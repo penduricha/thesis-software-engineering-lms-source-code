@@ -1,0 +1,10 @@
+- Nodejs 20.13.1
+- Vue 3.5.13
+- Vue3 + vite
+- Port 5173, 5174 => http://localhost:5173 and http://localhost:5174
+- Link github: https://github.com/penduricha/thesis-software-engineering-lms-source-code.git
+- Clone to your computer:
+git clone -b <name branch> https://github.com/penduricha/thesis-software-engineering-lms-source-code.git
+- Use WebStorm or Vs code.
+
+

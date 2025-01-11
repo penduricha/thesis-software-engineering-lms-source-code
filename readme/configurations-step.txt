@@ -1,0 +1,8 @@
+Step 1: git clone -b <tên-nhánh> <đường-dẫn-repository>
+Step 2: Chuẩn bị thư viện và framework.
+- Spring with jdk 21.
+- MariaDB 11.3.0 (login MariaDB and type select version() )
+- Node 20.13.1
+- Vue3 + Vite
+Step 3: Install các lib.
+

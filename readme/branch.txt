@@ -1,0 +1,4 @@
+main -> develop -> nhat/feature/login -> nhat/fix-bug/validate-login
+cú pháp branch: [Tên][Tính năng][Task], lưu ý task nhỏ sẽ kế thừa task lớn.
+sau khi task làm xong, merged vào branch kế thừa với commit là tiếng anh phù hợp.
+Tuyệt đối ko được merged vào branch develop khi chưa hoàn thành.

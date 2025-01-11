@@ -1,0 +1,5 @@
+Install: npm i bootstrap
+View version: npm list bootstrap
+=> boostrap 5.3.3
+
+

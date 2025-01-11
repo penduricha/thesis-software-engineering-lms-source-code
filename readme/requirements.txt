@@ -1,0 +1,47 @@
+Nodejs: node 20.13.1 => Bootstrap 5.4.4
+
+font-family: Arial, Helvetica, sans-serif; cho UI Web và mobile
+Code: Trong 18 tuần. Tính từ 8/2/2025 qua Tết.
+
+JDK: 21+
+Database: MariaDB với user: root, mk: 123, port: 3306
+Other service: email, upload image. EmailJS (max = 100), ImageBB (max = 100)
+Giả sử có yêu cầu mobile:
+- React Native js. Event mobile.
+- Có thể thử UI ở expo online.
+- UX y chang js thường.
+Framework;
+- Vue3 + Vite: Frontend Web.
+- Spring boot with SQL.
+- React Native (nếu có yêu cầu mobile)
+Agile Model
+
+Từ Quang Nhật: 
+- Dev Spring, Vue.
+- Build Database, SQL code.
+- Design UI-UX by figma.
+- Build Class Diagrams, Sequence.
+- Git.
+
+Võ Thị Minh Tiến:
+- React Native (nếu có yêu cầu mobile) bằng js.
+- Html css dev with Frontend Vue.
+- Build docs, pptx. (gg docs, gg powerpoint).
+- Draw diagrams by tools.
+- Usecase, Table, Activities.
+- Git.
+
+Restful API
+BE Service 
+Database -> Dao -> Service -> Controller -> API http://
+Controller -> Service -> Dao -> database
+
+FE
+API http:// -> Controller -> Dao -> Object/List/Map -> UI
+UI -> Dao -> Controller -> API http://
+
+
+
+
+
+

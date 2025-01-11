@@ -1,0 +1,24 @@
+Khởi tạo git
+master -> develop -> web/feature/create-ui-login -> web/fixbug/fix-form-login
+		     mobile/feature/create-ui-login -> mobile/fixbug/fix-header
+
+Câu commit example:
+- Done create ui sign up.
+- Done validate form sign up.
+Lệnh git
+git init: tạo folder git.
+
+git add .
+git commit -m "<câu commit>"
+
+git remote add origin <link repo>
+
+git push => đẩy lên GitHub => đè nhánh cũ GitHub hoặc tạo nhánh GitHub mới.
+
+git branch: Xem danh sách nhánh. (Ko cho cấu trúc nhánh kế thừa).
+
+git checkout <tên nhánh>
+
+git checkout -b <tạo nhánh mới dựa trên nhánh đang trỏ> 
+
+lịch sử commit lsr

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ví dụ về Header, Section, Footer</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        section {
+            min-width: 1800px;
+            width: 100%; /* Chiều rộng đầy đủ cho màn hình nhỏ hơn 1024px */
+            max-width: 1200px; /* Chiều rộng cố định cho màn hình lớn hơn 1024px */
+            margin: 0 auto; /* Căn giữa section */
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @media (max-width: 1024px) {
+            section {
+                //width: auto; /* Thay đổi chiều rộng cho các màn hình nhỏ hơn 1024px */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Tiêu đề Trang</h1>
+</header>
+
+<section>
+    <h2>Phần Nội Dung</h2>
+    <p>Đây là nơi bạn có thể đặt nội dung của mình.</p>
+</section>
+
+<footer>
+    <p>Bản quyền © 2025</p>
+</footer>
+
+</body>
+</html>

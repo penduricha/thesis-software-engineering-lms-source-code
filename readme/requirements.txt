@@ -24,7 +24,6 @@ Từ Quang Nhật:
 - Git.
 
 Võ Thị Minh Tiến:
-- React Native (nếu có yêu cầu mobile) bằng js.
 - Html css dev with Frontend Vue.
 - Build docs, pptx. (gg docs, gg powerpoint).
 - Draw diagrams by tools.

@@ -1,0 +1,6 @@
+- Lombok
+- Spring web
+- JDBC API
+- Spring Data JPA
+- MariaDB Driver with port 3306, root, 123
+- Cyclone DX

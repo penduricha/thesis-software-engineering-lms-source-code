@@ -90,12 +90,29 @@ main {
     border-right: solid;
     flex: 1;
     min-height: 100vh;
+    padding-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .section-code-editor {
     flex: 3;
     min-height: 100vh;
 }
+
+.text-exam{
+    width: 100%;
+    height: auto;
+    font-size: 18px;
+}
+
+table {
+    border: solid;
+    width: 100%;
+    font-size: 18px;
+}
+
+
 
 @media (max-width: 1068px) {
     header {
@@ -140,7 +157,7 @@ main {
     .section-exam{
         border-right: none;
         border-bottom: solid;
-        flex: 1;
+        height: auto;
     }
 
     .section-code-editor{

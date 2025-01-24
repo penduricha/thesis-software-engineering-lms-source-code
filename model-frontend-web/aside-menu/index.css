@@ -189,7 +189,7 @@ aside {
 
 .title-exam {
     font-weight: bold;
-    font-size: 17px;
+    font-size: 16px;
 }
 
 .type-exam {
@@ -222,8 +222,83 @@ main {
     min-height: 100vh;
     width: 100%;
     margin-top: 2rem;
-    padding-top: 2rem;
+    padding-top: 1rem;
+}
 
+.button-exam {
+    margin-left: 1rem;
+    background-color: var(--grey-item);
+    width: 96.5%;
+    height: 4rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 8rem;
+    padding-left: 3rem;
+}
+
+.text-button-exam {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.div-type-exam {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    height: 100%;
+    gap: 0.25rem;
+}
+
+.flex-title {
+    flex: 0.75;
+    display: flex;
+    justify-content: start;
+}
+
+.flex-type-exam {
+    flex: 1;
+    display: flex;
+    align-items: start;
+}
+
+.flex-date {
+    flex: 1;
+    display: flex;
+    justify-content: start;
+}
+
+.flex-status {
+    flex: 1;
+    display: flex;
+    justify-content: start;
+}
+
+.color-status-open {
+    color: #007BFF;
+}
+
+.color-status-lock {
+    color: #FF0505;
+}
+
+.color-status-complete {
+    color: #1CC800;
+}
+
+
+.text-type-exam {
+    font-size: 14px;
+    color: #3E3E3E;
+}
+
+.button-exam:hover {
+    opacity: 0.8;
 }
 
 .background-welcome {

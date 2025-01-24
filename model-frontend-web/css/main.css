@@ -6,6 +6,8 @@
     --white: #FFFFFF;
     --grey: #D9D9D9;
     --black: #000000;
+    --grey-item: #EBEBEB;
+    --background-linear: linear-gradient(to right,#786BDE, rgba(187, 183, 215, 0.5));
 }
 
 body {

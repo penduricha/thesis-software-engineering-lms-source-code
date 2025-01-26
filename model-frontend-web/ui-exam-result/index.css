@@ -43,6 +43,7 @@ aside {
     height: 40px;
     margin-bottom: 2.5rem;
     background-color: var(--background-color);
+    border-radius: 30px;
 }
 
 .view-name-and-button-information {
@@ -232,7 +233,6 @@ main {
     height: 4rem;
     border-radius: 4px;
     border: none;
-    cursor: pointer;
     margin-top: 0.5rem;
     display: flex;
     align-items: center;

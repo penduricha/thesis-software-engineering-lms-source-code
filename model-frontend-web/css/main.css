@@ -8,6 +8,7 @@
     --black: #000000;
     --grey-item: #EBEBEB;
     --background-linear: linear-gradient(to right,#786BDE, rgba(187, 183, 215, 0.5));
+    --danger-color-red: #FF0000;
 }
 
 body {

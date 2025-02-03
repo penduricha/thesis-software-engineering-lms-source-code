@@ -224,7 +224,8 @@ main {
 
 .span-text-exam {
     margin-left: 2rem;
-    font-size: 20px;
+    font-size: 18px;
+    width: 94%;
 }
 
 .color-deadline {
@@ -232,14 +233,14 @@ main {
 }
 
 .style-input-password-exam {
-    width: 15rem;
-    height: 2.15rem;
+    width: 20rem;
+    height: 2.2rem;
     margin-left: 2rem;
     border-radius: 4px;
-    padding-left: 1rem;
+    padding-left: 0.5rem;
     font-size: 16px;
-    font-weight: bold;
     background-color: var(--background-color);
+    border-color: solid grey 1px;
 }
 
 .style-button-do-exam {
@@ -259,7 +260,9 @@ main {
 }
 
 /*exam before ui css*/
-
+.style-table-result{
+    border: solid black;
+}
 
 @media (max-width: 1068px) {
     body {

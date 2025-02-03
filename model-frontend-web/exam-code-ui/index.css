@@ -138,6 +138,10 @@ footer {
     opacity: 0.8;
 }
 
+.button-number-question:hover {
+    opacity: 0.8;
+}
+
 @media (max-width: 1068px) {
     body {
         display: flex;

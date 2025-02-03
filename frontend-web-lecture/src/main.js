@@ -19,6 +19,7 @@ const vuetify = createVuetify();
 
 //import routers
 import routers from "@/assets/list-routes/routers.js";
+import RouterDao from "@/routes/RoutersDao.js";
 
 const app = createApp(App);
 app.use(vuetify);
@@ -42,8 +43,13 @@ function initPage(routers, routerPath) {
 
 function execute(){
     //co the doi path khac
+    const routerDao = new RouterDao();
     const startPagePath = '/';
-    initPage(routers, startPagePath);
+    if(!routerDao.getPath_From_SessionStorage()) {
+        initPage(routers, startPagePath);
+    } else {
+        initPage(routers, routerDao.getPath_From_SessionStorage());
+    }
 }
 
 execute();

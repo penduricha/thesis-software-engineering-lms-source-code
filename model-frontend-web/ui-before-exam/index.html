@@ -6,6 +6,7 @@
     <title>Java Core 1</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
 </head>
 <body>
     <aside class="aside-menu">
@@ -22,7 +23,32 @@
             <h2 class="style-button-do-exam">
                 <button class="button-do-exam">Do exam</button>
             </h2>
-            <span class="span-text-exam">Mark: 8.00</span>
+            <span class="span-text-exam">Result this exam:</span>
+            <table class="table table-striped style-table-result">
+                <thead>
+                    <tr>
+                        <th>Index</th>
+                        <th>Submit</th>
+                        <th>Correct</th>
+                        <th>Mark/10</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>19:30 10/5/2025</td>
+                        <td>4/5</td>
+                        <td>8.00</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>20:30 10/5/2025</td>
+                        <td>5/5</td>
+                        <td>10.00</td>
+                    </tr>
+                        <!-- Thêm các hàng khác nếu cần -->
+                    </tbody>
+            </table>
             <!-- table -->
         </section>
     </main>
@@ -36,7 +62,7 @@
         </div>
         <div class="view-calendar-schedule">
             <div class="view-header-calendar">
-                <h3>May 2025</h3>
+                <h5>May 2025</h5>
                 <div class="view-button-nav-calendar">
                     <button class="button_nav_calendar">
                         <img src="../image/button_nav_left_calendar.png" alt="button nav left calendar" class="style-button-nav-calendar">
@@ -76,7 +102,7 @@
                     <span>11</span>
                 </button>
             </div>
-            <h3 class="text-schedule-exam">Schedule exam</h3>
+            <h5 class="text-schedule-exam">Schedule exam</h5>
             <div class="view-items-exams-by-day">
                 <button class="item-exam">
                     <div class="view-item-exam view-index-exam">

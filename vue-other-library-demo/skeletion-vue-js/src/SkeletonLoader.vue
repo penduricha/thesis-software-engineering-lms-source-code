@@ -4,6 +4,7 @@
 
 <script>
 export default {
+  //truyen tham so component Vuejs
   props: {
     width: {
       type: String,

@@ -1,6 +1,7 @@
 <script>
 import './login-page.scss';
 import RouterDao from "@/routes/RoutersDao.js";
+import Password from "@/models/Password.js";
 
 export default {
   name: "LoginPage",
@@ -12,6 +13,9 @@ export default {
     return {
       lectureId: null,
       password: null,
+      //validation text,
+      validationSpan: null,
+
       //checkbox
       rememberMe: false,
     }
@@ -39,8 +43,37 @@ export default {
       routerDao.savePath_To_SessionStorage(route);
     },
 
+    //setup input
+    setInputLectureId() {
+      // Chỉ cho phép các ký tự số
+      this.lectureId = this.lectureId.replace(/[^0-9]/g, '');
+      if(!this.lectureId){
+        this.validationSpan = null;
+      } else {
+        this.validationSpan = null;
+      }
+    },
+
+    setInputPassword() {
+      if(!this.password){
+        this.validationSpan = null;
+      } else {
+        this.validationSpan = null;
+      }
+    },
+
     handleLogin() {
       //alert('Login');
+      const isEmptyInput = !this.lectureId || !this.password;
+      // const passwordClass = new Password(this.password);
+      // let passwordHashed = passwordClass.sha512().trim();
+      if(isEmptyInput) {
+        this.validationSpan = 'Please enter lecture id and password.';
+      } else {
+        // const passwordClass = new Password(this.password);
+        // let passwordHashed = passwordClass.sha512().trim();
+      }
+
     },
 
     getFromLocalStorage_CheckBox() {
@@ -55,10 +88,6 @@ export default {
       localStorage.setItem('rememberMe', this.rememberMe);
     },
 
-    filterInput() {
-      // Chỉ cho phép các ký tự số
-      this.lectureId = this.lectureId.replace(/[^0-9]/g, '');
-    },
 
   }
 }
@@ -70,7 +99,8 @@ export default {
       <div class="view-image-iuh">
         <img src="@/assets/image/iuh-logo.png"
              alt="iuh logo"
-             class="style-logo-iuh">
+             class="style-logo-iuh"
+        >
       </div>
       <div class="view-form-login">
         <div class="form-login">
@@ -79,15 +109,20 @@ export default {
                  class="style-input"
                  placeholder="Lecture Id"
                  v-model="lectureId"
-                 @input="filterInput"
+                 @input="setInputLectureId()"
                  maxlength="10"
           >
+
           <input type="password"
                  class="style-input"
                  placeholder="Password"
                  v-model="password"
+                 @input="setInputPassword()"
                  maxlength="20"
           >
+
+          <span v-if="validationSpan" class="span-validate-login">{{validationSpan}}</span>
+
           <button class="style-input style-button-login"
                   @click="handleLogin()"
                   @keyup.enter="handleLogin"

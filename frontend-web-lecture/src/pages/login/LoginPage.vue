@@ -62,16 +62,16 @@ export default {
       }
     },
 
-    handleLogin() {
+    async handleLogin() {
       //alert('Login');
       const isEmptyInput = !this.lectureId || !this.password;
       // const passwordClass = new Password(this.password);
       // let passwordHashed = passwordClass.sha512().trim();
-      if(isEmptyInput) {
+      if (isEmptyInput) {
         this.validationSpan = 'Please enter lecture id and password.';
       } else {
-        // const passwordClass = new Password(this.password);
-        // let passwordHashed = passwordClass.sha512().trim();
+        const passwordClass = new Password(this.password);
+        let passwordHashed = await passwordClass.sha512().trim();
       }
 
     },

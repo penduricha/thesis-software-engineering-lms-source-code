@@ -111,6 +111,11 @@ body {
   margin-top: 1px;
 }
 
+.span-validate-login {
+  font-size: 17px;
+  color: var(--danger-color-red);
+}
+
 
 @media (max-width: 1068px) {
   .container-login {

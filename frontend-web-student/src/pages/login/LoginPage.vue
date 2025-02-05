@@ -1,6 +1,7 @@
 <script>
 import './login-page.scss';
 import RouterDao from "@/routes/RoutersDao.js";
+import Password from "@/models/Password.js";
 
 export default {
   name: "LoginPage",
@@ -10,8 +11,11 @@ export default {
 
   data(){
     return {
-      lectureId: null,
+      studentId: null,
       password: null,
+      //validation text,
+      validationSpan: null,
+
       //checkbox
       rememberMe: false,
     }
@@ -39,8 +43,37 @@ export default {
       routerDao.savePath_To_SessionStorage(route);
     },
 
+    //setup input
+    setInputStudentId() {
+      // Chỉ cho phép các ký tự số
+      this.studentId = this.studentId.replace(/[^0-9]/g, '');
+      if(!this.studentId){
+        this.validationSpan = null;
+      } else {
+        this.validationSpan = null;
+      }
+    },
+
+    setInputPassword() {
+      if(!this.password){
+        this.validationSpan = null;
+      } else {
+        this.validationSpan = null;
+      }
+    },
+
     handleLogin() {
       //alert('Login');
+      const isEmptyInput = !this.studentId || !this.password;
+      // const passwordClass = new Password(this.password);
+      // let passwordHashed = passwordClass.sha512().trim();
+      if(isEmptyInput) {
+        this.validationSpan = 'Please enter lecture id and password.';
+      } else {
+        const passwordClass = new Password(this.password);
+        let passwordHashed = passwordClass.sha512().trim();
+      }
+
     },
 
     getFromLocalStorage_CheckBox() {
@@ -55,10 +88,6 @@ export default {
       localStorage.setItem('rememberMe', this.rememberMe);
     },
 
-    filterInput() {
-      // Chỉ cho phép các ký tự số
-      this.lectureId = this.lectureId.replace(/[^0-9]/g, '');
-    },
 
   }
 }
@@ -66,50 +95,56 @@ export default {
 
 <template>
   <body>
-    <main class="container-login">
-      <div class="view-image-iuh">
-        <img src="@/assets/image/iuh-logo.png"
-             alt="iuh logo"
-             class="style-logo-iuh">
-      </div>
-      <div class="view-form-login">
-        <div class="form-login">
-          <h2 class="style-title-login">Login lecture</h2>
-          <input type="text"
-                 class="style-input"
-                 placeholder="Lecture Id"
-                 v-model="lectureId"
-                 @input="filterInput"
-                 maxlength="10"
-          >
-          <input type="password"
-                 class="style-input"
-                 placeholder="Password"
-                 v-model="password"
-                 maxlength="20"
-          >
-          <button class="style-input style-button-login"
-                  @click="handleLogin()"
-                  @keyup.enter="handleLogin"
-          >Sign in</button>
+  <main class="container-login">
+    <div class="view-image-iuh">
+      <img src="@/assets/image/iuh-logo.png"
+           alt="iuh logo"
+           class="style-logo-iuh"
+      >
+    </div>
+    <div class="view-form-login">
+      <div class="form-login">
+        <h2 class="style-title-login">Login student</h2>
+        <input type="text"
+               class="style-input"
+               placeholder="Lecture Id"
+               v-model="studentId"
+               @input="setInputStudentId()"
+               maxlength="10"
+        >
 
-          <!--  keyup.enter là press enter event -->
-          <!-- <input type="checkbox" value="Remember me">
-          <label>Remember me</label> -->
+        <input type="password"
+               class="style-input"
+               placeholder="Password"
+               v-model="password"
+               @input="setInputPassword()"
+               maxlength="20"
+        >
 
-          <div class="view-check-box">
-            <input
-                type="checkbox"
-                id="rememberMe"
-                v-model="rememberMe"
-                @change="saveToLocalStorage_CheckBox()"
-                class="style-check-box"
-            />
-            <span class="style-remember-me">Remember me</span>
-          </div>
+        <span v-if="validationSpan" class="span-validate-login">{{validationSpan}}</span>
+
+        <button class="style-input style-button-login"
+                @click="handleLogin()"
+                @keyup.enter="handleLogin"
+        >Sign in</button>
+
+        <!--  keyup.enter là press enter event -->
+        <!-- <input type="checkbox" value="Remember me">
+        <label>Remember me</label> -->
+
+        <div class="view-check-box">
+          <input
+              type="checkbox"
+              id="rememberMe"
+              v-model="rememberMe"
+              @change="saveToLocalStorage_CheckBox()"
+              class="style-check-box"
+          />
+          <span class="style-remember-me">Remember me</span>
         </div>
       </div>
-    </main>
+    </div>
+  </main>
   </body>
 </template>
 

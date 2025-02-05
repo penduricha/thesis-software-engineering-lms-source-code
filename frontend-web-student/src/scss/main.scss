@@ -9,6 +9,7 @@
   --grey-item: #EBEBEB;
   --background-linear: linear-gradient(to right,#786BDE, rgba(187, 183, 215, 0.5));
   --danger-color-red: #FF0000;
+  --hover-button-border: #6D88CE;
 }
 
 body {
@@ -19,6 +20,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   /* background-color: red; */
   background-color: var(--background-color);
+  overflow: auto;
+  padding: 0;
 }
 
 //h1 {

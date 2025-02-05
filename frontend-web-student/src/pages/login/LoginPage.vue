@@ -71,7 +71,17 @@ export default {
         this.validationSpan = 'Please enter lecture id and password.';
       } else {
         const passwordClass = new Password(this.password);
-        let passwordHashed = passwordClass.sha512().trim();
+        let passwordHashed = passwordClass.sha512();
+        //go to main page
+        this.$router.replace({
+          path: '/list-exams-page',
+          // query: {
+          //   emailPhoneHomePage: this.emailPhoneNumber.trim(),
+          // }
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
       }
 
     },
@@ -95,7 +105,7 @@ export default {
 
 <template>
   <body>
-  <main class="container-login">
+  <div class="container-login">
     <div class="view-image-iuh">
       <img src="@/assets/image/iuh-logo.png"
            alt="iuh logo"
@@ -144,7 +154,7 @@ export default {
         </div>
       </div>
     </div>
-  </main>
+  </div>
   </body>
 </template>
 

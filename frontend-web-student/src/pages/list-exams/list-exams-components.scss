@@ -2,7 +2,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  min-width: 1672px;
+  //min-width: 1686px;
+  width: 100%;
+  padding: 0;
 }
 
 aside {
@@ -15,12 +17,13 @@ aside {
 
   justify-content: center;
   transition: 0.2s ease-in-out;
-  flex: 1;
+  width: 30rem;
 }
 
 .aside-menu {
   padding-left: 1rem;
   padding-top: 1rem;
+
 }
 
 .aside-account{
@@ -28,7 +31,6 @@ aside {
   flex-direction: column;
   justify-content: start;
   padding-right: 1rem;
-
 }
 
 .view-account {
@@ -208,7 +210,7 @@ aside {
 }
 
 main {
-  flex: 3;
+  width: 100%;
   min-height: 100vh;
   background: var(--background-linear);
   backdrop-filter: blur(5rem);
@@ -398,7 +400,7 @@ main {
 
 @media screen and (min-width: 1068px) and (max-width: 1440px) {
   body {
-    min-width: 1270px;
+    //min-width: 1270px;
   }
 
   .button-exam {
@@ -412,7 +414,7 @@ main {
 
 @media screen and (min-width: 1440px) and (max-width: 1672px) {
   body {
-    min-width: 1400px;
+    //min-width: 1400px;
   }
 
   .button-exam {
@@ -421,5 +423,11 @@ main {
     gap: 1rem;
     width: 100%;
     margin-left: 0;
+  }
+}
+
+@media screen and (min-width: 1686px) {
+  body{
+    width: 100%;
   }
 }

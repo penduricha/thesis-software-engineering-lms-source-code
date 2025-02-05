@@ -16,7 +16,7 @@ export default class RouterDao {
 
     savePath_To_SessionStorage(routerPath){
         //Khi chuyển trang khác, path được save vào session.
-        if(!routerPath){
+        if(routerPath){
             sessionStorage.setItem(this.getVariableRouterPathSession(), routerPath);
         }
     }

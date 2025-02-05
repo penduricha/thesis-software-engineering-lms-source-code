@@ -4,12 +4,15 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #FFFAFA;
+  overflow: hidden;
 }
 
 .container-login {
   width: var(--width-screen);
   height: var(--height-screen);
   display: flex;
+  background-color: #FFFAFA;
 }
 
 .view-image-iuh {

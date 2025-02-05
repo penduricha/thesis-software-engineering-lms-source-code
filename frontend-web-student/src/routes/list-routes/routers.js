@@ -3,7 +3,7 @@ import ListExamsComponent from "@/pages/list-exams/ListExamsComponent.vue";
 
 const routers = [
     // '/' khi init trang
-    { path: '/', component: ListExamsComponent},
+    { path: '/', component: LoginPage},
     { path: '/login-page', component: LoginPage},
     { path: '/list-exams-page', component: ListExamsComponent},
 ];

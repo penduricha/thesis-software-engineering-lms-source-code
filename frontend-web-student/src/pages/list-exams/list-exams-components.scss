@@ -10,20 +10,10 @@ body {
 aside {
   display: flex;
   flex-direction: column;
-
-  /* width: calc(2rem + 32px); */
   min-height: 100vh;
   overflow: hidden;
-
   justify-content: center;
-  transition: 0.2s ease-in-out;
   width: 30rem;
-}
-
-.aside-menu {
-  padding-left: 1rem;
-  padding-top: 1rem;
-
 }
 
 .aside-account{

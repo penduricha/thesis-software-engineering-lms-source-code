@@ -212,7 +212,6 @@ aside {
 
   &.is-expanded {
     width: 20rem;
-
     //.menu-toggle-wrap {
     //  //top: -3rem;
     //
@@ -220,15 +219,12 @@ aside {
     //  //  //transform: rotate(-180deg);
     //  //}
     //}
-
     h3, .button .text {
       opacity: 1;
     }
-
     .button {
       .material-icons {
         margin-right: 1rem;
-
       }
     }
 

@@ -62,6 +62,17 @@ export default {
       }
     },
 
+    navigateTo_MainPage() {
+      this.$router.replace({
+        path: '/list-exams-page',
+        // query: {
+        // }
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
+    },
+
     handleLogin() {
       //alert('Login');
       const isEmptyInput = !this.studentId || !this.password;
@@ -73,17 +84,8 @@ export default {
         const passwordClass = new Password(this.password);
         let passwordHashed = passwordClass.sha512();
         //go to main page
-        this.$router.replace({
-          path: '/list-exams-page',
-          // query: {
-          //   emailPhoneHomePage: this.emailPhoneNumber.trim(),
-          // }
-        }).catch((error) => {
-          console.error('Error navigating :', error);
-          alert(error);
-        });
+        this.navigateTo_MainPage();
       }
-
     },
 
     getFromLocalStorage_CheckBox() {

@@ -6,5 +6,5 @@ Install library Vue:
 npm install -D sass-embedded (scss)
 npm install vuetify@next @mdi/font
 
-Install vue-class-component
-npm i vue-class-component
+Install axios call api
+npm i axios

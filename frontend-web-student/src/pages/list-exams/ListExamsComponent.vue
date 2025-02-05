@@ -2,10 +2,12 @@
 import './list-exams-components.scss';
 import AsideAccount from "@/components/aside/AsideAccount.vue";
 import RouterDao from "@/routes/RoutersDao.js";
+import AsideMenu from "@/components/aside/AsideMenu.vue";
 
 export default {
   name: 'ListExamsComponents',
   components: {
+    AsideMenu,
     AsideAccount
 
   },
@@ -41,9 +43,7 @@ export default {
 
 <template>
   <body>
-    <aside class="aside-menu">
-
-    </aside>
+    <AsideMenu/>
     <main>
       <h4 class="title-menu">Exam coding</h4>
       <section class="section-welcome">

@@ -17,7 +17,7 @@ export default {
 
   data(){
     return {
-      indexMenu: 1,
+
     }
   },
 
@@ -30,8 +30,20 @@ export default {
   },
 
   methods: {
+    getRoute() {
+      console.log(this.$route.path);
+      return this.$route.path;
+    },
+
     handleButtonMenu(i) {
-      this.indexMenu = i.index;
+      this.$router.replace({
+        path: i.path,
+        // query: {
+        // }
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
     },
 
     navigateTo_LoginPage() {
@@ -52,8 +64,8 @@ export default {
 
   computed: {
     setBackGroundColor() {
-      return (index) => {
-        return (index === this.indexMenu)
+      return (path) => {
+        return (path === this.getRoute())
             ? 'background-grey'
             : 'background-no-grey';
       };
@@ -88,7 +100,7 @@ export default {
               class="style-button-item-menu"
               @click="handleButtonMenu(i)"
               :class="['background-color-button',
-              setBackGroundColor(i.index)]"
+              setBackGroundColor(i.path)]"
       >
         <img :src="i.imageSrc" alt="exam-list-icon" class="icon-menu">
         <span class="text-menu">{{i.name}}</span>

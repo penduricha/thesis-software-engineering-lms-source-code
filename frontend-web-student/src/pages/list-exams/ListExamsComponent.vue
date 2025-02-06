@@ -42,7 +42,7 @@ export default {
 </script>
 
 <template>
-  <body>
+  <body class="body-style">
     <AsideMenu/>
     <main>
       <h4 class="title-menu">Exam coding</h4>

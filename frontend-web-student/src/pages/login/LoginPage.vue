@@ -2,6 +2,7 @@
 import './login-page.scss';
 import RouterDao from "@/routes/RoutersDao.js";
 import Password from "@/models/Password.js";
+import listMenu from "@/components/aside/list-menu.js";
 
 export default {
   name: "LoginPage",
@@ -63,8 +64,10 @@ export default {
     },
 
     navigateTo_MainPage() {
+      const itemsMenu = listMenu;
+      const path = itemsMenu.find(item => item.index === 1)?.path;
       this.$router.replace({
-        path: '/list-exams-page',
+        path: path,
         // query: {
         // }
       }).catch((error) => {
@@ -76,6 +79,7 @@ export default {
     handleLogin() {
       //alert('Login');
       const isEmptyInput = !this.studentId || !this.password;
+
       // const passwordClass = new Password(this.password);
       // let passwordHashed = passwordClass.sha512().trim();
       if(isEmptyInput) {
@@ -83,8 +87,8 @@ export default {
       } else {
         const passwordClass = new Password(this.password);
         let passwordHashed = passwordClass.sha512();
-        //go to main page
         this.navigateTo_MainPage();
+
       }
     },
 

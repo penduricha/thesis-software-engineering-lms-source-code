@@ -2,13 +2,21 @@
 import './question-exam.scss';
 import RouterDao from "@/routes/RoutersDao.js";
 import questionsList from "./questions.js";
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from "vue";
+//text-editor
+import { Codemirror } from "vue-codemirror";
+import { shallowRef } from "vue";
+import { oneDark } from "@codemirror/theme-one-dark";
+import { java,  } from "@codemirror/lang-java";
 
+import { keymap } from "@codemirror/view";
+import {autocompletion, completeFromList} from "@codemirror/autocomplete";
+import CodeJava from "@/pages/ui-exam-questions/CodeJava.js";
 
 export default {
   name: "QuestionExam",
   components: {
-
+    Codemirror,
   },
 
   data(){
@@ -22,6 +30,10 @@ export default {
   },
 
   mounted() {
+
+  },
+
+  beforeDestroy() {
 
   },
 
@@ -41,20 +53,56 @@ export default {
     handleButtonQuestion(q) {
       this.indexQuestion = q.index;
     },
+
+    handlePaste(event) {
+      event.preventDefault();
+      // Prevent paste action
+    },
   },
 
   setup() {
     // const questions = questions;
     //cach khac set bien
-    const questions = ref(null)
+    const questions = ref(null);
+    const code= ref(null);
+
+
+    //set code auto
+    const codeJava = new CodeJava();
+    const setCodeString = () =>{
+      code.value = codeJava.getCodeJava_ToDemo();
+    }
+
+
     const setData_Components = () => {
       questions.value = questionsList;
     }
 
     onMounted(() => {
       setData_Components();
+      setCodeString();
     });
-    return {questions};
+
+    const extensions = [
+      java(),
+      oneDark,
+      autocompletion(),
+      keymap.of([
+        { key: "Ctrl-Space", run: completeFromList }
+      ])
+    ];
+
+    const view = shallowRef();
+    const handleReady = (payload) => {
+      view.value = payload.view;
+    };
+
+    return {
+      code,
+      extensions,
+      handleReady,
+      questions,
+    };
   },
 
   computed: {
@@ -133,16 +181,47 @@ export default {
           </table>
         </section>
         <section class="section-code-editor">
+          <div class="view-button-text-editor">
+            <button
+                class="button-text-editor"
+            >Save all
+            </button>
 
+            <button
+                class="button-text-editor"
+            >Reset
+            </button>
+
+            <button
+                class="button-text-editor"
+            >Compile all
+            </button>
+
+            <button
+                class="button-text-editor"
+            >Test output
+            </button>
+          </div>
+          <div class="view-text-editor">
+            <codemirror
+                v-model="code"
+                placeholder="Write code hear ..."
+                :autofocus="true"
+                :indent-with-tab="true"
+                :tab-size="4"
+                :extensions="extensions"
+                @ready="handleReady"
+                class="style-text-editor"
+                :style="{ height: '50rem', minHeight: 'calc(100vh - 6rem - 2.5rem)' }"
+                @paste="handlePaste"
+            />
+          </div>
         </section>
       </div>
-<!--      <footer class="page-footer">-->
-<!--        <button class="button-navigate-page-exam">Previous</button>-->
-<!--        <button class="button-navigate-page-exam">Next</button>-->
-<!--      </footer>-->
     </div>
 </template>
 
 <style scoped lang="scss">
 @use '@/scss/main';
+
 </style>

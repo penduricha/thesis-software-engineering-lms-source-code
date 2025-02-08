@@ -7,4 +7,21 @@
 git clone -b <name branch> https://github.com/penduricha/thesis-software-engineering-lms-source-code.git
 - Use WebStorm or Vs code.
 
+# Hướng dẫn Clone và Chạy Dự Án Vue.js
+
+## Bước 1: Cài đặt Node.js
+
+Trước khi bắt đầu, hãy đảm bảo rằng bạn đã cài đặt [Node.js](https://nodejs.org/).
+Bạn có thể kiểm tra xem nó đã được cài đặt hay chưa bằng cách mở terminal và chạy lệnh:
+
+```bash
+node -v => v20.13.1 là ok
+
+Type cmd
+Bước 2
+npm install
+npm run build
+
+Bước 3
+npm run dev => run local 5143 or 5174
 

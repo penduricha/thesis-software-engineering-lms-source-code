@@ -104,6 +104,11 @@ export default {
       localStorage.setItem('rememberMe', this.rememberMe);
     },
 
+    //lock paste
+    preventPaste(event) {
+      event.preventDefault();
+    },
+
 
   }
 }
@@ -135,6 +140,7 @@ export default {
                v-model="password"
                @input="setInputPassword()"
                maxlength="20"
+               @paste="preventPaste($event)"
         >
 
         <span v-if="validationSpan" class="span-validate-login">{{validationSpan}}</span>

@@ -115,7 +115,7 @@ export default {
       </div>
       <img src="@/assets/image/button_nav_left_calendar.png"
              alt="button nav left calendar"
-             class="style-button-nav-calendar" style="transform: rotate(270deg); margin-left: 2rem"
+             class="style-button-nav-calendar style-icon-drop-down"
            data-bs-toggle="dropdown" aria-expanded="true"
       >
       <ul class="dropdown-menu dropdown-menu-lg-start view-menu-dropdown">

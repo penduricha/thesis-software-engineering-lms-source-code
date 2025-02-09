@@ -2,6 +2,7 @@
 import './login-page.scss';
 import RouterDao from "@/routes/RoutersDao.js";
 import Password from "@/models/Password.js";
+// import listMenu from "@/components/aside/list-menu.js";
 
 export default {
   name: "LoginPage",
@@ -62,18 +63,33 @@ export default {
       }
     },
 
+    navigateTo_MainPage() {
+      // const itemsMenu = listMenu;
+      // const path = itemsMenu.find(item => item.index === 1)?.path;
+      // // this.$router.replace({
+      // //   path: path,
+      // //   // query: {
+      // //   // }
+      // // }).catch((error) => {
+      // //   console.error('Error navigating :', error);
+      // //   alert(error);
+      // // });
+    },
+
     async handleLogin() {
       //alert('Login');
       const isEmptyInput = !this.lectureId || !this.password;
+
       // const passwordClass = new Password(this.password);
       // let passwordHashed = passwordClass.sha512().trim();
-      if (isEmptyInput) {
+      if(isEmptyInput) {
         this.validationSpan = 'Please enter lecture id and password.';
       } else {
         const passwordClass = new Password(this.password);
-        let passwordHashed = await passwordClass.sha512().trim();
-      }
+        let passwordHashed = await passwordClass.sha512();
+        this.navigateTo_MainPage();
 
+      }
     },
 
     getFromLocalStorage_CheckBox() {
@@ -88,6 +104,11 @@ export default {
       localStorage.setItem('rememberMe', this.rememberMe);
     },
 
+    //lock paste
+    preventPaste(event) {
+      event.preventDefault();
+    },
+
 
   }
 }
@@ -95,56 +116,57 @@ export default {
 
 <template>
   <body>
-    <main class="container-login">
-      <div class="view-image-iuh">
-        <img src="@/assets/image/iuh-logo.png"
-             alt="iuh logo"
-             class="style-logo-iuh"
+  <div class="container-login">
+    <div class="view-image-iuh">
+      <img src="@/assets/image/iuh-logo.png"
+           alt="iuh logo"
+           class="style-logo-iuh"
+      >
+    </div>
+    <div class="view-form-login">
+      <div class="form-login">
+        <h2 class="style-title-login">Login lecture</h2>
+        <input type="text"
+               class="style-input"
+               placeholder="Lecture ID"
+               v-model="lectureId"
+               @input="setInputLectureId()"
+               maxlength="10"
         >
-      </div>
-      <div class="view-form-login">
-        <div class="form-login">
-          <h2 class="style-title-login">Login lecture</h2>
-          <input type="text"
-                 class="style-input"
-                 placeholder="Lecture Id"
-                 v-model="lectureId"
-                 @input="setInputLectureId()"
-                 maxlength="10"
-          >
 
-          <input type="password"
-                 class="style-input"
-                 placeholder="Password"
-                 v-model="password"
-                 @input="setInputPassword()"
-                 maxlength="20"
-          >
+        <input type="password"
+               class="style-input"
+               placeholder="Password"
+               v-model="password"
+               @input="setInputPassword()"
+               maxlength="20"
+               @paste="preventPaste($event)"
+        >
 
-          <span v-if="validationSpan" class="span-validate-login">{{validationSpan}}</span>
+        <span v-if="validationSpan" class="span-validate-login">{{validationSpan}}</span>
 
-          <button class="style-input style-button-login"
-                  @click="handleLogin()"
-                  @keyup.enter="handleLogin"
-          >Sign in</button>
+        <button class="style-input style-button-login"
+                @click="handleLogin()"
+                @keyup.enter="handleLogin"
+        >Sign in</button>
 
-          <!--  keyup.enter là press enter event -->
-          <!-- <input type="checkbox" value="Remember me">
-          <label>Remember me</label> -->
+        <!--  keyup.enter là press enter event -->
+        <!-- <input type="checkbox" value="Remember me">
+        <label>Remember me</label> -->
 
-          <div class="view-check-box">
-            <input
-                type="checkbox"
-                id="rememberMe"
-                v-model="rememberMe"
-                @change="saveToLocalStorage_CheckBox()"
-                class="style-check-box"
-            />
-            <span class="style-remember-me">Remember me</span>
-          </div>
+        <div class="view-check-box">
+          <input
+              type="checkbox"
+              id="rememberMe"
+              v-model="rememberMe"
+              @change="saveToLocalStorage_CheckBox()"
+              class="style-check-box"
+          />
+          <span class="style-remember-me">Remember me</span>
         </div>
       </div>
-    </main>
+    </div>
+  </div>
   </body>
 </template>
 

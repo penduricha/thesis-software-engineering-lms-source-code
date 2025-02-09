@@ -76,17 +76,17 @@ export default {
       });
     },
 
-    handleLogin() {
+    async handleLogin() {
       //alert('Login');
       const isEmptyInput = !this.studentId || !this.password;
 
       // const passwordClass = new Password(this.password);
       // let passwordHashed = passwordClass.sha512().trim();
-      if(isEmptyInput) {
-        this.validationSpan = 'Please enter lecture id and password.';
+      if (isEmptyInput) {
+        this.validationSpan = 'Please enter student id and password.';
       } else {
         const passwordClass = new Password(this.password);
-        let passwordHashed = passwordClass.sha512();
+        //let passwordHashed = await passwordClass.sha512();
         this.navigateTo_MainPage();
 
       }
@@ -128,7 +128,7 @@ export default {
         <h2 class="style-title-login">Login student</h2>
         <input type="text"
                class="style-input"
-               placeholder="Lecture Id"
+               placeholder="Student ID"
                v-model="studentId"
                @input="setInputStudentId()"
                maxlength="10"

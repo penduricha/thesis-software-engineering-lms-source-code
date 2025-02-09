@@ -32,6 +32,21 @@ export default {
   },
 
   methods: {
+    handleLogout() {
+      this.navigateTo_LoginPage();
+    },
+
+    navigateTo_LoginPage() {
+      this.$router.replace({
+        path: '/login-page',
+        // query: {
+        // }
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
+    },
+
     getInformation_Date() {
       const dateInWeek = new ManageDateTime();
       this.monthName = dateInWeek.getCurrentDayInfo().monthName;
@@ -90,13 +105,36 @@ export default {
 
 <template>
   <aside class="aside-account">
-    <div class="view-account">
+    <button class="view-account"
+    >
       <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo">
       <div class="view-name-and-button-information">
-        <span class="style-span-information">Tu Quang Nhat - 21107601<br>DHKTPM17BTT</span>
-        <button class="button-view-information">View information</button>
+        <span class="style-span-information">Tu Quang Nhat</span>
+        <span class="style-span-information">21107601</span>
+      <!--        <button class="button-view-information">View information</button>-->
       </div>
-    </div>
+      <img src="@/assets/image/button_nav_left_calendar.png"
+             alt="button nav left calendar"
+             class="style-button-nav-calendar" style="transform: rotate(270deg); margin-left: 2rem"
+           data-bs-toggle="dropdown" aria-expanded="true"
+      >
+      <ul class="dropdown-menu dropdown-menu-lg-start view-menu-dropdown">
+        <li class="dropdown-item button-item-dropdown">
+          View Profile
+        </li>
+        <li class="dropdown-item button-item-dropdown">
+          Change Password
+        </li>
+        <li class="dropdown-item button-item-dropdown"
+            style="color: var(--danger-color-red)"
+            @click="handleLogout()"
+        >
+          Log out
+        </li>
+      </ul>
+    </button>
+    <!--    frame dropdown-->
+
     <div class="view-calendar-schedule">
       <div class="view-header-calendar">
         <h5 class="style-text-month">{{monthName}} {{yearNumber}}</h5>
@@ -104,12 +142,16 @@ export default {
           <button class="button_nav_calendar"
                   @click="handleNavigateLastWeek()"
           >
-            <img src="@/assets/image/button_nav_left_calendar.png" alt="button nav left calendar" class="style-button-nav-calendar">
+            <img src="@/assets/image/button_nav_left_calendar.png"
+                 alt="button nav left calendar"
+                 class="style-button-nav-calendar">
           </button>
           <button class="button_nav_calendar"
                   @click="handleNavigateNextWeek()"
           >
-            <img src="@/assets/image/button_nav_right_calendar.png" alt="button nav right calendar" class="style-button-nav-calendar">
+            <img src="@/assets/image/button_nav_right_calendar.png"
+                 alt="button nav right calendar"
+                 class="style-button-nav-calendar">
           </button>
         </div>
       </div>
@@ -152,5 +194,9 @@ export default {
 
 <style scoped lang="scss">
 @use '@/scss/main';
-
+.view-menu-dropdown {
+  width: 250px;
+  height: auto;
+  border-radius: 0;
+}
 </style>

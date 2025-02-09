@@ -37,7 +37,6 @@ public class UMLGenerator {
             SourceStringReader reader = new SourceStringReader(uml);
             reader.outputImage(output, new FileFormatOption(FileFormat.PNG));
             output.close();
-
             System.out.println("Hình ảnh UML đã được tạo tại: " + outputFilePath);
         } catch (Exception e) {
             //e.printStackTrace();

@@ -57,9 +57,7 @@ export default {
       });
     },
 
-    handleLogout() {
-      this.navigateTo_LoginPage();
-    }
+
   },
 
   computed: {
@@ -106,19 +104,19 @@ export default {
         <span class="text-menu">{{i.name}}</span>
       </button>
     </div>
-    <div class="footer-menu">
-      <button
-              class="style-button-item-menu"
-              @click="handleLogout()"
-              style="padding-left: 3rem"
-      >
-        <img src="@/assets/image/icon-menu/icon-logout.png"
-             alt="log out"
-             class="icon-menu"
-        >
-        <span class="text-menu">Log out</span>
-      </button>
-    </div>
+<!--    <div class="footer-menu">-->
+<!--      <button-->
+<!--              class="style-button-item-menu"-->
+<!--              @click="handleLogout()"-->
+<!--              style="padding-left: 3rem"-->
+<!--      >-->
+<!--        <img src="@/assets/image/icon-menu/icon-logout.png"-->
+<!--             alt="log out"-->
+<!--             class="icon-menu"-->
+<!--        >-->
+<!--        <span class="text-menu">Log out</span>-->
+<!--      </button>-->
+<!--    </div>-->
   </aside>
 </template>
 

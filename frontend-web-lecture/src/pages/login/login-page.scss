@@ -4,12 +4,15 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #FFFAFA;
+  overflow: hidden;
 }
 
 .container-login {
   width: var(--width-screen);
   height: var(--height-screen);
   display: flex;
+  background-color: #FFFAFA;
 }
 
 .view-image-iuh {
@@ -115,6 +118,7 @@ body {
   font-size: 17px;
   color: var(--danger-color-red);
 }
+
 
 @media (max-width: 1068px) {
   .container-login {

@@ -1,3 +1,4 @@
+
 import './assets/main.css'
 
 import { createApp } from 'vue'
@@ -18,7 +19,7 @@ import 'vuetify/dist/vuetify-labs.min.css';
 const vuetify = createVuetify();
 
 //import routers
-import routers from "@/assets/list-routes/routers.js";
+import routers from "@/routes/list-routes/routers.js";
 import RouterDao from "@/routes/RoutersDao.js";
 
 const app = createApp(App);

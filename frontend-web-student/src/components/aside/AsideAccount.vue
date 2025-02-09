@@ -1,7 +1,7 @@
 <script>
 import './aside-account.scss';
 import '../../pages/list-exams/list-exams-components.scss';
-import DateInWeek from "@/date-time/DateInWeek.js";
+import ManageDateTime from "@/date-time/ManageDateTime.js";
 
 export default {
   name: 'AsideAccount',
@@ -33,7 +33,7 @@ export default {
 
   methods: {
     getInformation_Date() {
-      const dateInWeek = new DateInWeek();
+      const dateInWeek = new ManageDateTime();
       this.monthName = dateInWeek.getCurrentDayInfo().monthName;
       this.yearNumber = dateInWeek.getCurrentDayInfo().year;
       this.daysOfWeek = dateInWeek.getListDayOfWeek();
@@ -43,7 +43,7 @@ export default {
     },
 
     handleButtonDate(d) {
-      const dateInWeek = new DateInWeek();
+      const dateInWeek = new ManageDateTime();
       const dateChoose = new Date(d.date);
       this.chooseDate = dateInWeek.getDate_Choose(dateChoose);
       this.yearNumber = this.chooseDate.year;
@@ -51,7 +51,7 @@ export default {
     },
 
     handleNavigateLastWeek() {
-      const dateInWeek = new DateInWeek();
+      const dateInWeek = new ManageDateTime();
       const date = this.chooseDate.date;
       const dateLastWeek = new Date(date)
       dateLastWeek.setDate(date.getDate() - 7);
@@ -63,7 +63,7 @@ export default {
     },
 
     handleNavigateNextWeek() {
-      const dateInWeek = new DateInWeek();
+      const dateInWeek = new ManageDateTime();
       const date = this.chooseDate.date;
       const dateNextWeek = new Date(date)
       dateNextWeek.setDate(date.getDate() + 7);

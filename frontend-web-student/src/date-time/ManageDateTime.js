@@ -1,4 +1,4 @@
-export default class DateInWeek {
+export default class ManageDateTime {
 
     getCurrentWeek() {
         const today = new Date();
@@ -42,13 +42,12 @@ export default class DateInWeek {
             week.push({
                 dayName: dayName,
                 dayNumber: dayNumber,
-                date: currentDay, // Chỉnh sửa để sử dụng currentDay
+                date: currentDay,
                 monthNumber: monthNumber,
                 monthName: monthName,
                 year: year,
             });
         }
-
         return week;
     }
 

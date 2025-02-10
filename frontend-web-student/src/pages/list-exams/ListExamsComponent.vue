@@ -42,7 +42,7 @@ export default {
 </script>
 
 <template>
-  <body class="body-style">
+  <body>
     <AsideMenu/>
     <main>
       <h4 class="title-menu">Exam coding</h4>
@@ -53,11 +53,18 @@ export default {
       </section>
       <section class="section-list-exams">
         <h4 class="h2-all-exams-style">All exams</h4>
+        <div class="button-div-exam">
+          <span class="text-button-exam flex-title">Title exam</span>
+          <div class="div-type-exam flex-type-exam">
+            <span class="text-button-exam">Type exam</span>
+          </div>
+          <span class="text-button-exam flex-date">Date open</span>
+          <span class="text-button-exam flex-status">Status</span>
+        </div>
         <button class="button-exam">
           <span class="text-button-exam flex-title">Java core 1</span>
           <div class="div-type-exam flex-type-exam">
-            <span class="text-button-exam">Type exam</span>
-            <span class="text-type-exam">Theory 1</span>
+            <span class="text-button-exam">Theory 1</span>
           </div>
           <span class="text-button-exam flex-date">9:00 8/5/2025</span>
           <span class="text-button-exam flex-status color-status-open">Open</span>
@@ -65,8 +72,7 @@ export default {
         <button class="button-exam">
           <span class="text-button-exam flex-title">Java core 2</span>
           <div class="div-type-exam flex-type-exam">
-            <span class="text-button-exam">Type exam</span>
-            <span class="text-type-exam">Theory 1</span>
+            <span class="text-button-exam">Theory 2</span>
           </div>
           <span class="text-button-exam flex-date">9:00 15/5/2025</span>
           <span class="text-button-exam flex-status color-status-lock">Locked</span>
@@ -74,8 +80,7 @@ export default {
         <button class="button-exam">
           <span class="text-button-exam flex-title">Java class 1</span>
           <div class="div-type-exam flex-type-exam">
-            <span class="text-button-exam">Type exam</span>
-            <span class="text-type-exam">Theory 2</span>
+            <span class="text-button-exam">Theory 1</span>
           </div>
           <span class="text-button-exam flex-date">9:00 1/5/2025</span>
           <span class="text-button-exam flex-status color-status-complete">Completed</span>

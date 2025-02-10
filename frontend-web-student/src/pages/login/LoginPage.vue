@@ -115,8 +115,8 @@ export default {
 </script>
 
 <template>
-  <body>
-  <div class="container-login">
+
+  <section class="container-login">
     <div class="view-image-iuh">
       <img src="@/assets/image/iuh-logo.png"
            alt="iuh logo"
@@ -166,8 +166,8 @@ export default {
         </div>
       </div>
     </div>
-  </div>
-  </body>
+  </section>
+
 </template>
 
 <style lang="scss" scoped>

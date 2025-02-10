@@ -1,15 +1,16 @@
 @use '@/scss/main.scss';
 
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #FFFAFA;
-  overflow: hidden;
-}
+//body {
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  background-color: #FFFAFA;
+//  overflow: hidden;
+//}
 
 .container-login {
-  width: var(--width-screen);
+  //width: var(--width-screen);
+  width: 100%;
   height: var(--height-screen);
   display: flex;
   background-color: #FFFAFA;
@@ -17,7 +18,7 @@ body {
 
 .view-image-iuh {
   height: 100%;
-  flex: 1.5;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;

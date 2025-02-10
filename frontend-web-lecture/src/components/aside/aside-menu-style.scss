@@ -2,18 +2,6 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 30rem;
-  transition: 0.2s ease-in-out;
-}
-
-.expand-aside-menu {
-  &.is-expanded {
-    width: 30rem;
-  }
-
-  &.is-not-expanded {
-    width: 10rem;
-  }
 }
 
 .header-menu {
@@ -22,16 +10,11 @@
   display: flex;
   align-items: center;
   padding-left: 1rem;
-  padding-right: 1rem;
 }
 
 .image-iuh-logo {
-  width: 80px;
-  height: 80px;
-}
-
-.btn-toggle-menu {
-  background-color: transparent;
+  width: 100px;
+  height: 100px;
 }
 
 .section-menu {
@@ -73,21 +56,7 @@
 }
 
 .text-menu {
-  margin-left: 1.5rem;
-  opacity: 1;
-  transition: 0.3s ease-in-out;
-}
-
-.expand-text-menu {
-  &.is-expanded {
-    margin-left: 1.5rem;
-    opacity: 1;
-  }
-
-  &.is-not-expanded {
-    margin-left: 0;
-    opacity: 0;
-  }
+  margin-left: 1rem;
 }
 
 .footer-menu {

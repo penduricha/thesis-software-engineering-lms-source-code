@@ -122,7 +122,9 @@ export default {
         <li class="dropdown-item button-item-dropdown">
           View Profile
         </li>
-        <li class="dropdown-item button-item-dropdown">
+        <li class="dropdown-item button-item-dropdown"
+            data-bs-toggle="modal" data-bs-target="#modalChangePassword"
+        >
           Change Password
         </li>
         <li class="dropdown-item button-item-dropdown"
@@ -190,13 +192,40 @@ export default {
       </div>
     </div>
   </aside>
+
+  <!-- Modal change password -->
+  <div class="modal fade" id="modalChangePassword">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Change password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="fullName" class="form-label">Enter old password</label>
+            <input type="password" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="telephone" class="form-label">Enter new password</label>
+            <input type="password" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="dateOfBirth" class="form-label">Confirm new password</label>
+            <input type="password" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn-update-password"
+          >Update password
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
 @use '@/scss/main';
-.view-menu-dropdown {
-  width: 250px;
-  height: auto;
-  border-radius: 0;
-}
+
 </style>

@@ -16,6 +16,7 @@ Bạn có thể kiểm tra xem nó đã được cài đặt hay chưa bằng c�
 
 ```bash
 node -v => v20.13.1 là ok
+trong project, config vite 6.0.7
 
 Type cmd
 Bước 2

@@ -2,7 +2,8 @@ package source;
 
 public class SourceCode {
     public String getSource(){
-        return "class Student {" +
+        return
+                "class Student {" +
                 "    private Long id;" +
                 "    private String name;" +
                 "    private int age;" +

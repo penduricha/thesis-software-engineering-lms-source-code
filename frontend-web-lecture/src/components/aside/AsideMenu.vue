@@ -1,6 +1,6 @@
 <script>
 import listMenu from "@/components/aside/list-menu.js";
-import '../../pages/list-exams/list-exams-components.scss';
+import '../../pages/main/list-courses.scss';
 import './aside-menu-style.scss';
 import {onMounted, ref} from "vue";
 
@@ -17,12 +17,12 @@ export default {
 
   data(){
     return {
-
+      isExpanded: false,
     }
   },
 
   created() {
-
+    this.setExpanded();
   },
 
   mounted() {
@@ -33,6 +33,16 @@ export default {
     getRoute() {
       console.log(this.$route.path);
       return this.$route.path;
+    },
+
+    setExpanded() {
+      console.log(localStorage.getItem("isExpanded"));
+      if (localStorage.getItem("isExpanded") === null) {
+        this.isExpanded = true;
+        localStorage.setItem("isExpanded", true);
+      } else {
+        this.isExpanded = localStorage.getItem("isExpanded") === 'true';
+      }
     },
 
     handleButtonMenu(i) {
@@ -46,18 +56,10 @@ export default {
       });
     },
 
-    navigateTo_LoginPage() {
-      this.$router.replace({
-        path: '/login-page',
-        // query: {
-        // }
-      }).catch((error) => {
-        console.error('Error navigating :', error);
-        alert(error);
-      });
-    },
-
-
+    toggleAsideMenu() {
+      this.isExpanded = !this.isExpanded;
+      localStorage.setItem('isExpanded',this.isExpanded);
+    }
   },
 
   computed: {
@@ -67,10 +69,29 @@ export default {
             ? 'background-grey'
             : 'background-no-grey';
       };
+    },
+
+    setExpandAsideMenu() {
+      return (this.isExpanded)
+          ? 'is-expanded'
+          : 'is-not-expanded';
+    },
+
+    setExpandTextMenu() {
+      return (this.isExpanded)
+          ? 'is-expanded'
+          : 'is-not-expanded';
+    },
+
+    setExpandButtonBar() {
+      return (this.isExpanded)
+          ? 'is-expanded'
+          : 'is-not-expanded';
     }
   },
 
   setup(){
+
     const itemsMenu = ref(null)
     const getItems_Menu = () => {
       itemsMenu.value = listMenu;
@@ -84,14 +105,33 @@ export default {
 }
 </script>
 
+
 <template>
-  <aside class="aside-menu">
+  <aside class="aside-menu"
+        :class="['expand-aside-menu', setExpandAsideMenu]"
+  >
     <div class="header-menu">
       <img src="@/assets/image/icon-menu/logo-iuh-menu.png"
            alt="iuh-logo"
            class="image-iuh-logo"
       >
     </div>
+
+    <h1
+        :class="['expand-button-bar', setExpandButtonBar]"
+    >
+      <button class="btn-toggle-menu" @click="toggleAsideMenu()">
+        <svg
+             xmlns="http://www.w3.org/2000/svg"
+             width="16" height="16"
+             fill="currentColor" class="bi bi-list icon-bar"
+             viewBox="0 0 16 16"
+        >
+          <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+        </svg>
+      </button>
+    </h1>
+
     <div class="section-menu">
       <button v-for="i in itemsMenu"
               :key="i.index"
@@ -101,22 +141,14 @@ export default {
               setBackGroundColor(i.path)]"
       >
         <img :src="i.imageSrc" alt="exam-list-icon" class="icon-menu">
-        <span class="text-menu">{{i.name}}</span>
+        <span
+              :class="['expand-text-menu',
+              setExpandTextMenu]"
+        >{{i.name}}</span>
+        <!--      :class="['expand-text-menu',-->
+        <!--      setExpandTextMenu()]"-->
       </button>
     </div>
-<!--    <div class="footer-menu">-->
-<!--      <button-->
-<!--              class="style-button-item-menu"-->
-<!--              @click="handleLogout()"-->
-<!--              style="padding-left: 3rem"-->
-<!--      >-->
-<!--        <img src="@/assets/image/icon-menu/icon-logout.png"-->
-<!--             alt="log out"-->
-<!--             class="icon-menu"-->
-<!--        >-->
-<!--        <span class="text-menu">Log out</span>-->
-<!--      </button>-->
-<!--    </div>-->
   </aside>
 </template>
 
@@ -127,5 +159,19 @@ export default {
 //    flex-direction: row;
 //  }
 //}
+.icon-bar {
+  width: 2rem;
+  height: 2rem;
+}
 
+.expand-button-bar {
+  &.is-expanded {
+    text-align: right;
+    margin-right: 1rem;
+  }
+
+  &.is-not-expanded {
+    text-align: center;
+  }
+}
 </style>

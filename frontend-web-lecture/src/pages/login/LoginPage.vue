@@ -2,6 +2,7 @@
 import './login-page.scss';
 import RouterDao from "@/routes/RoutersDao.js";
 import Password from "@/models/Password.js";
+import listMenu from "@/components/aside/list-menu.js";
 // import listMenu from "@/components/aside/list-menu.js";
 
 export default {
@@ -64,16 +65,16 @@ export default {
     },
 
     navigateTo_MainPage() {
-      // const itemsMenu = listMenu;
-      // const path = itemsMenu.find(item => item.index === 1)?.path;
-      // // this.$router.replace({
-      // //   path: path,
-      // //   // query: {
-      // //   // }
-      // // }).catch((error) => {
-      // //   console.error('Error navigating :', error);
-      // //   alert(error);
-      // // });
+      const itemsMenu = listMenu;
+      const path = itemsMenu.find(item => item.index === 1)?.path;
+      this.$router.replace({
+        path: path,
+        // query: {
+        // }
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
     },
 
     async handleLogin() {
@@ -116,7 +117,7 @@ export default {
 
 <template>
 
-  <div class="container-login">
+  <section class="container-login">
     <div class="view-image-iuh">
       <img src="@/assets/image/iuh-logo.png"
            alt="iuh logo"
@@ -166,7 +167,7 @@ export default {
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
 </template>
 

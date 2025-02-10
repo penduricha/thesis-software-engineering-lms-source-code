@@ -1,6 +1,6 @@
 <script>
 import './aside-account.scss';
-import '../../pages/list-exams/list-exams-components.scss';
+import '../../pages/main/list-courses.scss';
 import ManageDateTime from "@/date-time/ManageDateTime.js";
 
 export default {
@@ -34,6 +34,11 @@ export default {
   methods: {
     handleLogout() {
       this.navigateTo_LoginPage();
+    },
+
+    //lock paste
+    preventPaste(event) {
+      event.preventDefault();
     },
 
     navigateTo_LoginPage() {
@@ -109,9 +114,8 @@ export default {
     >
       <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo">
       <div class="view-name-and-button-information">
-        <span class="style-span-information">Tu Quang Nhat</span>
-        <span class="style-span-information">21107601</span>
-      <!--        <button class="button-view-information">View information</button>-->
+        <span class="style-span-information">Dang Thi Thu Ha</span>
+        <span class="style-span-information">01120012</span>
       </div>
       <img src="@/assets/image/button_nav_left_calendar.png"
              alt="button nav left calendar"
@@ -122,7 +126,9 @@ export default {
         <li class="dropdown-item button-item-dropdown">
           View Profile
         </li>
-        <li class="dropdown-item button-item-dropdown">
+        <li class="dropdown-item button-item-dropdown"
+            data-bs-toggle="modal" data-bs-target="#modalChangePassword"
+        >
           Change Password
         </li>
         <li class="dropdown-item button-item-dropdown"
@@ -190,13 +196,50 @@ export default {
       </div>
     </div>
   </aside>
+
+  <!-- Modal change password -->
+  <div class="modal fade" id="modalChangePassword">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Change password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="fullName" class="form-label">Enter old password</label>
+            <input type="password"
+                   class="form-control"
+                   @paste="preventPaste($event)"
+            >
+          </div>
+          <div class="form-group">
+            <label for="telephone" class="form-label">Enter new password</label>
+            <input type="password"
+                   class="form-control"
+                   @paste="preventPaste($event)"
+            >
+          </div>
+          <div class="form-group">
+            <label for="dateOfBirth" class="form-label">Confirm new password</label>
+            <input type="password"
+                   class="form-control"
+                   @paste="preventPaste($event)"
+            >
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit"
+                  class="btn-update-password"
+          >Update password
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
 @use '@/scss/main';
-.view-menu-dropdown {
-  width: 250px;
-  height: auto;
-  border-radius: 0;
-}
+
 </style>

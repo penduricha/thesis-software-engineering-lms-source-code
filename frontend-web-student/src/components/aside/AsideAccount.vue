@@ -36,6 +36,11 @@ export default {
       this.navigateTo_LoginPage();
     },
 
+    //lock paste
+    preventPaste(event) {
+      event.preventDefault();
+    },
+
     navigateTo_LoginPage() {
       this.$router.replace({
         path: '/login-page',
@@ -204,19 +209,29 @@ export default {
         <div class="modal-body">
           <div class="form-group">
             <label for="fullName" class="form-label">Enter old password</label>
-            <input type="password" class="form-control">
+            <input type="password"
+                   class="form-control"
+                   @paste="preventPaste($event)"
+            >
           </div>
           <div class="form-group">
             <label for="telephone" class="form-label">Enter new password</label>
-            <input type="password" class="form-control">
+            <input type="password"
+                   class="form-control"
+                   @paste="preventPaste($event)"
+            >
           </div>
           <div class="form-group">
             <label for="dateOfBirth" class="form-label">Confirm new password</label>
-            <input type="password" class="form-control">
+            <input type="password"
+                   class="form-control"
+                   @paste="preventPaste($event)"
+            >
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn-update-password"
+          <button type="submit"
+                  class="btn-update-password"
           >Update password
           </button>
         </div>

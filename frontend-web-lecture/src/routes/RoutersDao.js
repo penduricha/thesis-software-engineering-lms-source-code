@@ -1,4 +1,3 @@
-
 export default class RouterDao {
 
     _variableRouterPathSession;

@@ -9,3 +9,21 @@
   margin-left: 2rem;
   margin-top: 2rem
 }
+
+.view-menu-dropdown {
+  width: 250px;
+  height: auto;
+  border-radius: 0;
+}
+
+.btn-update-password {
+  width: 100%;
+  background-color: var(--purple-iuh);
+  color: var(--white);
+  height: 2.5rem;
+  border-radius: 4px;
+}
+
+.btn-update-password:hover {
+  opacity: 0.8;
+}

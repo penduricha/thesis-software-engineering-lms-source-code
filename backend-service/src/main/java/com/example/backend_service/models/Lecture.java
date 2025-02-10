@@ -1,4 +1,7 @@
 package com.example.backend_service.models;
 
-public class Lecture {
+import java.io.Serializable;
+
+public class Lecture implements Serializable {
+
 }

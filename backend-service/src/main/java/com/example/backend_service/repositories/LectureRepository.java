@@ -1,4 +1,7 @@
 package com.example.backend_service.repositories;
 
-public interface LectureRepository {
+import com.example.backend_service.models.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface LectureRepository extends JpaRepository<Lecture,Long> {
 }

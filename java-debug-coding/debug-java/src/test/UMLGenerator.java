@@ -32,7 +32,7 @@ public class UMLGenerator {
 
         // Tạo hình ảnh UML
         try {
-            String outputFilePath = "student.jpg";
+            String outputFilePath = "event-class.jpg";
             OutputStream output = new FileOutputStream(outputFilePath);
             SourceStringReader reader = new SourceStringReader(uml);
             reader.outputImage(output, new FileFormatOption(FileFormat.PNG));

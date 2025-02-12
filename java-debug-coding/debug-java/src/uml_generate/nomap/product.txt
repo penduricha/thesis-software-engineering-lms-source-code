@@ -1,0 +1,30 @@
+@startuml
+class Product {
+    - String productCode
+    - String productName
+    - double price
+    - int quantity
+    - LocalDate manufactureDate
+    - LocalDate expirationDate
+    + Product()
+    + Product(String productCode, String productName, double price, int quantity, LocalDate manufactureDate, LocalDate expirationDate)
+    + String validateProductCode(String code)
+    + double validatePrice(double price)
+    + int validateQuantity(int quantity)
+    + LocalDate validateExpirationDate(LocalDate expirationDate, LocalDate manufactureDate)
+    + String toString()
+    + double getTotalValue()
+    + String getProductCode()
+    + String getProductName()
+    + double getPrice()
+    + int getQuantity()
+    + LocalDate getManufactureDate()
+    + LocalDate getExpirationDate()
+    + void setProductCode(String productCode)
+    + void setProductName(String productName)
+    + void setPrice(double price)
+    + void setQuantity(int quantity)
+    + void setManufactureDate(LocalDate manufactureDate)
+    + void setExpirationDate(LocalDate expirationDate)
+}
+@enduml

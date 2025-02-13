@@ -1,6 +1,7 @@
 package awswer.nomap.event;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
 
@@ -83,9 +84,15 @@ public class TestEvent {
         System.out.println(event12.getParticipantNumber());
 
         //Câu 13
+        LocalDate endDate = LocalDate.of(2026, 2, 1);
+        LocalDate startDate = endDate.minusDays(1);
+        // Ngày 31 tháng 1 năm 2026
+        long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+        long randomDays = random.nextInt((int) daysBetween);
+        LocalDate randomDate = startDate.plusDays(randomDays);
         Event event13 = new Event("E1234",
                 "Squid",
-                LocalDate.of(2026,1,20),
+                randomDate,
                 "Hcm",
                 100,
                 10

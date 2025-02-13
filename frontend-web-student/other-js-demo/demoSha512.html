@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sha512</title>
+</head>
+<body>
+    <script>
+        async function sha512(password) {
+            try {
+                const buf = await crypto.subtle.digest(
+                    "SHA-512",
+                    new TextEncoder("utf-8").encode(password)
+                );
+                return Array.from(new Uint8Array(buf))
+                    .map(x => ('00' + x.toString(16)).slice(-2))
+                    .join(''); // Kết hợp các hex lại thành chuỗi
+            } catch (error) {
+                console.error("Error generating hash:", error);
+                throw error;
+            }
+        }
+
+        (async () => {
+            const passwordHash = await sha512("1234567890");
+            console.log(passwordHash.length);
+        })();
+    </script>
+</body>
+</html>

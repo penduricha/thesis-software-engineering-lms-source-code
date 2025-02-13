@@ -1,0 +1,38 @@
+@startuml
+
+class Library {
+    - libraryCode: String
+    - libraryName: String
+
+    + Library()
+    + Library(libraryCode: String, libraryName: String)
+    + getLibraryCode(): String
+    + setLibraryCode(libraryCode: String): void
+    + getLibraryName(): String
+    + setLibraryName(libraryName: String): void
+    + toString(): String
+}
+
+class Book {
+    - title: String
+    - author: String
+    - isbn: String
+    - library: Library
+
+    + Book()
+    + Book(title: String, author: String, isbn: String, library: Library)
+    + getTitle(): String
+    + setTitle(title: String): void
+    + getAuthor(): String
+    + setAuthor(author: String): void
+    + getIsbn(): String
+    + setIsbn(isbn: String): void
+    + getLibrary(): Library
+    + setLibrary(library: Library): void
+    + toString(): String
+}
+
+Library "1" -- "*" Book
+Book "*" -- "1" Library
+
+@enduml

@@ -139,7 +139,7 @@ export default {
                placeholder="Password"
                v-model="password"
                @input="setInputPassword()"
-               maxlength="20"
+               maxlength="10"
                @paste="preventPaste($event)"
         >
 

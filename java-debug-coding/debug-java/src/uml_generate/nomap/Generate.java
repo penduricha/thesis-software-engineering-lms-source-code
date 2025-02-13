@@ -9,37 +9,26 @@ import java.io.*;
 public class Generate {
     public static void main(String[] args) {
         String uml = "@startuml\n" +
-                "class Product {\n" +
-                "    - String productCode\n" +
-                "    - String productName\n" +
-                "    - double price\n" +
-                "    - int quantity\n" +
-                "    - LocalDate manufactureDate\n" +
-                "    - LocalDate expirationDate\n" +
-                "    + Product()\n" +
-                "    + Product(String productCode, String productName, double price, int quantity, LocalDate manufactureDate, LocalDate expirationDate)\n" +
-                "    + String validateProductCode(String code)\n" +
-                "    + double validatePrice(double price)\n" +
-                "    + int validateQuantity(int quantity)\n" +
-                "    + LocalDate validateExpirationDate(LocalDate expirationDate, LocalDate manufactureDate)\n" +
-                "    + String toString()\n" +
-                "    + double getTotalValue()\n" +
-                "    + String getProductCode()\n" +
-                "    + String getProductName()\n" +
-                "    + double getPrice()\n" +
-                "    + int getQuantity()\n" +
-                "    + LocalDate getManufactureDate()\n" +
-                "    + LocalDate getExpirationDate()\n" +
-                "    + void setProductCode(String productCode)\n" +
-                "    + void setProductName(String productName)\n" +
-                "    + void setPrice(double price)\n" +
-                "    + void setQuantity(int quantity)\n" +
-                "    + void setManufactureDate(LocalDate manufactureDate)\n" +
-                "    + void setExpirationDate(LocalDate expirationDate)\n" +
+                "\n" +
+                "class Car {\n" +
+                "    - licensePlate: String\n" +
+                "    - manufacturer: String\n" +
+                "    - manufactureYear: int\n" +
+                "    - color: String\n" +
+                "    - price: double\n" +
+                "\n" +
+                "    + Car(licensePlate: String, manufacturer: String, manufactureYear: int, color: String, price: double)\n" +
+                "    + getLicensePlate(): String\n" +
+                "    + getManufacturer(): String\n" +
+                "    + getColor(): String\n" +
+                "    + getPrice(): double\n" +
+                "    + getManufactureYear(): int\n" +
+                "    + getReducedPrice(): double\n" +
                 "}\n" +
+                "\n" +
                 "@enduml";
         try {
-            String outputFilePath = "./product-class.jpg";
+            String outputFilePath = "./car.jpg";
             OutputStream output = new FileOutputStream(outputFilePath);
             SourceStringReader reader = new SourceStringReader(uml);
             reader.outputImage(output, new FileFormatOption(FileFormat.PNG));

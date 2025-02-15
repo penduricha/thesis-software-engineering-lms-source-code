@@ -26,11 +26,13 @@ export default {
   created() {
     // this.isActiveRoute();
     this.saveRouter_Path(this.getRoute());
+    this.getFromLocalStorage_CheckBox();
+    this.getFromLocalStorage_ID_Password();
   },
 
   mounted() {
     // Kiểm tra localStorage khi component được mount
-    this.getFromLocalStorage_CheckBox();
+
   },
 
   methods:{
@@ -87,7 +89,8 @@ export default {
         this.validationSpan = 'Please enter lecture id and password.';
       } else {
         const passwordClass = new Password(this.password);
-        let passwordHashed = await passwordClass.sha512();
+        //let passwordHashed = await passwordClass.sha512();
+        this.saveToLocalStorage_ID_Password();
         this.navigateTo_MainPage();
 
       }
@@ -103,6 +106,45 @@ export default {
     saveToLocalStorage_CheckBox() {
       // Lưu trạng thái vào localStorage
       localStorage.setItem('rememberMe', this.rememberMe);
+    },
+
+    getFromLocalStorage_ID_Password() {
+      const account = localStorage.getItem('account');
+      //const parsedAccount = account ? JSON.parse(account) : null;
+      console.log(account);
+      console.log(this.rememberMe);
+      if(this.rememberMe === true) {
+        if(account){
+          //đổi json thành đối tượng
+          const parsedAccount = account ? JSON.parse(account) : null;
+          this.lectureId = parsedAccount.id;
+          this.password = parsedAccount.password;
+        } else {
+          this.lectureId = null;
+          this.password = null;
+        }
+
+      } else {
+        if(account) {
+          localStorage.removeItem('account');
+        }
+        this.lectureId = null;
+        this.password = null;
+      }
+    },
+
+
+    saveToLocalStorage_ID_Password() {
+      // Lưu trạng thái vào localStorage
+      const account = {
+        id: this.lectureId,
+        password: this.password,
+      };
+
+      if(this.rememberMe) {
+        // Chuyển đổi đối tượng thành chuỗi JSON save json
+        localStorage.setItem('account', JSON.stringify(account));
+      }
     },
 
     //lock paste

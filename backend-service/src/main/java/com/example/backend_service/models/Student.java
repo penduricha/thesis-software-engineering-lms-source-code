@@ -1,6 +1,21 @@
 package com.example.backend_service.models;
 
-import java.io.Serializable;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+import java.io.Serializable;
+@Getter
+@Entity
+@Setter
+@ToString
+@NoArgsConstructor
 public class Student implements Serializable {
+    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(nullable = false, columnDefinition = "nvarchar(8)")
+    private String studentID;
+
 }

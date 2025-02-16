@@ -10,6 +10,7 @@ public class TestEvent {
         Random random = new Random();
         //yêu cầu class đơn 6 thuộc tính
         //Event(String eventCode, String eventName, LocalDate eventDate, String location, int participantNumber, double cost)
+
         //Câu 1
         Event event1 = new Event("E1234",
                 "IUH Coder",

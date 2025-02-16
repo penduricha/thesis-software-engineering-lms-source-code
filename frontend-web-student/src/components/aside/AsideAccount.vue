@@ -2,6 +2,9 @@
 import './aside-account.scss';
 import '../../pages/list-exams/list-exams-components.scss';
 import ManageDateTime from "@/date-time/ManageDateTime.js";
+import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
+import StudentDao from "@/daos/StudentDao.js";
+import RouterDao from "@/routes/RoutersDao.js";
 
 export default {
   name: 'AsideAccount',
@@ -20,20 +23,67 @@ export default {
       yearNumber: null,
       daysOfWeek: null,
       chooseDate: null,
+
+      //id name
+      studentID: null,
+      lastName: null,
+      firstName: null,
+
+      //Time to logout
+      timeout: null,
     }
   },
 
   created() {
+    this.resetTimer();
+    window.addEventListener('mousemove', this.resetTimer);
+    window.addEventListener('keypress', this.resetTimer);
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
     this.getInformation_Date();
+    this.setAccount();
   },
 
   mounted() {
 
   },
 
+  beforeDestroy() {
+    clearTimeout(this.timeout);
+    window.removeEventListener('mousemove', this.resetTimer);
+    window.removeEventListener('keypress', this.resetTimer);
+    window.removeEventListener('beforeunload', this.handleBeforeUnload);
+  },
+
   methods: {
     handleLogout() {
+      const studentLocalStorage = new StudentLocalStorage();
+      const routerDao = new RouterDao();
+      //remove Local-Storage
+      routerDao.removePath_From_LocalStorage();
+      studentLocalStorage.removeStudentID_From_LocalStorage();
       this.navigateTo_LoginPage();
+    },
+
+    resetTimer() {
+      clearTimeout(this.timeout);
+      // Thiết lập timer 30 phút
+      this.timeout = setTimeout(this.handleLogout, 30 * 60 * 1000);
+      //this.timeout = setTimeout(this.handleLogout, 10 * 1000);
+    },
+
+    handleBeforeUnload(event) {
+      // Gọi logout khi người dùng thoát trang
+      this.handleLogout();
+    },
+
+    async setAccount(){
+      const studentLocalStorage = new StudentLocalStorage();
+      let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
+      let student = await StudentDao.getStudentName_And_StudentID(studentID);
+      //console.log(student);
+      this.studentID = student.studentID;
+      this.lastName = student.lastName;
+      this.firstName = student.firstName;
     },
 
     //lock paste
@@ -114,8 +164,8 @@ export default {
     >
       <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo">
       <div class="view-name-and-button-information">
-        <span class="style-span-information">Tu Quang Nhat</span>
-        <span class="style-span-information">21107601</span>
+        <span class="style-span-information">{{lastName}} {{firstName}}</span>
+        <span class="style-span-information">{{studentID}}</span>
       <!--        <button class="button-view-information">View information</button>-->
       </div>
       <img src="@/assets/image/button_nav_left_calendar.png"

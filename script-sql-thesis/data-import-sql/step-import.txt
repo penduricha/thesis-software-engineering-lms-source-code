@@ -1,0 +1,4 @@
+Step 1: import lecture.sql
+Step 2: import course.sql
+Step 3: import student.sql
+Step 4: import map_lecture_course.sql

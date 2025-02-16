@@ -123,7 +123,8 @@ public class ExecuteJava {
             // Create the directory if it doesn't exist
             File directory = new File(packageDir);
             if (!directory.exists()) {
-                directory.mkdirs(); // Create the package directory structure
+                directory.mkdirs();
+                // Create the package directory structure
             }
 
             // Save the class code to a file

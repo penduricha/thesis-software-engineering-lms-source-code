@@ -23,6 +23,7 @@
     "@codemirror/theme-one-dark": "^6.1.2",
     "@codemirror/view": "^6.36.2",
     "@vitejs/plugin-vue": "^5.2.1",
+    "axios": "^1.7.9",
     "sass-embedded": "^1.83.4",
     "vite": "^6.0.5",
     "vite-plugin-vue-devtools": "^7.6.8",

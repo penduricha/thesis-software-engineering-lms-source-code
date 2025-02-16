@@ -48,7 +48,7 @@ export default {
       <h4 class="title-menu">Exam coding</h4>
       <section class="section-welcome">
         <div class="background-welcome">
-          <span class="span-welcome">Hello Nhat! Nice to meet you on this examining platform.</span>
+          <span class="span-welcome">Hello! Nice to meet you on this examining platform.</span>
         </div>
       </section>
       <section class="section-list-exams">

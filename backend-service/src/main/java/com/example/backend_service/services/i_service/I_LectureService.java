@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface I_LectureService {
     public boolean persistLectures(List<Lecture> lectures);
+
+    public Lecture findLectureByLectureID(String lectureID);
 }

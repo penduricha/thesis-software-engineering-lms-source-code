@@ -3,6 +3,8 @@ import './login-page.scss';
 import RouterDao from "@/routes/RoutersDao.js";
 import Password from "@/models/Password.js";
 import listMenu from "@/components/aside/list-menu.js";
+import StudentDao from "@/daos/StudentDao.js";
+import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 
 export default {
   name: "LoginPage",
@@ -68,6 +70,7 @@ export default {
     navigateTo_MainPage() {
       const itemsMenu = listMenu;
       const path = itemsMenu.find(item => item.index === 1)?.path;
+      this.savePath_Init_To_LocalStorage(path);
       this.$router.replace({
         path: path,
         // query: {
@@ -79,18 +82,33 @@ export default {
     },
 
     async handleLogin() {
-      //alert('Login');
       const isEmptyInput = !this.studentId || !this.password;
-      // const passwordClass = new Password(this.password);
-      // let passwordHashed = passwordClass.sha512().trim();
       if (isEmptyInput) {
         this.validationSpan = 'Please enter student id and password.';
       } else {
         const passwordClass = new Password(this.password);
-        //let passwordHashed = await passwordClass.sha512();
-        this.saveToLocalStorage_ID_Password();
-        this.navigateTo_MainPage();
+        let passwordHashed = await passwordClass.sha512();
+        let student = await StudentDao.getStudentID_And_Password(this.studentId.trim());
+        console.log("Student get: ",student);
+        const wrongLogin = (!student || (student.password !== passwordHashed));
+        if(wrongLogin) {
+          this.validationSpan = "Incorrect username or password. Please try again.";
+        } else {
+          this.saveToLocalStorage_ID_Password();
+          this.saveStudentID_To_LocalStorage(this.studentId.trim());
+          this.navigateTo_MainPage();
+        }
       }
+    },
+
+    savePath_Init_To_LocalStorage(path) {
+      const routerDao = new RouterDao();
+      routerDao.savePath_To_LocalStorage(path);
+    },
+
+    saveStudentID_To_LocalStorage(studentID) {
+      const studentLocalStorage  = new StudentLocalStorage();
+      studentLocalStorage.saveStudentID_To_LocalStorage(studentID);
     },
 
     getFromLocalStorage_CheckBox() {

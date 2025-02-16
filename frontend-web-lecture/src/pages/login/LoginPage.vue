@@ -3,6 +3,8 @@ import './login-page.scss';
 import RouterDao from "@/routes/RoutersDao.js";
 import Password from "@/models/Password.js";
 import listMenu from "@/components/aside/list-menu.js";
+import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
+import LectureDao from "@/daos/LectureDao.js";
 // import listMenu from "@/components/aside/list-menu.js";
 
 export default {
@@ -69,6 +71,7 @@ export default {
     navigateTo_MainPage() {
       const itemsMenu = listMenu;
       const path = itemsMenu.find(item => item.index === 1)?.path;
+      this.savePath_Init_To_LocalStorage(path);
       this.$router.replace({
         path: path,
         // query: {
@@ -89,11 +92,28 @@ export default {
         this.validationSpan = 'Please enter lecture id and password.';
       } else {
         const passwordClass = new Password(this.password);
-        //let passwordHashed = await passwordClass.sha512();
-        this.saveToLocalStorage_ID_Password();
-        this.navigateTo_MainPage();
-
+        let passwordHashed = await passwordClass.sha512();
+        let lecture = await LectureDao.getLectureID_And_Password(this.lectureId.trim());
+        console.log("Lecture get: ",lecture);
+        const wrongLogin = (!lecture || (lecture.password !== passwordHashed));
+        if(wrongLogin) {
+          this.validationSpan = "Incorrect username or password. Please try again.";
+        } else {
+          this.saveToLocalStorage_ID_Password();
+          this.saveLectureID_To_LocalStorage(this.lectureId.trim());
+          this.navigateTo_MainPage();
+        }
       }
+    },
+
+    savePath_Init_To_LocalStorage(path) {
+      const routerDao = new RouterDao();
+      routerDao.savePath_To_LocalStorage(path);
+    },
+
+    saveLectureID_To_LocalStorage(lectureID) {
+      const lectureLocalStorage  = new LectureLocalStorage();
+      lectureLocalStorage.saveLectureID_To_LocalStorage(lectureID);
     },
 
     getFromLocalStorage_CheckBox() {

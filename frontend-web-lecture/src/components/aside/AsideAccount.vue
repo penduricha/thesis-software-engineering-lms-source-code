@@ -2,6 +2,9 @@
 import './aside-account.scss';
 import '../../pages/main/list-courses.scss';
 import ManageDateTime from "@/date-time/ManageDateTime.js";
+import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
+import RouterDao from "@/routes/RoutersDao.js";
+import LectureDao from "@/daos/LectureDao.js";
 
 export default {
   name: 'AsideAccount',
@@ -16,29 +19,82 @@ export default {
 
   data(){
     return {
+      events: [
+        'click',
+        'mousemove',
+        'mouseup',
+        'mousedown',
+        'scroll',
+        'keypress',
+        'unload',
+      ],
+
       monthName: null,
       yearNumber: null,
       daysOfWeek: null,
       chooseDate: null,
+
+      //id name
+      lectureID: null,
+      name: null,
+
+      //Time to logout
+      timeout: null,
     }
   },
 
   created() {
     this.getInformation_Date();
+    this.setAccount();
   },
 
   mounted() {
-
+    this.events.forEach(function(event) {
+      window.addEventListener(event, this.resetTimer)
+    }, this);
+    this.setTimers();
   },
+
+  destroyed() {
+    this.events.forEach(function(event) {
+      window.removeEventListener(event, this.resetTimer)
+    }, this);
+    this.resetTimer();
+  },
+
+
 
   methods: {
     handleLogout() {
+      const lectureLocalStorage = new LectureLocalStorage();
+      const routerDao = new RouterDao();
+      //remove Local-Storage
+      routerDao.removePath_From_LocalStorage();
+      lectureLocalStorage.removeLectureID_From_LocalStorage();
       this.navigateTo_LoginPage();
     },
 
     //lock paste
     preventPaste(event) {
       event.preventDefault();
+    },
+
+    setTimers() {
+      this.timeout = setTimeout(this.handleLogout, 30 * 10 * 1000);
+    },
+
+    resetTimer() {
+      clearTimeout(this.timeout);
+      this.setTimers();
+    },
+
+    async setAccount() {
+      const lectureLocalStorage = new LectureLocalStorage();
+      let lectureID = lectureLocalStorage.getLectureID_From_LocalStorage();
+      let lecture = await LectureDao.getLectureName_And_LectureID(lectureID);
+      console.log(lecture);
+      this.lectureID = '0' + lecture.lectureID;
+      this.name = lecture.name;
     },
 
     navigateTo_LoginPage() {
@@ -99,7 +155,6 @@ export default {
     setStyleButton() {
       return (day) => {
         return ((day.dayNumber === this.chooseDate.dayNumber) )
-
             ? 'button-view-date-choose'
             : 'button-view-date-no-choose';
       };
@@ -114,8 +169,8 @@ export default {
     >
       <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo">
       <div class="view-name-and-button-information">
-        <span class="style-span-information">Dang Thi Thu Ha</span>
-        <span class="style-span-information">01120012</span>
+        <span class="style-span-information">{{name}}</span>
+        <span class="style-span-information">{{lectureID}}</span>
       </div>
       <img src="@/assets/image/button_nav_left_calendar.png"
              alt="button nav left calendar"

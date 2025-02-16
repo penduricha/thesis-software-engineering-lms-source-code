@@ -19,4 +19,9 @@ public class CourseService implements I_CourseService {
     public List<Course> addListCourses(List<Course> courses) {
         return courseRepository.saveAll(courses);
     }
+
+    @Override
+    public List<Course> getListCoursesByLectureId(String lectureId) {
+        return List.of();
+    }
 }

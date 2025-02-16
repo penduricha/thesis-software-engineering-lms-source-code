@@ -9,6 +9,16 @@ import RouterDao from "@/routes/RoutersDao.js";
 export default {
   name: 'AsideAccount',
 
+  beforeRouteLeave(to, from, next) {
+    const answer = window.confirm('Bạn có chắc chắn muốn rời khỏi trang này?');
+    if (answer) {
+      next(); // Cho phép rời khỏi trang
+    } else {
+      next(false); // Ngăn không cho rời khỏi trang
+    }
+    //clearTimeout(this.timeout);
+  },
+
   props: {
 
   },
@@ -19,6 +29,17 @@ export default {
 
   data(){
     return {
+      events: [
+        'click',
+        'mousemove',
+        'mouseup',
+        'mousedown',
+        'scroll',
+        'keypress',
+        'unload',
+      ],
+
+
       monthName: null,
       yearNumber: null,
       daysOfWeek: null,
@@ -35,23 +56,22 @@ export default {
   },
 
   created() {
-    this.resetTimer();
-    window.addEventListener('mousemove', this.resetTimer);
-    window.addEventListener('keypress', this.resetTimer);
-    window.addEventListener('beforeunload', this.handleBeforeUnload);
     this.getInformation_Date();
     this.setAccount();
   },
 
   mounted() {
-
+    this.events.forEach(function(event) {
+      window.addEventListener(event, this.resetTimer)
+    }, this);
+    this.setTimers();
   },
 
-  beforeDestroy() {
-    clearTimeout(this.timeout);
-    window.removeEventListener('mousemove', this.resetTimer);
-    window.removeEventListener('keypress', this.resetTimer);
-    window.removeEventListener('beforeunload', this.handleBeforeUnload);
+  destroyed() {
+    this.events.forEach(function(event) {
+      window.removeEventListener(event, this.resetTimer)
+    }, this);
+    this.resetTimer();
   },
 
   methods: {
@@ -64,17 +84,23 @@ export default {
       this.navigateTo_LoginPage();
     },
 
-    resetTimer() {
-      clearTimeout(this.timeout);
-      // Thiết lập timer 30 phút
-      this.timeout = setTimeout(this.handleLogout, 30 * 60 * 1000);
-      //this.timeout = setTimeout(this.handleLogout, 10 * 1000);
+    setTimers() {
+      this.timeout = setTimeout(this.handleLogout, 45 * 10 * 1000);
     },
 
-    handleBeforeUnload(event) {
-      // Gọi logout khi người dùng thoát trang
-      this.handleLogout();
+    resetTimer() {
+      clearTimeout(this.timeout);
+      this.setTimers();
     },
+
+    // handleBeforeUnload(event) {
+    //   // Lưu trạng thái rằng người dùng đã thoát
+    //   localStorage.setItem('logoutTriggered', 'true');
+    //
+    //   const message = 'Bạn có chắc chắn muốn rời khỏi trang này?';
+    //   event.returnValue = message; // Chrome yêu cầu thiết lập giá trị này
+    //   return message; // Các trình duyệt khác có thể sử dụng giá trị này
+    // },
 
     async setAccount(){
       const studentLocalStorage = new StudentLocalStorage();
@@ -108,8 +134,6 @@ export default {
       this.yearNumber = dateInWeek.getCurrentDayInfo().year;
       this.daysOfWeek = dateInWeek.getListDayOfWeek();
       this.chooseDate = dateInWeek.getCurrentDayInfo();
-      // console.log('Date choose: ',this.chooseDate);
-      // console.log('Days in week: ',this.daysOfWeek);
     },
 
     handleButtonDate(d) {

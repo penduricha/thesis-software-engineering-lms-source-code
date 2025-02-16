@@ -1,4 +1,4 @@
-.card {
+.card-course {
   width: 20rem;
   background-color: #fff;
   border-radius: 2px;
@@ -8,16 +8,16 @@
   border-style: solid;
 }
 
-.card:hover {
+.card-course:hover {
   opacity: 0.9;
 }
 
-.card .top {
+.card-course .top {
   background-color: #2c2c84;
   height: 5rem;
 }
 
-.card .bottom {
+.card-course .bottom {
   display: flex;
   height: 5rem;
   flex-direction: column;
@@ -26,7 +26,7 @@
 }
 
 .bottom .title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   color: #000000;
 }

@@ -59,5 +59,5 @@ public class LectureController {
         return lectureNameMap;
     }
 
-    
+
 }

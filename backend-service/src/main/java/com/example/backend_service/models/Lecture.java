@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Lecture implements Serializable {
     @Id
-    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, columnDefinition = "nvarchar(8)", name ="lecture_id")
     private String lectureID;
 

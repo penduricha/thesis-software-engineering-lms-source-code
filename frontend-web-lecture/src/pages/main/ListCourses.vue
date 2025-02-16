@@ -4,6 +4,8 @@ import AsideMenu from "@/components/aside/AsideMenu.vue";
 import AsideAccount from "@/components/aside/AsideAccount.vue";
 import './list-courses.scss';
 import './card-course.scss';
+import CourseDao from "@/daos/CourseDao.js";
+import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
 
 export default {
   name: "ListCourses",
@@ -15,12 +17,13 @@ export default {
 
   data(){
     return {
-
+      courses: null,
     }
   },
 
   created() {
     this.saveRouter_Path(this.getRoute());
+    this.setCourses();
   },
 
   mounted() {
@@ -38,6 +41,15 @@ export default {
       const routerDao = new RouterDao();
       routerDao.savePath_To_SessionStorage(route);
     },
+
+    async setCourses(){
+      const lectureLocalStorage = new LectureLocalStorage();
+      let lectureID = lectureLocalStorage.getLectureID_From_LocalStorage();
+      this.courses = await CourseDao.getCourses_By_LectureID(lectureID);
+      if(!this.courses) {
+        alert("No course found.");
+      }
+    }
   }
 }
 </script>
@@ -49,48 +61,23 @@ export default {
 
     <section class="section-welcome">
       <div class="background-welcome">
-        <span class="span-welcome">Welcome back, Dang Thi Thu Ha</span>
+        <span class="span-welcome">Welcome back to this platform.</span>
       </div>
     </section>
     <section class="section-list-course">
       <h4 class="title-menu">List Courses</h4>
       <div class="view-courses">
-        <button>
-          <div class="card">
+        <button v-for="course in courses">
+          <div class="card-course">
             <div class="top"></div>
             <div class="bottom">
-              <span class="title">DHKTPM20BTT - OOP</span>
-              <span class="text">Semester 1, year: 2025 - 2026</span>
+              <span class="title">{{course.className}} - {{course.courseName}}</span>
+              <span class="text">Semester {{course.semester}}, year: {{course.startYear}} - {{course.endYear}}</span>
             </div>
           </div>
         </button>
-        <button>
-          <div class="card">
-            <div class="top"></div>
-            <div class="bottom">
-              <span class="title">DHKTPM20BTT - OOP</span>
-              <span class="text">Semester 1, year: 2025 - 2026</span>
-            </div>
-          </div>
-        </button>
-        <button>
-          <div class="card">
-            <div class="top"></div>
-            <div class="bottom">
-              <span class="title">DHKTPM20BTT - OOP</span>
-              <span class="text">Semester 1, year: 2025 - 2026</span>
-            </div>
-          </div>
-        </button>
-        <button>
-          <div class="card">
-            <div class="top"></div>
-            <div class="bottom">
-              <span class="title">DHKTPM20BTT - OOP</span>
-              <span class="text">Semester 1, year: 2025 - 2026</span>
-            </div>
-          </div>
-        </button>
+
+
       </div>
 
 

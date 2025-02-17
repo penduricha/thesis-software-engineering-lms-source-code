@@ -13,9 +13,6 @@ spring:
 #      auto-commit: Chế độ tự động commit.
 #      transaction-isolation: Mức độ phân cách giao dịch.
   jpa:
-    #    t�nh n?ng open-in-view ???c b?t theo m?c ??nh.
-    #  ?i?u n�y c� th? g�y ra c�c truy v?n c? s? d? li?u kh�ng c?n thi?t trong qu� tr�nh render view,
-    #  ?nh h??ng ??n hi?u su?t v� kh? n?ng qu?n l� giao d?ch.
     open-in-view: false
     hibernate:
       ddl-auto: update

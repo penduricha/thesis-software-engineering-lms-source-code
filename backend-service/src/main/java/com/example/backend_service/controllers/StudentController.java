@@ -9,6 +9,7 @@ import com.example.backend_service.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -50,5 +51,17 @@ public class StudentController {
             studentNameMap.put("firstName",student.getFirstName());
         }
         return studentNameMap;
+    }
+
+    @GetMapping("/student/getPassword_By_StudentID/{studentID}")
+    public ResponseEntity<String> updatePasswordStudent(@PathVariable String studentID) throws HttpClientErrorException {
+        Student student = studentService.findStudentByStudentId(studentID);
+        return ResponseEntity.ok(student.getPassword());
+    }
+
+    @PatchMapping("/student/updatePasswordStudent/{studentID}/{newPassword}")
+    public ResponseEntity<String> updatePasswordStudent(@PathVariable String studentID, @PathVariable String newPassword) throws HttpClientErrorException {
+        Student updatedStudent = studentService.updatePasswordStudent(studentID, newPassword);
+        return ResponseEntity.ok(updatedStudent.getPassword());
     }
 }

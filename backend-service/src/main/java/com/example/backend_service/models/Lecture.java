@@ -63,4 +63,24 @@ public class Lecture implements Serializable {
     public String getPassword() {
         return password;
     }
+
+    public void setLectureID(String lectureID) {
+        this.lectureID = lectureID;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

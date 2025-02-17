@@ -12,5 +12,12 @@ export default class StudentService {
     static fetchStudentName_And_StudentID(studentID) {
         return axiosConfig.getAPIClient().get(`/student/studentID_name/${studentID}`);
     }
-    
+
+    static patchUpdate_Password_By_StudentID(studentID, newPassword) {
+        return axiosConfig.getAPIClient().patch(`/student/updatePasswordStudent/${studentID}/${newPassword}`,{});
+    }
+
+    static fetchStudentPassword_By_StudentID(studentID) {
+        return axiosConfig.getAPIClient().get(`/student/getPassword_By_StudentID/${studentID}`);
+    }
 }

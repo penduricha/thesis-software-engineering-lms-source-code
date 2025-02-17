@@ -1,10 +1,12 @@
 <script>
 import './aside-account.scss';
 import '../../pages/main/list-courses.scss';
+import '../span/span-style.scss';
 import ManageDateTime from "@/date-time/ManageDateTime.js";
 import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
 import RouterDao from "@/routes/RoutersDao.js";
 import LectureDao from "@/daos/LectureDao.js";
+import Password from "@/models/Password.js";
 
 export default {
   name: 'AsideAccount',
@@ -40,6 +42,16 @@ export default {
 
       //Time to logout
       timeout: null,
+
+      //password change;
+      currentPassword: null,
+      newPassword: null,
+      confirmNewPassword: null,
+
+      //validateSpan
+      validationCurrentPassword: null,
+      validationNewPassword: null,
+      validationConfirmNewPassword: null,
     }
   },
 
@@ -149,6 +161,98 @@ export default {
       this.monthName = this.chooseDate.monthName;
       // console.log('week: ',this.daysOfWeek);
     },
+
+    //set input
+    setInputCurrentPassword(){
+      if(!this.currentPassword){
+        this.validationCurrentPassword = null;
+      } else {
+        this.validationCurrentPassword = null;
+      }
+    },
+
+    setInputNewPassword() {
+      if(!this.newPassword){
+        this.validationNewPassword = null;
+      } else {
+        this.validationNewPassword = null;
+      }
+    },
+
+    setInputConfirmNewPassword() {
+      if(!this.confirmNewPassword){
+        this.validationConfirmNewPassword = null;
+      } else {
+        this.validationConfirmNewPassword = null;
+      }
+    },
+
+    //validate and update
+    async validateCurrentPassword() {
+      const lectureLocalStorage = new LectureLocalStorage();
+      let lectureID = lectureLocalStorage.getLectureID_From_LocalStorage();
+      const passwordClass = new Password(this.currentPassword);
+      let passwordHashed = await passwordClass.sha512();
+
+      let lecturePasswordHashed = await LectureDao.getLecturePasswordBy_LectureID(lectureID);
+      if (lecturePasswordHashed !== passwordHashed) {
+        this.validationCurrentPassword = 'Current password doesn\'t match.';
+      } else {
+        try {
+          const passwordClassNew = new Password(this.newPassword);
+          let passwordNewHashed = await passwordClassNew.sha512();
+          let statusUpdate = await LectureDao.update_Password_By_LectureID(lectureID, passwordNewHashed);
+          console.log('patched password status: ', statusUpdate);
+          if (statusUpdate) {
+            alert("Update password successfully.");
+            window.location.reload();
+          } else {
+            alert("Update Failed.");
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    },
+
+    validateRequiredInput() {
+      if(!this.currentPassword) {
+        this.validationCurrentPassword = 'Please enter current password.';
+      }
+
+      if(!this.newPassword) {
+        this.validationNewPassword = 'Please enter new password.';
+      }
+
+      if(!this.confirmNewPassword) {
+        this.validationConfirmNewPassword = 'Please enter confirm password.';
+      }
+    },
+
+    validateNewPassword() {
+      const isNotNullInput = this.currentPassword && this.newPassword && this.confirmNewPassword;
+      if(isNotNullInput) {
+        if(this.newPassword !== this.confirmNewPassword) {
+          this.validationConfirmNewPassword = 'Confirm password doesn\'t match new password.';
+        }
+      }
+    },
+
+    handleUpdatePassword() {
+      this.validateRequiredInput();
+      this.validateNewPassword();
+      const noValidateSpan =!this.validationCurrentPassword && !this.validationNewPassword && !this.validationConfirmNewPassword;
+      if(noValidateSpan) {
+        this.validateCurrentPassword();
+      }
+    },
+
+    handleCloseModal() {
+      this.validationCurrentPassword = null;
+      this.validationNewPassword = null;
+      this.validationConfirmNewPassword = null;
+    }
+
   },
 
   computed: {
@@ -253,39 +357,64 @@ export default {
   </aside>
 
   <!-- Modal change password -->
-  <div class="modal fade" id="modalChangePassword">
+  <div class="modal fade" id="modalChangePassword" @click.self="handleCloseModal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Change password</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" @click="handleCloseModal"></button>
         </div>
         <div class="modal-body">
           <div class="form-group">
             <label for="fullName" class="form-label">Enter old password</label>
             <input type="password"
                    class="form-control"
+                   :class="[{'is-invalid': validationCurrentPassword !== null}]"
                    @paste="preventPaste($event)"
+                   v-model="currentPassword"
+                   @input="setInputCurrentPassword()"
             >
+            <span v-if="validationCurrentPassword"
+                  class="span-validate-form-font-size invalid-feedback"
+            >
+              {{validationCurrentPassword}}
+            </span>
           </div>
           <div class="form-group">
             <label for="telephone" class="form-label">Enter new password</label>
             <input type="password"
                    class="form-control"
+                   :class="[{'is-invalid': validationNewPassword !== null}]"
                    @paste="preventPaste($event)"
+                   v-model="newPassword"
+                   @input="setInputNewPassword()"
             >
+            <span v-if="validationNewPassword"
+                  class="span-validate-form-font-size invalid-feedback"
+            >
+              {{validationNewPassword}}
+            </span>
           </div>
           <div class="form-group">
             <label for="dateOfBirth" class="form-label">Confirm new password</label>
             <input type="password"
                    class="form-control"
+                   :class="[{'is-invalid': validationConfirmNewPassword !== null}]"
                    @paste="preventPaste($event)"
+                   v-model="confirmNewPassword"
+                   @input="setInputConfirmNewPassword()"
             >
+            <span v-if="validationConfirmNewPassword"
+                  class="span-validate-form-font-size invalid-feedback"
+            >
+              {{validationConfirmNewPassword}}
+            </span>
           </div>
         </div>
         <div class="modal-footer">
           <button type="submit"
                   class="btn-update-password"
+                  @click="handleUpdatePassword()"
           >Update password
           </button>
         </div>

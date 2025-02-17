@@ -17,3 +17,11 @@ npm install @codemirror/theme-one-dark
 npm install @codemirror/lang-java
 npm install @codemirror/autocomplete
 npm install @codemirror/view
+
+or
+
+npm install vue-codemirror
+npm install @codemirror/theme-one-dark
+npm install @codemirror/lang-java
+npm install @codemirror/view
+npm install @codemirror/autocomplete

@@ -65,4 +65,8 @@ public class Student implements Serializable {
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

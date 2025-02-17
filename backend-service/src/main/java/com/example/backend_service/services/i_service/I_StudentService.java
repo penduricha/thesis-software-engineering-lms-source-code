@@ -11,4 +11,8 @@ public interface I_StudentService {
     public List<Student> getStudents();
 
     public Student findStudentByStudentId(String studentID);
+
+    public Student updatePasswordStudent(String studentID, String newPassword);
+
+
 }

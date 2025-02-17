@@ -25,4 +25,30 @@ export default class LectureDao {
         })
         return lecture;
     }
+
+    static async getLecturePasswordBy_LectureID(lectureID) {
+        let lecturePasswordHashed = null;
+        await LectureService.fetchLecturePassword_By_LectureID(lectureID).then(response => {
+            lecturePasswordHashed = response.data;
+        }).catch(error => {
+            console.error(error);
+            // alert(error)
+        });
+        return lecturePasswordHashed;
+    }
+
+    static async update_Password_By_LectureID(lectureID, newPassword) {
+        let status = false;
+        let newPasswordReturned = null;
+        await LectureService.patchUpdate_Password_By_LectureID(lectureID, newPassword).then(response => {
+            newPasswordReturned = response.data;
+            console.log('patched password: ', newPasswordReturned);
+            status = !!newPasswordReturned;
+        }).catch(error => {
+            console.error(error);
+            // alert(error)
+        });
+        console.log('patched password: ', newPasswordReturned);
+        return status;
+    }
 }

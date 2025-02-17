@@ -4,10 +4,7 @@ import com.example.backend_service.models.*;
 import com.example.backend_service.services.LectureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.HashMap;
@@ -59,5 +56,30 @@ public class LectureController {
         return lectureNameMap;
     }
 
+    @GetMapping("/lecture/getPassword_By_LectureID/{lectureID}")
+    public ResponseEntity<String> updatePasswordStudent(@PathVariable String lectureID) throws HttpClientErrorException {
+        if(lectureID.charAt(0) == '0'){
+            String lectureIDFind = lectureID.substring(1);
+            Lecture lecture = lectureService.findLectureByLectureID(lectureIDFind);
+            return ResponseEntity.ok(lecture.getPassword());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/lecture/updatePasswordLecture/{lectureID}/{newPassword}")
+    public ResponseEntity<String> updatePasswordStudent(@PathVariable String lectureID, @PathVariable String newPassword) throws HttpClientErrorException {
+        if(lectureID.charAt(0) == '0'){
+            String lectureIDFind = lectureID.substring(1);
+            Lecture updatedLecture = lectureService.updatePasswordLecture(lectureIDFind, newPassword);
+            return ResponseEntity.ok(updatedLecture.getPassword());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+//    @GetMapping("/lecture/updatePasswordLecture/{lectureID}/{newPassword}")
+//    public ResponseEntity<String> updatePasswordStudent(@PathVariable String lectureID, @PathVariable String newPassword) throws HttpClientErrorException {
+//        Lecture updatedLecture = lectureService.updatePasswordLecture(lectureID, newPassword);
+//        return ResponseEntity.ok(updatedLecture.getPassword());
+//    }
 
 }

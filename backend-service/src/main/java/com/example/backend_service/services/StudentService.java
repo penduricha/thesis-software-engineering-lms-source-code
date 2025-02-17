@@ -36,4 +36,14 @@ public class StudentService implements I_StudentService {
         return studentRepository.findStudentByStudentID(studentID);
     }
 
+    @Override
+    public Student updatePasswordStudent(String studentID, String newPassword) {
+        Student studentFind = findStudentByStudentId(studentID);
+        if(studentFind != null) {
+            studentFind.setPassword(newPassword);
+            return studentRepository.save(studentFind);
+        }
+        return null;
+    }
+
 }

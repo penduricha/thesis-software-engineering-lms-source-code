@@ -4,6 +4,7 @@ import com.example.backend_service.models.Lecture;
 import com.example.backend_service.repositories.CourseRepository;
 import com.example.backend_service.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,5 +49,17 @@ public class CourseController {
             }
         }
         return list;
+    }
+
+    public String covertLectureID(String lectureID) {
+        if(lectureID.charAt(0) == '0'){
+            return lectureID.substring(1);
+        }
+        return null;
+    }
+
+    @GetMapping("/course/get_course_by_lectureID_courseID/{lectureID}/{courseID}")
+    public ResponseEntity<Map<String, Object>> getCourse_By_LectureID_CourseID(@PathVariable String lectureID,@PathVariable Long courseID) throws HttpClientErrorException {
+        return ResponseEntity.ok(courseService.getCourse_By_LectureID_CourseID(covertLectureID(lectureID),courseID));
     }
 }

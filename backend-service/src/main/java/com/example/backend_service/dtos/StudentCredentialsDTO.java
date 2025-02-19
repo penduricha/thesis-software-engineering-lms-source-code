@@ -8,7 +8,6 @@ import java.io.Serializable;
 
 @Getter
 @Data
-@NoArgsConstructor
 public class StudentCredentialsDTO {
     // Getters
     private String studentID;

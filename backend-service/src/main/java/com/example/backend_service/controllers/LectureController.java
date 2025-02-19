@@ -76,6 +76,21 @@ public class LectureController {
         return ResponseEntity.notFound().build();
     }
 
+    public String covertLectureID(String lectureID) {
+        if(lectureID.charAt(0) == '0'){
+            return lectureID.substring(1);
+        }
+        return null;
+    }
+
+    @GetMapping("/lecture/lecture_Information_By_LectureID/{lectureID}")
+    public ResponseEntity<Map<String, Object>> getLecture_Information(@PathVariable String lectureID) throws HttpClientErrorException {
+        return ResponseEntity.ok(lectureService.findLectureInformation_By_LectureID(covertLectureID(lectureID)));
+    }
+
+//    public ResponseEntity<>
+
+
 //    @GetMapping("/lecture/updatePasswordLecture/{lectureID}/{newPassword}")
 //    public ResponseEntity<String> updatePasswordStudent(@PathVariable String lectureID, @PathVariable String newPassword) throws HttpClientErrorException {
 //        Lecture updatedLecture = lectureService.updatePasswordLecture(lectureID, newPassword);

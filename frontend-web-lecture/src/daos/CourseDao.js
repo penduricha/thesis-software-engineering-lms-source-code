@@ -16,5 +16,16 @@ export default class CourseDao {
         return courses;
     }
 
+    static async getCourse_By_LectureID_CourseID(lectureID, courseID) {
+        let course = {};
+        await CourseService.fetchCourse_By_LectureID_And_CourseID(lectureID,courseID)
+            .then(response => {
+            course = response.data;
+        }).catch(error => {
+            console.error(error);
+            //alert(error)
+        })
+        return course;
+    }
 
 }

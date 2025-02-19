@@ -49,7 +49,23 @@ export default {
       if(!this.courses) {
         alert("No course found.");
       }
-    }
+    },
+
+    navigateTo_Course(courseID) {
+      this.$router.replace({
+        path: '/main-page/list-courses/course-manage',
+        query: {
+          courseID: courseID,
+        }
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
+    },
+
+    handeNavigateToCourse(courseID) {
+      this.navigateTo_Course(courseID);
+    },
   }
 }
 </script>
@@ -67,7 +83,7 @@ export default {
     <section class="section-list-course">
       <h4 class="title-menu">List Courses</h4>
       <div class="view-courses">
-        <button v-for="course in courses">
+        <button v-for="course in courses" @click="handeNavigateToCourse(course.courseID)">
           <div class="card-course">
             <div class="top"></div>
             <div class="bottom">
@@ -76,11 +92,7 @@ export default {
             </div>
           </div>
         </button>
-
-
       </div>
-
-
     </section>
   </main>
   <AsideAccount/>

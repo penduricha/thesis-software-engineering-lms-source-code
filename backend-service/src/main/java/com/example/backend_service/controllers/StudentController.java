@@ -22,12 +22,11 @@ import java.util.*;
 public class StudentController {
     private final StudentService studentService;
 
-    private final StudentRepository studentRepository;
+//    private final StudentRepository studentRepository;
 
     @Autowired
-    public StudentController(StudentService studentService, StudentRepository studentRepository) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
-        this.studentRepository = studentRepository;
     }
 
     @GetMapping("/student/studentID_password/{studentID}")
@@ -65,8 +64,5 @@ public class StudentController {
         return ResponseEntity.ok(updatedStudent.getPassword());
     }
 
-    @GetMapping("/student/student_Information_By_StudentID/{studentID}")
-    public ResponseEntity<Map<String,Object>> getStudent_Information(@PathVariable String studentID) throws HttpClientErrorException {
-       return ResponseEntity.ok(studentService.findStudentInformation_By_StudentID(studentID));
-    }
+
 }

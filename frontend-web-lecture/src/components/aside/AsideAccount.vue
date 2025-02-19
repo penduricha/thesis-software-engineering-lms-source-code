@@ -92,7 +92,7 @@ export default {
     },
 
     setTimers() {
-      this.timeout = setTimeout(this.handleLogout, 30 * 10 * 1000);
+      this.timeout = setTimeout(this.handleLogout, 45 * 10 * 1000);
     },
 
     resetTimer() {

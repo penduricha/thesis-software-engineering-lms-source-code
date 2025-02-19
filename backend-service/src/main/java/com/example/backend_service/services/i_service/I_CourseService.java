@@ -6,4 +6,6 @@ public interface I_CourseService {
     public List<Course> addListCourses(List<Course> courses);
 
     public List<Course> getListCoursesByLectureId(String lectureId);
+
+    public Map<String, Object> getCourse_By_LectureID_CourseID(String lectureID, Long courseID);
 }

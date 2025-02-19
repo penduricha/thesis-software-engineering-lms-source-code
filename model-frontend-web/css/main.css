@@ -9,6 +9,7 @@
     --grey-item: #EBEBEB;
     --background-linear: linear-gradient(to right,#786BDE, rgba(187, 183, 215, 0.5));
     --danger-color-red: #FF0000;
+    --grey-exam: #F7F3F3;
 }
 
 body {

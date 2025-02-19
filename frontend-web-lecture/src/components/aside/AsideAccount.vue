@@ -241,7 +241,10 @@ export default {
     handleUpdatePassword() {
       this.validateRequiredInput();
       this.validateNewPassword();
-      const noValidateSpan =!this.validationCurrentPassword && !this.validationNewPassword && !this.validationConfirmNewPassword;
+      const noValidateSpan =
+          !this.validationCurrentPassword
+          && !this.validationNewPassword
+          && !this.validationConfirmNewPassword;
       if(noValidateSpan) {
         this.validateCurrentPassword();
       }

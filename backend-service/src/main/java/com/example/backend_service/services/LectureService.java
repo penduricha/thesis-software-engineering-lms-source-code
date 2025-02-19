@@ -9,6 +9,7 @@ import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class LectureService implements I_LectureService {
@@ -36,5 +37,10 @@ public class LectureService implements I_LectureService {
             return lectureRepository.save(lectureFind);
         }
         return null;
+    }
+
+    @Override
+    public Map<String, Object> findLectureInformation_By_LectureID(String lectureID) {
+        return Map.of();
     }
 }

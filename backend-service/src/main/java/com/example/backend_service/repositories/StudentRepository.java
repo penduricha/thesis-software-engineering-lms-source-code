@@ -3,15 +3,11 @@ package com.example.backend_service.repositories;
 
 import com.example.backend_service.models.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
-import java.util.Map;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
     Student findStudentByStudentID(String studentID);
+
 
 //    @Query(value = "select s.student_id, " +
 //            "s.password from Student s " +

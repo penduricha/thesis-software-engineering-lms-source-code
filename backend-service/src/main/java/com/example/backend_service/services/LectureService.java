@@ -31,7 +31,7 @@ public class LectureService implements I_LectureService {
     }
 
     @Override
-    public Lecture updatePasswordLecture(String lectureID, String newPassword) {
+    public Lecture updatePasswordLecture(String lectureID, String newPassword) throws JpaSystemException {
         Lecture lectureFind = findLectureByLectureID(lectureID);
         if(lectureFind != null) {
             lectureFind.setPassword(newPassword);
@@ -41,7 +41,7 @@ public class LectureService implements I_LectureService {
     }
 
     @Override
-    public Map<String, Object> findLectureInformation_By_LectureID(String lectureID) {
+    public Map<String, Object> findLectureInformation_By_LectureID(String lectureID) throws JpaSystemException {
         Lecture lectureFind = findLectureByLectureID(lectureID);
         Map<String, Object> lectureInfo = new HashMap<>();
         if (lectureFind != null) {

@@ -1,47 +1,42 @@
 <script>
-
-import RouterDao from "@/routes/RoutersDao.js";
-import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
-//scss
-import '../main/list-courses.scss';
-import '../../components/aside/aside-account.scss';
-import '../../components/aside/aside-menu-style.scss';
-import './course-manage.scss';
-import './modal-create-exam.scss';
-import '../../components/span/span-style.scss';
-
-//others
-import CourseDao from "@/daos/CourseDao.js";
-import AsideAccount from "@/components/aside/AsideAccount.vue";
-import AsideMenu from "@/components/aside/AsideMenu.vue";
 import Validation from "@/validation/Validation.js";
 import StringFormat from "@/models/StringFormat.js";
 import Password from "@/models/Password.js";
-import ModalUpdateExam from "@/pages/detail-course/ModalUpdateExam.vue";
 
 export default {
-  name: "CourseManage",
+  name: "ModalUpdateExam",
 
   props: {
-    courseID: {
+    examIDToUpdate: {
       type: Number,
       required: true
-    }
+    },
+
+    courseIDToUpdate: {
+      type: Number,
+      required: true
+    },
+
+    lectureID: {
+      type: String,
+      required: true
+    },
   },
 
-  components: {
-    ModalUpdateExam,
-    AsideMenu, AsideAccount
+  mounted() {
+    //call method set input
+    this.setInputExamTitle();
+    // this.setSelectExamType();
+    // this.setSelectTopicExam();
+    // this.setSelectRetake();
+    this.isLockSelectScoringMethod();
+    this.setInputStartDate();
+    this.setInputEndDate();
+    this.setInputExamPaper();
   },
 
   data() {
     return {
-      lectureID: null,
-
-      className: null,
-      courseName: null,
-      courseID: null,
-
       //form exam
       titleExam: null,
       typeExam: null,
@@ -66,82 +61,12 @@ export default {
 
 
       passwordExam: null,
-
     }
   },
 
-  created() {
-    this.setLectureID();
-    this.setCourse();
-    this.saveRouter_Path(this.getRoute());
-  },
-
-  mounted() {
-    //call method set input
-    this.setInputExamTitle();
-    // this.setSelectExamType();
-    // this.setSelectTopicExam();
-    // this.setSelectRetake();
-    this.isLockSelectScoringMethod();
-    this.setInputStartDate();
-    this.setInputEndDate();
-    this.setInputExamPaper();
-  },
-
   methods: {
-    getRoute() {
-      //ở đây có props thì phải thêm path của props
-      console.log(this.$route.path);
-      return this.$route.path + "?" + "courseID=" + this.courseID;
-    },
-
-    saveRouter_Path(route) {
-      const routerDao = new RouterDao();
-      routerDao.savePath_To_SessionStorage(route);
-    },
-
-    setLectureID() {
-      const lectureLocalStorage = new LectureLocalStorage();
-      let lectureID = lectureLocalStorage.getLectureID_From_LocalStorage();
-      if(lectureID) {
-        this.lectureID = lectureID;
-      } else {
-        this.lectureID = '1120050';
-        //mã bảo hà
-      }
-    },
-
-    navigateTo_ListCourses() {
-      this.$router.replace({
-        path: '/main-page/list-courses',
-        // query: {
-        // }
-      }).catch((error) => {
-        console.error('Error navigating :', error);
-        alert(error);
-      });
-    },
-
-    handleBackToListCourses() {
-      this.navigateTo_ListCourses();
-    },
-
-    //lock paste
     preventPaste(event) {
       event.preventDefault();
-    },
-
-
-    async setCourse() {
-      // console.log("Course ID: ",this.courseID);
-      let course = await CourseDao.getCourse_By_LectureID_CourseID(
-          this.lectureID,
-          this.courseID);
-      if(course) {
-        this.className = course.className;
-        this.courseName = course.courseName;
-        this.courseID = course.courseID;
-      }
     },
 
     //set field modal
@@ -299,9 +224,10 @@ export default {
       if(!this.endDate) {
         this.validateEndDate = "Please choose end date.";
       }
+
     },
 
-    async handleCreateExam() {
+    async handleUpdateExam() {
       this.validationNullField();
       //tạo danh sách ktra các validate xem còn nào còn thông báo ko
       const validations = [
@@ -328,108 +254,24 @@ export default {
         console.log("End date: ", this.endDate);
       }
     }
-
-  },
-
-  computed: {
-
   }
+
 }
 </script>
 
 <template>
-  <body>
-  <AsideMenu/>
-  <main>
-    <section class="section-course">
-      <div class="view-back-list-course">
-        <button class="button-return-list-course"
-                @click="handleBackToListCourses()"
-        >
-          <div class="button_nav_calendar button-return-courses-image">
-            <img src="@/assets/image/button_nav_left_calendar.png" alt="button nav left calendar" class="style-button-nav-calendar">
-          </div>
-          <span class="
-            span-button-return-list-course
-            span-button-return-list-course-hover"
-
-          >
-            List courses
-          </span>
-        </button>
-        <span class="span-button-return-list-course span-with-out-button span-slash-rotate">
-          /
-        </span>
-        <span class="span-button-return-list-course span-with-out-button">
-          {{className}} - {{courseName}}
-        </span>
-      </div>
-      <div class="nav-style-in-course">
-        <button class="button-nav-in-course button-nav-course-active">List exams</button>
-        <button class="button-nav-in-course">Student Grades List</button>
-        <button class="button-nav-in-course">Statistic</button>
-      </div>
-      <div class="view-list-exams">
-<!--        <h5 class="text-no-exam">No exam</h5>-->
-        <div class="exam">
-          <div class="view-title-exam">
-            <span class="text-exam">Java core 1</span>
-          </div>
-          <div class="view-topic-exam">
-            <span class="text-exam">Java core</span>
-          </div>
-          <div class="view-button-view-exam">
-            <button
-                class="text-exam color-status-view"
-                data-bs-toggle="modal"
-                data-bs-target="#updateExamModal"
-            >View</button>
-          </div>
-          <div class="view-button-view-delete">
-            <button class="text-exam color-status-delete">Delete</button>
-          </div>
-        </div>
-        <div class="exam">
-          <div class="view-title-exam">
-            <span class="text-exam">Java core 1</span>
-          </div>
-          <div class="view-topic-exam">
-            <span class="text-exam">Java core</span>
-          </div>
-          <div class="view-button-view-exam">
-            <button
-                class="text-exam color-status-view"
-            >View</button>
-          </div>
-          <div class="view-button-view-delete">
-            <button class="text-exam color-status-delete">Delete</button>
-          </div>
-        </div>
-        <button class="exam button-create-exam"
-                data-bs-toggle="modal"
-                data-bs-target="#createExamModal"
-        >
-          Create new exam
-        </button>
-      </div>
-    </section>
-  </main>
-  <AsideAccount/>
-  </body>
-
-  <!--  Modal form create exam-->
   <div
       class="modal fade"
-      id="createExamModal"
+      id="updateExamModal"
       tabindex="-1"
-      aria-labelledby="createExamModalLabel"
+      aria-labelledby="updateExamModalLabel"
       aria-hidden="true"
   >
     <div class="modal-dialog modal-lg">
       <div class="modal-content modal-content-create-exam">
         <div class="modal-header">
           <h5 class="modal-title" id="createExamModalLabel">
-            Create New Exam by Topic
+            Update Exam
           </h5>
           <button
               type="button"
@@ -587,84 +429,80 @@ export default {
               </div>
 
             </div>
-            </div>
+          </div>
 
-            <div class="mb-3 row">
-              <label for="endDate" class="col-sm-3 col-form-label">
-                End Date  (SA is am, CH is pm.):<span class="required-star">*</span>
-              </label>
-              <div class="col-sm-9">
-                <input
-                    type="datetime-local"
-                    class="form-control"
-                    @input="setInputEndDate()"
-                    v-model="endDate"
-                    :class="[{'is-invalid': validateEndDate !== null}]"
-                />
-                <span
-                    v-if="validateEndDate"
-                    class="span-validate-modal-form"
-                >{{validateEndDate}}</span>
-              </div>
+          <div class="mb-3 row">
+            <label for="endDate" class="col-sm-3 col-form-label">
+              End Date  (SA is am, CH is pm.):<span class="required-star">*</span>
+            </label>
+            <div class="col-sm-9">
+              <input
+                  type="datetime-local"
+                  class="form-control"
+                  @input="setInputEndDate()"
+                  v-model="endDate"
+                  :class="[{'is-invalid': validateEndDate !== null}]"
+              />
+              <span
+                  v-if="validateEndDate"
+                  class="span-validate-modal-form"
+              >{{validateEndDate}}</span>
             </div>
+          </div>
 
-            <div class="mb-3 row">
-              <label for="examPaper" class="col-sm-3 col-form-label">
-                Exam Paper (Link File, if any):
-              </label>
-              <div class="col-sm-9">
-                <input
-                    type="text"
-                    class="form-control"
-                    placeholder="https://drive.google.com/..."
-                    maxlength="50"
-                    @input="setInputExamPaper()"
-                    v-model="examPaper"
-                    :class="[{'is-invalid': validateExamPaper !== null}]"
-                />
-                <span
-                    v-if="validateExamPaper"
-                    class="span-validate-modal-form"
-                >{{validateExamPaper}}</span>
-              </div>
+          <div class="mb-3 row">
+            <label for="examPaper" class="col-sm-3 col-form-label">
+              Exam Paper (Link File, if any):
+            </label>
+            <div class="col-sm-9">
+              <input
+                  type="text"
+                  class="form-control"
+                  placeholder="https://drive.google.com/..."
+                  maxlength="50"
+                  @input="setInputExamPaper()"
+                  v-model="examPaper"
+                  :class="[{'is-invalid': validateExamPaper !== null}]"
+              />
+              <span
+                  v-if="validateExamPaper"
+                  class="span-validate-modal-form"
+              >{{validateExamPaper}}</span>
             </div>
+          </div>
 
-            <div class="mb-3 row">
-              <label for="password" class="col-sm-3 col-form-label">
-                Password (if any):
-              </label>
-              <div class="col-sm-9">
-                <input
-                    type="password"
-                    class="form-control"
-                    placeholder="Enter password"
-                    v-model="passwordExam"
-                    @paste="preventPaste($event)"
-                    @input="setPasswordExam()"
-                    maxlength="10"
-                />
-                <span class="form-text">
+          <div class="mb-3 row">
+            <label for="password" class="col-sm-3 col-form-label">
+              Password (if any):
+            </label>
+            <div class="col-sm-9">
+              <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Enter password"
+                  v-model="passwordExam"
+                  @paste="preventPaste($event)"
+                  @input="setPasswordExam()"
+                  maxlength="10"
+              />
+              <span class="form-text">
                 (Password must be digits and greater than 5 characters)
               </span>
-              </div>
             </div>
+          </div>
 
-            <div class="text-end">
-              <button type="submit"
-                      class="btn-create-exam"
-                      @click="handleCreateExam()"
-              >Create</button>
-            </div>
+          <div class="text-end">
+            <button type="submit"
+                    class="btn-create-exam"
+                    @click="handleUpdateExam()"
+            >Update</button>
           </div>
         </div>
       </div>
+    </div>
   </div>
-  <modal-update-exam :lecture-i-d="this.lectureID"
-                     :course-i-d-to-update="this.courseID"
-                     exam-i-d-to-update=""
-  />
 </template>
 
 <style scoped lang="scss">
-@use '@/scss/main';
+
 </style>

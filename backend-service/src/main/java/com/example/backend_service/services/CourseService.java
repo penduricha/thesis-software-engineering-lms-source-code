@@ -3,6 +3,7 @@ package com.example.backend_service.services;
 import com.example.backend_service.models.Course;
 import com.example.backend_service.repositories.CourseRepository;
 import com.example.backend_service.services.i_service.I_CourseService;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class CourseService implements I_CourseService {
     }
 
     @Override
-    public Map<String, Object> getCourse_By_LectureID_CourseID(String lectureID, Long courseID) {
+    public Map<String, Object> getCourse_By_LectureID_CourseID(String lectureID, Long courseID) throws JpaSystemException  {
         List<Map<String, Object>> queryMapCourse = courseRepository.getCoursesByLectureID(lectureID);
         List<Map<String, Object>> filteredMapByCourseID = queryMapCourse.stream()
                 .filter(map -> map.get("course_id").equals(courseID))

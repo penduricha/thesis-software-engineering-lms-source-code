@@ -1,3 +1,4 @@
+CHUẨN BỊ
 Step 1: git clone -b <tên-nhánh> <đường-dẫn-repository>
 Step 2: Chuẩn bị thư viện và framework.
 - Spring with jdk 21.
@@ -6,3 +7,29 @@ Step 2: Chuẩn bị thư viện và framework.
 - Vue3 + Vite
 Step 3: Install các lib.
 
+Mở script-sql import các dữ liệu theo các step trong file step-import.txt.
+
+Spring: mở IntelliJ mà cho nó load các maven và run service (xem cấu hình yaml).
+
+
+Vue-js mở vs và new terminal
+node -v => v20.13.1 là ok
+trong project, config vite 6.0.7
+
+Type cmd
+Bước 2
+2.1
+npm install
+2.2
+npm run build => Cài vite
+2.3
+run thêm thư viện code-mirror
+
+npm install vue-codemirror
+npm install @codemirror/theme-one-dark
+npm install @codemirror/lang-java
+npm install @codemirror/view
+npm install @codemirror/autocomplete
+
+Bước 3
+npm run dev => run local 5143 or 5174

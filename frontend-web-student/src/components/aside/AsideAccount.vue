@@ -353,6 +353,7 @@ export default {
       </div>
 
       <h5 class="text-schedule-exam">Schedule exam</h5>
+<!--      <h5 class="text-no-exam">No exam</h5>-->
       <div class="view-items-exams-by-day">
         <button class="item-exam">
           <div class="view-item-exam view-index-exam">

@@ -8,6 +8,7 @@
 
 .text-no-exam {
   text-align: center;
+  font-size: 18px;
 }
 
 .view-back-list-course {
@@ -21,6 +22,11 @@
 .button-return-courses-image {
   margin-bottom: 2.5px;
 }
+
+//.button-return-courses-image:hover {
+//  background-color: grey;
+//  opacity: 0.7;
+//}
 
 .button-return-list-course {
   gap: 0.5rem;

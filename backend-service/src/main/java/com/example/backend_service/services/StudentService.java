@@ -40,7 +40,7 @@ public class StudentService implements I_StudentService {
     }
 
     @Override
-    public Student updatePasswordStudent(String studentID, String newPassword) {
+    public Student updatePasswordStudent(String studentID, String newPassword) throws JpaSystemException {
         Student studentFind = findStudentByStudentId(studentID);
         if(studentFind != null) {
             studentFind.setPassword(newPassword);
@@ -50,7 +50,7 @@ public class StudentService implements I_StudentService {
     }
 
     @Override
-    public Map<String,Object> findStudentInformation_By_StudentID(String studentID) {
+    public Map<String,Object> findStudentInformation_By_StudentID(String studentID) throws JpaSystemException {
         Student studentFind = findStudentByStudentId(studentID);
         Map<String, Object> studentInfo = new HashMap<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

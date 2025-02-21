@@ -1,4 +1,4 @@
 package com.example.backend_service.controllers;
 
-public class BankTestCaseController {
+public class ResultJavaCoreController {
 }

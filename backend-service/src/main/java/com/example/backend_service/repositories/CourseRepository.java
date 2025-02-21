@@ -18,4 +18,6 @@ public interface CourseRepository extends JpaRepository<Course,Long> {
             "where l.lecture_id = :lecture_id",
             nativeQuery = true)
     List<Map<String, Object>> getCoursesByLectureID(@Param("lecture_id") String lectureID);
+
+    Course findCourseByCourseID(Long courseID);
 }

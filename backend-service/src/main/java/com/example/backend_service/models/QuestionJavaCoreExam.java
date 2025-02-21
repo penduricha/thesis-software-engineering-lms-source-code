@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -14,9 +12,12 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class BankQuestionJavaCore implements Serializable {
+public class QuestionJavaCoreExam implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "question_java_core_exam_id", nullable = false)
+    private Long questionJavaCoreExamID;
+
     @Column(name = "question_java_core_id", nullable = false)
     private Long questionJavaCoreID;
 
@@ -26,11 +27,10 @@ public class BankQuestionJavaCore implements Serializable {
     @Column(nullable = false, columnDefinition = "longtext")
     private String codeSample;
 
-    @Column(nullable = false, columnDefinition = "longtext")
-    private String codeRunToOutput;
-
-    //mapping
-    @OneToMany(mappedBy = "bankQuestionJavaCore", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    //map với exam
+    @ManyToOne
+    @JoinColumn(name = "exam_id")
     @JsonIgnore
-    private List<BankTestCaseJavaCore> bankTestCaseJavaCores = new ArrayList<>();
+    private Exam exam;
+
 }

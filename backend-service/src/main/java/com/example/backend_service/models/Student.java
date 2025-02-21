@@ -7,6 +7,8 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -25,6 +27,7 @@ public class Student implements Serializable {
     @Column(nullable = false, columnDefinition = "nvarchar(10)")
     private String firstName;
 
+    @Column(nullable = false)
     public boolean gender;
 
     @Getter
@@ -41,6 +44,10 @@ public class Student implements Serializable {
     @JoinColumn(name = "course_id")
     @JsonIgnore
     private Course course;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<MarkStudent> markStudentList = new ArrayList<>();
 
     public String getStudentID() {
         return studentID;
@@ -69,6 +76,4 @@ public class Student implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
 }

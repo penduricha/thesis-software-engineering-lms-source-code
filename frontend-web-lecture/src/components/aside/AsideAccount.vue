@@ -92,7 +92,7 @@ export default {
     },
 
     setTimers() {
-      this.timeout = setTimeout(this.handleLogout, 45 * 10 * 1000);
+      this.timeout = setTimeout(this.handleLogout, 2700000);
     },
 
     resetTimer() {
@@ -136,6 +136,7 @@ export default {
       this.chooseDate = dateInWeek.getDate_Choose(dateChoose);
       this.yearNumber = this.chooseDate.year;
       this.monthName = this.chooseDate.monthName;
+      console.log("Date choose: ",dateChoose);
     },
 
     handleNavigateLastWeek() {
@@ -336,6 +337,7 @@ export default {
       </div>
 
       <h5 class="text-schedule-exam">Schedule exam</h5>
+<!--      <h5 class="text-no-exam">No exam</h5>-->
       <div class="view-items-exams-by-day">
         <button class="item-exam">
           <div class="view-item-exam view-index-exam">

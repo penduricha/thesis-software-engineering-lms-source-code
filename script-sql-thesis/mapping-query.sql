@@ -7,6 +7,7 @@ select * from lecture;
 
 select * from map_lecture_course;
 
+# get course by lecture id
 select c.course_id, c.class_name, c.course_name, c.semester, c.start_year, c.end_year
 from course c
 left join map_lecture_course mlc on c.course_id = mlc.course_id

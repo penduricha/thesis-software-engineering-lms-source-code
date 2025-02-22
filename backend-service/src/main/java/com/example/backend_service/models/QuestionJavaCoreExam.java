@@ -18,8 +18,8 @@ public class QuestionJavaCoreExam implements Serializable {
     @Column(name = "question_java_core_exam_id", nullable = false)
     private Long questionJavaCoreExamID;
 
-    @Column(name = "question_java_core_id", nullable = false)
-    private Long questionJavaCoreID;
+//    @Column(name = "question_java_core_id", nullable = false)
+//    private Long questionJavaCoreID;
 
     @Column(nullable = false, columnDefinition = "longtext")
     private String contentQuestion;
@@ -33,4 +33,63 @@ public class QuestionJavaCoreExam implements Serializable {
     @JsonIgnore
     private Exam exam;
 
+    @ManyToOne
+    @JoinColumn(name = "question_java_core_id")
+    @JsonIgnore
+    private BankQuestionJavaCore bankQuestionJavaCore;
+
+    @OneToOne(mappedBy = "questionJavaCoreExam", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private ResultQuestionJavaCore resultQuestionJavaCore;
+
+//    public QuestionJavaCoreExam(String contentQuestion, String codeSample) {
+//        this.contentQuestion = contentQuestion;
+//        this.codeSample = codeSample;
+//    }
+
+    public Exam getExam() {
+        return exam;
+    }
+
+    public void setExam(Exam exam) {
+        this.exam = exam;
+    }
+
+    public BankQuestionJavaCore getBankQuestionJavaCore() {
+        return bankQuestionJavaCore;
+    }
+
+    public void setBankQuestionJavaCore(BankQuestionJavaCore bankQuestionJavaCore) {
+        this.bankQuestionJavaCore = bankQuestionJavaCore;
+    }
+
+    public ResultQuestionJavaCore getResultQuestionJavaCore() {
+        return resultQuestionJavaCore;
+    }
+
+    public void setResultQuestionJavaCore(ResultQuestionJavaCore resultQuestionJavaCore) {
+        this.resultQuestionJavaCore = resultQuestionJavaCore;
+    }
+
+//    public QuestionJavaCoreExam(Long questionJavaCoreExamID, String contentQuestion, String codeSample) {
+//        this.questionJavaCoreExamID = questionJavaCoreExamID;
+//        this.contentQuestion = contentQuestion;
+//        this.codeSample = codeSample;
+//    }
+
+    public String getContentQuestion() {
+        return contentQuestion;
+    }
+
+    public void setContentQuestion(String contentQuestion) {
+        this.contentQuestion = contentQuestion;
+    }
+
+    public String getCodeSample() {
+        return codeSample;
+    }
+
+    public void setCodeSample(String codeSample) {
+        this.codeSample = codeSample;
+    }
 }

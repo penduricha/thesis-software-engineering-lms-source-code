@@ -30,4 +30,9 @@ public class ResultQuestionJavaCore implements Serializable {
     @JoinColumn(name = "detail_mark_student_id")
     @JsonIgnore
     private DetailMarkStudent detailMarkStudent;
+
+    @OneToOne
+    @JoinColumn(name = "question_java_core_exam_id")
+    @JsonIgnore
+    private QuestionJavaCoreExam questionJavaCoreExam;
 }

@@ -34,15 +34,18 @@ public class Exam implements Serializable {
     @Column(nullable = false)
     private boolean retakeExam;
 
-    @Column(nullable = false, columnDefinition = "nvarchar(10)")
+    @Column(nullable = true, columnDefinition = "nvarchar(10)")
     private String scoringMethod;
 
+    @Column(nullable = false)
+    private int duration;
+
     @Column(columnDefinition = "datetime", nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startDate;
 
     @Column(columnDefinition = "datetime", nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endDate;
 
     @Column(columnDefinition = "nvarchar(50)")
@@ -51,13 +54,25 @@ public class Exam implements Serializable {
     @Column(columnDefinition = "nvarchar(130)")
     private String passwordExam;
 
+    @Column(nullable = false)
+    private boolean studentAccess;
+
     @Column(columnDefinition = "datetime")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
+    @Column(columnDefinition = "datetime")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime updateAt;
+
     @PrePersist
     protected void onCreated(){
         createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdated(){
+        updateAt = LocalDateTime.now();
     }
 
     //mapping course
@@ -73,4 +88,96 @@ public class Exam implements Serializable {
     @OneToOne(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private MarkStudent markStudent;
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public void setStudentAccess(boolean studentAccess) {
+        this.studentAccess = studentAccess;
+    }
+
+    public List<QuestionJavaCoreExam> getQuestionJavaCoreExams() {
+        return questionJavaCoreExams;
+    }
+
+    public String getTitleExam() {
+        return titleExam;
+    }
+
+    public void setTitleExam(String titleExam) {
+        this.titleExam = titleExam;
+    }
+
+    public String getTypeExam() {
+        return typeExam;
+    }
+
+    public void setTypeExam(String typeExam) {
+        this.typeExam = typeExam;
+    }
+
+    public String getTopicExam() {
+        return topicExam;
+    }
+
+    public void setTopicExam(String topicExam) {
+        this.topicExam = topicExam;
+    }
+
+    public boolean isRetakeExam() {
+        return retakeExam;
+    }
+
+    public void setRetakeExam(boolean retakeExam) {
+        this.retakeExam = retakeExam;
+    }
+
+    public String getScoringMethod() {
+        return scoringMethod;
+    }
+
+    public void setScoringMethod(String scoringMethod) {
+        this.scoringMethod = scoringMethod;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getLinkExamPaper() {
+        return linkExamPaper;
+    }
+
+    public void setLinkExamPaper(String linkExamPaper) {
+        this.linkExamPaper = linkExamPaper;
+    }
+
+    public String getPasswordExam() {
+        return passwordExam;
+    }
+
+    public void setPasswordExam(String passwordExam) {
+        this.passwordExam = passwordExam;
+    }
 }

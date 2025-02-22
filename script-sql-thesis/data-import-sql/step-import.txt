@@ -2,3 +2,6 @@ Step 1: import lecture.sql
 Step 2: import course.sql
 Step 3: import student.sql
 Step 4: import map_lecture_course.sql
+Step 5: run file utf-8.sql để set utf-8 cho các bảng cần thiết.
+Step 6: import bank_question_java_core.sql
+Step 7: import bank_test_case_java_core.sql

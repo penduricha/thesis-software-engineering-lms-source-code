@@ -74,5 +74,7 @@ public class Course implements Serializable {
     @JsonIgnore
     private List<Exam> exams = new ArrayList<>();
 
-
+    public List<Exam> getExams() {
+        return exams;
+    }
 }

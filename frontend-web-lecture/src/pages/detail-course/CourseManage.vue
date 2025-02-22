@@ -40,7 +40,6 @@ export default {
 
       className: null,
       courseName: null,
-      courseID: null,
 
       //form exam
       titleExam: null,
@@ -92,7 +91,7 @@ export default {
     getRoute() {
       //ở đây có props thì phải thêm path của props
       console.log(this.$route.path);
-      return this.$route.path + "?" + "courseID=" + this.courseID;
+      return this.$route.path + "?" + "courseID=" + Number(this.courseID);
     },
 
     saveRouter_Path(route) {
@@ -140,7 +139,7 @@ export default {
       if(course) {
         this.className = course.className;
         this.courseName = course.courseName;
-        this.courseID = course.courseID;
+        // this.courseID = course.courseID;
       }
     },
 
@@ -471,10 +470,9 @@ export default {
                         v-model="typeExam"
                         :class="[{'is-invalid': validateTypeExam !== null}]"
                 >
-                  <option value = "Theory 1">Theory 1</option>
-                  <option value = "Theory 2">Theory 2</option>
                   <option value = "Practice 1">Practice 1</option>
                   <option value = "Practice 2">Practice 2</option>
+                  <option value = "Practice 3">Practice 3</option>
                 </select>
                 <span
                     v-if="validateTypeExam"

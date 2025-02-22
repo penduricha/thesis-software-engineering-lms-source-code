@@ -33,4 +33,24 @@ public class BankQuestionJavaCore implements Serializable {
     @OneToMany(mappedBy = "bankQuestionJavaCore", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<BankTestCaseJavaCore> bankTestCaseJavaCores = new ArrayList<>();
+
+    @OneToMany(mappedBy = "bankQuestionJavaCore", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<QuestionJavaCoreExam> questionJavaCoreExams = new ArrayList<>();
+
+    public Long getQuestionJavaCoreID() {
+        return questionJavaCoreID;
+    }
+
+    public void setQuestionJavaCoreID(Long questionJavaCoreID) {
+        this.questionJavaCoreID = questionJavaCoreID;
+    }
+
+    public List<QuestionJavaCoreExam> getQuestionJavaCoreExams() {
+        return questionJavaCoreExams;
+    }
+
+    public void setQuestionJavaCoreExams(List<QuestionJavaCoreExam> questionJavaCoreExams) {
+        this.questionJavaCoreExams = questionJavaCoreExams;
+    }
 }

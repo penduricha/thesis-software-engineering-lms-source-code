@@ -34,39 +34,44 @@ public class ExamService implements I_ExamService {
     public Exam createExam(Exam exam, Long courseID) throws JpaSystemException {
         // Retrieve the course using the provided courseID
         Course course = courseRepository.findCourseByCourseID(courseID);
-        List<Map<String, Object>> questionRandomJavaCore = bankQuestionJavaCoreService.getRandom_10_Questions_JavaCore();
+        String javaCore = "Java Core";
+        if(exam.getTopicExam().equalsIgnoreCase(javaCore)) {
+            List<Map<String, Object>> questionRandomJavaCore = bankQuestionJavaCoreService.getRandom_10_Questions_JavaCore();
+            if (course != null && !questionRandomJavaCore.isEmpty()) {
+                // Set initial properties for the exam
+                exam.setStudentAccess(false);
+                course.getExams().add(exam);
+                exam.setCourse(course);
+                // Iterate over the list of random questions
+                for (Map<String, Object> questionMap : questionRandomJavaCore) {
+                    Long questionJavaCoreID = (Long) questionMap.get("questionJavaCoreID");
+                    String contentQuestion = (String) questionMap.get("contentQuestion");
+                    String codeSample = (String) questionMap.get("codeSample");
+                    // Create the BankQuestionJavaCore instance for this specific question
+                    BankQuestionJavaCore bankQuestionJavaCore = new BankQuestionJavaCore();
+                    bankQuestionJavaCore.setQuestionJavaCoreID(questionJavaCoreID);
+                    // Create the QuestionJavaCoreExam instance
+                    QuestionJavaCoreExam questionJavaCoreExam = new QuestionJavaCoreExam();
+                    questionJavaCoreExam.setContentQuestion(contentQuestion);
+                    questionJavaCoreExam.setCodeSample(codeSample);
 
-        if (course != null && !questionRandomJavaCore.isEmpty()) {
-            // Set initial properties for the exam
-            exam.setStudentAccess(false);
-            course.getExams().add(exam);
-            exam.setCourse(course);
-            // Iterate over the list of random questions
-            for (Map<String, Object> questionMap : questionRandomJavaCore) {
-                Long questionJavaCoreID = (Long) questionMap.get("questionJavaCoreID");
-                String contentQuestion = (String) questionMap.get("contentQuestion");
-                String codeSample = (String) questionMap.get("codeSample");
+                    exam.getQuestionJavaCoreExams().add(questionJavaCoreExam);
+                    questionJavaCoreExam.setExam(exam);
+                    questionJavaCoreExam.setBankQuestionJavaCore(bankQuestionJavaCore);
 
-                // Create the BankQuestionJavaCore instance for this specific question
-                BankQuestionJavaCore bankQuestionJavaCore = new BankQuestionJavaCore();
-                bankQuestionJavaCore.setQuestionJavaCoreID(questionJavaCoreID);
-
-                // Create the QuestionJavaCoreExam instance
-                QuestionJavaCoreExam questionJavaCoreExam = new QuestionJavaCoreExam();
-                questionJavaCoreExam.setContentQuestion(contentQuestion);
-                questionJavaCoreExam.setCodeSample(codeSample);
-
-                exam.getQuestionJavaCoreExams().add(questionJavaCoreExam);
-                questionJavaCoreExam.setExam(exam);
-                questionJavaCoreExam.setBankQuestionJavaCore(bankQuestionJavaCore);
-
-                // Associate the question with its bank
-                bankQuestionJavaCore.getQuestionJavaCoreExams().add(questionJavaCoreExam);
+                    // Associate the question with its bank
+                    bankQuestionJavaCore.getQuestionJavaCoreExams().add(questionJavaCoreExam);
+                }
+                return examRepository.save(exam);
             }
-            return examRepository.save(exam);
+            return null;
         }
-
         // Return null if course or questions are not found
         return null;
+    }
+
+    @Override
+    public Map<String, Object> getExamsByCourseID(Long courseID) {
+        return Map.of();
     }
 }

@@ -37,7 +37,7 @@ public class ExamController {
                 (Integer) mapExam.get("startDateDay"),
                 (Integer) mapExam.get("startDateHour"),
                 (Integer) mapExam.get("startDateMinute"),
-                (Integer) mapExam.get("startDateSecond")
+                0
         );
 
         // Extracting end date and time
@@ -47,7 +47,7 @@ public class ExamController {
                 (Integer) mapExam.get("endDateDay"),
                 (Integer) mapExam.get("endDateHour"),
                 (Integer) mapExam.get("endDateMinute"),
-                (Integer) mapExam.get("endDateSecond")
+                0
         );
 
         String linkExamPaper = (String) mapExam.get("linkExamPaper");

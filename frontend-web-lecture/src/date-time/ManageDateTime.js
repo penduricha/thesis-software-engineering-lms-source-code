@@ -60,6 +60,14 @@ export default class ManageDateTime {
         return months[monthNumber - 1];
     }
 
+    formatDateTime(date) {
+        /// Cộng thêm 7 giờ vào thời gian hiện tại
+        // Chuyển đổi đối tượng Date thành định dạng ISO cho input datetime-local
+        // Lấy phần năm-tháng-ngàyGiờ:Phút
+        date.setHours(date.getHours() + 7);
+        return date.toISOString().slice(0, 16);
+    }
+
     getDate_Choose(day) {
         if (!(day instanceof Date) || isNaN(day)) {
             throw new Error("Invalid date provided");

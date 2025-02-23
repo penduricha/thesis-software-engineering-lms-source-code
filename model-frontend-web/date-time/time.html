@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const date = new Date('2025-02-25T18:47');
+
+            // Lấy ngày, tháng, năm, giờ và phút
+            const day = date.getDate(); // Ngày
+            const month = date.getMonth() + 1; // Tháng (0-11, nên cộng thêm 1)
+            const year = date.getFullYear(); // Năm
+            const hours = date.getHours(); // Giờ
+            const minutes = date.getMinutes(); // Phút
+
+            // In ra kết quả
+            console.log(`Ngày: ${day}, Tháng: ${month}, Năm: ${year}, Giờ: ${hours}, Phút: ${minutes}`);
+    </script>
+</body>
+</html>

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -76,5 +77,20 @@ public class ExamController {
         // String passwordExam)
 
         return ResponseEntity.status(HttpStatus.CREATED).body(examService.createExam(exam,courseID));
+    }
+
+    @GetMapping("/get_exam_by_course_id/{courseID}")
+    public ResponseEntity<List<Map<String, Object>>> getExamsByCourseID(@PathVariable Long courseID) throws HttpClientErrorException {
+        return ResponseEntity.ok(examService.getExamsByCourseID(courseID));
+    }
+
+    @GetMapping("/view_exam_by_course_id_exam_id/{examID}/{courseID}")
+    public ResponseEntity<Map<String, Object>> viewExam_By_ExamID(@PathVariable Long examID,@PathVariable Long courseID) throws HttpClientErrorException {
+        return ResponseEntity.ok(examService.viewExam_By_ExamID(examID, courseID));
+    }
+
+    @DeleteMapping("/delete_exam/{examID}")
+    public ResponseEntity<Long> deleteExam_By_ExamID(@PathVariable Long examID) throws HttpClientErrorException {
+        return ResponseEntity.ok(examService.deleteExam_By_ExamID(examID));
     }
 }

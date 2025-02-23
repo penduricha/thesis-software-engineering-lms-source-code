@@ -18,6 +18,7 @@ import Validation from "@/validation/Validation.js";
 import StringFormat from "@/models/StringFormat.js";
 import Password from "@/models/Password.js";
 import ModalUpdateExam from "@/pages/detail-course/ModalUpdateExam.vue";
+import ExamDao from "@/daos/ExamDao.js";
 
 export default {
   name: "CourseManage",
@@ -63,15 +64,21 @@ export default {
       validateEndDate: null,
       validateExamPaper: null,
 
+      //exam
+      exams: null,
+      //update exam
+      examIDToUpdate: null,
+
 
       passwordExam: null,
-
+      passwordExamHashed: null,
     }
   },
 
   created() {
     this.setLectureID();
     this.setCourse();
+    this.setExams();
     this.saveRouter_Path(this.getRoute());
   },
 
@@ -108,6 +115,10 @@ export default {
         this.lectureID = '1120050';
         //mã bảo hà
       }
+    },
+
+    async setExams() {
+      this.exams = await ExamDao.getExams_By_CourseID(this.courseID);
     },
 
     navigateTo_ListCourses() {
@@ -156,7 +167,12 @@ export default {
           )) {
             this.validateTitleExam = "Title exam is invalid.";
           } else {
-            this.validateTitleExam = null;
+            const hasMatchingExam = this.exams.some(exam => exam.titleExam === this.titleExam.trim());
+            if(hasMatchingExam) {
+              this.validateTitleExam = "Title exam is existed";
+            } else {
+              this.validateTitleExam = null;
+            }
           }
         }
       }
@@ -300,6 +316,12 @@ export default {
       }
     },
 
+    async handleViewModal(examID) {
+      this.examIDToUpdate = examID;
+      console.log("Exam ID to update: ",this.examIDToUpdate);
+      await this.$refs.modalUpdateExam.setExam(this.examIDToUpdate);
+    },
+
     async handleCreateExam() {
       this.validationNullField();
       //tạo danh sách ktra các validate xem còn nào còn thông báo ko
@@ -317,14 +339,46 @@ export default {
       const allAreEmpty = validations.every(val => val === null);
       if(allAreEmpty) {
         this.titleExam = StringFormat.normalizeSpaces(this.titleExam.trim());
-        console.log("Title exam: ",this.titleExam);
         if(this.passwordExam) {
           const passwordClass = new Password(this.passwordExam);
-          let passwordExamHashed = await passwordClass.sha512();
-          console.log("Password exam: ",passwordExamHashed);
+          this.passwordExamHashed = passwordClass.xorEncryptDecrypt();
+          console.log("Password exam hashed: ",this.passwordExamHashed);
         }
-        console.log("Start date: ", this.startDate);
-        console.log("End date: ", this.endDate);
+        //chuyển thành new Date
+        const dateStartDate = new Date(this.startDate);
+        const dateEndDate = new Date(this.endDate);
+        if(this.examPaper) {
+          this.examPaper = this.examPaper.trim();
+        }
+        const examPost = {
+          "titleExam": this.titleExam,
+          "typeExam" : this.typeExam,
+          "topicExam" : this.topicExam,
+          "retakeExam" : this.retake,
+          "scoringMethod" : this.scoringMethod,
+          "duration" : Number(this.duration),
+          "startDateDay" : dateStartDate.getDate(),
+          "startDateMonth" : dateStartDate.getMonth() + 1,
+          "startDateYear" : dateStartDate.getFullYear(),
+          "startDateHour" : dateStartDate.getHours(),
+          "startDateMinute" : dateStartDate.getMinutes(),
+          "endDateDay" : dateEndDate.getDate(),
+          "endDateMonth" : dateEndDate.getMonth() + 1,
+          "endDateYear" : dateEndDate.getFullYear(),
+          "endDateHour" : dateEndDate.getHours(),
+          "endDateMinute" : dateEndDate.getMinutes() ,
+          "linkExamPaper" : this.examPaper,
+          "passwordExam" : this.passwordExamHashed,
+        }
+        //console.log("Exam post: ",examPost);
+
+        let statusCreate = await ExamDao.create_Exam_By_CourseID(this.courseID, examPost);
+        if(statusCreate) {
+          alert("Created exam successfully");
+          window.location.reload();
+        }else {
+          alert("Created exam failed");
+        }
       }
     }
 
@@ -369,35 +423,20 @@ export default {
         <button class="button-nav-in-course">Statistic</button>
       </div>
       <div class="view-list-exams">
-<!--        <h5 class="text-no-exam">No exam</h5>-->
-        <div class="exam">
+        <h5 v-if="!exams" class="text-no-exam">No exam</h5>
+        <div v-for="e in exams" class="exam">
           <div class="view-title-exam">
-            <span class="text-exam">Java core 1</span>
+            <span class="text-exam">{{e.titleExam}}</span>
           </div>
           <div class="view-topic-exam">
-            <span class="text-exam">Java core</span>
+            <span class="text-exam">{{e.topicExam}}</span>
           </div>
           <div class="view-button-view-exam">
             <button
                 class="text-exam color-status-view"
                 data-bs-toggle="modal"
                 data-bs-target="#updateExamModal"
-            >View</button>
-          </div>
-          <div class="view-button-view-delete">
-            <button class="text-exam color-status-delete">Delete</button>
-          </div>
-        </div>
-        <div class="exam">
-          <div class="view-title-exam">
-            <span class="text-exam">Java core 1</span>
-          </div>
-          <div class="view-topic-exam">
-            <span class="text-exam">Java core</span>
-          </div>
-          <div class="view-button-view-exam">
-            <button
-                class="text-exam color-status-view"
+                @click="handleViewModal(e.examID)"
             >View</button>
           </div>
           <div class="view-button-view-delete">
@@ -657,9 +696,9 @@ export default {
         </div>
       </div>
   </div>
-  <modal-update-exam :lecture-i-d="this.lectureID"
+  <modal-update-exam ref="modalUpdateExam"
+                     :lecture-i-d="this.lectureID"
                      :course-i-d-to-update="this.courseID"
-                     exam-i-d-to-update=""
   />
 </template>
 

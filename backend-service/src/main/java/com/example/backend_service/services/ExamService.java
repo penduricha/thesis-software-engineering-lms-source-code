@@ -7,16 +7,20 @@ import com.example.backend_service.models.QuestionJavaCoreExam;
 import com.example.backend_service.repositories.CourseRepository;
 import com.example.backend_service.repositories.ExamRepository;
 import com.example.backend_service.services.i_service.I_ExamService;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityManager;
+
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ExamService implements I_ExamService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private final ExamRepository examRepository;
 
@@ -50,6 +54,7 @@ public class ExamService implements I_ExamService {
                     // Create the BankQuestionJavaCore instance for this specific question
                     BankQuestionJavaCore bankQuestionJavaCore = new BankQuestionJavaCore();
                     bankQuestionJavaCore.setQuestionJavaCoreID(questionJavaCoreID);
+
                     // Create the QuestionJavaCoreExam instance
                     QuestionJavaCoreExam questionJavaCoreExam = new QuestionJavaCoreExam();
                     questionJavaCoreExam.setContentQuestion(contentQuestion);
@@ -71,7 +76,58 @@ public class ExamService implements I_ExamService {
     }
 
     @Override
-    public Map<String, Object> getExamsByCourseID(Long courseID) {
-        return Map.of();
+    public List<Map<String, Object>> getExamsByCourseID(Long courseID) throws JpaSystemException {
+        List<Map<String, Object>> queryList = examRepository.getExamsByCourseID(courseID);
+        List<Map<String, Object>> convertedList = new ArrayList<>();
+        if(!queryList.isEmpty()) {
+            for (Map<String, Object> queryMap : queryList) {
+                Map<String, Object> convertedMap = new HashMap<>();
+                for (Map.Entry<String, Object> entry : queryMap.entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    String convertedKey = ConvertNameField.convertSnakeToCamel(key);
+                    if (!convertedKey.equals("examId")) {
+                        convertedMap.put(convertedKey, value);
+                    } else {
+                        convertedMap.put("examID", value);
+                    }
+                }
+                convertedList.add(convertedMap);
+            }
+            return convertedList;
+        }
+        return null;
     }
+
+    @Override
+    public Map<String, Object> viewExam_By_ExamID(Long examID, Long courseID) throws JpaSystemException {
+        List<Map<String, Object>> queryList = getExamsByCourseID(courseID);
+        Optional<Map<String, Object>> exam = queryList.stream()
+                .filter(queryMap -> examID.equals(queryMap.get("examID")))
+                .findFirst();
+        return exam.orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public Long deleteExam_By_ExamID(Long examID) throws JpaSystemException {
+        Exam exam = examRepository.findExamByExamID(examID);
+        if(exam != null) {
+            entityManager.createNativeQuery("delete from question_java_core_exam where exam_id = :examID")
+                    .setParameter("examID", exam.getExamID())
+                    .executeUpdate();
+
+            entityManager.createNativeQuery("delete from mark_student where exam_id = :examID")
+                    .setParameter("examID", exam.getExamID())
+                    .executeUpdate();
+
+            entityManager.createNativeQuery("delete from exam where exam_id = :examID")
+                    .setParameter("examID", exam.getExamID())
+                    .executeUpdate();
+            return exam.getExamID();
+        }
+        return null;
+    }
+
+
 }

@@ -2,15 +2,17 @@
 import Validation from "@/validation/Validation.js";
 import StringFormat from "@/models/StringFormat.js";
 import Password from "@/models/Password.js";
+import ExamDao from "@/daos/ExamDao.js";
+import ManageDateTime from "@/date-time/ManageDateTime.js";
 
 export default {
   name: "ModalUpdateExam",
 
   props: {
-    examIDToUpdate: {
-      type: Number,
-      required: true
-    },
+    // examIDToUpdate: {
+    //   type: Number,
+    //   required: true
+    // },
 
     courseIDToUpdate: {
       type: Number,
@@ -21,6 +23,10 @@ export default {
       type: String,
       required: true
     },
+  },
+
+  created() {
+    // await this.setExam();
   },
 
   mounted() {
@@ -67,6 +73,29 @@ export default {
   methods: {
     preventPaste(event) {
       event.preventDefault();
+    },
+
+    async setExam(examIDToUpdate) {
+      // console.log("Exam ID to update: ",this.examIDToUpdate);
+      // console.log("Course ID to update: ",this.courseIDToUpdate);
+      let exam = await ExamDao.getExam_By_CourseID_ExamID(examIDToUpdate, this.courseIDToUpdate);
+      console.log(exam);
+      const manageDateTime = new ManageDateTime();
+      if(exam) {
+        this.titleExam = exam.titleExam;
+        this.typeExam = exam.typeExam;
+        this.topicExam = exam.topicExam;
+        this.retake = exam.retake ? "Yes" : "No";
+        this.scoringMethod = exam.scoringMethod;
+        this.duration = exam.duration;
+        this.startDate = manageDateTime.formatDateTime(new Date(exam.startDate));
+        this.endDate = manageDateTime.formatDateTime(new Date(exam.endDate));
+        this.examPaper = exam.examPaper;
+        if(exam.passwordExam) {
+          const passwordClass = new Password(exam.passwordExam);
+          this.passwordExam = passwordClass.xorEncryptDecrypt();
+        }
+      }
     },
 
     //set field modal
@@ -398,8 +427,8 @@ export default {
                         :class="[{'is-invalid': validateDuration !== null}]"
                         v-model="duration"
                 >
-                  <option value="30">30 minutes</option>
-                  <option value="60">60 minutes</option>
+                  <option value=30>30 minutes</option>
+                  <option value=60>60 minutes</option>
                 </select>
                 <span
                     v-if="validateDuration"

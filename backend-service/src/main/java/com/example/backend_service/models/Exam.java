@@ -81,11 +81,11 @@ public class Exam implements Serializable {
     @JsonIgnore
     private Course course;
 
-    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonIgnore
     private List<QuestionJavaCoreExam> questionJavaCoreExams = new ArrayList<>();
 
-    @OneToOne(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonIgnore
     private MarkStudent markStudent;
 
@@ -179,5 +179,13 @@ public class Exam implements Serializable {
 
     public void setPasswordExam(String passwordExam) {
         this.passwordExam = passwordExam;
+    }
+
+    public Long getExamID() {
+        return examID;
+    }
+
+    public void setExamID(Long examID) {
+        this.examID = examID;
     }
 }

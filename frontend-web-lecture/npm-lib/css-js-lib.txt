@@ -5,4 +5,5 @@ View version: npm list bootstrap
 Install library Vue:
 npm install -D sass-embedded (scss)
 npm install vuetify@next @mdi/font
-
+//cho phép import require
+npm i require

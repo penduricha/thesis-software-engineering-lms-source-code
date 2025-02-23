@@ -3,8 +3,6 @@ import AxiosConfig from "@/services/AxiosConfig.js";
 const axiosConfig = new AxiosConfig();
 
 export default class LectureService {
-
-
     static fetchLectureID_And_Password(lectureID) {
         return axiosConfig.getAPIClient().get(`/lecture/lectureID_password/${lectureID}`);
     }
@@ -22,5 +20,4 @@ export default class LectureService {
     static fetchLecturePassword_By_LectureID(lectureID) {
         return axiosConfig.getAPIClient().get(`/lecture/getPassword_By_LectureID/${lectureID}`);
     }
-
 }

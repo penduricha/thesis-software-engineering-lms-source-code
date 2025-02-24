@@ -20,4 +20,8 @@ export default class StudentService {
     static fetchStudentPassword_By_StudentID(studentID) {
         return axiosConfig.getAPIClient().get(`/student/getPassword_By_StudentID/${studentID}`);
     }
+
+    static fetchCourseID_By_StudentID(studentID) {
+        return axiosConfig.getAPIClient().get(`/student/get_course_id_by_student_id/${studentID}`);
+    }
 }

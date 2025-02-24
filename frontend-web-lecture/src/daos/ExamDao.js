@@ -36,4 +36,34 @@ export default class ExamDao {
         }
         return status;
     }
+
+    static async update_Exam_By_ExamID(exam, examID) {
+        let status = false;
+        let examResponse = null
+        await ExamService.put_Exam_By_ExamID(exam, examID).then(response => {
+            examResponse = response.data;
+        }).catch(error => {
+            console.error(error);
+        })
+
+        if(examResponse) {
+            status = true;
+        }
+        return status;
+    }
+
+    static async delete_Exam_By_ExamID(examID) {
+        let status = false;
+        let examResponse = null
+        await ExamService.delete_Exam_By_ExamID(examID).then(response => {
+            examResponse = response.data;
+        }).catch(error => {
+            console.error(error);
+        })
+
+        if(examResponse) {
+            status = true;
+        }
+        return status;
+    }
 }

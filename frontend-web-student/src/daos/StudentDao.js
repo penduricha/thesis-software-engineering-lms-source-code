@@ -51,4 +51,15 @@ export default class StudentDao {
         console.log('patched password: ', newPasswordReturned);
         return status;
     }
+
+    static async getCourseID_By_StudentID(studentID) {
+        let courseID = null
+        await StudentService.fetchCourseID_By_StudentID(studentID).then(response => {
+            courseID = response.data;
+        }).catch(error => {
+            console.error(error);
+            //alert(error)
+        })
+        return courseID;
+    }
 }

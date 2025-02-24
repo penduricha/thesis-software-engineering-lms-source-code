@@ -65,8 +65,10 @@ export default {
       validateEndDate: null,
       validateExamPaper: null,
 
-
       passwordExam: null,
+      passwordExamHashed: null,
+
+      examIDToUpdate: null,
     }
   },
 
@@ -76,6 +78,7 @@ export default {
     },
 
     async setExam(examIDToUpdate) {
+      this.examIDToUpdate = examIDToUpdate;
       // console.log("Exam ID to update: ",this.examIDToUpdate);
       // console.log("Course ID to update: ",this.courseIDToUpdate);
       let exam = await ExamDao.getExam_By_CourseID_ExamID(examIDToUpdate, this.courseIDToUpdate);
@@ -276,11 +279,49 @@ export default {
         console.log("Title exam: ",this.titleExam);
         if(this.passwordExam) {
           const passwordClass = new Password(this.passwordExam);
-          let passwordExamHashed = await passwordClass.sha512();
-          console.log("Password exam: ",passwordExamHashed);
+          this.passwordExamHashed = passwordClass.xorEncryptDecrypt();
+          console.log("Password exam hashed: ",this.passwordExamHashed);
         }
-        console.log("Start date: ", this.startDate);
-        console.log("End date: ", this.endDate);
+
+        //chuyển thành new Date
+        const dateStartDate = new Date(this.startDate);
+        const dateEndDate = new Date(this.endDate);
+        if(this.examPaper) {
+          this.examPaper = this.examPaper.trim();
+        }
+        const examPut = {
+          "titleExam": this.titleExam,
+          "typeExam" : this.typeExam,
+          "topicExam" : this.topicExam,
+          "retakeExam" : this.retake,
+          "scoringMethod" : this.scoringMethod,
+          "duration" : Number(this.duration),
+          "startDateDay" : dateStartDate.getDate(),
+          "startDateMonth" : dateStartDate.getMonth() + 1,
+          "startDateYear" : dateStartDate.getFullYear(),
+          "startDateHour" : dateStartDate.getHours(),
+          "startDateMinute" : dateStartDate.getMinutes(),
+          "endDateDay" : dateEndDate.getDate(),
+          "endDateMonth" : dateEndDate.getMonth() + 1,
+          "endDateYear" : dateEndDate.getFullYear(),
+          "endDateHour" : dateEndDate.getHours(),
+          "endDateMinute" : dateEndDate.getMinutes() ,
+          "linkExamPaper" : this.examPaper,
+          "passwordExam" : this.passwordExamHashed,
+        }
+        //console.log(examPut);
+
+        if(this.examIDToUpdate) {
+          let statusUpdate = await ExamDao.update_Exam_By_ExamID(examPut, this.examIDToUpdate);
+          if(statusUpdate) {
+            alert("Updated exam successfully");
+            window.location.reload();
+          }else {
+            alert("Updated exam failed");
+          }
+        } else {
+          alert("Error system.");
+        }
       }
     }
   }

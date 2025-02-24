@@ -105,15 +105,6 @@ export default {
       this.setTimers();
     },
 
-    // handleBeforeUnload(event) {
-    //   // Lưu trạng thái rằng người dùng đã thoát
-    //   localStorage.setItem('logoutTriggered', 'true');
-    //
-    //   const message = 'Bạn có chắc chắn muốn rời khỏi trang này?';
-    //   event.returnValue = message; // Chrome yêu cầu thiết lập giá trị này
-    //   return message; // Các trình duyệt khác có thể sử dụng giá trị này
-    // },
-
     async setAccount(){
       const studentLocalStorage = new StudentLocalStorage();
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
@@ -154,6 +145,9 @@ export default {
       this.chooseDate = dateInWeek.getDate_Choose(dateChoose);
       this.yearNumber = this.chooseDate.year;
       this.monthName = this.chooseDate.monthName;
+      console.log("Day choose: ", dateChoose.getDate());
+      console.log("Month choose: ", dateChoose.getMonth() + 1);
+      console.log("Year choose: ", dateChoose.getFullYear());
     },
 
     handleNavigateLastWeek() {

@@ -76,4 +76,12 @@ public class Student implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
 }

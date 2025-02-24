@@ -67,4 +67,13 @@ public class StudentService implements I_StudentService {
         return null;
     }
 
+    @Override
+    public Long getCourseIDByStudentID(String studentID) {
+        Student studentFind = findStudentByStudentId(studentID);
+        if(studentFind != null) {
+            return studentFind.getCourse().getCourseID();
+        }
+        return null;
+    }
+
 }

@@ -18,6 +18,8 @@ import 'vuetify/styles';
 import 'vuetify/dist/vuetify-labs.min.css';
 const vuetify = createVuetify();
 
+//font awesome
+import '@fortawesome/fontawesome-free/css/all.min.css';
 //import routers
 import routers from "@/routes/list-routes/routers.js";
 import RouterDao from "@/routes/RoutersDao.js";

@@ -77,4 +77,12 @@ public class Course implements Serializable {
     public List<Exam> getExams() {
         return exams;
     }
+
+    public Long getCourseID() {
+        return courseID;
+    }
+
+    public void setCourseID(Long courseID) {
+        this.courseID = courseID;
+    }
 }

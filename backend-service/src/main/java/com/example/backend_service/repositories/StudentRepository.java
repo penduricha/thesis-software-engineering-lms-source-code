@@ -9,6 +9,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Student findStudentByStudentID(String studentID);
 
 
+
 //    @Query(value = "select s.student_id, " +
 //            "s.password from Student s " +
 //            "where s.student_id = :student_id",

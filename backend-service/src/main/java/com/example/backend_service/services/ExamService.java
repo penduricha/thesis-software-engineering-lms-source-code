@@ -15,6 +15,7 @@ import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ExamService implements I_ExamService {
@@ -127,6 +128,70 @@ public class ExamService implements I_ExamService {
             return exam.getExamID();
         }
         return null;
+    }
+
+    @Override
+    public Exam findExam_By_ExamID(Long examID) {
+        return examRepository.findExamByExamID(examID);
+    }
+
+    @Override
+    @Transactional
+    public Exam updateExam_By_ExamID(Exam exam, Long examID) throws JpaSystemException{
+        Exam examFound = findExam_By_ExamID(examID);
+        if(examFound != null) {
+            String sqlUpdate = "update exam \n" +
+                    "set \n" +
+                    "    title_exam = ?, \n" +
+                    "    type_exam = ?, \n" +
+                    "    topic_exam = ?, \n" +
+                    "    retake_exam = ?, \n" +
+                    "    scoring_method = ?, \n" +
+                    "    duration = ?, \n" +
+                    "    start_date = ?, \n" +
+                    "    end_date = ?, \n" +
+                    "    link_exam_paper = ?, \n" +
+                    "    password_exam = ?\n" +
+                    "where \n" +
+                    "    exam_id = ?;";
+
+            entityManager.createNativeQuery(sqlUpdate)
+                    .setParameter(1, exam.getTitleExam())
+                    .setParameter(2, exam.getTypeExam())
+                    .setParameter(3, exam.getTopicExam())
+                    .setParameter(4, exam.isRetakeExam())
+                    .setParameter(5, exam.getScoringMethod())
+                    .setParameter(6, exam.getDuration())
+                    .setParameter(7, exam.getStartDate())
+                    .setParameter(8, exam.getEndDate())
+                    .setParameter(9, exam.getLinkExamPaper())
+                    .setParameter(10, exam.getPasswordExam())
+                    .setParameter(11, exam.getExamID())
+                    .executeUpdate();
+            return examFound;
+        }
+        return null;
+    }
+
+    @Override
+    public List<Map<String, Object>> getExams_Calendar_Lecture_By_StartDate(String lectureID,
+                                                                            int yearStartDate,
+                                                                            int monthStartDate,
+                                                                            int dateStartDate) throws JpaSystemException {
+        String yearStartDateString = Integer.toString(yearStartDate);
+        String monthStartDateString = Integer.toString(monthStartDate);
+        String dateStartDateString = Integer.toString(dateStartDate);
+        String dateFormat = yearStartDateString + "-" + monthStartDateString + "-" + dateStartDateString;
+        return examRepository.getExams_Calendar_Lecture_By_StartDate(lectureID,dateFormat).stream()
+                .map(originalMap -> {
+                    Map<String, Object> newMap = new HashMap<>();
+                    newMap.put("examID", originalMap.get("exam_id"));
+                    newMap.put("titleExam", originalMap.get("title_exam"));
+                    newMap.put("typeExam", originalMap.get("type_exam"));
+                    newMap.put("className", originalMap.get("class_name"));
+                    return newMap;
+                })
+                .collect(Collectors.toList());
     }
 
 

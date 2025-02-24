@@ -16,4 +16,6 @@ public interface I_StudentService {
     public Student updatePasswordStudent(String studentID, String newPassword);
 
     public Map<String,Object> findStudentInformation_By_StudentID(String studentID);
+
+    public Long getCourseIDByStudentID(String studentID);
 }

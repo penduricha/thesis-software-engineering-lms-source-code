@@ -136,7 +136,9 @@ export default {
       this.chooseDate = dateInWeek.getDate_Choose(dateChoose);
       this.yearNumber = this.chooseDate.year;
       this.monthName = this.chooseDate.monthName;
-      console.log("Date choose: ",dateChoose);
+      console.log("Day choose: ", dateChoose.getDate());
+      console.log("Month choose: ", dateChoose.getMonth() + 1);
+      console.log("Year choose: ", dateChoose.getFullYear());
     },
 
     handleNavigateLastWeek() {

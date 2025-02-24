@@ -19,6 +19,8 @@ import StringFormat from "@/models/StringFormat.js";
 import Password from "@/models/Password.js";
 import ModalUpdateExam from "@/pages/detail-course/ModalUpdateExam.vue";
 import ExamDao from "@/daos/ExamDao.js";
+import ModalDeleteExam from "@/pages/detail-course/ModalDeleteExam.vue";
+import ListExam from "@/pages/detail-course/component-menu-course/ListExam.vue";
 
 export default {
   name: "CourseManage",
@@ -31,6 +33,8 @@ export default {
   },
 
   components: {
+    ListExam,
+    ModalDeleteExam,
     ModalUpdateExam,
     AsideMenu, AsideAccount
   },
@@ -68,6 +72,7 @@ export default {
       exams: null,
       //update exam
       examIDToUpdate: null,
+      examIDToDelete: null,
 
 
       passwordExam: null,
@@ -322,6 +327,12 @@ export default {
       await this.$refs.modalUpdateExam.setExam(this.examIDToUpdate);
     },
 
+    async handleOpenDeleteModal(examID) {
+      this.examIDToDelete = examID;
+      console.log("Exam ID to update: ",this.examIDToDelete);
+      await this.$refs.modalDeleteExam.setExam(this.examIDToDelete);
+    },
+
     async handleCreateExam() {
       this.validationNullField();
       //tạo danh sách ktra các validate xem còn nào còn thông báo ko
@@ -417,39 +428,45 @@ export default {
           {{className}} - {{courseName}}
         </span>
       </div>
+      <!--      Menu nav-->
       <div class="nav-style-in-course">
         <button class="button-nav-in-course button-nav-course-active">List exams</button>
         <button class="button-nav-in-course">Student Grades List</button>
         <button class="button-nav-in-course">Statistic</button>
       </div>
-      <div class="view-list-exams">
-        <h5 v-if="!exams" class="text-no-exam">No exam</h5>
-        <div v-for="e in exams" class="exam">
-          <div class="view-title-exam">
-            <span class="text-exam">{{e.titleExam}}</span>
-          </div>
-          <div class="view-topic-exam">
-            <span class="text-exam">{{e.topicExam}}</span>
-          </div>
-          <div class="view-button-view-exam">
-            <button
-                class="text-exam color-status-view"
-                data-bs-toggle="modal"
-                data-bs-target="#updateExamModal"
-                @click="handleViewModal(e.examID)"
-            >View</button>
-          </div>
-          <div class="view-button-view-delete">
-            <button class="text-exam color-status-delete">Delete</button>
-          </div>
-        </div>
-        <button class="exam button-create-exam"
-                data-bs-toggle="modal"
-                data-bs-target="#createExamModal"
-        >
-          Create new exam
-        </button>
-      </div>
+      <ListExam :exams="exams" @view-exam="handleViewModal" @delete-exam="handleOpenDeleteModal" />
+<!--      <div class="view-list-exams">-->
+<!--        <h5 v-if="!exams" class="text-no-exam">No exam</h5>-->
+<!--        <div v-for="e in exams" class="exam">-->
+<!--          <div class="view-title-exam">-->
+<!--            <span class="text-exam">{{e.titleExam}}</span>-->
+<!--          </div>-->
+<!--          <div class="view-topic-exam">-->
+<!--            <span class="text-exam">{{e.topicExam}}</span>-->
+<!--          </div>-->
+<!--          <div class="view-button-view-exam">-->
+<!--            <button-->
+<!--                class="text-exam color-status-view"-->
+<!--                data-bs-toggle="modal"-->
+<!--                data-bs-target="#updateExamModal"-->
+<!--                @click="handleViewModal(e.examID)"-->
+<!--            >View</button>-->
+<!--          </div>-->
+<!--          <div class="view-button-view-delete">-->
+<!--            <button class="text-exam color-status-delete"-->
+<!--                    @click="handleOpenDeleteModal(e.examID)"-->
+<!--                    data-bs-toggle="modal"-->
+<!--                    data-bs-target="#deleteConfirmModal"-->
+<!--            >Delete</button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <button class="exam button-create-exam"-->
+<!--                data-bs-toggle="modal"-->
+<!--                data-bs-target="#createExamModal"-->
+<!--        >-->
+<!--          Create new exam-->
+<!--        </button>-->
+<!--      </div>-->
     </section>
   </main>
   <AsideAccount/>
@@ -699,6 +716,11 @@ export default {
   <modal-update-exam ref="modalUpdateExam"
                      :lecture-i-d="this.lectureID"
                      :course-i-d-to-update="this.courseID"
+  />
+
+  <modal-delete-exam ref="modalDeleteExam"
+                     :lecture-i-d="this.lectureID"
+                     :course-i-d-to-delete="this.courseID"
   />
 </template>
 

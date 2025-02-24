@@ -13,4 +13,10 @@ public interface I_ExamService {
     public Map<String, Object> viewExam_By_ExamID(Long examID, Long courseID);
 
     public Long deleteExam_By_ExamID(Long examID);
+
+    public Exam findExam_By_ExamID(Long examID);
+
+    public Exam updateExam_By_ExamID(Exam exam, Long examID);
+
+    public List<Map<String, Object>> getExams_Calendar_Lecture_By_StartDate(String lectureID,int yearStartDate, int monthStartDate, int dateStartDate);
 }

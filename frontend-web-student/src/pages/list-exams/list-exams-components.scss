@@ -120,6 +120,21 @@ aside {
   }
 }
 
+.span-status-color {
+  &.color-status-open {
+    color: #007BFF;
+  }
+
+  &.color-status-lock {
+    color: #FF0505;
+  }
+
+  &.color-status-complete {
+    color: #1CC800;
+  }
+}
+
+
 .button-view-date:hover {
   opacity: 0.8;
 }

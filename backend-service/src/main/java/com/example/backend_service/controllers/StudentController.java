@@ -64,5 +64,9 @@ public class StudentController {
         return ResponseEntity.ok(updatedStudent.getPassword());
     }
 
+    @GetMapping("/student/get_course_id_by_student_id/{studentID}")
+    public ResponseEntity<Long> getCourseID_By_StudentID(@PathVariable String studentID) throws HttpClientErrorException {
+        return ResponseEntity.ok(studentService.getCourseIDByStudentID(studentID));
+    }
 
 }

@@ -66,16 +66,6 @@ public class ExamController {
         exam.setLinkExamPaper(linkExamPaper); // Assuming there is a setLinkExamPaper method
         exam.setPasswordExam(passwordExam); // Assuming there is a setPasswordExam method
 
-        //public Exam(String titleExam,
-        // String typeExam, String topicExam,
-        // boolean retakeExam,
-        // String scoringMethod,
-        // int duration,
-        // LocalDateTime startDate,
-        // LocalDateTime endDate,
-        // String linkExamPaper,
-        // String passwordExam)
-
         return ResponseEntity.status(HttpStatus.CREATED).body(examService.createExam(exam,courseID));
     }
 
@@ -89,8 +79,74 @@ public class ExamController {
         return ResponseEntity.ok(examService.viewExam_By_ExamID(examID, courseID));
     }
 
+    @GetMapping("/view_exam_by_calendar_lecture/{lectureID}/{yearStartDate}/{monthStartDate}/{dateStartDate}")
+    public ResponseEntity<List<Map<String, Object>>>
+        getExams_Calendar_Lecture_By_StartDate(@PathVariable String lectureID,
+                                           @PathVariable int yearStartDate,
+                                           @PathVariable int monthStartDate,
+                                           @PathVariable int dateStartDate) throws HttpClientErrorException {
+        return ResponseEntity.ok(examService.
+                getExams_Calendar_Lecture_By_StartDate(covertLectureID(lectureID), yearStartDate, monthStartDate, dateStartDate));
+    }
+
+    public String covertLectureID(String lectureID) {
+        if(lectureID.charAt(0) == '0'){
+            return lectureID.substring(1);
+        }
+        return null;
+    }
+
     @DeleteMapping("/delete_exam/{examID}")
     public ResponseEntity<Long> deleteExam_By_ExamID(@PathVariable Long examID) throws HttpClientErrorException {
         return ResponseEntity.ok(examService.deleteExam_By_ExamID(examID));
+    }
+
+    @PutMapping("/put_exam/{examID}")
+    public ResponseEntity<Exam> put_Exam (@RequestBody Map<String,Object> mapExamToPut,
+                                          @PathVariable Long examID) throws HttpClientErrorException {
+
+        String titleExam = (String) mapExamToPut.get("titleExam");
+        String typeExam = (String) mapExamToPut.get("typeExam");
+        String topicExam = (String) mapExamToPut.get("topicExam");
+        String retakeExamValue = (String) mapExamToPut.get("retakeExam");
+        boolean retakeExam = "Yes".equalsIgnoreCase(retakeExamValue);
+        String scoringMethod = (String) mapExamToPut.get("scoringMethod");
+        int duration = (Integer) mapExamToPut.get("duration");
+
+        LocalDateTime startDate = LocalDateTime.of(
+                (Integer) mapExamToPut.get("startDateYear"),
+                (Integer) mapExamToPut.get("startDateMonth"),
+                (Integer) mapExamToPut.get("startDateDay"),
+                (Integer) mapExamToPut.get("startDateHour"),
+                (Integer) mapExamToPut.get("startDateMinute"),
+                0
+        );
+
+        // Extracting end date and time
+        LocalDateTime endDate = LocalDateTime.of(
+                (Integer) mapExamToPut.get("endDateYear"),
+                (Integer) mapExamToPut.get("endDateMonth"),
+                (Integer) mapExamToPut.get("endDateDay"),
+                (Integer) mapExamToPut.get("endDateHour"),
+                (Integer) mapExamToPut.get("endDateMinute"),
+                0
+        );
+
+        String linkExamPaper = (String) mapExamToPut.get("linkExamPaper");
+        String passwordExam = (String) mapExamToPut.get("passwordExam");
+
+        Exam exam = new Exam();
+        exam.setExamID(examID);
+        exam.setTitleExam(titleExam);
+        exam.setTypeExam(typeExam);
+        exam.setTopicExam(topicExam);
+        exam.setRetakeExam(retakeExam);
+        exam.setScoringMethod(scoringMethod);
+        exam.setDuration(duration);
+        exam.setStartDate(startDate);
+        exam.setEndDate(endDate);
+        exam.setLinkExamPaper(linkExamPaper);
+        exam.setPasswordExam(passwordExam);
+        return ResponseEntity.ok(examService.updateExam_By_ExamID(exam,examID));
     }
 }

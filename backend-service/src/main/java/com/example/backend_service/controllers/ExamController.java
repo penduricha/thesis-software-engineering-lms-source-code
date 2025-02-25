@@ -2,6 +2,7 @@ package com.example.backend_service.controllers;
 
 import com.example.backend_service.models.Exam;
 import com.example.backend_service.services.ExamService;
+import com.example.backend_service.services.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +18,11 @@ public class ExamController {
 
     private final ExamService examService;
 
+    private final StudentService studentService;
 
-    public ExamController(ExamService examService) {
+    public ExamController(ExamService examService, StudentService studentService) {
         this.examService = examService;
+        this.studentService = studentService;
     }
 
     @PostMapping("/post_exam/{courseID}")
@@ -79,6 +82,12 @@ public class ExamController {
         return ResponseEntity.ok(examService.viewExam_By_ExamID(examID, courseID));
     }
 
+    @GetMapping("/view_exam_by_course_id_exam_id_student_exam_before/{examID}/{courseID}")
+    public ResponseEntity<Map<String, Object>>
+        view_Information_Exam_Before_Student(@PathVariable Long examID,@PathVariable Long courseID) throws HttpClientErrorException {
+        return ResponseEntity.ok(examService.view_Information_Exam_Before_Student(examID, courseID));
+    }
+
     @GetMapping("/view_exam_by_calendar_lecture/{lectureID}/{yearStartDate}/{monthStartDate}/{dateStartDate}")
     public ResponseEntity<List<Map<String, Object>>>
         getExams_Calendar_Lecture_By_StartDate(@PathVariable String lectureID,
@@ -87,6 +96,16 @@ public class ExamController {
                                            @PathVariable int dateStartDate) throws HttpClientErrorException {
         return ResponseEntity.ok(examService.
                 getExams_Calendar_Lecture_By_StartDate(covertLectureID(lectureID), yearStartDate, monthStartDate, dateStartDate));
+    }
+
+    @GetMapping("/view_exam_by_calendar_student/{studentID}/{yearStartDate}/{monthStartDate}/{dateStartDate}")
+    public ResponseEntity<List<Map<String, Object>>>
+    getExams_Calendar_Student_By_StartDate(@PathVariable String studentID,
+                                           @PathVariable int yearStartDate,
+                                           @PathVariable int monthStartDate,
+                                           @PathVariable int dateStartDate) throws HttpClientErrorException {
+        return ResponseEntity.ok(studentService
+                .getExams_Calendar_Student_By_StartDate(studentID, yearStartDate, monthStartDate, dateStartDate));
     }
 
     public String covertLectureID(String lectureID) {

@@ -43,4 +43,11 @@ public class BankTestCaseJavaCoreController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responseList);
     }
+
+    @GetMapping("/bank_test_cases/get_test_case_by_question_java_core_exam_id/{questionJavaCoreExamID}")
+    public ResponseEntity<List<Map<String, Object>>> getTestCases_By_QuestionJavaCoreExamID(@PathVariable Long questionJavaCoreExamID)
+            throws HttpClientErrorException {
+        return ResponseEntity.ok(
+                bankTestCaseJavaCoreService.getTestCases_By_QuestionJavaCoreExamID(questionJavaCoreExamID));
+    }
 }

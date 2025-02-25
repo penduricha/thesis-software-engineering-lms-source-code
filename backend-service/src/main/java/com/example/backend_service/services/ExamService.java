@@ -6,6 +6,7 @@ import com.example.backend_service.models.Exam;
 import com.example.backend_service.models.QuestionJavaCoreExam;
 import com.example.backend_service.repositories.CourseRepository;
 import com.example.backend_service.repositories.ExamRepository;
+import com.example.backend_service.repositories.QuestionJavaCoreExamRepository;
 import com.example.backend_service.services.i_service.I_ExamService;
 import jakarta.persistence.EntityManager;
 
@@ -23,13 +24,16 @@ public class ExamService implements I_ExamService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    private final QuestionJavaCoreExamRepository questionJavaCoreExamRepository;
+
     private final ExamRepository examRepository;
 
     private final CourseRepository courseRepository;
 
     private final BankQuestionJavaCoreService bankQuestionJavaCoreService;
 
-    public ExamService(ExamRepository examRepository, CourseRepository courseRepository, BankQuestionJavaCoreService bankQuestionJavaCoreService) {
+    public ExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ExamRepository examRepository, CourseRepository courseRepository, BankQuestionJavaCoreService bankQuestionJavaCoreService) {
+        this.questionJavaCoreExamRepository = questionJavaCoreExamRepository;
         this.examRepository = examRepository;
         this.courseRepository = courseRepository;
         this.bankQuestionJavaCoreService = bankQuestionJavaCoreService;
@@ -45,6 +49,7 @@ public class ExamService implements I_ExamService {
             if (course != null && !questionRandomJavaCore.isEmpty()) {
                 // Set initial properties for the exam
                 exam.setStudentAccess(false);
+                exam.setComplete(false);
                 course.getExams().add(exam);
                 exam.setCourse(course);
                 // Iterate over the list of random questions
@@ -80,13 +85,14 @@ public class ExamService implements I_ExamService {
     public List<Map<String, Object>> getExamsByCourseID(Long courseID) throws JpaSystemException {
         List<Map<String, Object>> queryList = examRepository.getExamsByCourseID(courseID);
         List<Map<String, Object>> convertedList = new ArrayList<>();
-        if(!queryList.isEmpty()) {
+        if (!queryList.isEmpty()) {
             for (Map<String, Object> queryMap : queryList) {
                 Map<String, Object> convertedMap = new HashMap<>();
                 for (Map.Entry<String, Object> entry : queryMap.entrySet()) {
                     String key = entry.getKey();
                     Object value = entry.getValue();
                     String convertedKey = ConvertNameField.convertSnakeToCamel(key);
+
                     if (!convertedKey.equals("examId")) {
                         convertedMap.put(convertedKey, value);
                     } else {
@@ -107,6 +113,20 @@ public class ExamService implements I_ExamService {
                 .filter(queryMap -> examID.equals(queryMap.get("examID")))
                 .findFirst();
         return exam.orElse(null);
+    }
+
+    @Override
+    public Map<String, Object> view_Information_Exam_Before_Student(Long examID, Long courseID) throws JpaSystemException {
+        Map<String, Object> viewExamMap = viewExam_By_ExamID(examID, courseID);
+        if (viewExamMap != null) {
+            String topicExam = (String) viewExamMap.get("topicExam");
+            if (topicExam.equalsIgnoreCase("Java core")) {
+                Integer numberOfQuestions = questionJavaCoreExamRepository.getTotalQuestionsByExamID(examID);
+                viewExamMap.put("numberQuestions", numberOfQuestions);
+            }
+            return viewExamMap;
+        }
+        return null;
     }
 
     @Override

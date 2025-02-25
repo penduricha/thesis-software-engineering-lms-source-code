@@ -10,6 +10,7 @@ import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BankTestCaseJavaCoreService implements I_BankTestCaseJavaCoreService {
@@ -35,5 +36,10 @@ public class BankTestCaseJavaCoreService implements I_BankTestCaseJavaCoreServic
                     .getBankTestCaseJavaCoresByBankQuestionJavaCore_QuestionJavaCoreID(questionJavaCoreID);
         }
         return null;
+    }
+
+    @Override
+    public List<Map<String, Object>> getTestCases_By_QuestionJavaCoreExamID(Long questionJavaCoreExamID) {
+        return bankTestCaseJavaCoreRepository.getTestCases_By_QuestionJavaCoreExamID(questionJavaCoreExamID);
     }
 }

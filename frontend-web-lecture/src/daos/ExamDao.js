@@ -31,7 +31,7 @@ export default class ExamDao {
             console.error(error);
         })
 
-        if(examResponse) {
+        if (examResponse) {
             status = true;
         }
         return status;
@@ -46,7 +46,7 @@ export default class ExamDao {
             console.error(error);
         })
 
-        if(examResponse) {
+        if (examResponse) {
             status = true;
         }
         return status;
@@ -61,9 +61,23 @@ export default class ExamDao {
             console.error(error);
         })
 
-        if(examResponse) {
+        if (examResponse) {
             status = true;
         }
         return status;
+    }
+
+    static async getExams_By_LectureID_Lecture_Calendar(lectureID, yearStartDate, monthStartDate, dateStartDate) {
+        let exams = [];
+        await ExamService.fetchExams_By_LectureID_Lecture_Calendar
+        (lectureID,
+            yearStartDate,
+            monthStartDate,
+            dateStartDate).then(response => {
+            exams = response.data;
+        }).catch(error => {
+            console.error(error);
+        })
+        return exams;
     }
 }

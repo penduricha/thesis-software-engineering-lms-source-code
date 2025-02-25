@@ -47,3 +47,13 @@ from course c
          left join lecture l on mlc.lecture_id = l.lecture_id
          right join exam e on c.course_id = e.course_id
 where l.lecture_id = '1120050' and date(start_date) = '2025-02-24';
+
+# query exams by date and courseID
+select
+    e.exam_id,
+    e.title_exam,
+    e.type_exam
+from student s
+    right join course c on s.course_id = c.course_id
+    right join exam e on c.course_id = e.course_id
+where student_id = '22662361' and date(start_date) = '2025-02-24';

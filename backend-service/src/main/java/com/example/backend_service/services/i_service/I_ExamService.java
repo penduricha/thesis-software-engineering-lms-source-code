@@ -12,6 +12,8 @@ public interface I_ExamService {
 
     public Map<String, Object> viewExam_By_ExamID(Long examID, Long courseID);
 
+    public Map<String, Object> view_Information_Exam_Before_Student(Long examID, Long courseID);
+
     public Long deleteExam_By_ExamID(Long examID);
 
     public Exam findExam_By_ExamID(Long examID);

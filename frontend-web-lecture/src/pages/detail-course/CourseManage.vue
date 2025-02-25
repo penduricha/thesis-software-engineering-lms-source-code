@@ -114,7 +114,7 @@ export default {
     setLectureID() {
       const lectureLocalStorage = new LectureLocalStorage();
       let lectureID = lectureLocalStorage.getLectureID_From_LocalStorage();
-      if(lectureID) {
+      if (lectureID) {
         this.lectureID = lectureID;
       } else {
         this.lectureID = '1120050';
@@ -152,7 +152,7 @@ export default {
       let course = await CourseDao.getCourse_By_LectureID_CourseID(
           this.lectureID,
           this.courseID);
-      if(course) {
+      if (course) {
         this.className = course.className;
         this.courseName = course.courseName;
         // this.courseID = course.courseID;
@@ -161,19 +161,19 @@ export default {
 
     //set field modal
     setInputExamTitle() {
-      if(!this.titleExam) {
+      if (!this.titleExam) {
         this.validateTitleExam = null;
       } else {
-        if(Validation.isFullOfSpaces(this.titleExam)) {
+        if (Validation.isFullOfSpaces(this.titleExam)) {
           this.validateTitleExam = null;
         } else {
-          if(!Validation.validateString_Title(
+          if (!Validation.validateString_Title(
               Validation.removeSpaces(this.titleExam.trim())
           )) {
             this.validateTitleExam = "Title exam is invalid.";
           } else {
             const hasMatchingExam = this.exams.some(exam => exam.titleExam === this.titleExam.trim());
-            if(hasMatchingExam) {
+            if (hasMatchingExam) {
               this.validateTitleExam = "Title exam is existed";
             } else {
               this.validateTitleExam = null;
@@ -185,31 +185,31 @@ export default {
     },
 
     setSelectExamType() {
-      if(this.typeExam) {
+      if (this.typeExam) {
         this.validateTypeExam = null;
       }
     },
 
     setSelectTopicExam() {
-      if(this.topicExam) {
+      if (this.topicExam) {
         this.validateTopicExam = null;
       }
     },
 
     setSelectRetake() {
-      if(this.retake) {
+      if (this.retake) {
         this.validateRetake = null;
       }
     },
 
     setSelectScoringMethod() {
-      if(this.scoringMethod) {
+      if (this.scoringMethod) {
         this.validateScoringMethod = null;
       }
     },
 
     setSelectDurationTime() {
-      if(this.duration) {
+      if (this.duration) {
         this.validateDuration = null;
       }
     },
@@ -279,7 +279,7 @@ export default {
     },
 
     isLockSelectScoringMethod() {
-      if(this.retake === "Yes") {
+      if (this.retake === "Yes") {
         return false;
       } else {
         this.scoringMethod = null;
@@ -288,48 +288,48 @@ export default {
     },
 
     validationNullField() {
-      if(!this.titleExam) {
+      if (!this.titleExam) {
         this.validateTitleExam = "Please enter title exam.";
       }
 
-      if(!this.typeExam) {
+      if (!this.typeExam) {
         this.validateTypeExam = "Please choose type exam.";
       }
 
-      if(!this.topicExam) {
+      if (!this.topicExam) {
         this.validateTopicExam = "Please choose topic exam.";
       }
 
-      if(!this.retake) {
+      if (!this.retake) {
         this.validateRetake = "Please choose retake exam.";
       }
 
-      if(!this.scoringMethod && !this.isLockSelectScoringMethod()) {
+      if (!this.scoringMethod && !this.isLockSelectScoringMethod()) {
         this.validateScoringMethod = "Please choose scoring method.";
       }
 
-      if(!this.duration) {
+      if (!this.duration) {
         this.validateDuration = "Please choose time duration exam.";
       }
 
-      if(!this.startDate) {
+      if (!this.startDate) {
         this.validateStartDate = "Please choose start date.";
       }
 
-      if(!this.endDate) {
+      if (!this.endDate) {
         this.validateEndDate = "Please choose end date.";
       }
     },
 
     async handleViewModal(examID) {
       this.examIDToUpdate = examID;
-      console.log("Exam ID to update: ",this.examIDToUpdate);
+      console.log("Exam ID to update: ", this.examIDToUpdate);
       await this.$refs.modalUpdateExam.setExam(this.examIDToUpdate);
     },
 
     async handleOpenDeleteModal(examID) {
       this.examIDToDelete = examID;
-      console.log("Exam ID to update: ",this.examIDToDelete);
+      console.log("Exam ID to update: ", this.examIDToDelete);
       await this.$refs.modalDeleteExam.setExam(this.examIDToDelete);
     },
 
@@ -348,46 +348,46 @@ export default {
         this.validateExamPaper,
       ];
       const allAreEmpty = validations.every(val => val === null);
-      if(allAreEmpty) {
+      if (allAreEmpty) {
         this.titleExam = StringFormat.normalizeSpaces(this.titleExam.trim());
-        if(this.passwordExam) {
+        if (this.passwordExam) {
           const passwordClass = new Password(this.passwordExam);
           this.passwordExamHashed = passwordClass.xorEncryptDecrypt();
-          console.log("Password exam hashed: ",this.passwordExamHashed);
+          console.log("Password exam hashed: ", this.passwordExamHashed);
         }
         //chuyển thành new Date
         const dateStartDate = new Date(this.startDate);
         const dateEndDate = new Date(this.endDate);
-        if(this.examPaper) {
+        if (this.examPaper) {
           this.examPaper = this.examPaper.trim();
         }
         const examPost = {
           "titleExam": this.titleExam,
-          "typeExam" : this.typeExam,
-          "topicExam" : this.topicExam,
-          "retakeExam" : this.retake,
-          "scoringMethod" : this.scoringMethod,
-          "duration" : Number(this.duration),
-          "startDateDay" : dateStartDate.getDate(),
-          "startDateMonth" : dateStartDate.getMonth() + 1,
-          "startDateYear" : dateStartDate.getFullYear(),
-          "startDateHour" : dateStartDate.getHours(),
-          "startDateMinute" : dateStartDate.getMinutes(),
-          "endDateDay" : dateEndDate.getDate(),
-          "endDateMonth" : dateEndDate.getMonth() + 1,
-          "endDateYear" : dateEndDate.getFullYear(),
-          "endDateHour" : dateEndDate.getHours(),
-          "endDateMinute" : dateEndDate.getMinutes() ,
-          "linkExamPaper" : this.examPaper,
-          "passwordExam" : this.passwordExamHashed,
+          "typeExam": this.typeExam,
+          "topicExam": this.topicExam,
+          "retakeExam": this.retake,
+          "scoringMethod": this.scoringMethod,
+          "duration": Number(this.duration),
+          "startDateDay": dateStartDate.getDate(),
+          "startDateMonth": dateStartDate.getMonth() + 1,
+          "startDateYear": dateStartDate.getFullYear(),
+          "startDateHour": dateStartDate.getHours(),
+          "startDateMinute": dateStartDate.getMinutes(),
+          "endDateDay": dateEndDate.getDate(),
+          "endDateMonth": dateEndDate.getMonth() + 1,
+          "endDateYear": dateEndDate.getFullYear(),
+          "endDateHour": dateEndDate.getHours(),
+          "endDateMinute": dateEndDate.getMinutes(),
+          "linkExamPaper": this.examPaper,
+          "passwordExam": this.passwordExamHashed,
         }
         //console.log("Exam post: ",examPost);
 
         let statusCreate = await ExamDao.create_Exam_By_CourseID(this.courseID, examPost);
-        if(statusCreate) {
+        if (statusCreate) {
           alert("Created exam successfully");
           window.location.reload();
-        }else {
+        } else {
           alert("Created exam failed");
         }
       }
@@ -395,9 +395,7 @@ export default {
 
   },
 
-  computed: {
-
-  }
+  computed: {}
 }
 </script>
 
@@ -411,7 +409,8 @@ export default {
                 @click="handleBackToListCourses()"
         >
           <div class="button_nav_calendar button-return-courses-image">
-            <img src="@/assets/image/button_nav_left_calendar.png" alt="button nav left calendar" class="style-button-nav-calendar">
+            <img src="@/assets/image/button_nav_left_calendar.png" alt="button nav left calendar"
+                 class="style-button-nav-calendar">
           </div>
           <span class="
             span-button-return-list-course
@@ -425,7 +424,7 @@ export default {
           /
         </span>
         <span class="span-button-return-list-course span-with-out-button">
-          {{className}} - {{courseName}}
+          {{ className }} - {{ courseName }}
         </span>
       </div>
       <!--      Menu nav-->
@@ -434,39 +433,7 @@ export default {
         <button class="button-nav-in-course">Student Grades List</button>
         <button class="button-nav-in-course">Statistic</button>
       </div>
-      <ListExam :exams="exams" @view-exam="handleViewModal" @delete-exam="handleOpenDeleteModal" />
-<!--      <div class="view-list-exams">-->
-<!--        <h5 v-if="!exams" class="text-no-exam">No exam</h5>-->
-<!--        <div v-for="e in exams" class="exam">-->
-<!--          <div class="view-title-exam">-->
-<!--            <span class="text-exam">{{e.titleExam}}</span>-->
-<!--          </div>-->
-<!--          <div class="view-topic-exam">-->
-<!--            <span class="text-exam">{{e.topicExam}}</span>-->
-<!--          </div>-->
-<!--          <div class="view-button-view-exam">-->
-<!--            <button-->
-<!--                class="text-exam color-status-view"-->
-<!--                data-bs-toggle="modal"-->
-<!--                data-bs-target="#updateExamModal"-->
-<!--                @click="handleViewModal(e.examID)"-->
-<!--            >View</button>-->
-<!--          </div>-->
-<!--          <div class="view-button-view-delete">-->
-<!--            <button class="text-exam color-status-delete"-->
-<!--                    @click="handleOpenDeleteModal(e.examID)"-->
-<!--                    data-bs-toggle="modal"-->
-<!--                    data-bs-target="#deleteConfirmModal"-->
-<!--            >Delete</button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <button class="exam button-create-exam"-->
-<!--                data-bs-toggle="modal"-->
-<!--                data-bs-target="#createExamModal"-->
-<!--        >-->
-<!--          Create new exam-->
-<!--        </button>-->
-<!--      </div>-->
+      <list-exam :exams="exams" @view-exam="handleViewModal" @delete-exam="handleOpenDeleteModal"/>
     </section>
   </main>
   <AsideAccount/>
@@ -506,13 +473,13 @@ export default {
                     class="form-control"
                     :class="[{'is-invalid': validateTitleExam !== null}]"
                     placeholder="Enter exam title"
-                    maxlength="50"
+                    maxlength="15"
                     @input="setInputExamTitle()"
                     v-model="titleExam"
                 />
                 <span v-if="validateTitleExam"
                       class="span-validate-modal-form"
-                >{{validateTitleExam}}
+                >{{ validateTitleExam }}
                 </span>
               </div>
             </div>
@@ -526,14 +493,14 @@ export default {
                         v-model="typeExam"
                         :class="[{'is-invalid': validateTypeExam !== null}]"
                 >
-                  <option value = "Practice 1">Practice 1</option>
-                  <option value = "Practice 2">Practice 2</option>
-                  <option value = "Practice 3">Practice 3</option>
+                  <option value="Practice 1">Practice 1</option>
+                  <option value="Practice 2">Practice 2</option>
+                  <option value="Practice 3">Practice 3</option>
                 </select>
                 <span
                     v-if="validateTypeExam"
                     class="span-validate-modal-form"
-                >{{validateTypeExam}}</span>
+                >{{ validateTypeExam }}</span>
               </div>
             </div>
 
@@ -547,14 +514,14 @@ export default {
                         v-model="topicExam"
                         :class="[{'is-invalid': validateTopicExam !== null}]"
                 >
-                  <option value = "Java core">Java core</option>
-                  <option value = "Java class single">Java class single</option>
-                  <option value = "Java class mapping">Java class mapping</option>
+                  <option value="Java core">Java core</option>
+                  <option value="Java class single">Java class single</option>
+                  <option value="Java class mapping">Java class mapping</option>
                 </select>
                 <span
                     v-if="validateTopicExam"
                     class="span-validate-modal-form"
-                >{{validateTopicExam}}.</span>
+                >{{ validateTopicExam }}.</span>
               </div>
             </div>
 
@@ -568,13 +535,13 @@ export default {
                         :class="[{'is-invalid': validateRetake !== null}]"
                         v-model="retake"
                 >
-                  <option value = "Yes">Yes</option>
-                  <option value = "No">No</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
                 </select>
                 <span
                     v-if="validateRetake"
                     class="span-validate-modal-form"
-                >{{validateRetake}}</span>
+                >{{ validateRetake }}</span>
               </div>
             </div>
 
@@ -596,7 +563,7 @@ export default {
                 <span
                     v-if="validateScoringMethod"
                     class="span-validate-modal-form"
-                >{{validateScoringMethod}}</span>
+                >{{ validateScoringMethod }}</span>
               </div>
             </div>
 
@@ -616,7 +583,7 @@ export default {
                 <span
                     v-if="validateDuration"
                     class="span-validate-modal-form"
-                >{{validateDuration}}</span>
+                >{{ validateDuration }}</span>
               </div>
             </div>
 
@@ -636,82 +603,83 @@ export default {
                 <span
                     v-if="validateStartDate"
                     class="span-validate-modal-form"
-                >{{validateStartDate}}</span>
+                >{{ validateStartDate }}</span>
                 <!--@keydown.prevent; ko cho nhập bằng bàn phím-->
               </div>
 
             </div>
-            </div>
+          </div>
 
-            <div class="mb-3 row">
-              <label for="endDate" class="col-sm-3 col-form-label">
-                End Date  (SA is am, CH is pm.):<span class="required-star">*</span>
-              </label>
-              <div class="col-sm-9">
-                <input
-                    type="datetime-local"
-                    class="form-control"
-                    @input="setInputEndDate()"
-                    v-model="endDate"
-                    :class="[{'is-invalid': validateEndDate !== null}]"
-                />
-                <span
-                    v-if="validateEndDate"
-                    class="span-validate-modal-form"
-                >{{validateEndDate}}</span>
-              </div>
+          <div class="mb-3 row">
+            <label for="endDate" class="col-sm-3 col-form-label">
+              End Date (SA is am, CH is pm.):<span class="required-star">*</span>
+            </label>
+            <div class="col-sm-9">
+              <input
+                  type="datetime-local"
+                  class="form-control"
+                  @input="setInputEndDate()"
+                  v-model="endDate"
+                  :class="[{'is-invalid': validateEndDate !== null}]"
+              />
+              <span
+                  v-if="validateEndDate"
+                  class="span-validate-modal-form"
+              >{{ validateEndDate }}</span>
             </div>
+          </div>
 
-            <div class="mb-3 row">
-              <label for="examPaper" class="col-sm-3 col-form-label">
-                Exam Paper (Link File, if any):
-              </label>
-              <div class="col-sm-9">
-                <input
-                    type="text"
-                    class="form-control"
-                    placeholder="https://drive.google.com/..."
-                    maxlength="50"
-                    @input="setInputExamPaper()"
-                    v-model="examPaper"
-                    :class="[{'is-invalid': validateExamPaper !== null}]"
-                />
-                <span
-                    v-if="validateExamPaper"
-                    class="span-validate-modal-form"
-                >{{validateExamPaper}}</span>
-              </div>
+          <div class="mb-3 row">
+            <label for="examPaper" class="col-sm-3 col-form-label">
+              Exam Paper (Link File, if any):
+            </label>
+            <div class="col-sm-9">
+              <input
+                  type="text"
+                  class="form-control"
+                  placeholder="https://drive.google.com/..."
+                  maxlength="50"
+                  @input="setInputExamPaper()"
+                  v-model="examPaper"
+                  :class="[{'is-invalid': validateExamPaper !== null}]"
+              />
+              <span
+                  v-if="validateExamPaper"
+                  class="span-validate-modal-form"
+              >{{ validateExamPaper }}</span>
             </div>
+          </div>
 
-            <div class="mb-3 row">
-              <label for="password" class="col-sm-3 col-form-label">
-                Password (if any):
-              </label>
-              <div class="col-sm-9">
-                <input
-                    type="password"
-                    class="form-control"
-                    placeholder="Enter password"
-                    v-model="passwordExam"
-                    @paste="preventPaste($event)"
-                    @input="setPasswordExam()"
-                    maxlength="10"
-                />
-                <span class="form-text">
+          <div class="mb-3 row">
+            <label for="password" class="col-sm-3 col-form-label">
+              Password (if any):
+            </label>
+            <div class="col-sm-9">
+              <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Enter password"
+                  v-model="passwordExam"
+                  @paste="preventPaste($event)"
+                  @input="setPasswordExam()"
+                  maxlength="10"
+              />
+              <span class="form-text">
                 (Password must be digits and greater than 5 characters)
               </span>
-              </div>
             </div>
+          </div>
 
-            <div class="text-end">
-              <button type="submit"
-                      class="btn-create-exam"
-                      @click="handleCreateExam()"
-              >Create</button>
-            </div>
+          <div class="text-end">
+            <button type="submit"
+                    class="btn-create-exam"
+                    @click="handleCreateExam()"
+            >Create
+            </button>
           </div>
         </div>
       </div>
+    </div>
   </div>
   <modal-update-exam ref="modalUpdateExam"
                      :lecture-i-d="this.lectureID"

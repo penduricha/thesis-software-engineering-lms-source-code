@@ -6,10 +6,14 @@ import AsideMenu from "@/components/aside/AsideMenu.vue";
 import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import StudentDao from "@/daos/StudentDao.js";
 import ExamDao from "@/daos/ExamDao.js";
+import ModalBeforeExam from "@/pages/modal-exam/ModalBeforeExam.vue";
+import ModalExamLocked from "@/pages/modal-exam/ModalExamLocked.vue";
 
 export default {
   name: 'ListExamsComponents',
   components: {
+    ModalExamLocked,
+    ModalBeforeExam,
     AsideMenu,
     AsideAccount
 
@@ -59,19 +63,44 @@ export default {
       routerDao.savePath_To_SessionStorage(route);
     },
 
+    async handButtonClick(status, exam) {
+      if(status === "Open"){
+        if(this.courseID)
+          await this.handleGoToModalExamBefore(exam.examID, this.courseID);
+      }
+    },
+
+    async handleGoToModalExamBefore(examID, courseID) {
+      await this.$refs.modalExamBefore.setExam_Information(examID, courseID);
+    },
+
     getStatusExam(e) {
-      const dateTimeNow = new Date();
-      const startDate = new Date(e.startDate);
-      const endDate = new Date(e.endDate);
-      if(dateTimeNow < startDate) {
-        return "Locked";
-      } else if(dateTimeNow > endDate) {
-        return "Overdue";
-      } else if((dateTimeNow >= startDate) && (dateTimeNow <= endDate)) {
-        return "Open";
+      if(this.exams.length > 0) {
+        const dateTimeNow = new Date();
+        const startDate = new Date(e.startDate);
+        const endDate = new Date(e.endDate);
+        if(dateTimeNow < startDate) {
+          return "Locked";
+        } else if(dateTimeNow > endDate && e.complete) {
+          return "Complete";
+        } else if(dateTimeNow > endDate && !e.complete) {
+          return "Overdue";
+        } else if((dateTimeNow >= startDate) && (dateTimeNow <= endDate)) {
+          return "Open";
+        }
+        return null;
       }
       return null;
-    }
+    },
+
+    getModalIDToOpen(status) {
+      if(status === "Open"){
+        return "#modal-java-core-before-exam";
+      } else if(status === "Locked") {
+        return "#modal-exam-locked";
+      }
+      return null;
+    },
   },
 
   computed: {
@@ -85,7 +114,8 @@ export default {
         }
         return ""; // Default case, if needed
       };
-    }
+    },
+
   }
 }
 </script>
@@ -110,15 +140,14 @@ export default {
           <span class="text-button-exam flex-date">Date open</span>
           <span class="text-button-exam flex-status">Status</span>
         </div>
-        <button class="button-exam">
-          <span class="text-button-exam flex-title">Java core 1</span>
-          <div class="div-type-exam flex-type-exam">
-            <span class="text-button-exam">Theory 1</span>
-          </div>
-          <span class="text-button-exam flex-date">9:00 8/5/2025</span>
-          <span class="text-button-exam flex-status color-status-open">Open</span>
-        </button>
-        <button class="button-exam" v-for="e in exams">
+        <h5 v-if="!exams || exams.length === 0" class="text-no-exam">No exam</h5>
+        <!--        Cần xét điều kiện-->
+        <button class="button-exam"
+                v-for="e in exams"
+                data-bs-toggle="modal"
+                :data-bs-target="getModalIDToOpen(getStatusExam(e))"
+                @click="handButtonClick(getStatusExam(e), e)"
+        >
           <span class="text-button-exam flex-title">{{e.titleExam}}</span>
           <div class="div-type-exam flex-type-exam">
             <span class="text-button-exam">{{e.typeExam}}</span>
@@ -133,26 +162,12 @@ export default {
             {{getStatusExam(e)}}
           </span>
         </button>
-<!--        <button class="button-exam">-->
-<!--          <span class="text-button-exam flex-title">Java core 2</span>-->
-<!--          <div class="div-type-exam flex-type-exam">-->
-<!--            <span class="text-button-exam">Theory 2</span>-->
-<!--          </div>-->
-<!--          <span class="text-button-exam flex-date">9:00 15/5/2025</span>-->
-<!--          <span class="text-button-exam flex-status color-status-lock">Locked</span>-->
-<!--        </button>-->
-<!--        <button class="button-exam">-->
-<!--          <span class="text-button-exam flex-title">Java class 1</span>-->
-<!--          <div class="div-type-exam flex-type-exam">-->
-<!--            <span class="text-button-exam">Theory 1</span>-->
-<!--          </div>-->
-<!--          <span class="text-button-exam flex-date">9:00 1/5/2025</span>-->
-<!--          <span class="text-button-exam flex-status color-status-complete">Completed</span>-->
-<!--        </button>-->
       </section>
     </main>
     <AsideAccount/>
   </body>
+  <modal-before-exam ref="modalExamBefore"/>
+  <modal-exam-locked ref="modalExamLocked"/>
 </template>
 
 <style scoped lang="scss">

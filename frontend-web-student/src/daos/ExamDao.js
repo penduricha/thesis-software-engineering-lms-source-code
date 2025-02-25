@@ -20,4 +20,28 @@ export default class ExamDao {
         })
         return exam;
     }
+
+    static async getExams_By_StudentID_Student_Calendar(studentID, yearStartDate, monthStartDate, dateStartDate) {
+        let exams = [];
+        await ExamService
+            .fetchExams_By_StudentID_Student_Calendar(studentID, yearStartDate, monthStartDate, dateStartDate)
+            .then(response => {
+            exams = response.data;
+        }).catch(error => {
+            console.error(error);
+        })
+        return exams;
+    }
+
+    static async getExam_Information_Before_Exam(examID, courseID){
+        let exam = null;
+        await ExamService
+            .fetchExam_Information_Before_Exam(examID, courseID)
+            .then(response => {
+                exam = response.data;
+            }).catch(error => {
+                console.error(error);
+            })
+        return exam;
+    }
 }

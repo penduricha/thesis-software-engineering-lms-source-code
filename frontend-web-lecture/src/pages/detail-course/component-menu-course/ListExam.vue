@@ -1,6 +1,6 @@
 <template>
   <div class="view-list-exams">
-    <h5 v-if="!exams" class="text-no-exam">No exam</h5>
+    <h5 v-if="!exams || exams.length === 0" class="text-no-exam">No exam</h5>
     <div v-for="e in exams" :key="e.examID" class="exam">
       <div class="view-title-exam">
         <span class="text-exam">{{ e.titleExam }}</span>

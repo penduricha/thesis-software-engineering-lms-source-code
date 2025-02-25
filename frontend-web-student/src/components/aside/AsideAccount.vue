@@ -7,6 +7,9 @@ import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import StudentDao from "@/daos/StudentDao.js";
 import RouterDao from "@/routes/RoutersDao.js";
 import Password from "@/models/Password.js";
+import ExamDao from "@/daos/ExamDao.js";
+import ModalBeforeExam from "@/pages/modal-exam/ModalBeforeExam.vue";
+import ModalExamLocked from "@/pages/modal-exam/ModalExamLocked.vue";
 
 export default {
   name: 'AsideAccount',
@@ -26,6 +29,8 @@ export default {
   },
 
   components: {
+    ModalExamLocked,
+    ModalBeforeExam
 
   },
 
@@ -41,7 +46,6 @@ export default {
         'unload',
       ],
 
-
       monthName: null,
       yearNumber: null,
       daysOfWeek: null,
@@ -51,9 +55,12 @@ export default {
       studentID: null,
       lastName: null,
       firstName: null,
+      courseID: null,
 
       //Time to logout
       timeout: null,
+
+      examsCalendar: [],
 
       //password change;
       currentPassword: null,
@@ -64,6 +71,8 @@ export default {
       validationCurrentPassword: null,
       validationNewPassword: null,
       validationConfirmNewPassword: null,
+
+
     }
   },
 
@@ -113,6 +122,21 @@ export default {
       this.studentID = student.studentID;
       this.lastName = student.lastName;
       this.firstName = student.firstName;
+
+      if(this.studentID) {
+        const dateNow = new Date();
+        let yearStartDate = dateNow.getFullYear();
+        let monthStartDate = dateNow.getMonth() + 1;
+        let dateStartDate = dateNow.getDate();
+        this.examsCalendar = await ExamDao.getExams_By_StudentID_Student_Calendar
+        (this.studentID, yearStartDate, monthStartDate, dateStartDate);
+        console.log("Exam calendar: ",this.examsCalendar);
+        //console.log("Exam calendar: ",this.examsCalendar);
+        let courseID = await StudentDao.getCourseID_By_StudentID(studentID);
+        if(courseID) {
+          this.courseID = courseID;
+        }
+      }
     },
 
     //lock paste
@@ -139,15 +163,24 @@ export default {
       this.chooseDate = dateInWeek.getCurrentDayInfo();
     },
 
-    handleButtonDate(d) {
+    async handleButtonDate(d) {
       const dateInWeek = new ManageDateTime();
       const dateChoose = new Date(d.date);
       this.chooseDate = dateInWeek.getDate_Choose(dateChoose);
       this.yearNumber = this.chooseDate.year;
       this.monthName = this.chooseDate.monthName;
-      console.log("Day choose: ", dateChoose.getDate());
-      console.log("Month choose: ", dateChoose.getMonth() + 1);
-      console.log("Year choose: ", dateChoose.getFullYear());
+      // console.log("Day choose: ", dateChoose.getDate());
+      // console.log("Month choose: ", dateChoose.getMonth() + 1);
+      // console.log("Year choose: ", dateChoose.getFullYear());
+
+      let yearStartDate = dateChoose.getFullYear();
+      let monthStartDate = dateChoose.getMonth() + 1;
+      let dateStartDate = dateChoose.getDate();
+      if(this.studentID) {
+        this.examsCalendar = await ExamDao.
+        getExams_By_StudentID_Student_Calendar(this.studentID, yearStartDate, monthStartDate, dateStartDate);
+        console.log("Exam calendar: ",this.examsCalendar);
+      }
     },
 
     handleNavigateLastWeek() {
@@ -265,7 +298,61 @@ export default {
       this.validationCurrentPassword = null;
       this.validationNewPassword = null;
       this.validationConfirmNewPassword = null;
-    }
+    },
+
+    // async handButtonClick(status, exam) {
+    //   if(status === "Open"){
+    //     if(this.courseID)
+    //       await this.handleGoToModalExamBefore(exam.examID, this.courseID);
+    //   }
+    // },
+
+    // async handleGoToModalExamBefore(examID, courseID) {
+    //   await this.$refs.modalExamBefore.setExam_Information(examID, courseID);
+    // },
+
+    // getStatusExam(e) {
+    //   if(this.examsCalendar) {
+    //     const dateTimeNow = new Date();
+    //     const startDate = new Date(e.startDate);
+    //     const endDate = new Date(e.endDate);
+    //     if(dateTimeNow < startDate) {
+    //       return "Locked";
+    //     } else if(dateTimeNow > endDate && e.complete) {
+    //       return "Complete";
+    //     } else if(dateTimeNow > endDate && !e.complete) {
+    //       return "Overdue";
+    //     } else if((dateTimeNow >= startDate) && (dateTimeNow <= endDate)) {
+    //       return "Open";
+    //     }
+    //     return null;
+    //   }
+    //   return null;
+    // },
+    async handButtonClick(e, status) {
+      if(status === "Open") {
+        await this.$refs.modalExamBefore.setExam_Information(e.examID, this.courseID);
+      }
+    },
+
+    getModalIDToOpen(e) {
+      if(this.examsCalendar.length > 0) {
+        const dateTimeNow = new Date();
+        const startDate = new Date(e.startDate);
+        const endDate = new Date(e.endDate);
+        if(dateTimeNow < startDate) {
+          return "#modal-exam-locked";
+        } else if(dateTimeNow > endDate && e.complete) {
+          return "Complete";
+        } else if(dateTimeNow > endDate && !e.complete) {
+          return "Overdue";
+        } else if((dateTimeNow >= startDate) && (dateTimeNow <= endDate)) {
+          return "#modal-java-core-before-exam";
+        }
+        return null;
+      }
+      return null;
+    },
   },
 
   computed: {
@@ -347,24 +434,20 @@ export default {
       </div>
 
       <h5 class="text-schedule-exam">Schedule exam</h5>
-<!--      <h5 class="text-no-exam">No exam</h5>-->
+      <h5 v-if="!examsCalendar || examsCalendar.length === 0" class="text-no-exam">No exam</h5>
       <div class="view-items-exams-by-day">
-        <button class="item-exam">
+        <button v-if="examsCalendar.length > 0" class="item-exam"
+                v-for="(exam, index) in examsCalendar"
+                data-bs-toggle="modal"
+                :data-bs-target="getModalIDToOpen(exam)"
+                @click="handButtonClick(exam, getModalIDToOpen(exam))"
+        >
           <div class="view-item-exam view-index-exam">
-            1
+            {{index+1}}
           </div>
           <div class="view-item-exam view-content-exam">
-            <span class="title-exam">Java core 1</span>
-            <span class="type-exam">Theory 1</span>
-          </div>
-        </button>
-        <button class="item-exam">
-          <div class="view-item-exam view-index-exam">
-            2
-          </div>
-          <div class="view-item-exam view-content-exam">
-            <span class="title-exam">Java core 2</span>
-            <span class="type-exam">Theory 1</span>
+            <span class="title-exam">{{exam.titleExam}}</span>
+            <span class="type-exam">{{exam.typeExam}}</span>
           </div>
         </button>
       </div>
@@ -437,6 +520,8 @@ export default {
       </div>
     </div>
   </div>
+<!--  <modal-before-exam ref="modalExamBeforeInAside"/>-->
+<!--  <modal-exam-locked ref="modalExamLockedInAside"/>-->
 </template>
 
 <style scoped lang="scss">

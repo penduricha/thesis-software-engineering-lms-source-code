@@ -18,4 +18,6 @@ public interface I_StudentService {
     public Map<String,Object> findStudentInformation_By_StudentID(String studentID);
 
     public Long getCourseIDByStudentID(String studentID);
+
+    public List<Map<String, Object>> getExams_Calendar_Student_By_StartDate(String studentID,int yearStartDate, int monthStartDate, int dateStartDate);
 }

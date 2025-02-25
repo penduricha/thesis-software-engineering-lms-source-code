@@ -57,6 +57,17 @@ public class Exam implements Serializable {
     @Column(nullable = false)
     private boolean studentAccess;
 
+    @Column(nullable = false)
+    private boolean complete;
+
+    public boolean isComplete() {
+        return complete;
+    }
+
+    public void setComplete(boolean complete) {
+        this.complete = complete;
+    }
+
     @Column(columnDefinition = "datetime")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;

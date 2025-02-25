@@ -92,4 +92,6 @@ public class QuestionJavaCoreExam implements Serializable {
     public void setCodeSample(String codeSample) {
         this.codeSample = codeSample;
     }
+
+
 }

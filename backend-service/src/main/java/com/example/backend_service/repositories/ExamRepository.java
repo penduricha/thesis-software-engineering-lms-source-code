@@ -22,6 +22,7 @@ public interface ExamRepository extends JpaRepository<Exam,Long> {
                    e.end_date,
                    e.link_exam_paper,
                    e.password_exam,
+                   e.complete,
                    l.name
             from course c
                      left join map_lecture_course mlc on c.course_id = mlc.course_id
@@ -43,10 +44,10 @@ public interface ExamRepository extends JpaRepository<Exam,Long> {
                      left join map_lecture_course mlc on c.course_id = mlc.course_id
                      left join lecture l on mlc.lecture_id = l.lecture_id
                      right join exam e on c.course_id = e.course_id
-            where l.lecture_id = :lectureId and date(start_date) = :startDate
+            where l.lecture_id = :lectureID and date(start_date) = :startDate
             """,
             nativeQuery = true)
     List<Map<String, Object>> getExams_Calendar_Lecture_By_StartDate(
-            @Param("lectureId") String lectureId,
+            @Param("lectureID") String lectureId,
             @Param("startDate") String startDate);
 }

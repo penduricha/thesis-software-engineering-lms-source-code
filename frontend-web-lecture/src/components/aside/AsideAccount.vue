@@ -7,6 +7,7 @@ import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
 import RouterDao from "@/routes/RoutersDao.js";
 import LectureDao from "@/daos/LectureDao.js";
 import Password from "@/models/Password.js";
+import ExamDao from "@/daos/ExamDao.js";
 
 export default {
   name: 'AsideAccount',
@@ -40,6 +41,8 @@ export default {
       lectureID: null,
       name: null,
 
+      examsCalendar: null,
+
       //Time to logout
       timeout: null,
 
@@ -56,8 +59,8 @@ export default {
   },
 
   created() {
-    this.getInformation_Date();
     this.setAccount();
+    this.getInformation_Date();
   },
 
   mounted() {
@@ -107,6 +110,15 @@ export default {
       console.log(lecture);
       this.lectureID = '0' + lecture.lectureID;
       this.name = lecture.name;
+      if(this.lectureID) {
+        const dateNow = new Date();
+        let yearStartDate = dateNow.getFullYear();
+        let monthStartDate = dateNow.getMonth() + 1;
+        let dateStartDate = dateNow.getDate();
+        this.examsCalendar = await ExamDao.
+        getExams_By_LectureID_Lecture_Calendar(this.lectureID, yearStartDate, monthStartDate, dateStartDate);
+        console.log("Exam calendar: ",this.examsCalendar);
+      }
     },
 
     navigateTo_LoginPage() {
@@ -120,25 +132,30 @@ export default {
       });
     },
 
-    getInformation_Date() {
+    async getInformation_Date() {
       const dateInWeek = new ManageDateTime();
       this.monthName = dateInWeek.getCurrentDayInfo().monthName;
       this.yearNumber = dateInWeek.getCurrentDayInfo().year;
       this.daysOfWeek = dateInWeek.getListDayOfWeek();
       this.chooseDate = dateInWeek.getCurrentDayInfo();
-      // console.log('Date choose: ',this.chooseDate);
-      // console.log('Days in week: ',this.daysOfWeek);
     },
 
-    handleButtonDate(d) {
+    async handleButtonDate(d) {
       const dateInWeek = new ManageDateTime();
       const dateChoose = new Date(d.date);
       this.chooseDate = dateInWeek.getDate_Choose(dateChoose);
       this.yearNumber = this.chooseDate.year;
       this.monthName = this.chooseDate.monthName;
-      console.log("Day choose: ", dateChoose.getDate());
-      console.log("Month choose: ", dateChoose.getMonth() + 1);
-      console.log("Year choose: ", dateChoose.getFullYear());
+      // console.log("Day choose: ", dateChoose.getDate());
+      // console.log("Month choose: ", dateChoose.getMonth() + 1);
+      // console.log("Year choose: ", dateChoose.getFullYear());
+      let yearStartDate = dateChoose.getFullYear();
+      let monthStartDate = dateChoose.getMonth() + 1;
+      let dateStartDate = dateChoose.getDate();
+      if(this.lectureID) {
+        this.examsCalendar = await ExamDao.
+        getExams_By_LectureID_Lecture_Calendar(this.lectureID, yearStartDate, monthStartDate, dateStartDate);
+      }
     },
 
     handleNavigateLastWeek() {
@@ -339,24 +356,16 @@ export default {
       </div>
 
       <h5 class="text-schedule-exam">Schedule exam</h5>
-<!--      <h5 class="text-no-exam">No exam</h5>-->
+      <h5 v-if="!examsCalendar || examsCalendar.length === 0" class="text-no-exam">No exam</h5>
       <div class="view-items-exams-by-day">
-        <button class="item-exam">
+        <button class="item-exam"
+                v-for="(exam, index) in examsCalendar">
           <div class="view-item-exam view-index-exam">
-            1
+            {{index+1}}
           </div>
           <div class="view-item-exam view-content-exam">
-            <span class="title-exam">Java core 1</span>
-            <span class="type-exam">Theory 1</span>
-          </div>
-        </button>
-        <button class="item-exam">
-          <div class="view-item-exam view-index-exam">
-            2
-          </div>
-          <div class="view-item-exam view-content-exam">
-            <span class="title-exam">Java core 2</span>
-            <span class="type-exam">Theory 1</span>
+            <span class="title-exam">{{exam.titleExam}} - {{exam.className.substring(2)}}</span>
+            <span class="type-exam">{{exam.typeExam}}</span>
           </div>
         </button>
       </div>

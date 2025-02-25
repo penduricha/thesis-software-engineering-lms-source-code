@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService implements I_StudentService {
@@ -74,6 +75,25 @@ public class StudentService implements I_StudentService {
             return studentFind.getCourse().getCourseID();
         }
         return null;
+    }
+
+    @Override
+    public List<Map<String, Object>> getExams_Calendar_Student_By_StartDate(String studentID, int yearStartDate, int monthStartDate, int dateStartDate) {
+        String yearStartDateString = Integer.toString(yearStartDate);
+        String monthStartDateString = Integer.toString(monthStartDate);
+        String dateStartDateString = Integer.toString(dateStartDate);
+        String dateFormat = yearStartDateString + "-" + monthStartDateString + "-" + dateStartDateString;
+        return studentRepository.getExams_Calendar_Student_By_StartDate(studentID, dateFormat).stream()
+                .map(originalMap -> {
+                    Map<String, Object> newMap = new HashMap<>();
+                    newMap.put("examID", originalMap.get("exam_id"));
+                    newMap.put("titleExam", originalMap.get("title_exam"));
+                    newMap.put("typeExam", originalMap.get("type_exam"));
+                    newMap.put("startDate", originalMap.get("start_date"));
+                    newMap.put("endDate", originalMap.get("end_date"));
+                    return newMap;
+                })
+                .collect(Collectors.toList());
     }
 
 }

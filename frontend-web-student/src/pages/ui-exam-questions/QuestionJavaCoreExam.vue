@@ -1,5 +1,5 @@
 <script>
-import './question-exam.scss';
+import './question-exam-java-core.scss';
 import RouterDao from "@/routes/RoutersDao.js";
 import questionsList from "./questions.js";
 import { onMounted, ref } from "vue";
@@ -12,6 +12,9 @@ import { java,  } from "@codemirror/lang-java";
 import { keymap } from "@codemirror/view";
 import {autocompletion, completeFromList} from "@codemirror/autocomplete";
 import CodeJava from "@/pages/ui-exam-questions/CodeJava.js";
+import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
+import StudentDao from "@/daos/StudentDao.js";
+import ExamDao from "@/daos/ExamDao.js";
 
 export default {
   name: "QuestionExam",
@@ -19,14 +22,43 @@ export default {
     Codemirror,
   },
 
+  props: {
+    examID: {
+      type: Number,
+      required: true,
+    },
+
+    duration: {
+      type: Number,
+      required: true,
+    }
+  },
+
   data(){
     return {
       indexQuestion: 1,
+      studentID: null,
+      courseID: null,
+
+      lastName: null,
+      firstName: null,
+
+      //questions
+      questions: null,
+
+      //timer
+      // Khởi tạo thời gian còn lại
+      timeLeft: null,
+      timer: null,
     }
   },
 
   created() {
     this.saveRouter_Path(this.getRoute());
+    this.setStudent();
+
+    this.checkTimeLeft();
+    this.setDuration();
   },
 
   mounted() {
@@ -34,20 +66,77 @@ export default {
   },
 
   beforeDestroy() {
-
+    // Dọn dẹp khi component bị hủy
+    clearInterval(this.timer);
   },
+
 
   methods: {
     //router
     getRoute() {
-      console.log('Chiều rộng trình duyệt: ',window.innerWidth);
-      console.log(this.$route.path);
-      return this.$route.path;
+      console.log(this.$route.path );
+      return this.$route.path
+          + "?" + "examID=" + Number(this.examID)
+          + "&" + "duration=" + Number(this.duration);
     },
 
     saveRouter_Path(route) {
       const routerDao = new RouterDao();
       routerDao.savePath_To_SessionStorage(route);
+    },
+
+    async setQuestion_By_ExamID() {
+
+    },
+
+    async setStudent() {
+      const studentLocalStorage  = new StudentLocalStorage();
+      let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
+      if(studentID) {
+        let student = await StudentDao.getStudentName_And_StudentID(studentID);
+        //console.log(student);
+        this.studentID = student.studentID;
+        this.lastName = student.lastName;
+        this.firstName = student.firstName;
+        let courseID = await StudentDao.getCourseID_By_StudentID(studentID);
+        if(courseID) {
+          this.courseID = courseID;
+        }
+      }
+    },
+
+    checkTimeLeft() {
+      const savedTime = localStorage.getItem('timeLeft');
+      if (savedTime) {
+        this.timeLeft = parseInt(savedTime, 10);
+        // Bắt đầu lại timer nếu có thời gian lưu
+        this.startTimer();
+      } else {
+        this.timeLeft = this.duration * 60;
+      }
+    },
+
+    setDuration() {
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
+      // Lưu thời gian vào localStorage
+      localStorage.setItem('timeLeft', this.timeLeft);
+      this.startTimer();
+    },
+
+    startTimer() {
+      this.timer = setInterval(() => {
+        if (this.timeLeft > 0) {
+          this.timeLeft--;
+          // Cập nhật thời gian trong localStorage
+          localStorage.setItem('timeLeft', this.timeLeft);
+        } else {
+          clearInterval(this.timer);
+          // Xóa thời gian khi đã hết
+          localStorage.removeItem('timeLeft');
+        }
+      }, 1000);
     },
 
     handleButtonQuestion(q) {
@@ -119,7 +208,15 @@ export default {
             ? 'border-choose'
             : 'border-no-choose';
       };
-    }
+    },
+
+    // Tính toán thời gian còn lại
+    formattedTime() {
+      const minutes = Math.floor(this.timeLeft / 60);
+      const seconds = this.timeLeft % 60;
+      return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    },
+
   },
 }
 </script>
@@ -146,11 +243,11 @@ export default {
             </div>
           </div>
 
-          <span class="style-time">Time: 59:50:49</span>
+          <span class="style-time">Time: {{formattedTime}}</span>
         </div>
         <div class="aside-account-in-exam">
           <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo-in-exam">
-          <span class="style-span-information">Tu Quang Nhat - 21107601<br>DHKTPM17BTT</span>
+          <span class="style-span-information">{{lastName}} {{firstName}} - {{studentID}}</span>
         </div>
       </header>
       <div class="style-main">
@@ -181,27 +278,27 @@ export default {
           </table>
         </section>
         <section class="section-code-editor">
-          <div class="view-button-text-editor">
-            <button
-                class="button-text-editor"
-            >Save all
-            </button>
+<!--          <div class="view-button-text-editor">-->
+<!--            <button-->
+<!--                class="button-text-editor"-->
+<!--            >Save all-->
+<!--            </button>-->
 
-            <button
-                class="button-text-editor"
-            >Reset
-            </button>
+<!--            <button-->
+<!--                class="button-text-editor"-->
+<!--            >Reset-->
+<!--            </button>-->
 
-            <button
-                class="button-text-editor"
-            >Compile all
-            </button>
+<!--            <button-->
+<!--                class="button-text-editor"-->
+<!--            >Compile all-->
+<!--            </button>-->
 
-            <button
-                class="button-text-editor"
-            >Test output
-            </button>
-          </div>
+<!--            <button-->
+<!--                class="button-text-editor"-->
+<!--            >Test output-->
+<!--            </button>-->
+<!--          </div>-->
           <div class="view-text-editor">
             <codemirror
                 v-model="code"

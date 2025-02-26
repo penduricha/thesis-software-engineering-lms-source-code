@@ -1,7 +1,7 @@
 import LoginPage from "@/pages/login/LoginPage.vue";
 import ListExamsComponent from "@/pages/list-exams/ListExamsComponent.vue";
 import ListResultExams from "@/pages/list-exams/ListResultExams.vue";
-import QuestionExam from "@/pages/ui-exam-questions/QuestionExam.vue";
+import QuestionExam from "@/pages/ui-exam-questions/QuestionJavaCoreExam.vue";
 
 
 
@@ -15,6 +15,12 @@ const routers = [
     {
         path: '/main-page/list-exams-page', component: ListExamsComponent
     },
-    { path: '/page-do-exam', component: QuestionExam },
+    { path: '/main-page/list-exams-page/exam-open/java-core-exam',
+        component: QuestionExam,
+        props: (route) => ({
+            examID: route.query.examID,
+            duration: route.query.duration
+        })
+    },
 ];
 export default routers;

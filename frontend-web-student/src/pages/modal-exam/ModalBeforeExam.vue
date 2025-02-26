@@ -28,6 +28,7 @@ export default {
       examID: null,
       titleExam: null,
       typeExam: null,
+      topicExam: null,
       nameLecture: null,
       retake: null,
       scoringMethod: null,
@@ -48,6 +49,7 @@ export default {
       this.examID = exam.examID;
       this.titleExam = exam.titleExam;
       this.typeExam = exam.typeExam;
+      this.topicExam = exam.topicExam;
       this.nameLecture = exam.name;
       this.retake = exam.retake ? "Yes" : "No";
       this.scoringMethod = exam.scoringMethod;
@@ -66,6 +68,28 @@ export default {
 
     setPasswordExam() {
       this.passwordExamInput = this.passwordExamInput.replace(/[^0-9]/g, '');
+    },
+
+    navigateTo_JavaCoreExam() {
+      this.$router.replace({
+        path: '/main-page/list-exams-page/exam-open/java-core-exam',
+        query: {
+          examID: this.examID,
+          duration: this.duration
+        }
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
+    },
+
+    handleGoToExam() {
+      if(!this.passwordExamHashed) {
+        //ktra ko cos mk thi vao
+        if(this.topicExam === "Java core") {
+          this.navigateTo_JavaCoreExam();
+        }
+      }
     },
   },
 
@@ -103,7 +127,10 @@ export default {
                    @input="setPasswordExam()"
             />
           </div>
-          <button class="btn-do-exam">
+          <button class="btn-do-exam"
+                  @click="handleGoToExam()"
+                  data-bs-dismiss="modal"
+          >
             Do exam
           </button>
         </div>

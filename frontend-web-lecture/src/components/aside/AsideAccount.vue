@@ -8,6 +8,8 @@ import RouterDao from "@/routes/RoutersDao.js";
 import LectureDao from "@/daos/LectureDao.js";
 import Password from "@/models/Password.js";
 import ExamDao from "@/daos/ExamDao.js";
+import ModalUpdateExam from "@/pages/detail-course/ModalUpdateExam.vue";
+import '../skeleton/loading-skeleton.scss';
 
 export default {
   name: 'AsideAccount',
@@ -17,7 +19,7 @@ export default {
   },
 
   components: {
-
+    ModalUpdateExam,
   },
 
   data(){
@@ -207,6 +209,7 @@ export default {
       }
     },
 
+
     //validate and update
     async validateCurrentPassword() {
       const lectureLocalStorage = new LectureLocalStorage();
@@ -296,6 +299,8 @@ export default {
     >
       <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo">
       <div class="view-name-and-button-information">
+        <div v-if="!name" class="placeholder content style-span-information-skeleton"></div>
+        <div v-if="!name" class="placeholder content style-span-information-skeleton"></div>
         <span class="style-span-information">{{name}}</span>
         <span class="style-span-information">{{lectureID}}</span>
       </div>
@@ -359,7 +364,9 @@ export default {
       <h5 v-if="!examsCalendar || examsCalendar.length === 0" class="text-no-exam">No exam</h5>
       <div class="view-items-exams-by-day">
         <button class="item-exam"
-                v-for="(exam, index) in examsCalendar">
+                v-for="(exam, index) in examsCalendar"
+        >
+          <!--          Vào trang chi tiết bài kiểm tra-->
           <div class="view-item-exam view-index-exam">
             {{index+1}}
           </div>
@@ -430,6 +437,7 @@ export default {
         <div class="modal-footer">
           <button type="submit"
                   class="btn-update-password"
+
                   @click="handleUpdatePassword()"
           >Update password
           </button>

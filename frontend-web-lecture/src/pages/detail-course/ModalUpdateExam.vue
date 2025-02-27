@@ -23,6 +23,11 @@ export default {
       type: String,
       required: true
     },
+
+    exams: {
+      type: Array,
+      required: true
+    },
   },
 
   created() {
@@ -81,6 +86,7 @@ export default {
       this.examIDToUpdate = examIDToUpdate;
       // console.log("Exam ID to update: ",this.examIDToUpdate);
       // console.log("Course ID to update: ",this.courseIDToUpdate);
+
       let exam = await ExamDao.getExam_By_CourseID_ExamID(examIDToUpdate, this.courseIDToUpdate);
       console.log(exam);
       const manageDateTime = new ManageDateTime();
@@ -103,18 +109,23 @@ export default {
 
     //set field modal
     setInputExamTitle() {
-      if(!this.titleExam) {
+      if (!this.titleExam) {
         this.validateTitleExam = null;
       } else {
-        if(Validation.isFullOfSpaces(this.titleExam)) {
+        if (Validation.isFullOfSpaces(this.titleExam)) {
           this.validateTitleExam = null;
         } else {
-          if(!Validation.validateString_Title(
+          if (!Validation.validateString_Title(
               Validation.removeSpaces(this.titleExam.trim())
           )) {
             this.validateTitleExam = "Title exam is invalid.";
           } else {
-            this.validateTitleExam = null;
+            const hasMatchingExam = this.exams.some(exam => exam.titleExam === this.titleExam.trim());
+            if (hasMatchingExam) {
+              this.validateTitleExam = "Title exam is existed";
+            } else {
+              this.validateTitleExam = null;
+            }
           }
         }
       }
@@ -383,10 +394,9 @@ export default {
                         v-model="typeExam"
                         :class="[{'is-invalid': validateTypeExam !== null}]"
                 >
-                  <option value = "Theory 1">Theory 1</option>
-                  <option value = "Theory 2">Theory 2</option>
                   <option value = "Practice 1">Practice 1</option>
                   <option value = "Practice 2">Practice 2</option>
+                  <option value = "Practice 3">Practice 3</option>
                 </select>
                 <span
                     v-if="validateTypeExam"
@@ -406,8 +416,8 @@ export default {
                         :class="[{'is-invalid': validateTopicExam !== null}]"
                 >
                   <option value = "Java core">Java core</option>
-                  <option value = "Java class single">Java class single</option>
-                  <option value = "Java class mapping">Java class mapping</option>
+<!--                  <option value = "Java class single">Java class single</option>-->
+<!--                  <option value = "Java class mapping">Java class mapping</option>-->
                 </select>
                 <span
                     v-if="validateTopicExam"

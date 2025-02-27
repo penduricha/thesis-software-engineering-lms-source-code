@@ -11,10 +11,11 @@ import { java,  } from "@codemirror/lang-java";
 
 import { keymap } from "@codemirror/view";
 import {autocompletion, completeFromList} from "@codemirror/autocomplete";
-import CodeJava from "@/pages/ui-exam-questions/CodeJava.js";
+
 import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import StudentDao from "@/daos/StudentDao.js";
-import ExamDao from "@/daos/ExamDao.js";
+
+import QuestionDao from "@/daos/QuestionDao.js";
 
 export default {
   name: "QuestionExam",
@@ -36,7 +37,8 @@ export default {
 
   data(){
     return {
-      indexQuestion: 1,
+
+      indexQuestion: null,
       studentID: null,
       courseID: null,
 
@@ -44,18 +46,27 @@ export default {
       firstName: null,
 
       //questions
-      questions: null,
+      questions: [],
+      questionInit: null,
+      testCasesInit: [],
+
+      //content
+      contentQuestion: null,
 
       //timer
       // Khởi tạo thời gian còn lại
       timeLeft: null,
       timer: null,
+
+      //code to submit
+      code: null,
     }
   },
 
   created() {
     this.saveRouter_Path(this.getRoute());
     this.setStudent();
+    this.setQuestion_By_ExamID();
 
     this.checkTimeLeft();
     this.setDuration();
@@ -73,6 +84,7 @@ export default {
 
   methods: {
     //router
+
     getRoute() {
       console.log(this.$route.path );
       return this.$route.path
@@ -83,10 +95,32 @@ export default {
     saveRouter_Path(route) {
       const routerDao = new RouterDao();
       routerDao.savePath_To_SessionStorage(route);
+      this.indexQuestion = Number(sessionStorage.getItem("indexQuestion"));
     },
 
     async setQuestion_By_ExamID() {
-
+      const questionsJavaCore = localStorage.getItem('questionsJavaCore');
+      if (!questionsJavaCore) {
+        let questions = await QuestionDao.getQuestions_By_ExamID(this.examID);
+        localStorage.setItem('questionsJavaCore', JSON.stringify(questions));
+      }
+      const parsedQuestionsJavaCore  = questionsJavaCore ? JSON.parse(questionsJavaCore) : [];
+      if(parsedQuestionsJavaCore.length > 0) {
+        this.questions = parsedQuestionsJavaCore;
+        this.questionInit = this.questions[this.indexQuestion];
+        if(this.questionInit) {
+          //tạo session
+          // if(!sessionStorage.getItem('indexQuestion')) {
+          //   sessionStorage.setItem('indexQuestion',0);
+          // }
+          // this.indexQuestion = sessionStorage.getItem('indexQuestion');
+          // console.log('index question init: ', this.indexQuestion);
+          this.testCasesInit = await QuestionDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
+          console.log("Test case: ", this.testCasesInit);
+          this.contentQuestion = this.questionInit.contentQuestion;
+          this.code = this.questionInit.codeSample;
+        }
+      }
     },
 
     async setStudent() {
@@ -112,7 +146,7 @@ export default {
         // Bắt đầu lại timer nếu có thời gian lưu
         this.startTimer();
       } else {
-        this.timeLeft = this.duration * 60;
+        this.timeLeft = (this.duration) * 60;
       }
     },
 
@@ -139,8 +173,17 @@ export default {
       }, 1000);
     },
 
-    handleButtonQuestion(q) {
-      this.indexQuestion = q.index;
+    async handleButtonQuestion(q, index) {
+      //other method
+      sessionStorage.setItem('indexQuestion', index);
+      this.indexQuestion = Number(sessionStorage.getItem('indexQuestion'));
+      this.questionInit = q;
+      if(this.questionInit) {
+        this.testCasesInit = await QuestionDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
+        console.log("Test case: ", this.testCasesInit);
+        this.contentQuestion = this.questionInit.contentQuestion;
+        this.code = this.questionInit.codeSample;
+      }
     },
 
     handlePaste(event) {
@@ -152,25 +195,25 @@ export default {
   setup() {
     // const questions = questions;
     //cach khac set bien
-    const questions = ref(null);
-    const code= ref(null);
+    //const questions = ref(null);
+    //const code= ref(null);
 
 
     //set code auto
-    const codeJava = new CodeJava();
-    const setCodeString = () =>{
-      code.value = codeJava.getCodeJava_ToDemo();
-    }
+    // const codeJava = new CodeJava();
+    // const setCodeString = () =>{
+    //   code.value = codeJava.getCodeJava_ToDemo();
+    // }
 
 
-    const setData_Components = () => {
-      questions.value = questionsList;
-    }
+    // const setData_Components = () => {
+    //   questions.value = questionsList;
+    // }
 
-    onMounted(() => {
-      setData_Components();
-      setCodeString();
-    });
+    // onMounted(() => {
+    //   setData_Components();
+    //   setCodeString();
+    // });
 
     const extensions = [
       java(),
@@ -187,10 +230,8 @@ export default {
     };
 
     return {
-      code,
       extensions,
       handleReady,
-      questions,
     };
   },
 
@@ -203,8 +244,8 @@ export default {
     },
 
     setBorderColorChoose() {
-      return (q) => {
-        return (q.index === this.indexQuestion)
+      return (index) => {
+        return (index === this.indexQuestion)
             ? 'border-choose'
             : 'border-no-choose';
       };
@@ -222,7 +263,7 @@ export default {
 </script>
 
 <template >
-    <div :style="containerStyle">
+    <div :style="containerStyle" >
       <header class="page-header">
         <div class="aside-questions">
           <div class="style-view-questions">
@@ -231,13 +272,12 @@ export default {
               <!--              button-number-question-done-->
               <button class="button-number-question
                 button-number-question-no-done"
-                      :key="q.index"
-                      v-for="q in questions"
-                      @click="handleButtonQuestion(q)"
+                      v-for="(q, index) in questions"
+                      @click="handleButtonQuestion(q, index)"
                       :class="['border-color-button-choose',
-                        setBorderColorChoose(q)]"
+                        setBorderColorChoose(index)]"
               >
-                {{q.index}}
+                {{index + 1}}
               </button>
               <button class="button-number-question button-submit">Submit</button>
             </div>
@@ -252,53 +292,39 @@ export default {
       </header>
       <div class="style-main">
         <section class="section-exam">
-          <p class="text-exam">Viết hàm tính tổng 2 số nguyên a và số nguyên b. Bắt ngoại lệ nếu không phải là số nguyên và trả về 0.
-            Cho bảng test-case như sau:</p>
-          <table class="table table-striped">
+          <p class="text-exam">{{contentQuestion}}</p>
+          <table class="table table-striped" v-if="testCasesInit.length > 0">
             <thead>
             <tr>
               <th>Index</th>
               <th>Input</th>
               <th>Output Expect</th>
+              <th>Note</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>1</td>
-              <td>1, 2</td>
-              <td>3</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>2, 2.5</td>
-              <td>0</td>
+            <tr v-for="(t, index) in testCasesInit">
+              <td>{{index + 1}}</td>
+              <td>{{t.inputTest}}</td>
+              <td>{{t.outputExpect}}</td>
+              <td>{{t.note}}</td>
             </tr>
             <!-- Thêm các hàng khác nếu cần -->
             </tbody>
           </table>
         </section>
         <section class="section-code-editor">
-<!--          <div class="view-button-text-editor">-->
-<!--            <button-->
-<!--                class="button-text-editor"-->
-<!--            >Save all-->
-<!--            </button>-->
+          <div class="view-button-text-editor">
+            <button
+                class="button-text-editor"
+            >Save all
+            </button>
 
-<!--            <button-->
-<!--                class="button-text-editor"-->
-<!--            >Reset-->
-<!--            </button>-->
-
-<!--            <button-->
-<!--                class="button-text-editor"-->
-<!--            >Compile all-->
-<!--            </button>-->
-
-<!--            <button-->
-<!--                class="button-text-editor"-->
-<!--            >Test output-->
-<!--            </button>-->
-<!--          </div>-->
+            <button
+                class="button-text-editor"
+            >Reset
+            </button>
+          </div>
           <div class="view-text-editor">
             <codemirror
                 v-model="code"

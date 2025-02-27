@@ -15,4 +15,14 @@ export default class Password {
                 x => (('00' + x.toString(16)).slice(-2)))
             .join('');
     }
+
+    xorEncryptDecrypt() {
+        let key = "passwordExam";
+        let output = '';
+        for (let i = 0; i < this._password_Input.length; i++) {
+            // Mã hóa/giải mã bằng phép toán XOR
+            output += String.fromCharCode(this._password_Input.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+        }
+        return output;
+    }
 }

@@ -48,7 +48,6 @@ public class ExamService implements I_ExamService {
             List<Map<String, Object>> questionRandomJavaCore = bankQuestionJavaCoreService.getRandom_10_Questions_JavaCore();
             if (course != null && !questionRandomJavaCore.isEmpty()) {
                 // Set initial properties for the exam
-                exam.setStudentAccess(false);
                 exam.setComplete(false);
                 course.getExams().add(exam);
                 exam.setCourse(course);

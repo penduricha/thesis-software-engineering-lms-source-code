@@ -11,6 +11,21 @@ export default class ExamDao {
         return exams;
     }
 
+    static async startPolling_GetExams_By_CourseID(courseID, callback) {
+        let lastFetchedExams = await this.getExams_By_CourseID(courseID);
+         // Kiểm tra mỗi 5 giây
+        // Trả về interval để có thể dọn dẹp sau này
+        return setInterval(async () => {
+            const currentExams = await this.getExams_By_CourseID(courseID);
+
+            if (JSON.stringify(currentExams) !== JSON.stringify(lastFetchedExams)) {
+                lastFetchedExams = currentExams;
+                callback(currentExams);
+                // Gọi lại callback để cập nhật dữ liệu
+            }
+        }, 5000);
+    }
+
     static async getExam_By_CourseID_ExamID(examID, courseID) {
         let exam = null;
         await ExamService.fetchExam_By_CourseID_ExamID(examID, courseID).then(response => {
@@ -31,6 +46,23 @@ export default class ExamDao {
             console.error(error);
         })
         return exams;
+    }
+
+    static async startPolling_GetExams_By_StudentID_Student_Calendar(studentID, yearStartDate,
+                                                                     monthStartDate, dateStartDate, callback) {
+        let lastFetchedExams = await this.getExams_By_StudentID_Student_Calendar(studentID,
+            yearStartDate, monthStartDate, dateStartDate);
+        // Kiểm tra mỗi 5 giây
+        // Trả về interval để có thể dọn dẹp sau này
+        return setInterval(async () => {
+            const currentExams = await
+                this.getExams_By_StudentID_Student_Calendar(studentID, yearStartDate, monthStartDate, dateStartDate);
+            if (JSON.stringify(currentExams) !== JSON.stringify(lastFetchedExams)) {
+                lastFetchedExams = currentExams;
+                callback(currentExams);
+                // Gọi lại callback để cập nhật dữ liệu
+            }
+        }, 5000);
     }
 
     static async getExam_Information_Before_Exam(examID, courseID){

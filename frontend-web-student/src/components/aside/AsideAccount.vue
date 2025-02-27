@@ -10,6 +10,7 @@ import Password from "@/models/Password.js";
 import ExamDao from "@/daos/ExamDao.js";
 import ModalBeforeExam from "@/pages/modal-exam/ModalBeforeExam.vue";
 import ModalExamLocked from "@/pages/modal-exam/ModalExamLocked.vue";
+import '../skeleton/loading-skeleton.scss';
 
 export default {
   name: 'AsideAccount',
@@ -72,7 +73,8 @@ export default {
       validationNewPassword: null,
       validationConfirmNewPassword: null,
 
-
+      //thay doi khi record thi thay doi
+      pollingInterval: null,
     }
   },
 
@@ -93,6 +95,11 @@ export default {
       window.removeEventListener(event, this.resetTimer)
     }, this);
     this.resetTimer();
+  },
+
+  beforeDestroy() {
+    clearInterval(this.pollingInterval);
+    // Dọn dẹp interval khi component bị hủy
   },
 
   methods: {
@@ -130,14 +137,20 @@ export default {
         let dateStartDate = dateNow.getDate();
         this.examsCalendar = await ExamDao.getExams_By_StudentID_Student_Calendar
         (this.studentID, yearStartDate, monthStartDate, dateStartDate);
-        console.log("Exam calendar: ",this.examsCalendar);
         //console.log("Exam calendar: ",this.examsCalendar);
+        this.pollingInterval = await ExamDao.startPolling_GetExams_By_StudentID_Student_Calendar(
+            this.studentID, yearStartDate, monthStartDate, dateStartDate, (updatedExams) => {
+          this.examsCalendar = updatedExams;
+          // Cập nhật danh sách bài kiểm tra
+        });
         let courseID = await StudentDao.getCourseID_By_StudentID(studentID);
         if(courseID) {
           this.courseID = courseID;
         }
       }
     },
+
+
 
     //lock paste
     preventPaste(event) {
@@ -329,10 +342,34 @@ export default {
     //   }
     //   return null;
     // },
-    async handButtonClick(e, status) {
-      if(status === "Open") {
-        await this.$refs.modalExamBefore.setExam_Information(e.examID, this.courseID);
+    getStatusExam(e) {
+      if(this.examsCalendar.length > 0) {
+        const dateTimeNow = new Date();
+        const startDate = new Date(e.startDate);
+        const endDate = new Date(e.endDate);
+        if(dateTimeNow < startDate) {
+          return "Locked";
+        } else if(dateTimeNow > endDate && e.complete) {
+          return "Complete";
+        } else if(dateTimeNow > endDate && !e.complete) {
+          return "Overdue";
+        } else if((dateTimeNow >= startDate) && (dateTimeNow <= endDate)) {
+          return "Open";
+        }
+        return null;
       }
+      return null;
+    },
+
+    async handButtonClick(e, status) {
+      // if(status === "Open") {
+      //   console.log("Exam ID: ", e.examID);
+      //   console.log("Course ID: ", this.courseID);
+      //   if(this.courseID)
+      //     //await this.handleGoToModalExamBefore(e.examID, this.courseID);
+      //     await this.$refs.modalExamBefore_From_AsideAccount.setExam_Information_From_AsideAccount(e.examID, this.courseID);
+      // }
+      this.$emit('handleButtonClick', status, e);
     },
 
     getModalIDToOpen(e) {
@@ -373,8 +410,11 @@ export default {
     >
       <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo">
       <div class="view-name-and-button-information">
-        <span class="style-span-information">{{lastName}} {{firstName}}</span>
-        <span class="style-span-information">{{studentID}}</span>
+<!--        <div class="placeholder content" style=" width: 100%; height: 3rem;"></div>-->
+        <div v-if="!firstName" class="placeholder content style-span-information-skeleton"></div>
+        <div v-if="!lastName" class="placeholder content style-span-information-skeleton"></div>
+        <span v-if="studentID" class="style-span-information">{{lastName}} {{firstName}}</span>
+        <span v-if="studentID" class="style-span-information">{{studentID}}</span>
       <!--        <button class="button-view-information">View information</button>-->
       </div>
       <img src="@/assets/image/button_nav_left_calendar.png"
@@ -440,7 +480,7 @@ export default {
                 v-for="(exam, index) in examsCalendar"
                 data-bs-toggle="modal"
                 :data-bs-target="getModalIDToOpen(exam)"
-                @click="handButtonClick(exam, getModalIDToOpen(exam))"
+                @click="handButtonClick(exam, getStatusExam(exam))"
         >
           <div class="view-item-exam view-index-exam">
             {{index+1}}
@@ -520,6 +560,7 @@ export default {
       </div>
     </div>
   </div>
+<!--  <modal-before-exam ref="modalExamBefore_From_AsideAccount"/>-->
 <!--  <modal-before-exam ref="modalExamBeforeInAside"/>-->
 <!--  <modal-exam-locked ref="modalExamLockedInAside"/>-->
 </template>

@@ -30,7 +30,7 @@ public class QuestionJavaCoreExamController {
 //        return ResponseEntity.ok(questionJavaCoreRepository.getTotalQuestionsByExamID(Long.valueOf(examID)));
 //    }
 
-    @GetMapping("/get_questions_exam_exam_id/{examID}")
+    @GetMapping("/get_questions_java_core_exam_by_exam_id/{examID}")
     public ResponseEntity<List<Map<String, Object>>>
     getTotalQuestionsByExamID (@PathVariable Long examID) throws HttpClientErrorException {
         return ResponseEntity.ok(questionJavaCoreExamService.getQuestionJavaCoreExam_By_ExamID_To_Student_Exam(examID));

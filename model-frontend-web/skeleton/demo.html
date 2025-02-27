@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 300px;
+            padding: 10px;
+            background: #eee;
+            margin: auto;
+        }
+
+        .title {
+            width: 80%;
+            min-height: 20px;
+            margin-bottom: 10px;
+          }
+          
+        .content {
+            width: 100%;
+            min-height: 60px;
+        }
+
+        .placeholder {
+            position: relative;
+            overflow: hidden;
+            
+            background: #ccc;
+            border-radius: 3px;
+          }
+          
+        .placeholder:after{
+            content: "";
+            position: absolute;
+          
+            height: 100%;
+            width: 100px;
+            left: -100px;
+            top: 0;
+          
+            background: linear-gradient(to right, transparent, #ffffff70, transparent);
+            animation: reflect 800ms ease-out infinite;
+          }
+          
+          @keyframes reflect {
+            to {
+              left: calc(100% + 100px);
+            }
+          }
+          
+          
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="placeholder title"></div>
+        <div class="placeholder content"></div>
+    </div>
+</body>
+</html>

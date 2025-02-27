@@ -25,3 +25,5 @@ npm install @codemirror/theme-one-dark
 npm install @codemirror/lang-java
 npm install @codemirror/view
 npm install @codemirror/autocomplete
+
+Cài npm install jquery

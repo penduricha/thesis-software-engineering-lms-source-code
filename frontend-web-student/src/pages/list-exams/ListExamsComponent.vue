@@ -25,7 +25,10 @@ export default {
       courseID: null,
 
       //exam
-      exams: null,
+      exams: [],
+
+      //polling
+      pollingInterval: null,
     }
   },
 
@@ -38,6 +41,11 @@ export default {
 
   },
 
+  beforeDestroy() {
+    clearInterval(this.pollingInterval);
+    // Dọn dẹp interval khi component bị hủy
+  },
+
   methods: {
     async setStudentID_And_CourseID_And_Exams() {
       const studentLocalStorage  = new StudentLocalStorage();
@@ -48,6 +56,10 @@ export default {
         if(courseID) {
           this.courseID = courseID;
           this.exams = await ExamDao.getExams_By_CourseID(courseID);
+          this.pollingInterval = await ExamDao.startPolling_GetExams_By_CourseID(courseID, (updatedExams) => {
+            this.exams = updatedExams;
+            // Cập nhật danh sách bài kiểm tra
+          });
           console.log("Exams: ", this.exams);
         }
       }
@@ -140,9 +152,13 @@ export default {
           <span class="text-button-exam flex-date">Date open</span>
           <span class="text-button-exam flex-status">Status</span>
         </div>
-        <h5 v-if="!exams || exams.length === 0" class="text-no-exam">No exam</h5>
+        <h5 v-if="(exams.length === 0)" class="text-no-exam">No exam</h5>
         <!--        Cần xét điều kiện-->
+<!--        <button v-if="exams.length === 0" class="placeholder content button-exam"></button>-->
+<!--        <button v-if="exams.length === 0" class="placeholder content button-exam"></button>-->
+<!--        <button v-if="exams.length === 0" class="placeholder content button-exam"></button>-->
         <button class="button-exam"
+                v-if="exams.length > 0"
                 v-for="e in exams"
                 data-bs-toggle="modal"
                 :data-bs-target="getModalIDToOpen(getStatusExam(e))"
@@ -153,7 +169,7 @@ export default {
             <span class="text-button-exam">{{e.typeExam}}</span>
           </div>
           <span class="text-button-exam flex-date">
-            {{new Date(e.startDate).getHours()}}:{{new Date(e.startDate).getMinutes()}}
+            {{new Date(e.startDate).getHours()}}:{{( new Date(e.startDate).getMinutes() < 10 ? `0${new Date(e.startDate).getMinutes()}` : new Date(e.startDate).getMinutes())}}
             {{new Date(e.startDate).getDate()}}/{{new Date(e.startDate).getMonth() + 1}}/{{new Date(e.startDate).getFullYear()}}
           </span>
           <span class="text-button-exam flex-status"
@@ -164,7 +180,7 @@ export default {
         </button>
       </section>
     </main>
-    <AsideAccount/>
+    <AsideAccount @handleButtonClick="handButtonClick"/>
   </body>
   <modal-before-exam ref="modalExamBefore"/>
   <modal-exam-locked ref="modalExamLocked"/>

@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class BankTestCaseJavaCoreService implements I_BankTestCaseJavaCoreService {
@@ -39,7 +41,15 @@ public class BankTestCaseJavaCoreService implements I_BankTestCaseJavaCoreServic
     }
 
     @Override
-    public List<Map<String, Object>> getTestCases_By_QuestionJavaCoreExamID(Long questionJavaCoreExamID) {
-        return bankTestCaseJavaCoreRepository.getTestCases_By_QuestionJavaCoreExamID(questionJavaCoreExamID);
+    public List<Map<String, Object>> getTestCases_By_QuestionJavaCoreExamID(Long questionJavaCoreExamID) throws JpaSystemException {
+        return bankTestCaseJavaCoreRepository.getTestCases_By_QuestionJavaCoreExamID(questionJavaCoreExamID).stream()
+                .map(originalMap -> {
+                    Map<String, Object> newMap = new HashMap<>();
+                    newMap.put("inputTest", originalMap.get("input_test"));
+                    newMap.put("outputExpect", originalMap.get("output_expect"));
+                    newMap.put("note", originalMap.get("note"));
+                    return newMap;
+                })
+                .collect(Collectors.toList());
     }
 }

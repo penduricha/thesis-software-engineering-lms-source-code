@@ -25,6 +25,10 @@ import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 const app = createApp(App);
 app.use(vuetify);
 
+//bootstrap vue
+
+
+
 function initPage(routers, routerPath) {
     const router = createRouter({
         // mode: 'history',

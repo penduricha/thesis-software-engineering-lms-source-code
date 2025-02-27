@@ -54,8 +54,6 @@ public class Exam implements Serializable {
     @Column(columnDefinition = "nvarchar(130)")
     private String passwordExam;
 
-    @Column(nullable = false)
-    private boolean studentAccess;
 
     @Column(nullable = false)
     private boolean complete;
@@ -102,10 +100,6 @@ public class Exam implements Serializable {
 
     public void setCourse(Course course) {
         this.course = course;
-    }
-
-    public void setStudentAccess(boolean studentAccess) {
-        this.studentAccess = studentAccess;
     }
 
     public List<QuestionJavaCoreExam> getQuestionJavaCoreExams() {

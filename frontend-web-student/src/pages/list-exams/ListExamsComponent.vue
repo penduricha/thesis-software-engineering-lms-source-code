@@ -73,6 +73,14 @@ export default {
     saveRouter_Path(route) {
       const routerDao = new RouterDao();
       routerDao.savePath_To_SessionStorage(route);
+      //remove session, local storage;
+      if(sessionStorage.getItem('indexQuestion')) {
+        sessionStorage.removeItem('indexQuestion');
+      }
+
+      if(localStorage.getItem('questionsJavaCore')) {
+        localStorage.removeItem('questionsJavaCore');
+      }
     },
 
     async handButtonClick(status, exam) {
@@ -154,9 +162,6 @@ export default {
         </div>
         <h5 v-if="(exams.length === 0)" class="text-no-exam">No exam</h5>
         <!--        Cần xét điều kiện-->
-<!--        <button v-if="exams.length === 0" class="placeholder content button-exam"></button>-->
-<!--        <button v-if="exams.length === 0" class="placeholder content button-exam"></button>-->
-<!--        <button v-if="exams.length === 0" class="placeholder content button-exam"></button>-->
         <button class="button-exam"
                 v-if="exams.length > 0"
                 v-for="e in exams"
@@ -188,5 +193,4 @@ export default {
 
 <style scoped lang="scss">
 @use '@/scss/main';
-
 </style>

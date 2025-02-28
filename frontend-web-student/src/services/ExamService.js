@@ -8,7 +8,8 @@ export default class ExamService {
     }
 
     static fetchExam_By_CourseID_ExamID(examID, courseID) {
-        return axiosConfig.getAPIClient()
+        return axiosConfig
+            .getAPIClient()
             .get(`/view_exam_by_course_id_exam_id/${examID}/${courseID}`);
     }
 
@@ -22,5 +23,17 @@ export default class ExamService {
         return axiosConfig
             .getAPIClient()
             .get(`/view_exam_by_course_id_exam_id_student_exam_before/${examID}/${courseID}`)
+    }
+
+    static post_Access_Exam(studentID, examID) {
+        return axiosConfig
+            .getAPIClient()
+            .post(`/student/student_access_exam_post/${studentID}/${examID}`);
+    }
+
+    static delete_Access_Exam(studentID, examID) {
+        return axiosConfig
+            .getAPIClient()
+            .delete(`/student/student_access_exam_delete/${studentID}/${examID}`);
     }
 }

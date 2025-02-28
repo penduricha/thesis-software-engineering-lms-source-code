@@ -35,15 +35,22 @@ export default {
 
     async handleDeleteExam(){
       if(this.examIDToDelete) {
-        let statusUpdate = await ExamDao.delete_Exam_By_ExamID(this.examIDToDelete);
-        if(statusUpdate) {
-          alert("Deleted exam successfully");
-          window.location.reload();
-        }else {
-          alert("Deleted exam failed");
+        let statusStudentAccess = await ExamDao
+            .getStatus_Access_Student_To_Exam_By_ExamID(this.examIDToDelete);
+        console.log("Status student access: ", statusStudentAccess);
+        if(statusStudentAccess === false) {
+          let statusDelete = await ExamDao.delete_Exam_By_ExamID(this.examIDToDelete);
+          if(statusDelete) {
+            alert("Deleted exam successfully");
+            window.location.reload();
+          }else {
+            alert("Deleted exam failed");
+          }
+        } else {
+          alert("There is student is currently accessing the test. Please wait until finish.");
         }
       } else {
-        alert("Deleted exam failed");
+        alert("Deleted exam failed. Can't get exam.");
       }
     }
   }

@@ -80,4 +80,15 @@ export default class ExamDao {
         })
         return exams;
     }
+
+    static async getStatus_Access_Student_To_Exam_By_ExamID(examID) {
+        let status = false;
+         await ExamService
+            .fetchStatus_Access_Student_To_Exam_By_ExamID(examID).then(response => {
+                 status = response.data;
+             }).catch(error => {
+                 console.error(error);
+             })
+        return status;
+    }
 }

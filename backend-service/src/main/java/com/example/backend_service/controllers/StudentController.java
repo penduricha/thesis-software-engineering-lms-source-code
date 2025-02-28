@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -69,6 +70,27 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getCourseIDByStudentID(studentID));
     }
 
+    @PostMapping("/student/student_access_exam_post/{studentID}/{examID}")
+    public ResponseEntity<Long>
+    postAccessToExam_By_StudentID_ExamID(@PathVariable String studentID,@PathVariable Long examID) throws HttpClientErrorException {
+        return ResponseEntity.ok(studentService.accessToExam_By_StudentID_ExamID(studentID, examID));
+    }
 
+    //22662361 23
+    @DeleteMapping("/student/student_access_exam_delete/{studentID}/{examID}")
+    public ResponseEntity<String>
+    deleteAccessToExam_By_StudentID_ExamID
+            (@PathVariable String studentID, @PathVariable Long examID) throws HttpClientErrorException {
+        return ResponseEntity.ok(studentService.deleteAccessToExam_By_StudentID(studentID, examID));
+    }
 
+    //find student access exam, use examID = 23
+    @GetMapping("/student/find_student_access_exam/{examID}")
+    public ResponseEntity<Boolean>
+        findStudent_Access_Exam_By_ExamID(@PathVariable Long examID) throws JpaSystemException {
+        //System.out.println(studentService.findStudent_Access_Exam_By_ExamID(examID));
+        //map tra new HashMap
+        Boolean studentAccessExam = !Objects.equals(studentService.findStudent_Access_Exam_By_ExamID(examID), new HashMap<>());
+        return ResponseEntity.ok(studentAccessExam);
+    }
 }

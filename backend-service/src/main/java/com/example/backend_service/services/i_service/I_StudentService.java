@@ -20,4 +20,10 @@ public interface I_StudentService {
     public Long getCourseIDByStudentID(String studentID);
 
     public List<Map<String, Object>> getExams_Calendar_Student_By_StartDate(String studentID,int yearStartDate, int monthStartDate, int dateStartDate);
+
+    public Long accessToExam_By_StudentID_ExamID (String studentID, Long examID);
+
+    public String deleteAccessToExam_By_StudentID(String studentID, Long examID);
+
+    public Map<String, Object> findStudent_Access_Exam_By_ExamID(Long examID);
 }

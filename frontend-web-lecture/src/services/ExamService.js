@@ -28,4 +28,10 @@ export default class ExamService {
             .getAPIClient()
             .get(`/view_exam_by_calendar_lecture/${lectureID}/${yearStartDate}/${monthStartDate}/${dateStartDate}`);
     }
+
+    static fetchStatus_Access_Student_To_Exam_By_ExamID(examID) {
+        return axiosConfig
+            .getAPIClient()
+            .get(`/student/find_student_access_exam/${examID}`);
+    }
 }

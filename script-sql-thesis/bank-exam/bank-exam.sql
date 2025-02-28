@@ -17,4 +17,3 @@ where bq.question_java_core_id = 1;
 select * from bank_test_case_java_core where
 input_test = '2-Jan';
 
-update bank_test_case_java_core;

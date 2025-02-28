@@ -9,6 +9,8 @@ spring:
       maximum-pool-size: 10
       auto-commit: true
 
+
+
 #      minimum-idle: Số lượng kết nối tối thiểu trong pool.
 #      maximum-pool-size: Số lượng kết nối tối đa trong pool.
 #      auto-commit: Chế độ tự động commit.
@@ -17,6 +19,11 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: update
+
+#  session:
+#    store-type: jdbc
+#    jdbc:
+#      table-name: spring_session # Tên bảng cho session
 
 server:
   servlet:

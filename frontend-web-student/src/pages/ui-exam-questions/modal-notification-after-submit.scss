@@ -1,7 +1,3 @@
-body {
-  background-color: #f9f9f9;
-}
-
 .modal-content-notify-mark {
   padding: 15px;
   text-align: center;
@@ -12,7 +8,7 @@ body {
 
 .modal-title-notify-mark {
   font-size: 1.5rem;
-  color: #28a745;
+  color: var(--color-success);
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -30,7 +26,7 @@ body {
 
 .fa-circle-check {
   font-size: 2.5rem;
-  color: #28a745;
+  color: var(--color-success);
 }
 
 .btn-return-list {

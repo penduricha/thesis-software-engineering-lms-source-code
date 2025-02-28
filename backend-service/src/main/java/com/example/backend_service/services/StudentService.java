@@ -1,9 +1,14 @@
 package com.example.backend_service.services;
 
 
+import com.example.backend_service.models.Exam;
 import com.example.backend_service.models.Student;
+import com.example.backend_service.repositories.ExamRepository;
 import com.example.backend_service.repositories.StudentRepository;
 import com.example.backend_service.services.i_service.I_StudentService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
@@ -18,11 +23,17 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService implements I_StudentService {
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     private final StudentRepository studentRepository;
 
+    private final ExamRepository examRepository;
+
     @Autowired
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, ExamRepository examRepository) {
         this.studentRepository = studentRepository;
+        this.examRepository = examRepository;
     }
 
     @Override
@@ -94,6 +105,45 @@ public class StudentService implements I_StudentService {
                     return newMap;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public Long accessToExam_By_StudentID_ExamID(String studentID, Long examID) throws JpaSystemException {
+        Student studentFind = findStudentByStudentId(studentID);
+        Exam examFind = examRepository.findExamByExamID(examID);
+        if(studentFind !=null && examFind !=null) {
+            String sqlInsertRecord = "insert into student_access_exam (student_id, exam_id) values (?,?)";
+            entityManager.createNativeQuery(sqlInsertRecord)
+                    .setParameter(1, studentFind.getStudentID())
+                    .setParameter(2, examFind.getExamID()).executeUpdate();
+            return examFind.getExamID();
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public String deleteAccessToExam_By_StudentID(String studentID, Long examID) throws JpaSystemException {
+        Student studentFind = findStudentByStudentId(studentID);
+        Exam examFind = examRepository.findExamByExamID(examID);
+        if(studentFind !=null && examFind != null) {
+            String sqlDeleteRecord = "delete from student_access_exam where student_id = ? and exam_id = ? ";
+            entityManager.createNativeQuery(sqlDeleteRecord)
+                    .setParameter(1, studentFind.getStudentID())
+                    .setParameter(2, examFind.getExamID())
+                    .executeUpdate();
+            return studentFind.getStudentID();
+        }
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> findStudent_Access_Exam_By_ExamID(Long examID) throws JpaSystemException {
+        if(examRepository.findExamByExamID(examID) != null)
+            return studentRepository.findStudent_Access_Exam_By_ExamID(examID);
+        else
+            return new HashMap<>();
     }
 
 }

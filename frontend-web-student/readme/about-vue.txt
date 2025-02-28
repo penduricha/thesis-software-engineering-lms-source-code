@@ -26,3 +26,6 @@ npm run build
 Bước 3
 npm run dev => run local 5143 or 5174
 
+npm i @fortawesome/fontawesome-free
+
+

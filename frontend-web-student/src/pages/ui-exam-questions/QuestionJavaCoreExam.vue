@@ -2,7 +2,7 @@
 import './question-exam-java-core.scss';
 import RouterDao from "@/routes/RoutersDao.js";
 import questionsList from "./questions.js";
-import { onMounted, ref } from "vue";
+// import { onMounted, ref } from "vue";
 //text-editor
 import { Codemirror } from "vue-codemirror";
 import { shallowRef } from "vue";
@@ -16,10 +16,12 @@ import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import StudentDao from "@/daos/StudentDao.js";
 
 import QuestionDao from "@/daos/QuestionDao.js";
+import ModalNotificationAfterSubmit from "@/pages/ui-exam-questions/ModalNotificationAfterSubmit.vue";
 
 export default {
   name: "QuestionExam",
   components: {
+    ModalNotificationAfterSubmit,
     Codemirror,
   },
 
@@ -67,20 +69,17 @@ export default {
     this.saveRouter_Path(this.getRoute());
     this.setStudent();
     this.setQuestion_By_ExamID();
-
-    this.checkTimeLeft();
-    this.setDuration();
   },
 
   mounted() {
-
+    this.checkTimeLeft();
+    this.setDuration();
   },
 
   beforeDestroy() {
     // Dọn dẹp khi component bị hủy
     clearInterval(this.timer);
   },
-
 
   methods: {
     //router
@@ -99,22 +98,28 @@ export default {
     },
 
     async setQuestion_By_ExamID() {
+      //xu li local storage với api
+      // Retrieve the questions from localStorage
       const questionsJavaCore = localStorage.getItem('questionsJavaCore');
-      if (!questionsJavaCore) {
-        let questions = await QuestionDao.getQuestions_By_ExamID(this.examID);
+      let parsedQuestionsJavaCore = [];
+      // Check if there are questions in localStorage
+      if (questionsJavaCore) {
+        parsedQuestionsJavaCore = JSON.parse(questionsJavaCore);
+      } else {
+        // Fetch questions from the API and store them in localStorage
+        const questions = await QuestionDao.getQuestions_By_ExamID(this.examID);
         localStorage.setItem('questionsJavaCore', JSON.stringify(questions));
+        // Use the fetched questions
+        parsedQuestionsJavaCore = questions;
       }
-      const parsedQuestionsJavaCore  = questionsJavaCore ? JSON.parse(questionsJavaCore) : [];
-      if(parsedQuestionsJavaCore.length > 0) {
+      // Proceed if there are questions available
+      if (parsedQuestionsJavaCore.length > 0) {
+        //console.log("Questions from localStorage or API: ", parsedQuestionsJavaCore);
         this.questions = parsedQuestionsJavaCore;
+        console.log("10 questions: ", this.questions);
         this.questionInit = this.questions[this.indexQuestion];
-        if(this.questionInit) {
-          //tạo session
-          // if(!sessionStorage.getItem('indexQuestion')) {
-          //   sessionStorage.setItem('indexQuestion',0);
-          // }
-          // this.indexQuestion = sessionStorage.getItem('indexQuestion');
-          // console.log('index question init: ', this.indexQuestion);
+
+        if (this.questionInit) {
           this.testCasesInit = await QuestionDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
           console.log("Test case: ", this.testCasesInit);
           this.contentQuestion = this.questionInit.contentQuestion;
@@ -136,6 +141,7 @@ export default {
         if(courseID) {
           this.courseID = courseID;
         }
+
       }
     },
 
@@ -190,6 +196,19 @@ export default {
       event.preventDefault();
       // Prevent paste action
     },
+
+    handleSubmit_And_Notification_Mark() {
+
+    },
+
+    handleSaveAll() {
+      //save to localstorage
+
+    },
+
+    handleReset() {
+
+    }
   },
 
   setup() {
@@ -279,15 +298,20 @@ export default {
               >
                 {{index + 1}}
               </button>
-              <button class="button-number-question button-submit">Submit</button>
+              <button class="button-number-question button-submit"
+                      @click = "handleSubmit_And_Notification_Mark()"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modal-notification-mark"
+              >Submit</button>
             </div>
           </div>
-
           <span class="style-time">Time: {{formattedTime}}</span>
         </div>
         <div class="aside-account-in-exam">
-          <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo-in-exam">
-          <span class="style-span-information">{{lastName}} {{firstName}} - {{studentID}}</span>
+          <h1 class="style-name-student-exam">
+            <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo-in-exam">
+            <span v-if="studentID" class="style-span-information">{{lastName}} {{firstName}} - {{studentID}}</span>
+          </h1>
         </div>
       </header>
       <div class="style-main">
@@ -317,11 +341,13 @@ export default {
           <div class="view-button-text-editor">
             <button
                 class="button-text-editor"
+                @click="handleSaveAll()"
             >Save all
             </button>
 
             <button
                 class="button-text-editor"
+                @click="handleReset()"
             >Reset
             </button>
           </div>
@@ -342,6 +368,8 @@ export default {
         </section>
       </div>
     </div>
+
+  <modal-notification-after-submit  :exam-i-d="examID"/>
 </template>
 
 <style scoped lang="scss">

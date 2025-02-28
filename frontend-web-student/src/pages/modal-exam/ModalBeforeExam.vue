@@ -5,13 +5,19 @@ import Password from "@/models/Password.js";
 import '../../components/span/span-style.scss';
 import 'bootstrap/dist/js/bootstrap.js';
 import '../../components/skeleton/loading-skeleton.scss';
+import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 
 export default {
   name: "ModalBeforeExam",
 
   components: {},
 
-  props: {},
+  props: {
+    // studentID: {
+    //   type: String,
+    //   required: true,
+    // }
+  },
 
   created() {
 
@@ -24,6 +30,7 @@ export default {
   data() {
     return {
       passwordExam: null,
+      studentID: null,
 
       examID: null,
       titleExam: null,
@@ -62,75 +69,82 @@ export default {
       this.duration = exam.duration;
       const endDate = new Date(exam.endDate);
       this.endDate = endDate.getDate() + "/" + (endDate.getMonth() + 1) + "/" + endDate.getFullYear()
-          + " " + endDate.getHours() + ":" + endDate.getMinutes();
-      this.linkPaperExam = exam.linkPaperExam;
-      this.passwordExamHashed = exam.passwordExam;
-    },
-
-    async setExam_Information_From_AsideAccount(examID, courseID) {
-      console.log("Exam ID: ", examID);
-      console.log("Course ID: ", courseID);
-      let exam = await ExamDao.getExam_Information_Before_Exam(examID, courseID);
-      console.log("Information exam: ", exam);
-      this.examID = exam.examID;
-      this.titleExam = exam.titleExam;
-      this.typeExam = exam.typeExam;
-      this.topicExam = exam.topicExam;
-      this.nameLecture = exam.name;
-      this.retake = exam.retake ? "Yes" : "No";
-      this.scoringMethod = exam.scoringMethod;
-      this.numberQuestions = exam.numberQuestions;
-      this.duration = exam.duration;
-      const endDate = new Date(exam.endDate);
-      this.endDate = endDate.getDate() + "/" + (endDate.getMonth() + 1) + "/" + endDate.getFullYear()
           + " " + endDate.getHours() + ":" + (endDate.getMinutes() < 10 ? `0${endDate.getMinutes()}` : endDate.getMinutes());
       this.linkPaperExam = exam.linkPaperExam;
       this.passwordExamHashed = exam.passwordExam;
     },
+
+    // async setExam_Information_From_AsideAccount(examID, courseID) {
+    //   console.log("Exam ID: ", examID);
+    //   console.log("Course ID: ", courseID);
+    //   let exam = await ExamDao.getExam_Information_Before_Exam(examID, courseID);
+    //   console.log("Information exam: ", exam);
+    //   this.examID = exam.examID;
+    //   this.titleExam = exam.titleExam;
+    //   this.typeExam = exam.typeExam;
+    //   this.topicExam = exam.topicExam;
+    //   this.nameLecture = exam.name;
+    //   this.retake = exam.retake ? "Yes" : "No";
+    //   this.scoringMethod = exam.scoringMethod;
+    //   this.numberQuestions = exam.numberQuestions;
+    //   this.duration = exam.duration;
+    //   const endDate = new Date(exam.endDate);
+    //   this.endDate = endDate.getDate() + "/" + (endDate.getMonth() + 1) + "/" + endDate.getFullYear()
+    //       + " " + endDate.getHours() + ":" + (endDate.getMinutes() < 10 ? `0${endDate.getMinutes()}` : endDate.getMinutes());
+    //   this.linkPaperExam = exam.linkPaperExam;
+    //   this.passwordExamHashed = exam.passwordExam;
+    // },
 
     preventPaste(event) {
       event.preventDefault();
     },
 
     setPasswordExam() {
-      if (this.passwordExamInput) {
+      if (this.passwordExamInput || !this.passwordExamInput) {
         this.validatePasswordExam = null;
       }
       this.passwordExamInput = this.passwordExamInput.replace(/[^0-9]/g, '');
     },
 
-    navigateTo_JavaCoreExam() {
-      sessionStorage.setItem('indexQuestion', 0);
-      window.location.reload();
-      this.$router.replace({
-        path: '/main-page/list-exams-page/exam-open/java-core-exam',
-        query: {
-          examID: this.examID,
-          duration: this.duration
-        }
-      }).catch((error) => {
-        console.error('Error navigating :', error);
-        alert(error);
-      });
+    async navigateTo_JavaCoreExam() {
+      const studentLocalStorage  = new StudentLocalStorage();
+      let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
+      let status = await ExamDao.create_Access_Exam(studentID, this.examID);
+      if(!status) {
+        alert("Can't access to exam.");
+      } else {
+        sessionStorage.setItem('indexQuestion', 0);
+        window.location.reload();
+        this.$router.replace({
+          path: '/main-page/list-exams-page/exam-open/java-core-exam',
+          query: {
+            examID: this.examID,
+            duration: this.duration
+          }
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      }
     },
 
-    handleGoToExam() {
-      if(!this.passwordExamHashed) {
+    async handleGoToExam() {
+      if (!this.passwordExamHashed) {
         //ktra ko cos mk thi vao
-        if(this.topicExam === "Java core") {
-          this.navigateTo_JavaCoreExam();
+        if (this.topicExam === "Java core") {
+          await this.navigateTo_JavaCoreExam();
         }
       } else {
-        if(!this.passwordExamInput) {
+        if (!this.passwordExamInput) {
           this.validatePasswordExam = "Please enter password.";
         } else {
           const passwordClass = new Password(this.passwordExamInput);
           const passwordExamInputHashed = passwordClass.xorEncryptDecrypt();
-          if(this.passwordExamHashed !== passwordExamInputHashed) {
+          if (this.passwordExamHashed !== passwordExamInputHashed) {
             this.validatePasswordExam = "Incorrect password";
           } else {
-            if(this.topicExam === "Java core") {
-              this.navigateTo_JavaCoreExam();
+            if (this.topicExam === "Java core") {
+              await this.navigateTo_JavaCoreExam();
             }
           }
         }
@@ -158,6 +172,17 @@ export default {
   >
     <div class="modal-dialog modal-md">
       <div class="modal-content content-info-exam">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Exam detail
+          </h5>
+          <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+          ></button>
+        </div>
         <div class="modal-body modal-exam-body">
           <label><span>{{ titleExam }}</span></label>
           <label><span>Type exam: {{ typeExam }}</span></label>

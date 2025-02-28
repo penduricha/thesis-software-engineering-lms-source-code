@@ -29,4 +29,12 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Map<String, Object>> getExams_Calendar_Student_By_StartDate(
             @Param("studentID") String studentID,
             @Param("startDate") String startDate);
+
+    @Query(value = """
+            select s.student_id, s.exam_id 
+            from student_access_exam s
+            where s.exam_id = :examID;
+            """,
+            nativeQuery = true)
+    Map<String, Object> findStudent_Access_Exam_By_ExamID(@Param("examID") Long examID);
 }

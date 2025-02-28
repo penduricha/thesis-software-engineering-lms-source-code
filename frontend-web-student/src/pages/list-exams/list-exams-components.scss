@@ -60,6 +60,10 @@ aside {
 
 .style-span-information{
   font-weight: bold;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
 }
 
 .style-span-information-skeleton {
@@ -266,7 +270,6 @@ main {
   display: flex;
   align-items: center;
   justify-content: start;
-  gap: 8rem;
   padding-left: 3rem;
 }
 
@@ -281,7 +284,6 @@ main {
   display: flex;
   align-items: center;
   justify-content: start;
-  gap: 8rem;
   padding-left: 3rem;
 }
 
@@ -300,9 +302,11 @@ main {
 }
 
 .flex-title {
-  flex: 0.75;
+  flex: 1.5;
   display: flex;
   justify-content: start;
+  height: 100%;
+  align-items: center;
 }
 
 .flex-type-exam {
@@ -312,9 +316,11 @@ main {
 }
 
 .flex-date {
-  flex: 1;
+  flex: 1.5;
   display: flex;
   justify-content: start;
+  align-items: center;
+  height: 100%;
 }
 
 .flex-status {

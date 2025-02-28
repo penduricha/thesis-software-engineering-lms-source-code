@@ -98,6 +98,16 @@ public class Exam implements Serializable {
     @JsonIgnore
     private MarkStudent markStudent;
 
+    //map with student
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "exams",
+            cascade = {CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST,
+                    CascadeType.REFRESH}
+    )
+    @JsonIgnore
+    private List<Student> students = new ArrayList<>();
+
     public void setCourse(Course course) {
         this.course = course;
     }

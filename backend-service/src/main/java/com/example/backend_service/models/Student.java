@@ -49,6 +49,16 @@ public class Student implements Serializable {
     @JsonIgnore
     private List<MarkStudent> markStudentList = new ArrayList<>();
 
+    //map with exam
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "student_access_exam",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "exam_id")
+    )
+    @JsonIgnore
+    private List<Exam> exams = new ArrayList<>();
+
     public String getStudentID() {
         return studentID;
     }

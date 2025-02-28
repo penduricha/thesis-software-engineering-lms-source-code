@@ -6,6 +6,8 @@ import App from './App.vue'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 
+// npm i @fortawesome/fontawesome-free
+import "@fortawesome/fontawesome-free/css/all.min.css";
 //import vue routers
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -25,9 +27,7 @@ import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 const app = createApp(App);
 app.use(vuetify);
 
-//bootstrap vue
-
-
+//font awesome
 
 function initPage(routers, routerPath) {
     const router = createRouter({

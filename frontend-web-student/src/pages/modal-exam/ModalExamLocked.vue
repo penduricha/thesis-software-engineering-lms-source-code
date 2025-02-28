@@ -12,7 +12,7 @@ name: "ModalExamLocked"
           <h5 >Exam is locked</h5>
         </div>
         <div class="modal-footer d-flex justify-content-center border-0">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="width: 100%">OK</button>
+          <button type="button" class="btn-ok" data-bs-dismiss="modal">OK</button>
         </div>
       </div>
     </div>
@@ -20,5 +20,17 @@ name: "ModalExamLocked"
 </template>
 
 <style scoped lang="scss">
+@use '@/scss/main';
+.btn-ok {
+  width: 100%;
+  background-color: var(--purple-iuh);
+  color: var(--white);
+  height: 2.5rem;
+  font-size: 18px;
+  border-radius: 2px;
+}
 
+.btn-ok:hover {
+  opacity: 0.8;
+}
 </style>

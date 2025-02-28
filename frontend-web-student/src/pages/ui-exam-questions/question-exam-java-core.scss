@@ -18,17 +18,18 @@
 }
 
 .aside-account-in-exam {
-  width: 30rem;
-  height: 80%;
+  //width: calc(100% - 4rem);
+  flex: 1;
+  height: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: end;
   align-items: center;
-  gap: 1rem;
+  padding-right: 2rem;
 }
 
 .aside-questions{
-  width: 100%;
-  height: 80%;
+  flex: 1.25;
+  height: 100%;
   display: flex;
   padding-left: 2rem;
   align-items: center;
@@ -41,6 +42,12 @@
   height: 100%;
   align-items: center;
   gap: 0.5rem;
+}
+
+.style-name-student-exam {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .span-questions{

@@ -76,4 +76,25 @@ export default class ExamDao {
             })
         return exam;
     }
+
+    static async create_Access_Exam(studentID, examID) {
+        let examIDResponse = null;
+            await ExamService.post_Access_Exam(studentID, examID).then(response => {
+                examIDResponse = response.data;
+            }).catch(error => {
+                console.error(error);
+            })
+        return examID === examIDResponse;
+    }
+
+    //suy nghi lai
+    static async delete_Access_Exam(studentID, examID) {
+        let studentIDResponse = null;
+        await ExamService.delete_Access_Exam(studentID, examID).then(response => {
+            studentIDResponse = response.data;
+        }).catch(error => {
+            console.error(error);
+        })
+        return Number(studentID) === Number(studentIDResponse);
+    }
 }

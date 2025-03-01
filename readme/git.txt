@@ -22,3 +22,10 @@ git checkout <tên nhánh>
 git checkout -b <tạo nhánh mới dựa trên nhánh đang trỏ> 
 
 lịch sử commit lsr
+
+fetch nhánh
+git fetch --all
+git branch -r
+
+//chuyen den nhanh can pull
+git pull origin <tên-nhánh>

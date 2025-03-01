@@ -104,6 +104,75 @@ public class ExecuteJava {
         }
     }
 
+    public String executeJavaCore( String nameMainClass, String packageName, String javaCoreCode) {
+        StringBuilder output = new StringBuilder();
+        try {
+            //thay đổi tùy theo cấu trúc
+            String baseDir = "src";
+            String packageDir = baseDir + "/" + packageName.replace('.', '/');
+
+            String mainFilePath = packageDir + "/" + nameMainClass + ".java";
+
+            String mainFilePathToExecute = packageName + "." + nameMainClass;
+
+            // Create directory if it doesn't exist
+            File directory = new File(packageDir);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            // Save the source code to a file
+            try (PrintWriter writer = new PrintWriter(mainFilePath)) {
+                writer.println("package " + packageName + ";");
+                writer.println(javaCoreCode);
+            }
+
+            // Compile the source code
+            JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+            DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+            StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
+            Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjects(mainFilePath);
+            JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
+
+            boolean success = task.call();
+
+            if (!success) {
+                //StringBuilder errorMessage = new StringBuilder("Compilation Error:\n");
+                String errorMessage = "";
+                for (Diagnostic<?> diagnostic : diagnostics.getDiagnostics()) {
+                    //errorMessage.append((diagnostic.toString())).append("\n");
+                    //errorMessage.append(diagnostic.getPosition()).append("\n");
+                    errorMessage = diagnostic.toString();
+                }
+                return errorMessage;
+            }
+
+            // Run the program
+            ProcessBuilder processBuilder = new ProcessBuilder("java", "-cp", packageDir, mainFilePathToExecute);
+            processBuilder.redirectErrorStream(true);
+
+            Process process = processBuilder.start();
+
+            InputStream inputStream = process.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            //StringBuilder output = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            // Delete files after execution
+            //Files.deleteIfExists(Paths.get(mainFilePath));
+            //delete
+            //Files.deleteIfExists(Paths.get(path + mainClassName + ".class"));
+
+            return output.toString();
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
     public ExecuteJava() {
     }
 

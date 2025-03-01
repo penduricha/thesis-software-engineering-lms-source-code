@@ -19,6 +19,9 @@ select * from bank_question_java_core
 where content_question like '%số trung vị%';
 
 select s.student_id, s.exam_id
+from student_access_exam s;
+
+select s.student_id, s.exam_id
 from student_access_exam s
 where s.exam_id = 23;
 

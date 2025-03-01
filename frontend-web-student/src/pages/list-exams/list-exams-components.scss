@@ -256,6 +256,13 @@ main {
   margin-top: 2rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  /* Kích hoạt thanh cuộn dọc */
+  overflow-y: auto;
+}
+
+.section-list-exams::-webkit-scrollbar-thumb {
+  background: var(--purple-iuh);
+  border-radius: 4px;
 }
 
 .button-exam {

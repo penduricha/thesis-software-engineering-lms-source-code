@@ -1,71 +1,66 @@
--- mã hóa dạng utf-8 của bảng
-# alter table bank_test_case_java_core convert to character set utf8mb4 collate utf8mb4_unicode_ci;
-alter table question_java_core_exam convert to character set utf8mb4 collate utf8mb4_unicode_ci;
-
-insert into bank_test_case_java_core (input_test, output_expect, note, question_java_core_id) values
-('0 0','0','No rectangle',1)
-, ('0 23','0','No rectangle',1)
-, ('23 0','0','No rectangle',1)
-, ('1 -12','-1','Negative numbers not allowed',1)
-, ('-1 12','-1','Negative numbers not allowed',1)
-, ('4.5 14.5','40','Phải đặt biến số thực',1)
-, ('5 15','40','',1)
-, ('0 0','0','No rectangle',2)
-, ('0 23','0','No rectangle',2)
-, ('23 0','0','No rectangle',2)
-, ('1 -12','-1','Negative numbers not allowed',2)
-, ('-1 12','-1','Negative numbers not allowed',2)
-, ('2.5 2.5','6.25','Phải đặt biến số thực',2)
-, ('2 2','4','',2)
-, ('0','-1','n can’t be 0',3)
-, ('-2','-1','n can’t be lower than 1',3)
-, ('1.5','-1','n must be integer',3)
-, ('5','9','',3)
-, ('6','12','',3)
-, ('-2','-1','',4)
-, ('1.5','-1','n must be integer',4)
-, ('2','1','Is Prime',4)
-, ('4','0','Is not Prime',4)
-, ('64 34 25 12 22 11 90','11 12 22 25 34 64 90','Pass',5)
-, ('64 34 25 12 22 11 90','(other array)','Fail',5)
-, ('[64 34 25 12 22 11 90] 22','1','',6)
-, ('[64 34 25 12 22 11 90] 21','0','',6)
-, ('[]','0','',6)
-, ('-2','-1','Không âm',7)
-, ('0','0','',7)
-, ('1','1','',7)
-, ('3','2','',7)
-, ('4','4','',7)
-, ('5','7','',7)
-, ('1 -3 2','[2.0 1.0]','Có 2 nghiệm phân biệt',8)
-, ('1 2 1','[-1.0]','Có 1 nghiệm kép',8)
-, ('1 0 -4','[2.0 -2.0]','Có 2 nghiệm phân biệt',8)
-, ('1 -2 5','[]','Không có nghiệm',8)
-, ('0 2 -4','[0.0 0.0]','Ko là pt bậc 2',8)
-, ('2022 12 1','1','',9)
-, ('2090 12 1','0','',9)
-, ('1000 0 0','-1','Ngoại lệ ngày tháng năm',9)
-, ('2022 12 1','1/12/2022','',10)
-, ('2090 12 1','1/12/2090','',10)
-, ('1000 0 0','"Exception Date Time"','Ngoại lệ ngày tháng năm',10)
-, ('abcd@gmail.com','1','',11)
-, ('abcd@*()&.com','0','',11)
-, ('abcd@gmail.com.vn','1','',11)
-, ('abcd@gmail.com@.com','0','',11)
-, ('1','1','',12)
-, ('2-Jan','0.5','',12)
-, ('2','2','',12)
-, ('[1 2 3 4 5]','3','',13)
-, ('[1 2 2 4]','2','',13)
-, ('[]','0','',13)
-, ('LocalDate.of(2000,2,2)','2000','',14)
-, ('LocalDate.of(2000,2,30)','1900','',14)
-, ('Hello, hello','1','',15)
-, ('Hello, hello','0','',15)
-, ('1','January','',16)
-, ('12','December','',16)
-, ('13','Invalid month','',16)
-, ('10 5','30240','',17)
-, ('5 10','0','',17)
-, ('-5 2','0','',17)
-, ('-6','0','',17);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (331, '0 0', 'No rectangle', '0', 1);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (332, '0 23', 'No rectangle', '0', 1);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (333, '23 0', 'No rectangle', '0', 1);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (334, '1 -12', 'Negative numbers not allowed', '-1', 1);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (335, '-1 12', 'Negative numbers not allowed', '-1', 1);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (336, '4.5 15.5', 'Phải đặt biến số thực', '40', 1);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (337, '5 15', '', '40', 1);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (338, '0 0', 'No rectangle', '0', 2);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (339, '0 23', 'No rectangle', '0', 2);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (340, '23 0', 'No rectangle', '0', 2);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (341, '1 -12', 'Negative numbers not allowed', '-1', 2);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (342, '-1 12', 'Negative numbers not allowed', '-1', 2);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (343, '2.5 2.5', 'Phải đặt biến số thực', '6.25', 2);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (344, '2 2', '', '4', 2);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (345, '0', 'n can’t be 0', '-1', 3);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (346, '-2', 'n can’t be lower than 1', '-1', 3);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (347, '1.5', 'n must be integer', '-1', 3);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (348, '5', '', '9', 3);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (349, '6', '', '12', 3);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (350, '-2', '', '-1', 4);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (351, '1.5', 'n must be integer', '-1', 4);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (352, '2', 'Is Prime', '1', 4);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (353, '4', 'Is not Prime', '0', 4);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (354, '64 34 25 12 22 11 90', 'Pass', '11 12 22 25 34 64 90', 5);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (355, '64 34 25 12 22 11 90', 'Fail', '(other array)', 5);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (356, '[64 34 25 12 22 11 90] 22', '', '1', 6);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (357, '[64 34 25 12 22 11 90] 21', '', '0', 6);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (358, '[]', '', '0', 6);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (359, '-2', 'Không âm', '-1', 7);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (360, '0', '', '0', 7);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (361, '1', '', '1', 7);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (362, '3', '', '2', 7);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (363, '4', '', '4', 7);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (364, '5', '', '7', 7);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (365, '1 -3 2', 'Có 2 nghiệm phân biệt', '[2.0 1.0]', 8);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (366, '1 2 1', 'Có 1 nghiệm kép', '[-1.0]', 8);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (367, '1 0 -4', 'Có 2 nghiệm phân biệt', '[2.0 -2.0]', 8);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (368, '1 -2 5', 'Không có nghiệm', '[]', 8);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (369, '0 2 -4', 'Ko là pt bậc 2', '[0.0 0.0]', 8);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (370, '2022 12 1', '', '1', 9);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (371, '2090 12 1', '', '0', 9);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (372, '1000 0 0', 'Ngoại lệ ngày tháng năm', '-1', 9);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (373, '2022 12 1', '', '1/12/2022', 10);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (374, '2090 12 1', '', '1/12/2090', 10);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (375, '1000 0 0', 'Ngoại lệ ngày tháng năm', '"Exception Date Time"', 10);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (376, 'abcd@gmail.com', '', '1', 11);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (377, 'abcd@*()&.com', '', '0', 11);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (378, 'abcd@gmail.com.vn', '', '1', 11);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (379, 'abcd@gmail.com@.com', '', '0', 11);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (380, '1', '', '1', 12);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (381, '1/2', '', '0.5', 12);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (382, '2', '', '2', 12);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (383, '[1 2 3 4 5]', '', '3', 13);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (384, '[1 2 2 4]', '', '2', 13);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (385, '[]', '', '0', 13);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (386, 'LocalDate.of(2000,2,2)', '', '2000', 14);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (387, 'LocalDate.of(2000,2,30)', '', '1900', 14);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (388, 'Hello, hello', '', '1', 15);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (389, 'Hello, hello', '', '0', 15);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (390, '1', '', 'January', 16);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (391, '12', '', 'December', 16);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (392, '13', '', 'Invalid month', 16);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (393, '10 5', '', '30240', 17);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (394, '5 10', '', '0', 17);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (395, '-5 2', '', '0', 17);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (396, '-6', '', '0', 17);

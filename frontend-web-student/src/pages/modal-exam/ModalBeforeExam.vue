@@ -6,6 +6,7 @@ import '../../components/span/span-style.scss';
 import 'bootstrap/dist/js/bootstrap.js';
 import '../../components/skeleton/loading-skeleton.scss';
 import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
+import RouterDao from "@/routes/RoutersDao.js";
 
 export default {
   name: "ModalBeforeExam",
@@ -113,10 +114,15 @@ export default {
       if(!status) {
         alert("Can't access to exam.");
       } else {
+        const path = '/main-page/list-exams-page/exam-open/java-core-exam';
+        const pathQueryParams = path + + "?" + "examID=" + Number(this.examID)
+            + "&" + "duration=" + Number(this.duration);
+        const routerDao = new RouterDao();
+        routerDao.savePath_To_LocalStorage(pathQueryParams);
         sessionStorage.setItem('indexQuestion', 0);
         window.location.reload();
         this.$router.replace({
-          path: '/main-page/list-exams-page/exam-open/java-core-exam',
+          path: path,
           query: {
             examID: this.examID,
             duration: this.duration

@@ -22,7 +22,6 @@ public interface ExamRepository extends JpaRepository<Exam,Long> {
                    e.end_date,
                    e.link_exam_paper,
                    e.password_exam,
-                   e.complete,
                    l.name
             from course c
                      left join map_lecture_course mlc on c.course_id = mlc.course_id

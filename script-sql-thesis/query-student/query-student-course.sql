@@ -25,4 +25,11 @@ select s.student_id, s.exam_id
 from student_access_exam s
 where s.exam_id = 23;
 
+# delete
 delete from student_access_exam;
+
+select * from bank_question_java_core
+left join
+bank_test_case_java_core btcjc
+on bank_question_java_core.question_java_core_id = btcjc.question_java_core_id
+where btcjc.question_java_core_id = 2;

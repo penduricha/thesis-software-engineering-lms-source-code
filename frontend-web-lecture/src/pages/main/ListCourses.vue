@@ -74,7 +74,6 @@ export default {
   <body>
   <AsideMenu/>
   <main>
-
     <section class="section-welcome">
       <div class="background-welcome">
         <span class="span-welcome">Welcome back to this platform.</span>

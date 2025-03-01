@@ -8,10 +8,12 @@ import StudentDao from "@/daos/StudentDao.js";
 import ExamDao from "@/daos/ExamDao.js";
 import ModalBeforeExam from "@/pages/modal-exam/ModalBeforeExam.vue";
 import ModalExamLocked from "@/pages/modal-exam/ModalExamLocked.vue";
+import ModalExamOverdue from "@/pages/modal-exam/ModalExamOverdue.vue";
 
 export default {
   name: 'ListExamsComponents',
   components: {
+    ModalExamOverdue,
     ModalExamLocked,
     ModalBeforeExam,
     AsideMenu,
@@ -118,6 +120,8 @@ export default {
         return "#modal-java-core-before-exam";
       } else if(status === "Locked") {
         return "#modal-exam-locked";
+      } else if(status === "Locked") {
+        return "#modal-exam-overdue";
       }
       return null;
     },
@@ -131,6 +135,8 @@ export default {
           return "color-status-lock";
         } else if (status === "Open") {
           return "color-status-open";
+        } else if (status === "Completed") {
+          return "color-status-complete";
         }
         return ""; // Default case, if needed
       };
@@ -189,6 +195,7 @@ export default {
   </body>
   <modal-before-exam ref="modalExamBefore"/>
   <modal-exam-locked ref="modalExamLocked"/>
+  <modal-exam-overdue ref="modalExamOverdue"/>
 </template>
 
 <style scoped lang="scss">

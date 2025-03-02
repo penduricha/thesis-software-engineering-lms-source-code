@@ -2,6 +2,7 @@ package com.example.backend_service.services.i_service;
 
 import com.example.backend_service.models.Exam;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -20,5 +21,8 @@ public interface I_ExamService {
 
     public Exam updateExam_By_ExamID(Exam exam, Long examID);
 
-    public List<Map<String, Object>> getExams_Calendar_Lecture_By_StartDate(String lectureID,int yearStartDate, int monthStartDate, int dateStartDate);
+    public List<Map<String, Object>>
+    getExams_Calendar_Lecture_By_StartDate(String lectureID,int yearStartDate, int monthStartDate, int dateStartDate);
+
+    //public Map<String, Object> get_Student_StartDate_Exam_By_StudentID (String studentID);
 }

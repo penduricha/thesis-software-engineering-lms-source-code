@@ -342,48 +342,37 @@ export default {
     //   }
     //   return null;
     // },
-    getStatusExam(e) {
-      if(this.examsCalendar.length > 0) {
-        const dateTimeNow = new Date();
-        const startDate = new Date(e.startDate);
-        const endDate = new Date(e.endDate);
-        if(dateTimeNow < startDate) {
-          return "Locked";
-        } else if(dateTimeNow > endDate && e.complete) {
-          return "Complete";
-        } else if(dateTimeNow > endDate && !e.complete) {
-          return "Overdue";
-        } else if((dateTimeNow >= startDate) && (dateTimeNow <= endDate)) {
-          return "Open";
-        }
-        return null;
-      }
-      return null;
-    },
+    // getStatusExam(e) {
+    //   if(this.examsCalendar.length > 0) {
+    //     const dateTimeNow = new Date();
+    //     const startDate = new Date(e.startDate);
+    //     const endDate = new Date(e.endDate);
+    //     if(dateTimeNow < startDate) {
+    //       return "Locked";
+    //     } else if(dateTimeNow > endDate && e.complete) {
+    //       return "Complete";
+    //     } else if(dateTimeNow > endDate && !e.complete) {
+    //       return "Overdue";
+    //     } else if((dateTimeNow >= startDate) && (dateTimeNow <= endDate)) {
+    //       return "Open";
+    //     }
+    //     return null;
+    //   }
+    //   return null;
+    // },
 
     async handButtonClick(e, status) {
-      // if(status === "Open") {
-      //   console.log("Exam ID: ", e.examID);
-      //   console.log("Course ID: ", this.courseID);
-      //   if(this.courseID)
-      //     //await this.handleGoToModalExamBefore(e.examID, this.courseID);
-      //     await this.$refs.modalExamBefore_From_AsideAccount.setExam_Information_From_AsideAccount(e.examID, this.courseID);
-      // }
       this.$emit('handleButtonClick', status, e);
     },
 
     getModalIDToOpen(e) {
       if(this.examsCalendar.length > 0) {
-        const dateTimeNow = new Date();
-        const startDate = new Date(e.startDate);
-        const endDate = new Date(e.endDate);
-        if(dateTimeNow < startDate) {
+        const status = e.status;
+        if(status === "Locked") {
           return "#modal-exam-locked";
-        } else if(dateTimeNow > endDate && e.complete) {
-          return "Complete";
-        } else if(dateTimeNow > endDate && !e.complete) {
-          return "Overdue";
-        } else if((dateTimeNow >= startDate) && (dateTimeNow <= endDate)) {
+        } else if(status === "Overdue") {
+          return "#modal-exam-overdue";
+        } else if(status === "Open") {
           return "#modal-java-core-before-exam";
         }
         return null;
@@ -480,7 +469,7 @@ export default {
                 v-for="(exam, index) in examsCalendar"
                 data-bs-toggle="modal"
                 :data-bs-target="getModalIDToOpen(exam)"
-                @click="handButtonClick(exam, getStatusExam(exam))"
+                @click="handButtonClick(exam, exam.status)"
         >
           <div class="view-item-exam view-index-exam">
             {{index+1}}

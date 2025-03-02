@@ -1,15 +1,14 @@
 <script>
 import './question-exam-java-core.scss';
 import RouterDao from "@/routes/RoutersDao.js";
-import questionsList from "./questions.js";
 // import { onMounted, ref } from "vue";
 //text-editor
-import { Codemirror } from "vue-codemirror";
-import { shallowRef } from "vue";
-import { oneDark } from "@codemirror/theme-one-dark";
-import { java,  } from "@codemirror/lang-java";
+import {Codemirror} from "vue-codemirror";
+import {shallowRef} from "vue";
+import {oneDark} from "@codemirror/theme-one-dark";
+import {java,} from "@codemirror/lang-java";
 
-import { keymap } from "@codemirror/view";
+import {keymap} from "@codemirror/view";
 import {autocompletion, completeFromList} from "@codemirror/autocomplete";
 
 import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
@@ -17,6 +16,7 @@ import StudentDao from "@/daos/StudentDao.js";
 
 import QuestionJavaCoreDao from "@/daos/QuestionJavaCoreDao.js";
 import ModalNotificationAfterSubmit from "@/pages/ui-exam-questions/ModalNotificationAfterSubmit.vue";
+import CodeStorageDao from "@/daos/CodeStorageDao.js";
 
 export default {
   name: "QuestionExam",
@@ -101,12 +101,21 @@ export default {
       this.questions = await QuestionJavaCoreDao.getQuestions_By_ExamID(this.examID);
       console.log("10 questions: ", this.questions);
       this.questionInit = this.questions[this.indexQuestion];
-
-      if (this.questionInit) {
-        this.testCasesInit = await QuestionJavaCoreDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
-        console.log("Test case: ", this.testCasesInit);
-        this.contentQuestion = this.questionInit.contentQuestion;
-        this.code = this.questionInit.codeSample;
+      const studentLocalStorage  = new StudentLocalStorage();
+      let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
+      if(studentID) {
+        if (this.questionInit) {
+            this.testCasesInit = await QuestionJavaCoreDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
+            console.log("Test case: ", this.testCasesInit);
+            this.contentQuestion = this.questionInit.contentQuestion;
+            let codeGet = await CodeStorageDao
+                .get_Code_By_IndexQuestion_StudentID(studentID, Number(this.indexQuestion));
+            if (codeGet) {
+              this.code = codeGet;
+            } else {
+              this.code = this.questionInit.codeSample;
+            }
+          }
       }
     },
 
@@ -167,10 +176,17 @@ export default {
       this.indexQuestion = Number(sessionStorage.getItem('indexQuestion'));
       this.questionInit = q;
       if(this.questionInit) {
-        this.testCasesInit = await QuestionJavaCoreDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
+        this.testCasesInit = await QuestionJavaCoreDao
+            .getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
         console.log("Test case: ", this.testCasesInit);
         this.contentQuestion = this.questionInit.contentQuestion;
-        this.code = this.questionInit.codeSample;
+        let codeGet = await CodeStorageDao
+            .get_Code_By_IndexQuestion_StudentID(this.studentID, this.indexQuestion);
+        if (codeGet) {
+          this.code = codeGet;
+        } else {
+          this.code = this.questionInit.codeSample;
+        }
       }
     },
 
@@ -183,9 +199,39 @@ export default {
 
     },
 
-    handleSaveAll() {
-      //save to localstorage
-
+    async handleSave() {
+      //save to database
+      let codeExport = this.code
+          .split('\n') // Tách mã thành từng dòng
+          .filter(line =>
+              line.trim() !== '' && // Bỏ qua dòng trống
+              !line.includes('java.') && // Bỏ qua dòng chứa 'java.'
+              !line.includes('javax.') && // Bỏ qua dòng chứa 'javax.'
+              !line.includes('jdk.') && // Bỏ qua dòng chứa 'jdk.'
+              !line.includes('com.') && // Bỏ qua dòng chứa 'com.'
+              !line.includes('org.') && // Bỏ qua dòng chứa 'org.'
+              !line.includes('import') // Bỏ qua dòng chứa 'import'
+          )
+          // Thay thế tab đầu dòng nếu có
+          .map(line => line.replace(/^\t/, '\t'))
+          .join('\n');
+          // Kết hợp các dòng lại với nhau
+      const codeSaveStoragePost = {
+        "codeSave" : codeExport,
+        "indexQuestionSave" : this.indexQuestion
+      }
+      if(this.studentID) {
+        let status = await CodeStorageDao
+            .save_Code_By_StudentId_IndexQuestion(codeSaveStoragePost, this.studentID);
+        if(!status) {
+          alert("Save failed.");
+        } else {
+          let codeGet = await CodeStorageDao
+              .get_Code_By_IndexQuestion_StudentID(this.studentID, this.indexQuestion);
+          console.log("Code get: ", codeGet);
+          this.code = codeGet;
+        }
+      }
     },
 
     handleReset() {
@@ -323,7 +369,7 @@ export default {
           <div class="view-button-text-editor">
             <button
                 class="button-text-editor"
-                @click="handleSaveAll()"
+                @click="handleSave()"
             >Save all
             </button>
 

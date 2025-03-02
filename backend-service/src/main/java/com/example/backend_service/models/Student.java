@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,17 @@ public class Student implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
+    @Column(columnDefinition = "datetime", nullable = true)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime dateTimeStartExam;
+
+    public LocalDateTime getDateTimeStartExam() {
+        return dateTimeStartExam;
+    }
+
+    public void setDateTimeStartExam(LocalDateTime dateTimeStartExam) {
+        this.dateTimeStartExam = dateTimeStartExam;
+    }
 
     @ManyToOne
     @JoinColumn(name = "course_id")

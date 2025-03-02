@@ -15,6 +15,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -83,6 +87,9 @@ public class ExamService implements I_ExamService {
     public List<Map<String, Object>> getExamsByCourseID(Long courseID) throws JpaSystemException {
         List<Map<String, Object>> queryList = examRepository.getExamsByCourseID(courseID);
         List<Map<String, Object>> convertedList = new ArrayList<>();
+
+        LocalDateTime now = LocalDateTime.now(); // Khởi tạo LocalDateTime now
+
         if (!queryList.isEmpty()) {
             for (Map<String, Object> queryMap : queryList) {
                 Map<String, Object> convertedMap = new HashMap<>();
@@ -96,6 +103,20 @@ public class ExamService implements I_ExamService {
                     } else {
                         convertedMap.put("examID", value);
                     }
+                }
+                // Lấy startDate và endDate từ queryMap
+                Timestamp startDateTimestamp = (Timestamp) queryMap.get("start_date"); // giả sử tên trường là "start_date"
+                Timestamp endDateTimestamp = (Timestamp) queryMap.get("end_date"); // giả sử tên trường là "end_date"
+                // Chuyển đổi Timestamp thành LocalDateTime
+                LocalDateTime startDate = startDateTimestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                LocalDateTime endDate = endDateTimestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                // Kiểm tra trạng thái
+                if (now.isBefore(startDate)) {
+                    convertedMap.put("status", "Locked");
+                } else if (now.isAfter(endDate)) {
+                    convertedMap.put("status", "Overdue");
+                } else {
+                    convertedMap.put("status", "Open");
                 }
                 convertedList.add(convertedMap);
             }

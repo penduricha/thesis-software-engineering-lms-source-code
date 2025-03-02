@@ -37,4 +37,19 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             """,
             nativeQuery = true)
     Map<String, Object> findStudent_Access_Exam_By_ExamID(@Param("examID") Long examID);
+
+    @Query(value = """
+            select
+                sae.exam_id,
+                (e.duration - timestampdiff(minute , s.date_time_start_exam, now()))
+                as remain_minutes
+            from student s
+            left join
+                student_access_exam sae on s.student_id = sae.student_id
+            right join
+                exam e on sae.exam_id = e.exam_id
+            where s.student_id = :studentID;
+            """,
+            nativeQuery = true)
+    Map<String, Object> get_Information_Student_Do_Exam(@Param("studentID") String studentID);
 }

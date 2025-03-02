@@ -7,6 +7,9 @@ import 'bootstrap/dist/js/bootstrap.js';
 import '../../components/skeleton/loading-skeleton.scss';
 import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import RouterDao from "@/routes/RoutersDao.js";
+import SessionTimeDao from "@/daos/SessionTimeDao.js";
+import axios from 'axios';
+import StudentDao from "@/daos/StudentDao.js";
 
 export default {
   name: "ModalBeforeExam",
@@ -114,23 +117,24 @@ export default {
       if(!status) {
         alert("Can't access to exam.");
       } else {
-        const path = '/main-page/list-exams-page/exam-open/java-core-exam';
-        const pathQueryParams = path + + "?" + "examID=" + Number(this.examID)
-            + "&" + "duration=" + Number(this.duration);
-        const routerDao = new RouterDao();
-        routerDao.savePath_To_LocalStorage(pathQueryParams);
-        sessionStorage.setItem('indexQuestion', 0);
-        window.location.reload();
-        this.$router.replace({
-          path: path,
-          query: {
-            examID: this.examID,
-            duration: this.duration
-          }
-        }).catch((error) => {
-          console.error('Error navigating :', error);
-          alert(error);
-        });
+        let statusSetDateExam = await StudentDao.set_Date_Time_Start_Exam(studentID);
+        if(statusSetDateExam) {
+          const path = '/main-page/list-exams-page/exam-open/java-core-exam';
+          sessionStorage.setItem('indexQuestion', 0);
+          window.location.reload();
+          this.$router.replace({
+            path: path,
+            query: {
+              examID: this.examID,
+              duration: this.duration
+            }
+          }).catch((error) => {
+            console.error('Error navigating :', error);
+            alert(error);
+          });
+        } else {
+          alert("Failed to access to exam.")
+        }
       }
     },
 

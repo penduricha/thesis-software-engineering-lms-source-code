@@ -26,4 +26,10 @@ public interface I_StudentService {
     public String deleteAccessToExam_By_StudentID(String studentID, Long examID);
 
     public Map<String, Object> findStudent_Access_Exam_By_ExamID(Long examID);
+
+    public String setDateTimeStartExam_By_StudentID (String studentID);
+
+    public String resetDateTimeStartExam_By_StudentID (String studentID);
+
+    public Map<String, Object> get_Information_Student_Do_Exam(String studentID);
 }

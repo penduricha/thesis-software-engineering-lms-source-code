@@ -34,7 +34,8 @@ public class StudentController {
     }
 
     @GetMapping("/student/studentID_password/{studentID}")
-    public Map<String, Object> findStudentByStudentId(@PathVariable String studentID) throws HttpClientErrorException{
+    public Map<String, Object> findStudentByStudentId(@PathVariable String studentID)
+            throws HttpClientErrorException{
         Map<String, Object> studentMap = new HashMap<>();
         Student student = studentService.findStudentByStudentId(studentID);
         if (student != null) {
@@ -45,7 +46,8 @@ public class StudentController {
     }
 
     @GetMapping("/student/studentID_name/{studentID}")
-    public Map<String, Object> findStudentID_Name_ByStudentId(@PathVariable String studentID) throws HttpClientErrorException{
+    public Map<String, Object> findStudentID_Name_ByStudentId(@PathVariable String studentID)
+            throws HttpClientErrorException{
         Map<String, Object> studentNameMap = new HashMap<>();
         Student student = studentService.findStudentByStudentId(studentID);
         if (student != null) {
@@ -57,25 +59,30 @@ public class StudentController {
     }
 
     @GetMapping("/student/getPassword_By_StudentID/{studentID}")
-    public ResponseEntity<String> updatePasswordStudent(@PathVariable String studentID) throws HttpClientErrorException {
+    public ResponseEntity<String> updatePasswordStudent(@PathVariable String studentID)
+            throws HttpClientErrorException {
         Student student = studentService.findStudentByStudentId(studentID);
         return ResponseEntity.ok(student.getPassword());
     }
 
     @PatchMapping("/student/updatePasswordStudent/{studentID}/{newPassword}")
-    public ResponseEntity<String> updatePasswordStudent(@PathVariable String studentID, @PathVariable String newPassword) throws HttpClientErrorException {
+    public ResponseEntity<String>
+    updatePasswordStudent(@PathVariable String studentID, @PathVariable String newPassword)
+            throws HttpClientErrorException {
         Student updatedStudent = studentService.updatePasswordStudent(studentID, newPassword);
         return ResponseEntity.ok(updatedStudent.getPassword());
     }
 
     @GetMapping("/student/get_course_id_by_student_id/{studentID}")
-    public ResponseEntity<Long> getCourseID_By_StudentID(@PathVariable String studentID) throws HttpClientErrorException {
+    public ResponseEntity<Long> getCourseID_By_StudentID(@PathVariable String studentID)
+            throws HttpClientErrorException {
         return ResponseEntity.ok(studentService.getCourseIDByStudentID(studentID));
     }
 
     @PostMapping("/student/student_access_exam_post/{studentID}/{examID}")
     public ResponseEntity<Long>
-    postAccessToExam_By_StudentID_ExamID(@PathVariable String studentID,@PathVariable Long examID) throws HttpClientErrorException {
+    postAccessToExam_By_StudentID_ExamID(@PathVariable String studentID,@PathVariable Long examID)
+            throws HttpClientErrorException {
         return ResponseEntity.ok(studentService.accessToExam_By_StudentID_ExamID(studentID, examID));
     }
 
@@ -93,20 +100,41 @@ public class StudentController {
         findStudent_Access_Exam_By_ExamID(@PathVariable Long examID) throws HttpClientErrorException{
         //System.out.println(studentService.findStudent_Access_Exam_By_ExamID(examID));
         //map tra new HashMap
-        Boolean studentAccessExam = !Objects.equals(studentService.findStudent_Access_Exam_By_ExamID(examID), new HashMap<>());
+        Boolean studentAccessExam =
+                !Objects.equals(studentService.findStudent_Access_Exam_By_ExamID(examID), new HashMap<>());
         return ResponseEntity.ok(studentAccessExam);
     }
 
     @PostMapping("/student/save_code_by_studentID/{studentID}")
     public ResponseEntity<CodeStorageSave>
-    save_Code_Do_Exam(@RequestBody CodeStorageSave codeStorageSave,@PathVariable String studentID) throws HttpClientErrorException{
+    save_Code_Do_Exam(@RequestBody CodeStorageSave codeStorageSave,@PathVariable String studentID)
+            throws HttpClientErrorException{
         return ResponseEntity.ok(codeStorageSaveService.saveCode(codeStorageSave, studentID));
     }
 
     @GetMapping("/student/get_code_by_studentID_indexQuestion/{studentID}/{indexQuestion}")
     public ResponseEntity<String>
-    getCodeSave_By_StudentID_IndexQuestion(@PathVariable String studentID, @PathVariable int indexQuestion) throws HttpClientErrorException{
+    getCodeSave_By_StudentID_IndexQuestion(@PathVariable String studentID, @PathVariable int indexQuestion)
+            throws HttpClientErrorException{
         return ResponseEntity
                 .ok(codeStorageSaveService.getCodeSave_By_StudentID_IndexQuestion(studentID, indexQuestion));
+    }
+
+    @GetMapping("/student/set_date_time_start_exam/{studentID}")
+    public ResponseEntity<String> setDateTimeStartExam_By_StudentID(@PathVariable String studentID)
+            throws HttpClientErrorException{
+        return ResponseEntity.ok(studentService.setDateTimeStartExam_By_StudentID(studentID));
+    }
+
+    @GetMapping("/student/reset_date_time_start_exam/{studentID}")
+    public ResponseEntity<String> resetDateTimeStartExam_By_StudentID(@PathVariable String studentID)
+            throws HttpClientErrorException{
+        return ResponseEntity.ok(studentService.resetDateTimeStartExam_By_StudentID(studentID));
+    }
+
+    @GetMapping("/student/get_information_exam_and_remain_minutes/{studentID}")
+    public ResponseEntity<Map<String, Object>> get_Information_Student_Do_Exam(@PathVariable String studentID)
+            throws HttpClientErrorException{
+        return ResponseEntity.ok(studentService.get_Information_Student_Do_Exam(studentID));
     }
 }

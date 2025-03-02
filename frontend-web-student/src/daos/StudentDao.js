@@ -62,4 +62,46 @@ export default class StudentDao {
         })
         return courseID;
     }
+
+    static async set_Date_Time_Start_Exam(studentID) {
+        let status = false;
+        let responseReturn = null
+        await StudentService.fetch_Set_Date_Time_Start_Exam(studentID).then(response => {
+            responseReturn = response.data;
+        }).catch(error => {
+            console.error(error);
+            //alert(error)
+        })
+        if(responseReturn) {
+            status = true;
+        }
+        return status;
+    }
+
+    static async reset_Date_Time_Start_Exam(studentID) {
+        let status = false;
+        let responseReturn = null
+        await StudentService.fetch_Reset_Date_Time_Start_Exam(studentID).then(response => {
+            responseReturn = response.data;
+        }).catch(error => {
+            console.error(error);
+            //alert(error)
+        })
+        if(responseReturn) {
+            status = true;
+        }
+        return status;
+    }
+
+    static async get_Information_Student_Access_Exam_And_RemainMinutes (studentID) {
+        let responseReturn = null;
+        await StudentService.fetch_Information_Student_Access_Exam_And_RemainMinutes(studentID)
+        .then(response => {
+            responseReturn = response.data;
+        }).catch(error => {
+            console.error(error);
+            //alert(error)
+        })
+        return responseReturn;
+    }
 }

@@ -3,6 +3,8 @@ package com.example.backend_service.controllers;
 import com.example.backend_service.models.session.ExamSession;
 import jakarta.servlet.http.HttpSession;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -13,13 +15,13 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/api/session")
+@RequestMapping("/api")
 public class ExamSessionController {
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-    @PostMapping("/create-session-time")
-    public String createSession(@RequestBody ExamSession examSession, HttpSession httpSession) {
+    @PostMapping("/session/create-session-time")
+    public ResponseEntity<?> createSession(@RequestBody ExamSession examSession, HttpSession httpSession) {
         // Chuyển đổi từ phút sang giây
         examSession.setTime(examSession.getTime() * 60);
 
@@ -33,7 +35,8 @@ public class ExamSessionController {
         // Kiểm tra xem session đã tồn tại chưa
         for (ExamSession session : sessions) {
             if (session.getStudentID().equals(examSession.getStudentID())) {
-                return "Session already exists for studentID: " + examSession.getStudentID();
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Session already exists for studentID: " + examSession.getStudentID());
             }
         }
 
@@ -48,14 +51,15 @@ public class ExamSessionController {
                 currentSessions.removeIf(session -> {
                     long remainingTime = session.getTime();
                     if (remainingTime <= 0) {
-                        //System.out.println("Session expired and removed for studentID: " + session.getStudentID());
+                        System.out.println("Session expired and removed for studentID: " + session.getStudentID());
                         return true; // Trả về true để xóa session này
                     } else {
                         // Giảm thời gian
                         session.setTime(remainingTime - 1);
                         String formattedTime = formatTime(remainingTime);
-                        //System.out.println("Time remaining for student " + session.getStudentID() + ": " + formattedTime);
-                        return false; // Không xóa session
+                        System.out.println("Time remaining for student " + session.getStudentID() + ": " + formattedTime);
+                        // Không xóa session
+                        return false;
                     }
                 });
 
@@ -64,11 +68,14 @@ public class ExamSessionController {
             }
         }, 0, 1, TimeUnit.SECONDS);
 
-        // Trả về thông tin về session mới
-        return "Session created for studentID: " + examSession.getStudentID() + " with countdown: " + formatTime(examSession.getTime());
+        // Trả về thông tin về session mới cùng với thời gian đếm ngược
+        return ResponseEntity.ok(Map.of(
+                "message", "Session created for studentID: " + examSession.getStudentID(),
+                "countdown", formatTime(examSession.getTime())
+        ));
     }
 
-    @GetMapping("/time/{studentID}")
+    @GetMapping("/session/time/{studentID}")
     public String getSessionTime(@PathVariable String studentID, HttpSession httpSession) {
         List<ExamSession> currentSessions = (List<ExamSession>) httpSession.getAttribute("examSessions");
         if (currentSessions != null) {
@@ -82,10 +89,26 @@ public class ExamSessionController {
         return null;
     }
 
-    @DeleteMapping("/delete-all-session-time")
+    @DeleteMapping("/session/delete-all-session-time")
     public String deleteAllSessions(HttpSession httpSession) {
         httpSession.removeAttribute("examSessions");
         return "All sessions have been deleted.";
+    }
+
+    @DeleteMapping("/session/delete-session/{studentID}")
+    public String deleteSessionByStudentID(@PathVariable String studentID, HttpSession httpSession) {
+        List<ExamSession> currentSessions = (List<ExamSession>) httpSession.getAttribute("examSessions");
+        if (currentSessions != null) {
+            boolean sessionRemoved = currentSessions.removeIf(session -> session.getStudentID().equals(studentID));
+            if (sessionRemoved) {
+                // Cập nhật lại danh sách session trong httpSession
+                httpSession.setAttribute("examSessions", currentSessions);
+                return studentID;
+            } else {
+                return null;
+            }
+        }
+        return null;
     }
 
     private String formatTime(long seconds) {

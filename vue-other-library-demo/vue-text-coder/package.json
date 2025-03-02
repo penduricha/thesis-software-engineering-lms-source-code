@@ -16,12 +16,16 @@
   "devDependencies": {
     "@ckeditor/ckeditor5-vue": "^7.3.0",
     "@codemirror/autocomplete": "^6.18.4",
+    "@codemirror/basic-setup": "^0.20.0",
     "@codemirror/commands": "^6.8.0",
     "@codemirror/lang-cpp": "^6.0.2",
     "@codemirror/lang-java": "^6.0.1",
     "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/theme-one-dark": "^6.1.2",
     "@codemirror/view": "^6.36.2",
+    "@tiptap/extension-code-block": "^2.11.5",
+    "@tiptap/starter-kit": "^2.11.5",
+    "@tiptap/vue-3": "^2.11.5",
     "@vitejs/plugin-vue": "^5.2.1",
     "axios": "^1.7.9",
     "codemirror": "^6.0.1",
@@ -30,6 +34,8 @@
     "simple-code-editor": "^2.0.9",
     "vite": "^6.0.5",
     "vite-plugin-vue-devtools": "^7.6.8",
-    "vue-codemirror": "^6.1.1"
+    "vue-ace-editor": "^1.0.3",
+    "vue-codemirror": "^6.1.1",
+    "vue3-ace-editor": "^2.2.4"
   }
 }

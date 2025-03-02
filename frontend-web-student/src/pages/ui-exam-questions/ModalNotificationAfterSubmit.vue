@@ -4,6 +4,7 @@ import listMenu from "@/components/aside/list-menu.js";
 import RouterDao from "@/routes/RoutersDao.js";
 import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import ExamDao from "@/daos/ExamDao.js";
+import StudentDao from "@/daos/StudentDao.js";
 
 export default {
   name: "ModalNotificationAfterSubmit",
@@ -40,7 +41,8 @@ export default {
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
       let status = await ExamDao.delete_Access_Exam(studentID, this.examID);
       console.log("status: ",status);
-      if(!status) {
+      let statusResetDate = await StudentDao.reset_Date_Time_Start_Exam(studentID);
+      if(!status || !statusResetDate) {
         alert("Can't return page because error system.");
       } else {
         window.location.reload();

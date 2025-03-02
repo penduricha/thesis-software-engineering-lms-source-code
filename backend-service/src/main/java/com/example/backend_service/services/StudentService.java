@@ -14,11 +14,14 @@ import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.sql.Timestamp;
 
 @Service
 public class StudentService implements I_StudentService {
@@ -94,14 +97,27 @@ public class StudentService implements I_StudentService {
         String monthStartDateString = Integer.toString(monthStartDate);
         String dateStartDateString = Integer.toString(dateStartDate);
         String dateFormat = yearStartDateString + "-" + monthStartDateString + "-" + dateStartDateString;
+        LocalDateTime now = LocalDateTime.now(); // Khởi tạo LocalDateTime now
         return studentRepository.getExams_Calendar_Student_By_StartDate(studentID, dateFormat).stream()
                 .map(originalMap -> {
                     Map<String, Object> newMap = new HashMap<>();
                     newMap.put("examID", originalMap.get("exam_id"));
                     newMap.put("titleExam", originalMap.get("title_exam"));
                     newMap.put("typeExam", originalMap.get("type_exam"));
-                    newMap.put("startDate", originalMap.get("start_date"));
-                    newMap.put("endDate", originalMap.get("end_date"));
+                    // Chuyển đổi start_date và end_date từ Timestamp sang LocalDateTime
+                    Timestamp startDateTimestamp = (Timestamp) originalMap.get("start_date");
+                    Timestamp endDateTimestamp = (Timestamp) originalMap.get("end_date");
+                    LocalDateTime startDate = startDateTimestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                    LocalDateTime endDate = endDateTimestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                    newMap.put("startDate", startDate);
+                    newMap.put("endDate", endDate);
+                    if (now.isBefore(startDate)) {
+                        newMap.put("status", "Locked");
+                    } else if (now.isAfter(endDate)) {
+                        newMap.put("status", "Overdue");
+                    } else {
+                        newMap.put("status", "Open");
+                    }
                     return newMap;
                 })
                 .collect(Collectors.toList());
@@ -146,4 +162,36 @@ public class StudentService implements I_StudentService {
             return new HashMap<>();
     }
 
+    @Override
+    public String setDateTimeStartExam_By_StudentID(String studentID) throws JpaSystemException {
+        Student studentFind = findStudentByStudentId(studentID);
+        if(studentFind != null) {
+            studentFind.setDateTimeStartExam(LocalDateTime.now());
+            studentRepository.save(studentFind);
+            return studentFind.getStudentID();
+        }
+        return null;
+    }
+
+    @Override
+    public String resetDateTimeStartExam_By_StudentID(String studentID) throws JpaSystemException  {
+        Student studentFind = findStudentByStudentId(studentID);
+        if(studentFind != null) {
+            studentFind.setDateTimeStartExam(null);
+            studentRepository.save(studentFind);
+            return studentFind.getStudentID();
+        }
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> get_Information_Student_Do_Exam(String studentID)
+            throws JpaSystemException {
+        Map<String, Object> queryMap = studentRepository.get_Information_Student_Do_Exam(studentID);
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("examID", queryMap.get("exam_id"));
+        returnMap.put("remainMinutes", queryMap.get("remain_minutes"));
+        //System.out.println(queryMap);
+        return returnMap;
+    }
 }

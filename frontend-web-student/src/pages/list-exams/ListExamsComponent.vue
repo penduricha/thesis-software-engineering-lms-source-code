@@ -9,6 +9,8 @@ import ExamDao from "@/daos/ExamDao.js";
 import ModalBeforeExam from "@/pages/modal-exam/ModalBeforeExam.vue";
 import ModalExamLocked from "@/pages/modal-exam/ModalExamLocked.vue";
 import ModalExamOverdue from "@/pages/modal-exam/ModalExamOverdue.vue";
+import SessionTimeDao from "@/daos/SessionTimeDao.js";
+import axios from "axios";
 
 export default {
   name: 'ListExamsComponents',
@@ -40,7 +42,7 @@ export default {
   },
 
   mounted() {
-
+    this.checkStatusDoExam();
   },
 
   beforeDestroy() {
@@ -72,11 +74,34 @@ export default {
       return this.$route.path;
     },
 
-    saveRouter_Path(route) {
+    async checkStatusDoExam() {
+      const studentLocalStorage = new StudentLocalStorage();
+      let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
+      //kiem tra co lam bai ktra hay ko
+      let informationDoExam = await StudentDao.get_Information_Student_Access_Exam_And_RemainMinutes(studentID);
+      let accessExam = (informationDoExam.examID === null) && (informationDoExam.remainMinutes === null);
+      if(!accessExam) {
+        const path = '/main-page/list-exams-page/exam-open/java-core-exam';
+        sessionStorage.setItem('indexQuestion', 0);
+        window.location.reload();
+        this.$router.replace({
+          path: path,
+          query: {
+            examID: informationDoExam.examID,
+            duration: Number(informationDoExam.remainMinutes)
+          }
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      }
+    },
+
+    async saveRouter_Path(route) {
       const routerDao = new RouterDao();
       routerDao.savePath_To_SessionStorage(route);
       //remove session, local storage;
-      if(sessionStorage.getItem('indexQuestion')) {
+      if (sessionStorage.getItem('indexQuestion')) {
         sessionStorage.removeItem('indexQuestion');
       }
     },
@@ -92,31 +117,29 @@ export default {
       await this.$refs.modalExamBefore.setExam_Information(examID, courseID);
     },
 
-    getStatusExam(e) {
-      if(this.exams.length > 0) {
-        const dateTimeNow = new Date();
-        const startDate = new Date(e.startDate);
-        const endDate = new Date(e.endDate);
-        if(dateTimeNow < startDate) {
-          return "Locked";
-        } else if(dateTimeNow > endDate && e.complete) {
-          return "Complete";
-        } else if(dateTimeNow > endDate && !e.complete) {
-          return "Overdue";
-        } else if((dateTimeNow >= startDate) && (dateTimeNow <= endDate)) {
-          return "Open";
-        }
-        return null;
-      }
-      return null;
-    },
+    // getStatusExam(e) {
+    //   if(this.exams.length > 0) {
+    //     const dateTimeNow = new Date();
+    //     const startDate = new Date(e.startDate);
+    //     const endDate = new Date(e.endDate);
+    //     if(dateTimeNow < startDate) {
+    //       return "Locked";
+    //     } else if(dateTimeNow > endDate) {
+    //       return "Overdue";
+    //     } else if((dateTimeNow >= startDate) && (dateTimeNow <= endDate)) {
+    //       return "Open";
+    //     }
+    //     return null;
+    //   }
+    //   return null;
+    // },
 
     getModalIDToOpen(status) {
       if(status === "Open"){
         return "#modal-java-core-before-exam";
       } else if(status === "Locked") {
         return "#modal-exam-locked";
-      } else if(status === "Locked") {
+      } else if(status === "Overdue") {
         return "#modal-exam-overdue";
       }
       return null;
@@ -126,7 +149,7 @@ export default {
   computed: {
     setColorButton() {
       return (e) => {
-        const status = this.getStatusExam(e);
+        const status = e.status;
         if (status === "Locked" || status === "Overdue") {
           return "color-status-lock";
         } else if (status === "Open") {
@@ -168,8 +191,8 @@ export default {
                 v-if="exams.length > 0"
                 v-for="e in exams"
                 data-bs-toggle="modal"
-                :data-bs-target="getModalIDToOpen(getStatusExam(e))"
-                @click="handButtonClick(getStatusExam(e), e)"
+                :data-bs-target="getModalIDToOpen(e.status)"
+                @click="handButtonClick(e.status, e)"
         >
           <span class="text-button-exam flex-title">{{e.titleExam}}</span>
           <div class="div-type-exam flex-type-exam">
@@ -182,7 +205,7 @@ export default {
           <span class="text-button-exam flex-status"
                 :class="['span-status-color',setColorButton(e)]"
           >
-            {{getStatusExam(e)}}
+            {{e.status}}
           </span>
         </button>
       </section>

@@ -164,24 +164,31 @@ export default {
       if (!this.titleExam) {
         this.validateTitleExam = null;
       } else {
-        if (Validation.isFullOfSpaces(this.titleExam)) {
-          this.validateTitleExam = null;
-        } else {
-          if (!Validation.validateString_Title(
-              Validation.removeSpaces(this.titleExam.trim())
-          )) {
+        const trimmedTitle = this.titleExam.trim();
+
+        // Nếu exams rỗng, kiểm tra regex ngay
+        if (this.exams.length === 0) {
+          if (Validation.isFullOfSpaces(trimmedTitle)) {
+            this.validateTitleExam = null;
+          } else if (!Validation.validateString_Title(Validation.removeSpaces(trimmedTitle))) {
             this.validateTitleExam = "Title exam is invalid.";
           } else {
-            const hasMatchingExam = this.exams.some(exam => exam.titleExam === this.titleExam.trim());
-            if (hasMatchingExam) {
-              this.validateTitleExam = "Title exam is existed";
-            } else {
-              this.validateTitleExam = null;
-            }
+            this.validateTitleExam = null; // Valid title
+          }
+        } else {
+          // Nếu exams không rỗng, kiểm tra sự tồn tại trước
+          const hasMatchingExam = this.exams.some(exam => exam.titleExam === trimmedTitle);
+          if (hasMatchingExam) {
+            this.validateTitleExam = "Title exam already exists.";
+          } else if (Validation.isFullOfSpaces(trimmedTitle)) {
+            this.validateTitleExam = null;
+          } else if (!Validation.validateString_Title(Validation.removeSpaces(trimmedTitle))) {
+            this.validateTitleExam = "Title exam is invalid.";
+          } else {
+            this.validateTitleExam = null; // Valid title
           }
         }
       }
-      //this.validateTitleExam = "Title exam is invalid.";
     },
 
     setSelectExamType() {

@@ -2,7 +2,7 @@ import AxiosConfig from "@/services/AxiosConfig.js";
 
 const axiosConfig = new AxiosConfig();
 
-export default class QuestionService {
+export default class QuestionJavaCoreService {
     static fetchQuestions_By_ExamID (examID) {
         return axiosConfig.getAPIClient().get(`/get_questions_java_core_exam_by_exam_id/${examID}`);
     }

@@ -1,10 +1,10 @@
 package com.example.backend_service.controllers;
 
 
-
-
+import com.example.backend_service.models.CodeStorageSave;
 import com.example.backend_service.models.Student;
 import com.example.backend_service.repositories.StudentRepository;
+import com.example.backend_service.services.CodeStorageSaveService;
 import com.example.backend_service.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,9 +25,12 @@ public class StudentController {
 
 //    private final StudentRepository studentRepository;
 
+    private final CodeStorageSaveService codeStorageSaveService;
+
     @Autowired
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, CodeStorageSaveService codeStorageSaveService) {
         this.studentService = studentService;
+        this.codeStorageSaveService = codeStorageSaveService;
     }
 
     @GetMapping("/student/studentID_password/{studentID}")
@@ -87,10 +90,23 @@ public class StudentController {
     //find student access exam, use examID = 23
     @GetMapping("/student/find_student_access_exam/{examID}")
     public ResponseEntity<Boolean>
-        findStudent_Access_Exam_By_ExamID(@PathVariable Long examID) throws JpaSystemException {
+        findStudent_Access_Exam_By_ExamID(@PathVariable Long examID) throws HttpClientErrorException{
         //System.out.println(studentService.findStudent_Access_Exam_By_ExamID(examID));
         //map tra new HashMap
         Boolean studentAccessExam = !Objects.equals(studentService.findStudent_Access_Exam_By_ExamID(examID), new HashMap<>());
         return ResponseEntity.ok(studentAccessExam);
+    }
+
+    @PostMapping("/student/save_code_by_studentID/{studentID}")
+    public ResponseEntity<CodeStorageSave>
+    save_Code_Do_Exam(@RequestBody CodeStorageSave codeStorageSave,@PathVariable String studentID) throws HttpClientErrorException{
+        return ResponseEntity.ok(codeStorageSaveService.saveCode(codeStorageSave, studentID));
+    }
+
+    @GetMapping("/student/get_code_by_studentID_indexQuestion/{studentID}/{indexQuestion}")
+    public ResponseEntity<String>
+    getCodeSave_By_StudentID_IndexQuestion(@PathVariable String studentID, @PathVariable int indexQuestion) throws HttpClientErrorException{
+        return ResponseEntity
+                .ok(codeStorageSaveService.getCodeSave_By_StudentID_IndexQuestion(studentID, indexQuestion));
     }
 }

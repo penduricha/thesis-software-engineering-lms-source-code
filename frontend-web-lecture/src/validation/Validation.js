@@ -21,7 +21,7 @@ export default class Validation {
     }
 
     static validateString_Title(input) {
-        const regex = /^[a-zA-Z0-9.,]+$/;
+        const regex = /^[a-zA-Z0-9.,-]+(?:\s[a-zA-Z0-9.,-]+)*$/;
         return regex.test(input);
     }
 

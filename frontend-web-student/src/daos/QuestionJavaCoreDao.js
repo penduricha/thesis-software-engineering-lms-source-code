@@ -1,9 +1,9 @@
-import QuestionService from "@/services/QuestionService.js";
+import QuestionJavaCoreService from "@/services/QuestionJavaCoreService.js";
 
-export default class QuestionDao {
+export default class QuestionJavaCoreDao {
     static async getQuestions_By_ExamID (examID) {
         let questions = [];
-        await QuestionService
+        await QuestionJavaCoreService
             .fetchQuestions_By_ExamID(examID)
             .then(response => {
                 questions = response.data;
@@ -15,7 +15,7 @@ export default class QuestionDao {
 
     static async getTestCases_By_QuestionJavaCoreExamID (questionJavaCoreExamID) {
         let testCases = [];
-        await QuestionService
+        await QuestionJavaCoreService
             .fetchTestCases_By_QuestionJavaCoreExamID(questionJavaCoreExamID)
             .then(response => {
                 testCases = response.data;

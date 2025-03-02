@@ -49,6 +49,10 @@ public class Student implements Serializable {
     @JsonIgnore
     private List<MarkStudent> markStudentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<CodeStorageSave> codeStorageSaves = new ArrayList<>();
+
     //map with exam
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -93,5 +97,13 @@ public class Student implements Serializable {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public List<CodeStorageSave> getCodeStorageSaves() {
+        return codeStorageSaves;
+    }
+
+    public void setCodeStorageSaves(List<CodeStorageSave> codeStorageSaves) {
+        this.codeStorageSaves = codeStorageSaves;
     }
 }

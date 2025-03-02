@@ -79,10 +79,6 @@ export default {
       if(sessionStorage.getItem('indexQuestion')) {
         sessionStorage.removeItem('indexQuestion');
       }
-
-      if(localStorage.getItem('questionsJavaCore')) {
-        localStorage.removeItem('questionsJavaCore');
-      }
     },
 
     async handButtonClick(status, exam) {

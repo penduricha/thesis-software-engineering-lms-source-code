@@ -37,7 +37,8 @@ public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamServic
     public List<Map<String, Object>> getQuestionJavaCoreExam_By_ExamID_To_Student_Exam(Long examID) throws JpaSystemException {
         List<Map<String, Object>> questionsQuery = questionJavaCoreExamRepository.findQuestionJavaCoreExamsByExam_ExamID_Map(examID);
         if(questionsQuery != null) {
-            Collections.shuffle(questionsQuery);
+            //Collections.shuffle(questionsQuery);
+//            List<Map<String, Object>> questionsReturn
             return questionsQuery.stream()
                     .map(originalMap -> {
                         Map<String, Object> newMap = new HashMap<>();

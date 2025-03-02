@@ -47,7 +47,6 @@ function initPage(routers, routerPath) {
 }
 
 function execute(){
-    //co the doi path khac
     const routerDao = new RouterDao();
     const studentLocalStorage = new StudentLocalStorage();
     const startPagePath = '/';
@@ -61,7 +60,14 @@ function execute(){
             initPage(routers, routerDao.getPath_From_SessionStorage());
         }
     }
+
 }
+
+// khi break
+// function execute() {
+//     const startPagePath = '/';
+//     initPage(routers, startPagePath);
+// }
 
 execute();
 //createApp(App).mount('#app')

@@ -93,5 +93,11 @@ public class QuestionJavaCoreExam implements Serializable {
         this.codeSample = codeSample;
     }
 
+    public Long getQuestionJavaCoreExamID() {
+        return questionJavaCoreExamID;
+    }
 
+    public void setQuestionJavaCoreExamID(Long questionJavaCoreExamID) {
+        this.questionJavaCoreExamID = questionJavaCoreExamID;
+    }
 }

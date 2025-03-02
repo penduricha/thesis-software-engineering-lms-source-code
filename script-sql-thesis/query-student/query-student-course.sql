@@ -2,6 +2,8 @@ use project_thesis_final;
 
 select * from student;
 
+select version();
+
 select * from course;
 
 select * from exam;
@@ -23,7 +25,7 @@ from student_access_exam s;
 
 select s.student_id, s.exam_id
 from student_access_exam s
-where s.exam_id = 23;
+where s.exam_id = 24;
 
 # delete
 delete from student_access_exam;
@@ -33,3 +35,5 @@ left join
 bank_test_case_java_core btcjc
 on bank_question_java_core.question_java_core_id = btcjc.question_java_core_id
 where btcjc.question_java_core_id = 2;
+
+select * from question_java_core_exam where exam_id = 24;

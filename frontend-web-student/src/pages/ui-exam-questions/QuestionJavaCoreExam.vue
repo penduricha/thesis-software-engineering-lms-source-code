@@ -15,7 +15,7 @@ import {autocompletion, completeFromList} from "@codemirror/autocomplete";
 import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import StudentDao from "@/daos/StudentDao.js";
 
-import QuestionDao from "@/daos/QuestionDao.js";
+import QuestionJavaCoreDao from "@/daos/QuestionJavaCoreDao.js";
 import ModalNotificationAfterSubmit from "@/pages/ui-exam-questions/ModalNotificationAfterSubmit.vue";
 
 export default {
@@ -98,33 +98,15 @@ export default {
     },
 
     async setQuestion_By_ExamID() {
-      //xu li local storage với api
-      // Retrieve the questions from localStorage
-      const questionsJavaCore = localStorage.getItem('questionsJavaCore');
-      let parsedQuestionsJavaCore = [];
-      // Check if there are questions in localStorage
-      if (questionsJavaCore) {
-        parsedQuestionsJavaCore = JSON.parse(questionsJavaCore);
-      } else {
-        // Fetch questions from the API and store them in localStorage
-        const questions = await QuestionDao.getQuestions_By_ExamID(this.examID);
-        localStorage.setItem('questionsJavaCore', JSON.stringify(questions));
-        // Use the fetched questions
-        parsedQuestionsJavaCore = questions;
-      }
-      // Proceed if there are questions available
-      if (parsedQuestionsJavaCore.length > 0) {
-        //console.log("Questions from localStorage or API: ", parsedQuestionsJavaCore);
-        this.questions = parsedQuestionsJavaCore;
-        console.log("10 questions: ", this.questions);
-        this.questionInit = this.questions[this.indexQuestion];
+      this.questions = await QuestionJavaCoreDao.getQuestions_By_ExamID(this.examID);
+      console.log("10 questions: ", this.questions);
+      this.questionInit = this.questions[this.indexQuestion];
 
-        if (this.questionInit) {
-          this.testCasesInit = await QuestionDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
-          console.log("Test case: ", this.testCasesInit);
-          this.contentQuestion = this.questionInit.contentQuestion;
-          this.code = this.questionInit.codeSample;
-        }
+      if (this.questionInit) {
+        this.testCasesInit = await QuestionJavaCoreDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
+        console.log("Test case: ", this.testCasesInit);
+        this.contentQuestion = this.questionInit.contentQuestion;
+        this.code = this.questionInit.codeSample;
       }
     },
 
@@ -185,7 +167,7 @@ export default {
       this.indexQuestion = Number(sessionStorage.getItem('indexQuestion'));
       this.questionInit = q;
       if(this.questionInit) {
-        this.testCasesInit = await QuestionDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
+        this.testCasesInit = await QuestionJavaCoreDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
         console.log("Test case: ", this.testCasesInit);
         this.contentQuestion = this.questionInit.contentQuestion;
         this.code = this.questionInit.codeSample;

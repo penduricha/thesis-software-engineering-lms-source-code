@@ -210,8 +210,79 @@ export default {
 
     }
   },
+  
 
   setup() {
+  // Danh sách từ khóa Java quan trọng
+  const javaKeywords = [
+    "public", "private", "protected", "static", "final", "void", "class", "interface", "enum",
+    "extends", "implements", "abstract", "new", "this", "super", "return", "import", "package",
+    "if", "else", "switch", "case", "default", "break", "continue", "while", "do", "for", "try",
+    "catch", "finally", "throw", "throws", "synchronized", "volatile", "transient", "native",
+    "strictfp", "assert", "instanceof"
+  ];
+
+  // Danh sách kiểu dữ liệu Java (hỗ trợ khi khai báo biến)
+  const javaDataTypes = [
+    "boolean", "char", "byte", "short", "int", "long", "float", "double", "String",
+    "List", "ArrayList", "LinkedList", "Set", "HashSet", "TreeSet", "Map", "HashMap", "TreeMap"
+  ];
+
+  // Danh sách hàm getter, setter, constructors
+  const javaMethods = [
+    { label: "getName()", type: "function", detail: "Getter method for name" },
+    { label: "setName(String name)", type: "function", detail: "Setter method for name" },
+    { label: "getAge()", type: "function", detail: "Getter method for age" },
+    { label: "setAge(int age)", type: "function", detail: "Setter method for age" },
+    { label: "toString()", type: "function", detail: "Convert object to string" },
+    { label: "equals(Object obj)", type: "function", detail: "Check object equality" },
+    { label: "hashCode()", type: "function", detail: "Generate hash code" },
+    { label: "compareTo(Object obj)", type: "function", detail: "Compare two objects" },
+    { label: "clone()", type: "function", detail: "Clone the object" },
+    { label: "public class ClassName () { }", type: "snippet", detail: "Create a Java class" },
+    { label: "private int ;", type: "variable", detail: "Declare private int variable" },
+    { label: "private String ;", type: "variable", detail: "Declare private String variable" },
+    { label: "private double ;", type: "variable", detail: "Declare private String variable" },
+    { label: "private float ;", type: "variable", detail: "Declare private String variable" },
+    { label: "private boolean ;", type: "variable", detail: "Declare private String variable" }
+  ];
+
+  // Tích hợp danh sách gợi ý vào CodeMirror
+  const javaCompletion = completeFromList([
+    ...javaKeywords.map((keyword) => ({
+      label: keyword,
+      type: "keyword"
+    })),
+    ...javaDataTypes.map((dataType) => ({
+      label: dataType,
+      type: "type"
+    })),
+    ...javaMethods
+  ]);
+
+  // 🔥 5️⃣ Cấu hình CodeMirror với Java Autocompletion nâng cao
+  const codeMirrorExtensions = [
+    java(),
+    oneDark,
+    autocompletion({ override: [javaCompletion] }),
+    keymap.of([
+      { key: "Ctrl-Space", run: autocompletion() } // Nhấn Ctrl + Space để gợi ý code
+    ])
+  ];
+
+  const view = shallowRef();
+  const handleReady = (payload) => {
+    view.value = payload.view;
+  };
+
+  return {
+    extensions: codeMirrorExtensions,
+    handleReady,
+  };
+
+
+
+
     // const questions = questions;
     //cach khac set bien
     //const questions = ref(null);
@@ -234,24 +305,24 @@ export default {
     //   setCodeString();
     // });
 
-    const extensions = [
-      java(),
-      oneDark,
-      autocompletion(),
-      keymap.of([
-        { key: "Ctrl-Space", run: completeFromList }
-      ])
-    ];
+    // const extensions = [
+    //   java(),
+    //   oneDark,
+    //   autocompletion(),
+    //   keymap.of([
+    //     { key: "Ctrl-Space", run: completeFromList }
+    //   ])
+    // ];
 
-    const view = shallowRef();
-    const handleReady = (payload) => {
-      view.value = payload.view;
-    };
+    // const view = shallowRef();
+    // const handleReady = (payload) => {
+    //   view.value = payload.view;
+    // };
 
-    return {
-      extensions,
-      handleReady,
-    };
+    // return {
+    //   extensions,
+    //   handleReady,
+    // };
   },
 
   computed: {

@@ -26,7 +26,7 @@ public class BankQuestionJavaCore implements Serializable {
     @Column(nullable = false, columnDefinition = "longtext")
     private String codeSample;
 
-    @Column(nullable = false, columnDefinition = "longtext")
+    @Column(nullable = true, columnDefinition = "longtext")
     private String codeRunToOutput;
 
     //mapping
@@ -52,5 +52,37 @@ public class BankQuestionJavaCore implements Serializable {
 
     public void setQuestionJavaCoreExams(List<QuestionJavaCoreExam> questionJavaCoreExams) {
         this.questionJavaCoreExams = questionJavaCoreExams;
+    }
+
+    public String getContentQuestion() {
+        return contentQuestion;
+    }
+
+    public void setContentQuestion(String contentQuestion) {
+        this.contentQuestion = contentQuestion;
+    }
+
+    public String getCodeSample() {
+        return codeSample;
+    }
+
+    public void setCodeSample(String codeSample) {
+        this.codeSample = codeSample;
+    }
+
+    public String getCodeRunToOutput() {
+        return codeRunToOutput;
+    }
+
+    public void setCodeRunToOutput(String codeRunToOutput) {
+        this.codeRunToOutput = codeRunToOutput;
+    }
+
+    public List<BankTestCaseJavaCore> getBankTestCaseJavaCores() {
+        return bankTestCaseJavaCores;
+    }
+
+    public void setBankTestCaseJavaCores(List<BankTestCaseJavaCore> bankTestCaseJavaCores) {
+        this.bankTestCaseJavaCores = bankTestCaseJavaCores;
     }
 }

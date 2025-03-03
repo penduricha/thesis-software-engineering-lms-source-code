@@ -54,6 +54,7 @@ export default {
 
       //content
       contentQuestion: null,
+      score: null,
 
       //timer
       // Khởi tạo thời gian còn lại
@@ -74,6 +75,7 @@ export default {
   mounted() {
     this.checkTimeLeft();
     this.setDuration();
+    //this.clickButtonSubmit();
   },
 
   beforeDestroy() {
@@ -106,8 +108,9 @@ export default {
       if(studentID) {
         if (this.questionInit) {
             this.testCasesInit = await QuestionJavaCoreDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
-            console.log("Test case: ", this.testCasesInit);
+            //console.log("Test case: ", this.testCasesInit);
             this.contentQuestion = this.questionInit.contentQuestion;
+            this.score = this.questionInit.score;
             let codeGet = await CodeStorageDao
                 .get_Code_By_IndexQuestion_StudentID(studentID, Number(this.indexQuestion));
             if (codeGet) {
@@ -167,6 +170,7 @@ export default {
           // Xóa thời gian khi đã hết
           localStorage.removeItem('timeLeft');
         }
+        this.clickButtonSubmit();
       }, 1000);
     },
 
@@ -180,6 +184,7 @@ export default {
             .getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
         console.log("Test case: ", this.testCasesInit);
         this.contentQuestion = this.questionInit.contentQuestion;
+        this.score = this.questionInit.score;
         let codeGet = await CodeStorageDao
             .get_Code_By_IndexQuestion_StudentID(this.studentID, this.indexQuestion);
         if (codeGet) {
@@ -193,6 +198,13 @@ export default {
     handlePaste(event) {
       event.preventDefault();
       // Prevent paste action
+    },
+
+    clickButtonSubmit() {
+      //thoi gian ket thuc
+      if(this.timeLeft === 0 || this.duration <= 0) {
+        this.$refs.submitButton.click();
+      }
     },
 
     handleSubmit_And_Notification_Mark() {
@@ -240,28 +252,6 @@ export default {
   },
 
   setup() {
-    // const questions = questions;
-    //cach khac set bien
-    //const questions = ref(null);
-    //const code= ref(null);
-
-
-    //set code auto
-    // const codeJava = new CodeJava();
-    // const setCodeString = () =>{
-    //   code.value = codeJava.getCodeJava_ToDemo();
-    // }
-
-
-    // const setData_Components = () => {
-    //   questions.value = questionsList;
-    // }
-
-    // onMounted(() => {
-    //   setData_Components();
-    //   setCodeString();
-    // });
-
     const extensions = [
       java(),
       oneDark,
@@ -327,6 +317,7 @@ export default {
                 {{index + 1}}
               </button>
               <button class="button-number-question button-submit"
+                      ref="submitButton"
                       @click = "handleSubmit_And_Notification_Mark()"
                       data-bs-toggle="modal"
                       data-bs-target="#modal-notification-mark"
@@ -344,7 +335,7 @@ export default {
       </header>
       <div class="style-main">
         <section class="section-exam">
-          <p class="text-exam">{{contentQuestion}}</p>
+          <p class="text-exam">Score: {{score}}<br>{{contentQuestion}}</p>
           <table class="table table-striped" v-if="testCasesInit.length > 0">
             <thead>
             <tr>
@@ -397,7 +388,7 @@ export default {
       </div>
     </div>
 
-  <modal-notification-after-submit  :exam-i-d="examID"/>
+  <modal-notification-after-submit  :exam-i-d="examID" :timer="timer"/>
 </template>
 
 <style scoped lang="scss">

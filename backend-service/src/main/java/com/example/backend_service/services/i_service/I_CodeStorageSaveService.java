@@ -10,4 +10,6 @@ public interface I_CodeStorageSaveService {
     public String getCodeSave_By_StudentID_IndexQuestion (String studentID, int indexQuestion);
 
     public Map<String, Object> findCodeStorageBy_StudentID_IndexQuestion (String studentID, int indexQuestion);
+
+    public String delete_CodeStorageBy_StudentID(String studentID);
 }

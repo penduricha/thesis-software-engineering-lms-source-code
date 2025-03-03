@@ -67,6 +67,8 @@ public class ExamService implements I_ExamService {
                     QuestionJavaCoreExam questionJavaCoreExam = new QuestionJavaCoreExam();
                     questionJavaCoreExam.setContentQuestion(contentQuestion);
                     questionJavaCoreExam.setCodeSample(codeSample);
+                    //set điểm
+                    questionJavaCoreExam.setScore(1);
 
                     exam.getQuestionJavaCoreExams().add(questionJavaCoreExam);
                     questionJavaCoreExam.setExam(exam);
@@ -233,5 +235,19 @@ public class ExamService implements I_ExamService {
                 .collect(Collectors.toList());
     }
 
-
+    @Override
+    public Map<String, Object> get_Status_Retake_And_Scoring_Method_By_ExamID(Long examID)
+            throws JpaSystemException {
+        Exam examFound = findExam_By_ExamID(examID);
+        if(examFound !=null) {
+            Map<String, Object> queryMap = examRepository
+                    .get_Status_Retake_And_Scoring_Method_By_ExamID(examFound.getExamID());
+            Map<String, Object> returnMap = new HashMap<>();
+            returnMap.put("examID", queryMap.get("exam_id"));
+            returnMap.put("retakeExam", queryMap.get("retake_exam"));
+            returnMap.put("scoringMethod", queryMap.get("scoring_method"));
+            return returnMap;
+        }
+        return new HashMap<>();
+    }
 }

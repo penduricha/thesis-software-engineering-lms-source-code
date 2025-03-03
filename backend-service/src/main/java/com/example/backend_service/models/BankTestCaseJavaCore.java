@@ -59,4 +59,28 @@ public class BankTestCaseJavaCore implements Serializable {
     public String getNote() {
         return note;
     }
+
+    public void setBankTestCaseID(Long bankTestCaseID) {
+        this.bankTestCaseID = bankTestCaseID;
+    }
+
+    public void setInputTest(String inputTest) {
+        this.inputTest = inputTest;
+    }
+
+    public void setOutputExpect(String outputExpect) {
+        this.outputExpect = outputExpect;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public BankQuestionJavaCore getBankQuestionJavaCore() {
+        return bankQuestionJavaCore;
+    }
+
+    public void setBankQuestionJavaCore(BankQuestionJavaCore bankQuestionJavaCore) {
+        this.bankQuestionJavaCore = bankQuestionJavaCore;
+    }
 }

@@ -126,7 +126,7 @@ export default {
             path: path,
             query: {
               examID: this.examID,
-              duration: this.duration
+              duration: 1
             }
           }).catch((error) => {
             console.error('Error navigating :', error);
@@ -199,7 +199,7 @@ export default {
           <label><span>Created by: {{ nameLecture }}</span></label>
           <label><span>Retake: {{ retake }}</span></label>
           <label v-if="scoringMethod"><span>Scoring method: {{ scoringMethod }}</span></label>
-          <label><span>Questions: {{ this.numberQuestions }}</span></label>
+          <label><span>Questions: {{ numberQuestions }}</span></label>
           <label><span>Time: {{ duration }} minutes</span> </label>
           <label><span class="text-danger">Deadline: {{ endDate }}</span></label>
           <label v-if="linkPaperExam"><span>Link paper exam: {{ linkPaperExam }}</span></label>
@@ -218,6 +218,23 @@ export default {
                 class="span-validate-modal-form"
             >{{ validatePasswordExam }}</span>
           </div>
+          <table class="table table-striped" v-if="retake === 'Yes'">
+            <thead>
+            <tr>
+              <th>Index</th>
+              <th>Date submit</th>
+              <th>Mark</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>1</td>
+              <td>10/3/2025 10:00</td>
+              <td>6.00</td>
+            </tr>
+            <!-- Thêm các hàng khác nếu cần -->
+            </tbody>
+          </table>
 
           <button class="btn-do-exam"
                   type="submit"

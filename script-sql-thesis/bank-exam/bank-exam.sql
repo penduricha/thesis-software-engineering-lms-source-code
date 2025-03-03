@@ -14,6 +14,10 @@ where bq.question_java_core_id = 1;
 
 # update bank_test_case_java_core
 # set input_test = '4.5 15.5' where bank_test_case_id = 336;
-select * from bank_test_case_java_core where
-input_test = '2-Jan';
+select * from bank_question_java_core
+where question_java_core_id = 19;
+
+select *
+from bank_test_case_java_core
+where question_java_core_id = 20;
 

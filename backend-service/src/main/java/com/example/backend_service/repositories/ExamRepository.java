@@ -49,4 +49,11 @@ public interface ExamRepository extends JpaRepository<Exam,Long> {
     List<Map<String, Object>> getExams_Calendar_Lecture_By_StartDate(
             @Param("lectureID") String lectureId,
             @Param("startDate") String startDate);
+
+    @Query(value = """
+            select exam_id, retake_exam, scoring_method
+            from exam where exam_id = :examID;
+            """,
+            nativeQuery = true)
+    Map<String, Object> get_Status_Retake_And_Scoring_Method_By_ExamID(@Param("examID") Long examID);
 }

@@ -137,4 +137,11 @@ public class StudentController {
             throws HttpClientErrorException{
         return ResponseEntity.ok(studentService.get_Information_Student_Do_Exam(studentID));
     }
+
+    @DeleteMapping("/student/delete-code-storage_by-student-id/{studentID}")
+    public ResponseEntity<String>
+        delete_Code_Storage_By_StudentID(@PathVariable String studentID)
+            throws HttpClientErrorException{
+        return ResponseEntity.ok(codeStorageSaveService.delete_CodeStorageBy_StudentID(studentID));
+    }
 }

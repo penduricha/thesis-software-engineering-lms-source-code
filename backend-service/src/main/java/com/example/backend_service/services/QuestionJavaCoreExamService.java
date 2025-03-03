@@ -34,17 +34,20 @@ public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamServic
     }
 
     @Override
-    public List<Map<String, Object>> getQuestionJavaCoreExam_By_ExamID_To_Student_Exam(Long examID) throws JpaSystemException {
-        List<Map<String, Object>> questionsQuery = questionJavaCoreExamRepository.findQuestionJavaCoreExamsByExam_ExamID_Map(examID);
+    public List<Map<String, Object>> getQuestionJavaCoreExam_By_ExamID_To_Student_Exam(Long examID)
+            throws JpaSystemException {
+        List<Map<String, Object>> questionsQuery =
+                questionJavaCoreExamRepository.findQuestionJavaCoreExamsByExam_ExamID_Map(examID);
         if(questionsQuery != null) {
             //Collections.shuffle(questionsQuery);
-//            List<Map<String, Object>> questionsReturn
+            //List<Map<String, Object>> questionsReturn
             return questionsQuery.stream()
                     .map(originalMap -> {
                         Map<String, Object> newMap = new HashMap<>();
                         newMap.put("questionJavaCoreExamID", originalMap.get("question_java_core_exam_id"));
                         newMap.put("codeSample", originalMap.get("code_sample"));
                         newMap.put("contentQuestion", originalMap.get("content_question"));
+                        newMap.put("score", originalMap.get("score"));
                         return newMap;
                     })
                     .collect(Collectors.toList());

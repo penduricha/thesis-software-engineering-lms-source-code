@@ -13,4 +13,10 @@ export default class CodeStorageService {
             .getAPIClient()
             .get(`/student/get_code_by_studentID_indexQuestion/${studentID}/${indexQuestion}`);
     }
+
+    static delete_Code_Storage_By_StudentID ( studentID ){
+        return axiosConfig
+            .getAPIClient()
+            .delete(`/student/delete-code-storage_by-student-id/${studentID}`);
+    }
 }

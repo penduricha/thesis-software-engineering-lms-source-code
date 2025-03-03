@@ -402,7 +402,15 @@ export default {
 
   },
 
-  computed: {}
+  computed: {
+    setActiveButtonNavListExam() {
+      if(this.getRoute().includes("/main-page/list-courses/course-manage")){
+        return "button-nav-course-active";
+      } else {
+        return null;
+      }
+    }
+  }
 }
 </script>
 
@@ -436,7 +444,9 @@ export default {
       </div>
       <!--      Menu nav-->
       <div class="nav-style-in-course">
-        <button class="button-nav-in-course button-nav-course-active">List exams</button>
+        <button class="button-nav-in-course"
+                :class="['active-button', setActiveButtonNavListExam]"
+        >List exams</button>
         <button class="button-nav-in-course">Student Grades List</button>
         <button class="button-nav-in-course">Statistic</button>
       </div>

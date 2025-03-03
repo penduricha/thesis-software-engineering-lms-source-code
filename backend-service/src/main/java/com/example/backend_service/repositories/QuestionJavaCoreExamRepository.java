@@ -17,7 +17,8 @@ public interface QuestionJavaCoreExamRepository extends JpaRepository<QuestionJa
     @Query(value = """
                     select question_java_core_exam_id,
                            code_sample,
-                           content_question
+                           content_question,
+                            score
                     from question_java_core_exam where exam_id = :examID;
                     """, nativeQuery = true)
     List<Map<String, Object>>  findQuestionJavaCoreExamsByExam_ExamID_Map(@Param("examID") Long examID);

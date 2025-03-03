@@ -19,4 +19,6 @@ public interface BankTestCaseJavaCoreRepository extends JpaRepository<BankTestCa
                     where q.question_java_core_exam_id = :questionJavaCoreExamID;
                     """, nativeQuery = true)
     List<Map<String, Object>> getTestCases_By_QuestionJavaCoreExamID(@Param("questionJavaCoreExamID") Long questionJavaCoreExamID);
+
+
 }

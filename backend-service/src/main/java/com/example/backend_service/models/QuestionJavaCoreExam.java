@@ -27,6 +27,17 @@ public class QuestionJavaCoreExam implements Serializable {
     @Column(nullable = false, columnDefinition = "longtext")
     private String codeSample;
 
+    @Column(nullable = false)
+    private double score;
+
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
+
     //map với exam
     @ManyToOne
     @JoinColumn(name = "exam_id")

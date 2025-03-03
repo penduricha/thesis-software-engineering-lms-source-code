@@ -24,4 +24,14 @@ export default class CodeStorageDao {
         })
         return codeGet;
     }
+
+    static async delete_Code_Storage_By_StudentID ( studentID ) {
+        let responseReturn = null;
+        await CodeStorageService.delete_Code_Storage_By_StudentID(studentID).then(response => {
+            responseReturn = response.data;
+        }).catch(error => {
+            console.error(error);
+        })
+        return Number(responseReturn) === Number(studentID);
+    }
 }

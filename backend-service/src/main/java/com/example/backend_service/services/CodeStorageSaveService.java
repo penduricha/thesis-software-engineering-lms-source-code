@@ -34,7 +34,8 @@ public class CodeStorageSaveService implements I_CodeStorageSaveService {
     @Override
     @Transactional
     //annotation nay tao luong sql query
-    public CodeStorageSave saveCode(CodeStorageSave codeStorageSave, String studentID) throws JpaSystemException {
+    public CodeStorageSave saveCode(CodeStorageSave codeStorageSave, String studentID)
+            throws JpaSystemException {
         Student student = studentRepository.findStudentByStudentID(studentID);
         if (student == null) {
             throw new EntityNotFoundException("Student not found with ID: " + studentID);
@@ -55,16 +56,15 @@ public class CodeStorageSaveService implements I_CodeStorageSaveService {
                     .setParameter("studentID", studentID)
                     .setParameter("indexQuestionSave", codeStorageSave.getIndexQuestionSave())
                     .executeUpdate();
-
-            // Optionally, you might want to return the updated code storage or some confirmation
-            // or retrieve the updated entity if needed
             return codeStorageSave;
         }
     }
 
     @Override
-    public String getCodeSave_By_StudentID_IndexQuestion(String studentID, int indexQuestion) throws JpaSystemException {
-        return codeStorageServiceRepository.getCodeSave_By_StudentID_IndexQuestion(studentID, indexQuestion);
+    public String getCodeSave_By_StudentID_IndexQuestion(String studentID, int indexQuestion)
+            throws JpaSystemException {
+        return codeStorageServiceRepository
+                .getCodeSave_By_StudentID_IndexQuestion(studentID, indexQuestion);
     }
 
     @Override
@@ -81,5 +81,19 @@ public class CodeStorageSaveService implements I_CodeStorageSaveService {
             return returnMap;
         }
         return new HashMap<>();
+    }
+
+    @Override
+    @Transactional
+    public String delete_CodeStorageBy_StudentID(String studentID) throws JpaSystemException {
+        Student student = studentRepository.findStudentByStudentID(studentID);
+        if(student !=null) {
+            String sqlDelete = "delete from code_storage_save where student_id = :studentID;";
+            entityManager.createNativeQuery(sqlDelete)
+                    .setParameter("studentID", student.getStudentID())
+                    .executeUpdate();
+            return student.getStudentID();
+        }
+        return null;
     }
 }

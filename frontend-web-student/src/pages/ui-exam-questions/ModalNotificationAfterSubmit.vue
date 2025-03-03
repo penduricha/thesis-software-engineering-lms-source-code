@@ -5,6 +5,7 @@ import RouterDao from "@/routes/RoutersDao.js";
 import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import ExamDao from "@/daos/ExamDao.js";
 import StudentDao from "@/daos/StudentDao.js";
+import CodeStorageDao from "@/daos/CodeStorageDao.js";
 
 export default {
   name: "ModalNotificationAfterSubmit",
@@ -12,6 +13,10 @@ export default {
   props: {
     examID : {
       type: Number,
+      required: true,
+    },
+
+    timer: {
       required: true,
     }
   },
@@ -36,13 +41,22 @@ export default {
       routerDao.savePath_To_LocalStorage(path);
     },
 
+    async submit_Transaction_And_Get_Mark() {
+
+    },
+
     async navigateTo_MainPage() {
+      clearInterval(this.timer);
+      // Xóa thời gian khi đã hết
+      localStorage.removeItem('timeLeft');
       const studentLocalStorage  = new StudentLocalStorage();
+
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
       let status = await ExamDao.delete_Access_Exam(studentID, this.examID);
-      console.log("status: ",status);
+
       let statusResetDate = await StudentDao.reset_Date_Time_Start_Exam(studentID);
-      if(!status || !statusResetDate) {
+      let statusDeleteCodeStorage = await CodeStorageDao.delete_Code_Storage_By_StudentID(studentID);
+      if(!status || !statusResetDate || !statusDeleteCodeStorage) {
         alert("Can't return page because error system.");
       } else {
         window.location.reload();

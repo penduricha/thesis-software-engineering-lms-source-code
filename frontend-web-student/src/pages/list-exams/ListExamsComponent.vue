@@ -84,16 +84,29 @@ export default {
         const path = '/main-page/list-exams-page/exam-open/java-core-exam';
         sessionStorage.setItem('indexQuestion', 0);
         window.location.reload();
-        this.$router.replace({
-          path: path,
-          query: {
-            examID: informationDoExam.examID,
-            duration: Number(informationDoExam.remainMinutes)
-          }
-        }).catch((error) => {
-          console.error('Error navigating :', error);
-          alert(error);
-        });
+        if(Number(informationDoExam.remainMinutes) <=0) {
+          this.$router.replace({
+            path: path,
+            query: {
+              examID: informationDoExam.examID,
+              duration: 0,
+            }
+          }).catch((error) => {
+            console.error('Error navigating :', error);
+            alert(error);
+          });
+        } else {
+          this.$router.replace({
+            path: path,
+            query: {
+              examID: informationDoExam.examID,
+              duration: Number(informationDoExam.remainMinutes)
+            }
+          }).catch((error) => {
+            console.error('Error navigating :', error);
+            alert(error);
+          });
+        }
       }
     },
 

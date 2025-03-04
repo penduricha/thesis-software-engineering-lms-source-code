@@ -63,6 +63,10 @@ export default {
 
       //code to submit
       code: null,
+
+      //code saved
+      codeSaved: [],
+      indexQuestionSaved: [],
     }
   },
 
@@ -97,6 +101,11 @@ export default {
       const routerDao = new RouterDao();
       routerDao.savePath_To_SessionStorage(route);
       this.indexQuestion = Number(sessionStorage.getItem("indexQuestion"));
+      const savedTime = localStorage.getItem('timeLeft');
+      if(savedTime) {
+        localStorage.removeItem("timeLeft");
+      }
+
     },
 
     async setQuestion_By_ExamID() {
@@ -111,6 +120,13 @@ export default {
             //console.log("Test case: ", this.testCasesInit);
             this.contentQuestion = this.questionInit.contentQuestion;
             this.score = this.questionInit.score;
+            //get code da save
+            this.codeSaved = await CodeStorageDao.get_Code_Saved_By_StudentID(studentID);
+            if(this.codeSaved.length > 0) {
+              this.indexQuestionSaved = this.codeSaved.map(c => c.indexQuestion);
+              console.log("Index question saved: ", this.indexQuestionSaved);
+            }
+            console.log("Code saved: ", this.codeSaved);
             let codeGet = await CodeStorageDao
                 .get_Code_By_IndexQuestion_StudentID(studentID, Number(this.indexQuestion));
             if (codeGet) {
@@ -176,6 +192,8 @@ export default {
 
     async handleButtonQuestion(q, index) {
       //other method
+      //save truoc
+      //this.$refs.saveCode.click();
       sessionStorage.setItem('indexQuestion', index);
       this.indexQuestion = Number(sessionStorage.getItem('indexQuestion'));
       this.questionInit = q;
@@ -191,6 +209,14 @@ export default {
           this.code = codeGet;
         } else {
           this.code = this.questionInit.codeSample;
+        }
+        //fetch lai khi da saved
+        const studentLocalStorage  = new StudentLocalStorage();
+        let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
+        this.codeSaved = await CodeStorageDao.get_Code_Saved_By_StudentID(studentID);
+        if(this.codeSaved.length > 0) {
+          this.indexQuestionSaved = this.codeSaved.map(c => c.indexQuestion);
+          console.log("Index question saved: ", this.indexQuestionSaved);
         }
       }
     },
@@ -208,7 +234,24 @@ export default {
     },
 
     handleSubmit_And_Notification_Mark() {
+      const studentLocalStorage  = new StudentLocalStorage();
+      let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
+      let answerQuestions = this.questions.map(question => {
+        const codeSavedItem = this.codeSaved
+            .find(item => item.indexQuestion === this.questions.indexOf(question));
+        return {
+          questionJavaCoreID: question.questionJavaCoreExamID,
+          // Nếu không có mã code thì dùng codeSample
+          codeStudentSubmitted: codeSavedItem ? codeSavedItem.codeSave : question.codeSample
+        };
+      });
 
+      const dataToSubmit = {
+        studentID: studentID,
+        examID: Number(this.examID),
+        answerQuestions: answerQuestions === null ? [] : answerQuestions,
+      }
+      console.log("Data to submit: ", dataToSubmit);
     },
 
     async handleSave() {
@@ -242,7 +285,16 @@ export default {
               .get_Code_By_IndexQuestion_StudentID(this.studentID, this.indexQuestion);
           console.log("Code get: ", codeGet);
           this.code = codeGet;
+          //window.location.reload();
         }
+      }
+      //fetch lai khi da saved
+      const studentLocalStorage  = new StudentLocalStorage();
+      let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
+      this.codeSaved = await CodeStorageDao.get_Code_Saved_By_StudentID(studentID);
+      if(this.codeSaved.length > 0) {
+        this.indexQuestionSaved = this.codeSaved.map(c => c.indexQuestion);
+        console.log("Index question saved: ", this.indexQuestionSaved);
       }
     },
 
@@ -288,6 +340,14 @@ export default {
       };
     },
 
+    setButtonColorSavedCode() {
+      return (index) => {
+        return (this.indexQuestionSaved.includes(index))
+            ? 'button-number-question-done'
+            : 'button-number-question-no-done';
+      };
+    },
+
     // Tính toán thời gian còn lại
     formattedTime() {
       const minutes = Math.floor(this.timeLeft / 60);
@@ -307,15 +367,17 @@ export default {
             <span class="span-questions">Questions:</span>
             <div class="view-list-questions">
               <!--              button-number-question-done-->
-              <button class="button-number-question
-                button-number-question-no-done"
+              <button class="button-number-question"
                       v-for="(q, index) in questions"
                       @click="handleButtonQuestion(q, index)"
-                      :class="['border-color-button-choose',
-                        setBorderColorChoose(index)]"
+                      :class="[
+                        'border-color-button-choose', setBorderColorChoose(index),
+                        'button-color-saved', setButtonColorSavedCode(index)
+                      ]"
               >
                 {{index + 1}}
               </button>
+              <!--              Nếu dùng nhiều hàm scss-->
               <button class="button-number-question button-submit"
                       ref="submitButton"
                       @click = "handleSubmit_And_Notification_Mark()"
@@ -359,6 +421,7 @@ export default {
         <section class="section-code-editor">
           <div class="view-button-text-editor">
             <button
+                ref="saveCode"
                 class="button-text-editor"
                 @click="handleSave()"
             >Save all

@@ -67,7 +67,7 @@ export default {
       this.typeExam = exam.typeExam;
       this.topicExam = exam.topicExam;
       this.nameLecture = exam.name;
-      this.retake = exam.retake ? "Yes" : "No";
+      this.retake = exam.retakeExam ? "Yes" : "No";
       this.scoringMethod = exam.scoringMethod;
       this.numberQuestions = exam.numberQuestions;
       this.duration = exam.duration;
@@ -77,27 +77,6 @@ export default {
       this.linkPaperExam = exam.linkPaperExam;
       this.passwordExamHashed = exam.passwordExam;
     },
-
-    // async setExam_Information_From_AsideAccount(examID, courseID) {
-    //   console.log("Exam ID: ", examID);
-    //   console.log("Course ID: ", courseID);
-    //   let exam = await ExamDao.getExam_Information_Before_Exam(examID, courseID);
-    //   console.log("Information exam: ", exam);
-    //   this.examID = exam.examID;
-    //   this.titleExam = exam.titleExam;
-    //   this.typeExam = exam.typeExam;
-    //   this.topicExam = exam.topicExam;
-    //   this.nameLecture = exam.name;
-    //   this.retake = exam.retake ? "Yes" : "No";
-    //   this.scoringMethod = exam.scoringMethod;
-    //   this.numberQuestions = exam.numberQuestions;
-    //   this.duration = exam.duration;
-    //   const endDate = new Date(exam.endDate);
-    //   this.endDate = endDate.getDate() + "/" + (endDate.getMonth() + 1) + "/" + endDate.getFullYear()
-    //       + " " + endDate.getHours() + ":" + (endDate.getMinutes() < 10 ? `0${endDate.getMinutes()}` : endDate.getMinutes());
-    //   this.linkPaperExam = exam.linkPaperExam;
-    //   this.passwordExamHashed = exam.passwordExam;
-    // },
 
     preventPaste(event) {
       event.preventDefault();
@@ -126,7 +105,7 @@ export default {
             path: path,
             query: {
               examID: this.examID,
-              duration: 1
+              duration: this.duration
             }
           }).catch((error) => {
             console.error('Error navigating :', error);
@@ -218,12 +197,14 @@ export default {
                 class="span-validate-modal-form"
             >{{ validatePasswordExam }}</span>
           </div>
+          <h5 v-if="retake === 'Yes'"><span>Time retakes:</span> </h5>
           <table class="table table-striped" v-if="retake === 'Yes'">
             <thead>
             <tr>
               <th>Index</th>
               <th>Date submit</th>
               <th>Mark</th>
+              <th>View</th>
             </tr>
             </thead>
             <tbody>
@@ -231,6 +212,7 @@ export default {
               <td>1</td>
               <td>10/3/2025 10:00</td>
               <td>6.00</td>
+              <td><button class="button-view-exam">View</button></td>
             </tr>
             <!-- Thêm các hàng khác nếu cần -->
             </tbody>

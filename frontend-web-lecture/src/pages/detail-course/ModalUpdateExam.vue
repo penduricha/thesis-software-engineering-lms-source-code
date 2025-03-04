@@ -84,9 +84,6 @@ export default {
 
     async setExam(examIDToUpdate) {
       this.examIDToUpdate = examIDToUpdate;
-      // console.log("Exam ID to update: ",this.examIDToUpdate);
-      // console.log("Course ID to update: ",this.courseIDToUpdate);
-
       let exam = await ExamDao.getExam_By_CourseID_ExamID(examIDToUpdate, this.courseIDToUpdate);
       console.log(exam);
       const manageDateTime = new ManageDateTime();
@@ -94,7 +91,7 @@ export default {
         this.titleExam = exam.titleExam;
         this.typeExam = exam.typeExam;
         this.topicExam = exam.topicExam;
-        this.retake = exam.retake ? "Yes" : "No";
+        this.retake = exam.retakeExam ? "Yes" : "No";
         this.scoringMethod = exam.scoringMethod;
         this.duration = exam.duration;
         this.startDate = manageDateTime.formatDateTime(new Date(exam.startDate));

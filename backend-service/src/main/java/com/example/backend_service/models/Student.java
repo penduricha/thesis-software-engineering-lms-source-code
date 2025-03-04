@@ -44,6 +44,34 @@ public class Student implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateTimeStartExam;
 
+    public List<MarkStudent> getMarkStudentList() {
+        return markStudentList;
+    }
+
+    public void setMarkStudentList(List<MarkStudent> markStudentList) {
+        this.markStudentList = markStudentList;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setGender(boolean gender) {
+        this.gender = gender;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setStudentID(String studentID) {
+        this.studentID = studentID;
+    }
+
     public LocalDateTime getDateTimeStartExam() {
         return dateTimeStartExam;
     }

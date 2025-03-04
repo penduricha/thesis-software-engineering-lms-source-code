@@ -14,7 +14,9 @@ import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class CodeStorageSaveService implements I_CodeStorageSaveService {
@@ -93,6 +95,22 @@ public class CodeStorageSaveService implements I_CodeStorageSaveService {
                     .setParameter("studentID", student.getStudentID())
                     .executeUpdate();
             return student.getStudentID();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Map<String, Object>> get_Code_Storage_Saved_By_Student_ID(String studentID) {
+        Student student = studentRepository.findStudentByStudentID(studentID);
+        if(student !=null) {
+            return codeStorageServiceRepository.get_Code_Storage_Saved_By_Student_ID(studentID).stream()
+                    .map(originalMap -> {
+                        Map<String, Object> newMap = new HashMap<>();
+                        newMap.put("indexQuestion", originalMap.get("index_question_save"));
+                        newMap.put("codeSave", originalMap.get("code_save"));
+                        return newMap;
+                    })
+                    .collect(Collectors.toList());
         }
         return null;
     }

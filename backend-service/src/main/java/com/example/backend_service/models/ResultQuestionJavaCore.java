@@ -27,7 +27,6 @@ public class ResultQuestionJavaCore implements Serializable {
     @Column(columnDefinition = "longtext")
     private String outputCodeStudent;
 
-    private double score;
 
     @ManyToOne
     @JoinColumn(name = "detail_mark_student_id")

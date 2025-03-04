@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        const inputString = `hello public static void main(String[] args) { int a= 5; } hekhlifhlwe`;
+
+        // Sử dụng Regular Expression để cắt chuỗi
+        const result = inputString.match(/(public.*?\})/)[0];
+
+        console.log(result);
+    </script>
+</body>
+</html>

@@ -144,4 +144,10 @@ public class StudentController {
             throws HttpClientErrorException{
         return ResponseEntity.ok(codeStorageSaveService.delete_CodeStorageBy_StudentID(studentID));
     }
+
+    @GetMapping("/student/get_code_saved_by_student_id/{studentID}")
+    public ResponseEntity<List<Map<String, Object>>> get_Code_Storage_Saved_By_Student_ID(@PathVariable String studentID)
+            throws HttpClientErrorException{
+        return ResponseEntity.ok(codeStorageSaveService.get_Code_Storage_Saved_By_Student_ID(studentID));
+    }
 }

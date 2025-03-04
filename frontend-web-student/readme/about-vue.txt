@@ -21,6 +21,8 @@ trong project, config vite 6.0.7
 Type cmd
 Bước 2
 npm install
+npm install vue-codemirror @codemirror/theme-one-dark @codemirror/lang-java @codemirror/view @codemirror/autocomplete
+
 npm run build
 
 Bước 3

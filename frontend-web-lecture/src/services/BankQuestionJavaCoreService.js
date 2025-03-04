@@ -26,6 +26,13 @@ export default class BankQuestionJavaCoreService {
     static delete_Question_JavaCore( questionJavaCoreID ) {
         return axiosConfig
             .getAPIClient()
-            .delete(`/bank-question-java-core/get-test-cases-by-question-java-core-id/${questionJavaCoreID}`);
+            .delete(
+                `/bank-question-java-core/delete-create-question-and-test-cases-by-question-java-core-id/${questionJavaCoreID}`);
+    }
+
+    static fetch_Test_Cases_By_Question_JavaCore_ID( questionJavaCoreID ){
+        return axiosConfig
+            .getAPIClient()
+            .get(`/bank-question-java-core/get-test-cases-by-question-java-core-id/${questionJavaCoreID}`);
     }
 }

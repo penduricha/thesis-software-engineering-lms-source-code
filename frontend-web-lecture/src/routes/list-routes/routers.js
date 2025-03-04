@@ -8,7 +8,7 @@ const routers = [
     { path: '/', component: LoginPage },
     { path: '/login-page', component: LoginPage },
     { path: '/main-page/list-courses', component: ListCourses },
-    { path: '/main-page/bank-exams', component: BankExam },
+    { path: '/main-page/bank-exams/java-core', component: BankExam },
     { path: '/main-page/list-courses/course-manage',
         component: CourseManage,
         props: (route) => ({ courseID: route.query.courseID })

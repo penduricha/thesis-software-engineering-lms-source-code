@@ -14,6 +14,18 @@ export default class BankQuestionJavaCoreDao {
         return bankQuestionsJavaCore;
     }
 
+    static async get_Test_Cases_By_Question_JavaCore_ID( questionJavaCoreID ) {
+        let testCases = [];
+        await BankQuestionJavaCoreService.fetch_Test_Cases_By_Question_JavaCore_ID(questionJavaCoreID)
+            .then(response => {
+                testCases = response.data;
+            }).catch(error => {
+                console.error(error);
+                //alert(error)
+            })
+        return testCases;
+    }
+
     static async create_Question_JavaCore( dataQuestionPost ) {
         let status = false;
         let responseReturn = null;

@@ -115,7 +115,9 @@ public class ExamService implements I_ExamService {
                 // Kiểm tra trạng thái
                 if (now.isBefore(startDate)) {
                     convertedMap.put("status", "Locked");
-                } else if (now.isAfter(endDate)) {
+                }
+                //if neu hoan thanh
+                else if (now.isAfter(endDate)) {
                     convertedMap.put("status", "Overdue");
                 } else {
                     convertedMap.put("status", "Open");

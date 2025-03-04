@@ -88,6 +88,18 @@
   }
 }
 
+.button-color-saved {
+  &.button-number-question-done{
+    background-color: var(--purple-iuh);
+    color: var(--white);
+  }
+
+  &.button-number-question-no-done {
+    background-color: var(--grey);
+    color: var(--black);
+  }
+}
+
 .button-submit{
   width: 9rem;
   background-color: var(--purple-iuh);

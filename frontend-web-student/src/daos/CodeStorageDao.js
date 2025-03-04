@@ -34,4 +34,14 @@ export default class CodeStorageDao {
         })
         return Number(responseReturn) === Number(studentID);
     }
+
+    static async get_Code_Saved_By_StudentID( studentID ) {
+        let codeSaved = [];
+        await CodeStorageService.fetch_Code_Saved_By_StudentID(studentID).then(response => {
+            codeSaved = response.data;
+        }).catch(error => {
+            console.error(error);
+        })
+        return codeSaved;
+    }
 }

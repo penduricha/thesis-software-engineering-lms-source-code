@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Map;
 
 public interface CodeStorageServiceRepository extends JpaRepository<CodeStorageSave,Long> {
@@ -29,4 +30,11 @@ public interface CodeStorageServiceRepository extends JpaRepository<CodeStorageS
             nativeQuery = true)
     Map<String, Object> findCodeStorageBy_StudentID_IndexQuestion
             (@Param("studentID") String studentID,@Param("indexQuestion") int indexQuestion);
+
+    @Query(value = """
+            select code_save, index_question_save
+            from code_storage_save where student_id  = :studentID;
+            """,
+            nativeQuery = true)
+    public List<Map<String, Object>> get_Code_Storage_Saved_By_Student_ID(@Param("studentID") String studentID);
 }

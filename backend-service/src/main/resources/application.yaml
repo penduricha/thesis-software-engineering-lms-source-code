@@ -20,6 +20,16 @@ spring:
     hibernate:
       ddl-auto: update
 
+  ai:
+    openai:
+      api-key: "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"
+
+#  openai:
+#    api:
+#      key: "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"
+#      url: "https://api.openai.com/v1/chat/completions"
+
+
 #  session:
 #    store-type: jdbc
 #    jdbc:

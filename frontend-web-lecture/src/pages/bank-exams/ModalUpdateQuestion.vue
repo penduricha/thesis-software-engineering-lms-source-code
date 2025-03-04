@@ -1,0 +1,365 @@
+<script>
+import {SessionStorageTestCase} from "@/pages/bank-exams/SessionStorageTestCase.js";
+import {Codemirror} from "vue-codemirror";
+import {shallowRef} from "vue";
+import {oneDark} from "@codemirror/theme-one-dark";
+import {java,} from "@codemirror/lang-java";
+
+import {keymap} from "@codemirror/view";
+import {autocompletion, completeFromList} from "@codemirror/autocomplete";
+import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
+export default {
+  name: "ModalUpdateQuestion",
+  components: {Codemirror},
+
+  mounted() {
+    //this.setInputContent();
+    //this.setInputCodeSample();
+  },
+
+  data() {
+    return {
+      content: null,
+      codeSample: null,
+
+      codeRunToOutput: null,
+      input: null,
+      output: null,
+      note: "",
+
+      validationInput: null,
+      validationOutput: null,
+      validationCodeRunToOutput: null,
+
+      validationContent: null,
+      validationCodeSample: null,
+
+      validationNullTestCases: null,
+
+      listTestCases: [],
+    }
+  },
+
+  methods: {
+    async setAllInput(q){
+      const testCaseManager = new SessionStorageTestCase();
+      this.content = q.contentQuestion;
+      this.codeSample = q.codeSample;
+      this.codeRunToOutput = q.codeRunToOutput;
+      let testCases = await BankQuestionJavaCoreDao
+          .get_Test_Cases_By_Question_JavaCore_ID(Number(q.questionJavaCoreID));
+      testCases.forEach(testCase => {
+        const { inputTest, outputExpect, note } = testCase;
+        testCaseManager.addTestCase(inputTest, outputExpect, note);
+      });
+      this.loadSessionTestCase();
+    },
+
+    loadSessionTestCase(){
+      const testCaseManager = new SessionStorageTestCase();
+      this.listTestCases = testCaseManager.loadFromSessionStorage();
+    },
+
+    saveTestCase() {
+      const testCaseManager = new SessionStorageTestCase();
+      if(!this.input) {
+        this.validationInput = "Please enter input test case.";
+      }
+
+      if(!this.output) {
+        this.validationOutput = "Please enter output test case.";
+      }
+
+      const validations = [
+        this.validationInput,
+        this.validationOutput,
+      ];
+      const allValidateFormAreEmpty = validations.every(val => val === null);
+
+      if(allValidateFormAreEmpty) {
+        testCaseManager.addTestCase(this.input.trim(), this.output.trim(), this.note.trim());
+        this.listTestCases = testCaseManager.loadFromSessionStorage();
+        this.resetFieldInputTestCase();
+      }
+    },
+
+    deleteTestCase(indexTestCase) {
+      const testCaseManager = new SessionStorageTestCase();
+      testCaseManager.removeTestCase(indexTestCase );
+      this.listTestCases = testCaseManager.loadFromSessionStorage();
+    },
+
+    validateNull(){
+      if(!this.content) {
+        this.validationContent = 'Please enter content question.';
+      }
+
+      if(!this.codeSample) {
+        this.validationCodeSample = 'Please enter code sample.';
+      }
+
+      if(!this.codeRunToOutput) {
+        this.validationCodeRunToOutput = 'Please enter code run to output.';
+      }
+
+      //check list session test case
+      const testCaseManager = new SessionStorageTestCase();
+      this.listTestCases = testCaseManager.loadFromSessionStorage();
+      if(this.listTestCases.length === 0) {
+        this.validationNullTestCases = 'Please enter test cases.';
+      }
+    },
+
+    async submitQuestion() {
+      this.validateNull();
+      const validations = [
+        this.validationContent,
+        this.validationCodeSample,
+        this.validationNullTestCases,
+        this.validationCodeRunToOutput,
+      ];
+      const allValidateFormAreEmpty = validations.every(val => val === null);
+      if(allValidateFormAreEmpty) {
+        //clean string
+        this.content = this.content.trim();
+        this.codeSample = this.codeSample
+            .split('\n') // Tách mã thành từng dòng
+            .filter(line =>
+                line.trim() !== '' && // Bỏ qua dòng trống
+                !line.includes('java.') && // Bỏ qua dòng chứa 'java.'
+                !line.includes('javax.') && // Bỏ qua dòng chứa 'javax.'
+                !line.includes('jdk.') && // Bỏ qua dòng chứa 'jdk.'
+                !line.includes('com.') && // Bỏ qua dòng chứa 'com.'
+                !line.includes('org.') && // Bỏ qua dòng chứa 'org.'
+                !line.includes('import') // Bỏ qua dòng chứa 'import'
+            )
+            // Thay thế tab đầu dòng nếu có
+            .map(line => line.replace(/^\t/, '\t'))
+            .join('\n');
+        this.codeSample = this.codeSample.trim();
+        //this.codeRunToOutput = this.codeRunToOutput.match(/(public.*?\})/)[0];
+        this.codeRunToOutput = this.codeRunToOutput
+            .split('\n') // Tách mã thành từng dòng
+            .filter(line =>
+                line.trim() !== '' && // Bỏ qua dòng trống
+                !line.includes('java.') && // Bỏ qua dòng chứa 'java.'
+                !line.includes('javax.') && // Bỏ qua dòng chứa 'javax.'
+                !line.includes('jdk.') && // Bỏ qua dòng chứa 'jdk.'
+                !line.includes('com.') && // Bỏ qua dòng chứa 'com.'
+                !line.includes('org.') && // Bỏ qua dòng chứa 'org.'
+                !line.includes('import') // Bỏ qua dòng chứa 'import'
+            )
+            // Thay thế tab đầu dòng nếu có
+            .map(line => line.replace(/^\t/, '\t'))
+            .join('\n');
+        this.codeRunToOutput = this.codeRunToOutput.trim();
+        console.log("Code run to output: ", this.codeRunToOutput);
+      }
+    },
+
+    resetFieldInputTestCase() {
+      this.input = null;
+      this.output = null;
+      this.note = null;
+    },
+
+    setInputContent() {
+      if(this.content) {
+        this.validationContent = null;
+      }
+    },
+
+    setInputCodeSample() {
+      if(this.codeSample) {
+        this.validationCodeSample = null;
+      }
+    },
+
+    setInputCodeRunToOutput() {
+      if(this.codeRunToOutput) {
+        this.validationCodeRunToOutput = null;
+      }
+    },
+
+    setInput() {
+      if(this.input) {
+        this.validationNullTestCases = null;
+        this.validationInput = null;
+      }
+    },
+
+    setOutput() {
+      if(this.output){
+        this.validationNullTestCases = null;
+        this.validationOutput = null;
+      }
+    },
+
+    setNote() {
+      if(this.note){
+        this.validationNullTestCases = null;
+      }
+    }
+  },
+
+  setup() {
+    const extensions = [
+      java(),
+      oneDark,
+      autocompletion(),
+      keymap.of([
+        { key: "Ctrl-Space", run: completeFromList }
+      ])
+    ];
+
+    const view = shallowRef();
+    const handleReady = (payload) => {
+      view.value = payload.view;
+    };
+
+    return {
+      extensions,
+      handleReady,
+    };
+  },
+
+
+  computed: {
+
+  }
+}
+</script>
+
+<template>
+  <div class="modal fade" id="modal-update-question" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Question</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form @submit.prevent="submitQuestion">
+            <div class="mb-3">
+              <label class="form-label">Content:</label>
+              <textarea v-model="content"
+                        class="form-control"
+                        rows="4"
+                        @input="setInputContent()"
+                        :class="[{'is-invalid': validationContent !== null}]"
+              />
+              <span
+                  v-if="validationContent"
+                  class="span-validate-modal-form"
+              >{{validationContent}}</span>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Code sample:</label>
+              <codemirror
+                  v-model="codeSample"
+                  placeholder="Write code run to out put hear ..."
+                  :autofocus="true"
+                  :indent-with-tab="true"
+                  :tab-size="4"
+                  :extensions="extensions"
+                  @ready="handleReady"
+                  style="width: 100%; height: 5rem;"
+                  @input="setInputCodeSample"
+              />
+              <span
+                  v-if="validationCodeSample"
+                  class="span-validate-modal-form"
+              >{{validationCodeSample}}</span>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Code test out put:</label>
+              <codemirror
+                  v-model="codeRunToOutput"
+                  placeholder="Write code run to out put hear ..."
+                  :autofocus="true"
+                  :indent-with-tab="true"
+                  :tab-size="4"
+                  :extensions="extensions"
+                  @ready="handleReady"
+                  style="width: 100%; height: 30rem;"
+                  @input="setInputCodeRunToOutput()"
+              />
+              <span
+                  v-if="validationCodeRunToOutput"
+                  class="span-validate-modal-form"
+              >{{validationCodeRunToOutput}}</span>
+            </div>
+            <div>
+              <h5>Test Cases</h5>
+              <div class="mb-3">
+                <label class="form-label">Input:</label>
+                <input v-model="input" class="form-control"
+                       :class="[{'is-invalid': validationInput !== null}]"
+                       @input="setInput()"
+                />
+                <span
+                    v-if="validationInput"
+                    class="span-validate-modal-form"
+                >{{validationInput}}</span>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Expected Output:</label>
+                <input v-model="output" class="form-control"
+                       :class="[{'is-invalid': validationOutput !== null}]"
+                       @input="setOutput"
+                />
+                <span
+                    v-if="validationOutput"
+                    class="span-validate-modal-form"
+                >{{validationOutput}}</span>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Note:</label>
+                <input v-model="note" class="form-control"
+                       @input="setNote()"
+                />
+              </div>
+              <button type="button" class="btn button-purple" @click="saveTestCase">Save Test Case</button>
+
+              <table class="table table-bordered mt-3">
+                <thead>
+                <tr>
+                  <th>Index</th>
+                  <th>Input</th>
+                  <th>Expected Output</th>
+                  <th>Note</th>
+                  <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(testCase, index) in listTestCases" :key="index">
+                  <td>{{ index + 1 }}</td>
+                  <td>{{ testCase.inputTest }}</td>
+                  <td>{{ testCase.outputExpect }}</td>
+                  <td>{{ testCase.note }}</td>
+                  <td>
+                    <button class="btn btn-sm btn-danger" @click="deleteTestCase(index)">Delete</button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <span
+                v-if="validationNullTestCases"
+                class="span-validate-modal-form"
+            >{{validationNullTestCases}}</span>
+            <div class="text-center mt-3">
+              <button type="submit" class="btn button-purple"
+                      @handle="submitQuestion"
+              >Update Question</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+@use '@/scss/main';
+</style>

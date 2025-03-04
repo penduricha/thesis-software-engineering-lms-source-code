@@ -38,4 +38,47 @@ public class MarkStudent implements Serializable {
     @OneToMany(mappedBy = "markStudent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<DetailMarkStudent> detailMarkStudents = new ArrayList<>();
+
+    public MarkStudent() {
+    }
+
+    public Long getMarkStudentID() {
+        return markStudentID;
+    }
+
+    public void setMarkStudentID(Long markStudentID) {
+        this.markStudentID = markStudentID;
+    }
+
+    public double getMarkExam() {
+        return markExam;
+    }
+
+    public void setMarkExam(double markExam) {
+        this.markExam = markExam;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Exam getExam() {
+        return exam;
+    }
+
+    public void setExam(Exam exam) {
+        this.exam = exam;
+    }
+
+    public List<DetailMarkStudent> getDetailMarkStudents() {
+        return detailMarkStudents;
+    }
+
+    public void setDetailMarkStudents(List<DetailMarkStudent> detailMarkStudents) {
+        this.detailMarkStudents = detailMarkStudents;
+    }
 }

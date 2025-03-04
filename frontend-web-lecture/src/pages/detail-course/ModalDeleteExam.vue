@@ -67,7 +67,7 @@ export default {
           </h5>
         </div>
         <div class="modal-body text-center">
-          <span class="delete-confirm-text">Are you sure to delete this exam</span>
+          <span class="delete-confirm-text">Are you sure to delete this exam.</span>
         </div>
         <div class="modal-footer d-flex justify-content-center border-0">
           <button type="button" class="btn btn-confirm-yes"

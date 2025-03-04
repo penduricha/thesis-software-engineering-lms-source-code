@@ -22,6 +22,26 @@ public class Exam implements Serializable {
     @Column(nullable = false, name ="exam_id")
     private Long examID;
 
+    public void setQuestionJavaCoreExams(List<QuestionJavaCoreExam> questionJavaCoreExams) {
+        this.questionJavaCoreExams = questionJavaCoreExams;
+    }
+
+    public MarkStudent getMarkStudent() {
+        return markStudent;
+    }
+
+    public void setMarkStudent(MarkStudent markStudent) {
+        this.markStudent = markStudent;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
     @Column(nullable = false, columnDefinition = "nvarchar(50)")
     private String titleExam;
 

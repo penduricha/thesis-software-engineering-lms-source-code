@@ -22,4 +22,16 @@ public interface QuestionJavaCoreExamRepository extends JpaRepository<QuestionJa
                     from question_java_core_exam where exam_id = :examID;
                     """, nativeQuery = true)
     List<Map<String, Object>>  findQuestionJavaCoreExamsByExam_ExamID_Map(@Param("examID") Long examID);
+
+//    @Query(value = """
+//                    select q.content_question,
+//                           btcjc.code_run_to_output,
+//                           q.score
+//                    from question_java_core_exam q
+//                    right join bank_question_java_core btcjc
+//                    on q.question_java_core_id = btcjc.question_java_core_id
+//                    where q.question_java_core_exam_id = :questionJavaCoreExamID;
+//                    """, nativeQuery = true)
+//    Map<String, Object>  findQuestionJavaCoreExams_Content_Question_CodeRunToOutput_Score_By_QuestionJavaCoreExamID
+//            (@Param("questionJavaCoreExamID") Long questionJavaCoreExamID);
 }

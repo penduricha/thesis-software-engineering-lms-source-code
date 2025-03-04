@@ -227,7 +227,7 @@ export default {
     "boolean", "char", "byte", "short", "int", "long", "float", "double", "String",
     "List", "ArrayList", "LinkedList", "Set", "HashSet", "TreeSet", "Map", "HashMap", "TreeMap"
   ];
-
+g
   // Danh sách hàm getter, setter, constructors
   const javaMethods = [
     { label: "getName()", type: "function", detail: "Getter method for name" },

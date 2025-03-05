@@ -1,4 +1,4 @@
-export class SessionStorageTestCase {
+export default class SessionStorageTestCase {
     constructor() {
         // Khởi tạo mảng test cases và tải từ session storage nếu có
         this.testCases = [];

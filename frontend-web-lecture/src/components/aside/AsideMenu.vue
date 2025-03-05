@@ -65,7 +65,7 @@ export default {
   computed: {
     setBackGroundColor() {
       return (path) => {
-        return (path === this.getRoute())
+        return (this.getRoute().includes(path))
             ? 'background-grey'
             : 'background-no-grey';
       };

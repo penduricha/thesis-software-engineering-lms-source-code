@@ -10,6 +10,8 @@ import '../detail-course/course-manage.scss';
 import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
 import ModalUpdateQuestion from "@/pages/bank-exams/ModalUpdateQuestion.vue";
 import ModalDeleteQuestion from "@/pages/bank-exams/ModalDeleteQuestion.vue";
+import SessionStorageQuestionJavaCoreChoose
+  from "@/pages/bank-exams/create-exam-with-choose-questions/SessionStorageQuestionJavaCoreChoose.js";
 
 export default {
   name: "BankExams",
@@ -28,6 +30,7 @@ export default {
       bankQuestionJavaCore: [],
 
       filteredQuestions: [],
+      selectedQuestions: [],
     };
   },
 
@@ -72,7 +75,39 @@ export default {
 
     handleDeleteQuestion(questionJavaCoreID){
       this.$refs.modalDeleteQuestion.setQuestionJavaCoreID(questionJavaCoreID);
-    }
+    },
+
+    navigateTo_CreateExam() {
+      this.$router.replace({
+        path: '/main-page/bank-exams/java-core/create-exam-choose',
+        query: {
+          //selectedQuestionIDs: this.selectedQuestionIDs,
+        }
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
+    },
+
+    handleNavigateCreateExam() {
+      if(this.selectedQuestions.length === 0) {
+        alert("Please select a question.");
+      } else {
+        //don sach session
+        sessionStorage.removeItem("questionsSelected");
+
+        //tao moi
+        const sessionQuestionJavaCoreChoose = new SessionStorageQuestionJavaCoreChoose();
+        this.selectedQuestions.forEach((question) => {
+          sessionQuestionJavaCoreChoose.addQuestion(
+            question.questionJavaCoreID,
+            question.contentQuestion,
+            question.codeSample,
+          )
+        })
+        this.navigateTo_CreateExam();
+      }
+    },
   },
 
   computed: {
@@ -117,6 +152,11 @@ export default {
                   data-bs-target="#modal-create-question"
           >Add Question</button>
         </div>
+        <div class="col-md-3">
+          <button class="btn btn-primary button-purple"
+                  @click="handleNavigateCreateExam()"
+          >Create exam java core</button>
+        </div>
       </div>
 
       <table class="table table-striped">
@@ -126,10 +166,13 @@ export default {
           <th>Content Question</th>
           <th>Edit</th>
           <th>Delete</th>
+          <th>Add to create exam</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(question, index) in filteredQuestions">
+        <tr v-for="(question, index) in filteredQuestions"
+            :key="question.questionJavaCoreID"
+        >
           <td>{{ index + 1 }}</td>
           <td>{{ question.contentQuestion }}</td>
           <td>
@@ -145,6 +188,12 @@ export default {
                     data-bs-target="#modal-delete-question"
                     @click="handleDeleteQuestion(question.questionJavaCoreID)"
             >Delete</button>
+          </td>
+          <td class="style-column-checkbox">
+            <input type="checkbox" class="style-check-box"
+                   :value="question"
+                   v-model="selectedQuestions"
+            />
           </td>
         </tr>
         </tbody>
@@ -162,4 +211,8 @@ export default {
 
 <style scoped lang="scss">
 @use '@/scss/main';
+.style-column-checkbox {
+  display: flex;
+  justify-content: center;
+}
 </style>

@@ -2,6 +2,7 @@ package test;
 
 import javax.tools.*;
 import java.io.*;
+import java.lang.*;
 
 public class DebugJavaExecution {
     public static void main(String[] args) {
@@ -18,7 +19,7 @@ public class DebugJavaExecution {
         System.out.println(result);
     }
 
-    public String executeJavaCore(String nameMainClass, String packageName, String javaCoreCode) {
+    public String executeJavaCore(String nameMainClass, String packageName, String javaCoreCode)  {
         StringBuilder output = new StringBuilder();
         try {
             // Change according to structure
@@ -43,7 +44,9 @@ public class DebugJavaExecution {
                         "import java.util.*;          // For importing all classes in java.util package\n" +
                         "import java.lang.StringBuilder; // For using StringBuilder\n" +
                         "import java.time.format.DateTimeFormatter; // For formatting dates\n" +
-                        "import java.time.LocalDate; // For using LocalDateTime");
+                        "import java.lang.*; // For exception\n" +
+                        "import java.io.*; // For exception\n" +
+                        "import java.time.*; // For using LocalDateTime");
                 writer.println(javaCoreCode);
             }
 

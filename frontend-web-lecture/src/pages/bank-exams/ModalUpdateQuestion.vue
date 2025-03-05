@@ -1,5 +1,5 @@
 <script>
-import {SessionStorageTestCase} from "@/pages/bank-exams/SessionStorageTestCase.js";
+
 import {Codemirror} from "vue-codemirror";
 import {shallowRef} from "vue";
 import {oneDark} from "@codemirror/theme-one-dark";
@@ -8,6 +8,7 @@ import {java,} from "@codemirror/lang-java";
 import {keymap} from "@codemirror/view";
 import {autocompletion, completeFromList} from "@codemirror/autocomplete";
 import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
+import SessionStorageTestCase from "@/pages/bank-exams/SessionStorageTestCase.js";
 export default {
   name: "ModalUpdateQuestion",
   components: {Codemirror},
@@ -19,6 +20,7 @@ export default {
 
   data() {
     return {
+      questionJavaCoreID: null,
       content: null,
       codeSample: null,
 
@@ -43,9 +45,13 @@ export default {
   methods: {
     async setAllInput(q){
       const testCaseManager = new SessionStorageTestCase();
+      this.questionJavaCoreID = q.questionJavaCoreID;
       this.content = q.contentQuestion;
       this.codeSample = q.codeSample;
       this.codeRunToOutput = q.codeRunToOutput;
+      if(!this.codeRunToOutput) {
+        this.codeRunToOutput = "public static void main(String[] args) {\n\n}\n";
+      }
       let testCases = await BankQuestionJavaCoreDao
           .get_Test_Cases_By_Question_JavaCore_ID(Number(q.questionJavaCoreID));
       testCases.forEach(testCase => {
@@ -153,7 +159,25 @@ export default {
             .map(line => line.replace(/^\t/, '\t'))
             .join('\n');
         this.codeRunToOutput = this.codeRunToOutput.trim();
-        console.log("Code run to output: ", this.codeRunToOutput);
+        //console.log("Code run to output: ", this.codeRunToOutput);
+        if(this.listTestCases.length > 0 && this.questionJavaCoreID) {
+          const dataToPut = {
+            "questionJavaCoreID" : this.questionJavaCoreID,
+            "contentQuestion" : this.content,
+            "codeSample" : this.codeSample,
+            "codeRunToOutput" :   this.codeRunToOutput,
+            "bankTestCaseJavaCoreList" : this.listTestCases,
+          }
+
+          console.log(dataToPut);
+
+          let statusPut = await BankQuestionJavaCoreDao.update_Question_JavaCore(dataToPut);
+          if(statusPut) {
+            window.location.reload();
+          } else {
+            alert("Updated failed.");
+          }
+        }
       }
     },
 

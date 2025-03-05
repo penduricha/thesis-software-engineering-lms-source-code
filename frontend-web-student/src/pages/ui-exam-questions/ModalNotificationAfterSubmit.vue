@@ -48,7 +48,7 @@ export default {
     async navigateTo_MainPage() {
       clearInterval(this.timer);
       // Xóa thời gian khi đã hết
-      localStorage.removeItem('timeLeft');
+      sessionStorage.removeItem('timeLeft');
       const studentLocalStorage  = new StudentLocalStorage();
 
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();

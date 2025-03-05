@@ -19,7 +19,7 @@ export default class BankQuestionJavaCoreService {
     static put_Question_JavaCore( dataQuestionPut ) {
         return axiosConfig
             .getAPIClient()
-            .put(`/bank-question-java-core/create-question-and-test-cases`,
+            .put(`/bank-question-java-core/update-question-and-test-cases`,
                 dataQuestionPut, {});
     }
 

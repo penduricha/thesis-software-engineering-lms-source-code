@@ -69,7 +69,7 @@ export default {
       validateExamPaper: null,
 
       //exam
-      exams: null,
+      exams: [],
       //update exam
       examIDToUpdate: null,
       examIDToDelete: null,

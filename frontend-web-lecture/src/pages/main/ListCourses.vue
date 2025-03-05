@@ -82,6 +82,21 @@ export default {
     <section class="section-list-course">
       <h4 class="title-menu">List Courses</h4>
       <div class="view-courses">
+        <button v-if="courses.length === 0">
+          <div class="placeholder content" style="width: 20rem; height: 10rem">
+
+          </div>
+        </button>
+        <button v-if="courses.length === 0">
+          <div class="placeholder content" style="width: 20rem; height: 10rem">
+
+          </div>
+        </button>
+        <button v-if="courses.length === 0">
+          <div class="placeholder content" style="width: 20rem; height: 10rem">
+
+          </div>
+        </button>
         <button v-for="course in courses" @click="handeNavigateToCourse(course.courseID)">
           <div class="card-course">
             <div class="top"></div>

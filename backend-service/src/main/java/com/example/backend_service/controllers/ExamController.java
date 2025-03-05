@@ -1,6 +1,8 @@
 package com.example.backend_service.controllers;
 
+import com.example.backend_service.models.BankTestCaseJavaCore;
 import com.example.backend_service.models.Exam;
+import com.example.backend_service.models.QuestionJavaCoreExam;
 import com.example.backend_service.services.ExamService;
 import com.example.backend_service.services.StudentService;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -70,6 +73,72 @@ public class ExamController {
         exam.setPasswordExam(passwordExam); // Assuming there is a setPasswordExam method
 
         return ResponseEntity.status(HttpStatus.CREATED).body(examService.createExam(exam,courseID));
+    }
+
+    @PostMapping("/post_exam_java_core_with_choose_questions/{courseID}")
+    public ResponseEntity<Exam> post_Exam_JavaCore_With_Choose_Questions
+            (@RequestBody Map<String,Object> mapExamPost,
+             @PathVariable Long courseID)
+            throws HttpClientErrorException {
+        String titleExam = (String) mapExamPost.get("titleExam");
+        String typeExam = (String) mapExamPost.get("typeExam");
+        String topicExam = (String) mapExamPost.get("topicExam");
+        String retakeExamValue = (String) mapExamPost.get("retakeExam");
+        boolean retakeExam = "Yes".equalsIgnoreCase(retakeExamValue);
+        String scoringMethod = (String) mapExamPost.get("scoringMethod");
+        int duration = (Integer) mapExamPost.get("duration");
+
+        LocalDateTime startDate = LocalDateTime.of(
+                (Integer) mapExamPost.get("startDateYear"),
+                (Integer) mapExamPost.get("startDateMonth"),
+                (Integer) mapExamPost.get("startDateDay"),
+                (Integer) mapExamPost.get("startDateHour"),
+                (Integer) mapExamPost.get("startDateMinute"),
+                0
+        );
+
+        // Extracting end date and time
+        LocalDateTime endDate = LocalDateTime.of(
+                (Integer) mapExamPost.get("endDateYear"),
+                (Integer) mapExamPost.get("endDateMonth"),
+                (Integer) mapExamPost.get("endDateDay"),
+                (Integer) mapExamPost.get("endDateHour"),
+                (Integer) mapExamPost.get("endDateMinute"),
+                0
+        );
+
+        String linkExamPaper = (String) mapExamPost.get("linkExamPaper");
+        String passwordExam = (String) mapExamPost.get("passwordExam");
+        List<Map<String, Object>> questionJavaCoreExams =
+                (List<Map<String, Object>> ) mapExamPost.get("questionJavaCoreExams");
+
+        List<QuestionJavaCoreExam> convertedQuestionJavaCoreExams = new ArrayList<>();
+        for (Map<String, Object> map : questionJavaCoreExams) {
+            Integer questionJavaCoreIDInteger = (Integer) map.get("questionJavaCoreID");
+            Long questionJavaCoreID = questionJavaCoreIDInteger != null ? questionJavaCoreIDInteger.longValue() : null;
+            String contentQuestion = (String) map.get("contentQuestion");
+            String codeSample = (String) map.get("codeSample");
+            // Create a new BankTestCaseJavaCore object and add it to the list
+            QuestionJavaCoreExam questionJavaCoreExam = new QuestionJavaCoreExam();
+            questionJavaCoreExam.setQuestionJavaCoreExamID(questionJavaCoreID);
+            questionJavaCoreExam.setContentQuestion(contentQuestion);
+            questionJavaCoreExam.setCodeSample(codeSample);
+            convertedQuestionJavaCoreExams.add(questionJavaCoreExam);
+        }
+
+        Exam exam = new Exam();
+        exam.setTitleExam(titleExam);
+        exam.setTypeExam(typeExam); // Assuming there is a setType method
+        exam.setTopicExam(topicExam); // Assuming there is a setTopic method
+        exam.setRetakeExam(retakeExam);
+        exam.setScoringMethod(scoringMethod); // Assuming there is a setScoringMethod method
+        exam.setDuration(duration);
+        exam.setStartDate(startDate); // Assuming there is a setStartDate method
+        exam.setEndDate(endDate); // Assuming there is a setEndDate method
+        exam.setLinkExamPaper(linkExamPaper); // Assuming there is a setLinkExamPaper method
+        exam.setPasswordExam(passwordExam); // Assuming there is a setPasswordExam method
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                examService.createExam_JavaCore_With_ChooseQuestion(exam, courseID, convertedQuestionJavaCoreExams));
     }
 
     @GetMapping("/get_exam_by_course_id/{courseID}")

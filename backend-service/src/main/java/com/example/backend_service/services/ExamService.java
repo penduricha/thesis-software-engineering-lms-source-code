@@ -47,6 +47,7 @@ public class ExamService implements I_ExamService {
     public Exam createExam(Exam exam, Long courseID) throws JpaSystemException {
         // Retrieve the course using the provided courseID
         Course course = courseRepository.findCourseByCourseID(courseID);
+        //neu java khác sẽ có kiểu khác
         String javaCore = "Java Core";
         if(exam.getTopicExam().equalsIgnoreCase(javaCore)) {
             List<Map<String, Object>> questionRandomJavaCore = bankQuestionJavaCoreService.getRandom_10_Questions_JavaCore();
@@ -82,6 +83,24 @@ public class ExamService implements I_ExamService {
             return null;
         }
         // Return null if course or questions are not found
+        return null;
+    }
+
+    @Override
+    public Exam
+    createExam_JavaCore_With_ChooseQuestion(Exam exam,
+                                            Long courseID,
+                                            List<QuestionJavaCoreExam> questionJavaCoreExams) throws JpaSystemException{
+        Course course = courseRepository.findCourseByCourseID(courseID);
+        if(course !=null && !questionJavaCoreExams.isEmpty()) {
+            course.getExams().add(exam);
+            exam.setCourse(course);
+            for(QuestionJavaCoreExam questionJavaCoreExam: questionJavaCoreExams) {
+                exam.getQuestionJavaCoreExams().add(questionJavaCoreExam);
+                questionJavaCoreExam.setExam(exam);
+            }
+            return examRepository.save(exam);
+        }
         return null;
     }
 
@@ -168,6 +187,8 @@ public class ExamService implements I_ExamService {
             entityManager.createNativeQuery("delete from exam where exam_id = :examID")
                     .setParameter("examID", exam.getExamID())
                     .executeUpdate();
+
+            //xoa them diem ktra (Nho lam)
             return exam.getExamID();
         }
         return null;

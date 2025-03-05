@@ -101,10 +101,10 @@ export default {
       const routerDao = new RouterDao();
       routerDao.savePath_To_SessionStorage(route);
       this.indexQuestion = Number(sessionStorage.getItem("indexQuestion"));
-      const savedTime = localStorage.getItem('timeLeft');
-      if(savedTime) {
-        localStorage.removeItem("timeLeft");
-      }
+      // const savedTime = localStorage.getItem('timeLeft');
+      // if(savedTime) {
+      //   localStorage.removeItem("timeLeft");
+      // }
 
     },
 
@@ -156,7 +156,7 @@ export default {
     },
 
     checkTimeLeft() {
-      const savedTime = localStorage.getItem('timeLeft');
+      const savedTime = sessionStorage.getItem('timeLeft');
       if (savedTime) {
         this.timeLeft = parseInt(savedTime, 10);
         // Bắt đầu lại timer nếu có thời gian lưu
@@ -171,7 +171,7 @@ export default {
         clearInterval(this.timer);
       }
       // Lưu thời gian vào localStorage
-      localStorage.setItem('timeLeft', this.timeLeft);
+      sessionStorage.setItem('timeLeft', this.timeLeft);
       this.startTimer();
     },
 
@@ -180,11 +180,11 @@ export default {
         if (this.timeLeft > 0) {
           this.timeLeft--;
           // Cập nhật thời gian trong localStorage
-          localStorage.setItem('timeLeft', this.timeLeft);
+          sessionStorage.setItem('timeLeft', this.timeLeft);
         } else {
           clearInterval(this.timer);
           // Xóa thời gian khi đã hết
-          localStorage.removeItem('timeLeft');
+          sessionStorage.removeItem('timeLeft');
         }
         this.clickButtonSubmit();
       }, 1000);
@@ -202,6 +202,7 @@ export default {
             .getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
         console.log("Test case: ", this.testCasesInit);
         this.contentQuestion = this.questionInit.contentQuestion;
+        //console.log("Content question: ", this.contentQuestion);
         this.score = this.questionInit.score;
         let codeGet = await CodeStorageDao
             .get_Code_By_IndexQuestion_StudentID(this.studentID, this.indexQuestion);
@@ -397,7 +398,8 @@ export default {
       </header>
       <div class="style-main">
         <section class="section-exam">
-          <p class="text-exam">Score: {{score}}<br>{{contentQuestion}}</p>
+          <span class="text-exam">Score: {{score}}</span>
+          <p class="text-exam">{{contentQuestion}}</p>
           <table class="table table-striped" v-if="testCasesInit.length > 0">
             <thead>
             <tr>

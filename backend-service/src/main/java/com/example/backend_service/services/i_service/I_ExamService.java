@@ -1,6 +1,7 @@
 package com.example.backend_service.services.i_service;
 
 import com.example.backend_service.models.Exam;
+import com.example.backend_service.models.QuestionJavaCoreExam;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
@@ -9,6 +10,9 @@ import java.util.Map;
 
 public interface I_ExamService {
     public Exam createExam(Exam exam, Long courseID);
+
+    public Exam createExam_JavaCore_With_ChooseQuestion
+            (Exam exam, Long courseID, List<QuestionJavaCoreExam> questionJavaCoreExams);
 
     public List<Map<String, Object>> getExamsByCourseID(Long courseID);
 

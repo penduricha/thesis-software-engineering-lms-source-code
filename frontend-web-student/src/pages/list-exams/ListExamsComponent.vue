@@ -11,6 +11,7 @@ import ModalExamLocked from "@/pages/modal-exam/ModalExamLocked.vue";
 import ModalExamOverdue from "@/pages/modal-exam/ModalExamOverdue.vue";
 import SessionTimeDao from "@/daos/SessionTimeDao.js";
 import axios from "axios";
+import MarkStudentDao from "@/daos/MarkStudentDao.js";
 
 export default {
   name: 'ListExamsComponents',
@@ -39,9 +40,12 @@ export default {
   created() {
     this.saveRouter_Path(this.getRoute());
     this.setStudentID_And_CourseID_And_Exams();
+
+    //this.set_Zero_If_Exam_Overdue();
   },
 
   mounted() {
+
     this.checkStatusDoExam();
   },
 
@@ -65,6 +69,21 @@ export default {
             // Cập nhật danh sách bài kiểm tra
           });
           console.log("Exams: ", this.exams);
+          if(this.exams.length > 0) {
+            for (const e of this.exams) {
+              if(e.status === "Overdue") {
+                try{
+                  //set 0 if exam overdue
+                  let statusResponseSet =
+                      await MarkStudentDao.set_Mark_Student_Zero_If_Exam_Overdue(studentID, Number(e.examID));
+                  console.log("Set 0.0 with examID is: ",statusResponseSet);
+                }catch(err) {
+                  console.error(err);
+                  alert(err);
+                }
+              }
+            }
+          }
         }
       }
     },

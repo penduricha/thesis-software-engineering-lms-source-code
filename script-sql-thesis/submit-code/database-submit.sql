@@ -37,8 +37,7 @@ where q.question_java_core_exam_id = 171;
 
 select * from result_question_java_core;
 
-update exam set end_date = '2025-03-04 04:16:00'
-where exam_id = 32;
+delete from mark_student;
 
-
+select * from student where student_id = '22662361';
 

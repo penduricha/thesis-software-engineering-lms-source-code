@@ -13,6 +13,7 @@ import CourseDao from "@/daos/CourseDao.js";
 import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
 import SessionStorageQuestionJavaCoreChoose
   from "@/pages/bank-exams/create-exam-with-choose-questions/SessionStorageQuestionJavaCoreChoose.js";
+import ModalAddQuestions from "@/pages/bank-exams/create-exam-with-choose-questions/ModalAddQuestions.vue";
 
 
 export default {
@@ -27,6 +28,7 @@ export default {
   },
 
   components: {
+    ModalAddQuestions,
     AsideAccount, AsideMenu
 
   },
@@ -78,6 +80,8 @@ export default {
       validateEndDate: null,
       validateExamPaper: null,
       validateCourseIDChoose: null,
+
+      validateSelectQuestion: null,
 
       passwordExam: null,
       passwordExamHashed: null,
@@ -142,6 +146,14 @@ export default {
       const sessionQuestionJavaCoreChoose = new SessionStorageQuestionJavaCoreChoose();
       sessionQuestionJavaCoreChoose.removeQuestion(index);
       this.selectedQuestions = sessionQuestionJavaCoreChoose.getAllQuestions();
+      if(this.selectedQuestions.length === 0){
+        this.validateSelectQuestion = "Please choose a question.";
+      }
+      //this.$refs.modalAddQuestion.show();
+    },
+
+    handleModalAddQuestion() {
+      this.$refs.modalAddQuestion.setModalAddQuestions();
     },
 
     //set field modal
@@ -309,14 +321,113 @@ export default {
       //map
     },
 
+    validationSelectedQuestion() {
+      if(this.selectedQuestions.length > 0) {
+        let totalScore = this.selectedQuestions.reduce((accumulator, question) => {
+          return accumulator + question.score;
+        }, 0);
+        if(totalScore !== 10) {
+          this.validateSelectQuestion = "Total score must be 10."
+        }
+      }
+    },
+
     updateScoreByIndex(index, newScore) {
       const sessionQuestionJavaCoreChoose = new SessionStorageQuestionJavaCoreChoose();
       sessionQuestionJavaCoreChoose.updateScore(index, newScore)
       this.selectedQuestions = sessionQuestionJavaCoreChoose.getAllQuestions();
+      let totalScore = this.selectedQuestions.reduce((accumulator, question) => {
+        return accumulator + question.score;
+      }, 0);
+      if(totalScore === 10) {
+        this.validateSelectQuestion = null;
+      }
     },
 
     async handleCreateExam() {
+      this.validationNullField();
+      this.validationSelectedQuestion();
+      //tạo danh sách ktra các validate xem còn nào còn thông báo ko
+      const validations = [
+        this.validateTitleExam,
+        this.validateTypeExam,
+        this.validateTopicExam,
+        this.validateRetake,
+        this.validateScoringMethod,
+        this.validateDuration,
+        this.validateStartDate,
+        this.validateEndDate,
+        this.validateExamPaper,
+        this.validateSelectQuestion,
+      ];
+      const allValidateEmpty = validations.every(val => val === null);
 
+      if (allValidateEmpty) {
+        this.titleExam = StringFormat.normalizeSpaces(this.titleExam.trim());
+        if (this.passwordExam) {
+          const passwordClass = new Password(this.passwordExam);
+          this.passwordExamHashed = passwordClass.xorEncryptDecrypt();
+          console.log("Password exam hashed: ", this.passwordExamHashed);
+        }
+        //chuyển thành new Date
+        const dateStartDate = new Date(this.startDate);
+        const dateEndDate = new Date(this.endDate);
+        if (this.examPaper) {
+          this.examPaper = this.examPaper.trim();
+        }
+        const examPost = {
+          "titleExam": this.titleExam,
+          "typeExam": this.typeExam,
+          "topicExam": this.topicExam,
+          "retakeExam": this.retake,
+          "scoringMethod": this.scoringMethod,
+          "duration": Number(this.duration),
+          "startDateDay": dateStartDate.getDate(),
+          "startDateMonth": dateStartDate.getMonth() + 1,
+          "startDateYear": dateStartDate.getFullYear(),
+          "startDateHour": dateStartDate.getHours(),
+          "startDateMinute": dateStartDate.getMinutes(),
+          "endDateDay": dateEndDate.getDate(),
+          "endDateMonth": dateEndDate.getMonth() + 1,
+          "endDateYear": dateEndDate.getFullYear(),
+          "endDateHour": dateEndDate.getHours(),
+          "endDateMinute": dateEndDate.getMinutes(),
+          "linkExamPaper": this.examPaper,
+          "passwordExam": this.passwordExamHashed,
+          "questionJavaCoreExams" : this.selectedQuestions.map(({ questionJavaCoreID, score }) => ({
+            questionJavaCoreID,
+            score
+          })),
+        }
+        console.log("Exam post: ",examPost);
+        console.log("Course ID choose: ", this.courseIDChoose);
+
+        if(this.courseIDChoose && this.titleExam) {
+          let isExistTitleExam = await ExamDao
+              .get_Exist_Title_Exam_By_TitleExam_CourseID(Number(this.courseIDChoose), this.titleExam.trim());
+          if(isExistTitleExam) {
+            this.validateTitleExam = "Title exam is exist";
+          } else {
+            let statusPost =
+                await ExamDao.create_Exam_Java_Core_With_Choose_Question(examPost, Number(this.courseIDChoose));
+            if(statusPost) {
+              //navigate
+              this.$router.replace({
+                path: '/main-page/list-courses/course-manage',
+                query: {
+                  courseID: this.courseIDChoose,
+                }
+              }).catch((error) => {
+                console.error('Error navigating :', error);
+                alert(error);
+              });
+            } else {
+              alert("Create exam failed.");
+            }
+          }
+        }
+
+      }
     },
   },
 
@@ -570,7 +681,19 @@ export default {
               </span>
               </div>
             </div>
-            <h5>Question to add</h5>
+
+            <div class="mb-3 row">
+              <h5 class="col-sm-3">Question to add</h5>
+            </div>
+            <div class="mb-3 row">
+              <button class="button-purple button-add-questions col-sm-3 col-form-label"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modal-add-questions"
+                      @click="handleModalAddQuestion"
+              >
+                Add questions
+              </button>
+            </div>
             <table class="table table-striped" >
               <thead>
               <tr>
@@ -608,6 +731,10 @@ export default {
               </tr>
               </tbody>
             </table>
+            <span
+                v-if="validateSelectQuestion"
+                class="span-validate-modal-form"
+            >{{validateSelectQuestion}}</span>
             <div class="text-end">
               <button type="submit"
                       class="btn-create-exam"
@@ -622,6 +749,11 @@ export default {
   </main>
   <AsideAccount/>
   </body>
+  <modal-add-questions
+      v-if="bankQuestionJavaCore.length > 0"
+      :bank-question-java-core="bankQuestionJavaCore"
+      ref="modalAddQuestion"
+  />
 </template>
 
 <style scoped lang="scss">

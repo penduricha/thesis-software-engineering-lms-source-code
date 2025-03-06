@@ -13,11 +13,20 @@ import {keymap} from "@codemirror/view";
 import {autocompletion, completeFromList} from "@codemirror/autocomplete";
 import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
 import SessionStorageTestCase from "@/pages/bank-exams/SessionStorageTestCase.js";
+import Validation from "@/validation/Validation.js";
 
 
 export default {
   name: "ModalCreateQuestion",
   components: {Codemirror},
+
+  props: {
+    bankJavaCoreExam : {
+      type: Array,
+      required: true,
+      default: [],
+    }
+  },
 
   created() {
     sessionStorage.removeItem("testCases");
@@ -27,6 +36,7 @@ export default {
     //this.setInputContent();
     //this.setInputCodeSample();
     this.loadSessionTestCase();
+    this.setInputContent();
   },
 
   data() {
@@ -182,8 +192,19 @@ export default {
     },
 
     setInputContent() {
-      if(this.content) {
+      if(!this.content) {
         this.validationContent = null;
+      } else {
+        if(this.bankJavaCoreExam.length > 0) {
+          const contentQuestion = this.content.trim();
+          const hasMatchingContentQuestion =
+              this.bankJavaCoreExam.some(q => q.contentQuestion === contentQuestion);
+          if (hasMatchingContentQuestion) {
+            this.validationContent = "Content question already exists.";
+          } else {
+            this.validationContent = null;
+          }
+        }
       }
     },
 

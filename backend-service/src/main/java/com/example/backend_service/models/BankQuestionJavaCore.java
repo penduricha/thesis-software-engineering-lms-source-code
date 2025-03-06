@@ -20,7 +20,7 @@ public class BankQuestionJavaCore implements Serializable {
     @Column(name = "question_java_core_id", nullable = false)
     private Long questionJavaCoreID;
 
-    @Column(nullable = false, columnDefinition = "longtext")
+    @Column(nullable = false, columnDefinition = "longtext", unique = true)
     private String contentQuestion;
 
     @Column(nullable = false, columnDefinition = "longtext")

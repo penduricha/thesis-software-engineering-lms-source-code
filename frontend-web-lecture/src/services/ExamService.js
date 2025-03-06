@@ -34,4 +34,17 @@ export default class ExamService {
             .getAPIClient()
             .get(`/student/find_student_access_exam/${examID}`);
     }
+
+    static fetch_Title_Exam_By_TitleExam_CourseID(courseID, titleExam) {
+        return axiosConfig
+            .getAPIClient()
+            .get(
+                `/find-title-exam-by-course-id-title-exam/${courseID}/${titleExam}`);
+    }
+
+    static post_Exam_Java_Core_With_Choose_Question(dataPost ,courseID) {
+        return axiosConfig
+            .getAPIClient()
+            .post (`/post_exam_java_core_with_choose_questions/${courseID}`, dataPost, {});
+    }
 }

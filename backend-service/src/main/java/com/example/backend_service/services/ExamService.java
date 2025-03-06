@@ -4,6 +4,7 @@ import com.example.backend_service.models.BankQuestionJavaCore;
 import com.example.backend_service.models.Course;
 import com.example.backend_service.models.Exam;
 import com.example.backend_service.models.QuestionJavaCoreExam;
+import com.example.backend_service.repositories.BankQuestionJavaCoreRepository;
 import com.example.backend_service.repositories.CourseRepository;
 import com.example.backend_service.repositories.ExamRepository;
 import com.example.backend_service.repositories.QuestionJavaCoreExamRepository;
@@ -36,11 +37,14 @@ public class ExamService implements I_ExamService {
 
     private final BankQuestionJavaCoreService bankQuestionJavaCoreService;
 
-    public ExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ExamRepository examRepository, CourseRepository courseRepository, BankQuestionJavaCoreService bankQuestionJavaCoreService) {
+    private final BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository;
+
+    public ExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ExamRepository examRepository, CourseRepository courseRepository, BankQuestionJavaCoreService bankQuestionJavaCoreService, BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository) {
         this.questionJavaCoreExamRepository = questionJavaCoreExamRepository;
         this.examRepository = examRepository;
         this.courseRepository = courseRepository;
         this.bankQuestionJavaCoreService = bankQuestionJavaCoreService;
+        this.bankQuestionJavaCoreRepository = bankQuestionJavaCoreRepository;
     }
 
     @Override
@@ -90,15 +94,50 @@ public class ExamService implements I_ExamService {
     public Exam
     createExam_JavaCore_With_ChooseQuestion(Exam exam,
                                             Long courseID,
-                                            List<QuestionJavaCoreExam> questionJavaCoreExams) throws JpaSystemException{
+                                            List<Map<String, Object>> questionJavaCoreExams
+    ) throws JpaSystemException{
         Course course = courseRepository.findCourseByCourseID(courseID);
         if(course !=null && !questionJavaCoreExams.isEmpty()) {
+            //set relationship
             course.getExams().add(exam);
             exam.setCourse(course);
-            for(QuestionJavaCoreExam questionJavaCoreExam: questionJavaCoreExams) {
-                exam.getQuestionJavaCoreExams().add(questionJavaCoreExam);
-                questionJavaCoreExam.setExam(exam);
+
+            for (Map<String, Object> map : questionJavaCoreExams) {
+                Integer questionJavaCoreIDInteger = (Integer) map.get("questionJavaCoreID");
+                Long questionJavaCoreID = questionJavaCoreIDInteger != null ? questionJavaCoreIDInteger.longValue() : null;
+
+                Object scoreObject = map.get("score");
+                double score = 0.0;
+
+                if (scoreObject instanceof Integer) {
+                    score = (Integer) scoreObject;
+                } else if (scoreObject instanceof Double) {
+                    score = (Double) scoreObject;
+                } else if (scoreObject instanceof String) {
+                    try {
+                        score = Double.parseDouble((String) scoreObject);
+                    } catch (NumberFormatException e) {
+                        // Xử lý lỗi nếu không thể chuyển đổi thành số
+                        System.err.println("Invalid score format: " + scoreObject);
+                    }
+                }
+                BankQuestionJavaCore bankQuestionJavaCoreFound =
+                        bankQuestionJavaCoreRepository.findBankQuestionJavaCoreByQuestionJavaCoreID(questionJavaCoreID);
+                if (bankQuestionJavaCoreFound != null) {
+                    QuestionJavaCoreExam questionJavaCoreExam = new QuestionJavaCoreExam();
+                    questionJavaCoreExam.setContentQuestion(bankQuestionJavaCoreFound.getContentQuestion());
+                    questionJavaCoreExam.setCodeSample(bankQuestionJavaCoreFound.getCodeSample());
+                    questionJavaCoreExam.setScore(score);
+
+                    // relationship
+                    exam.getQuestionJavaCoreExams().add(questionJavaCoreExam);
+                    questionJavaCoreExam.setExam(exam);
+
+                    bankQuestionJavaCoreFound.getQuestionJavaCoreExams().add(questionJavaCoreExam);
+                    questionJavaCoreExam.setBankQuestionJavaCore(bankQuestionJavaCoreFound);
+                }
             }
+
             return examRepository.save(exam);
         }
         return null;
@@ -272,5 +311,11 @@ public class ExamService implements I_ExamService {
             return returnMap;
         }
         return new HashMap<>();
+    }
+
+    @Override
+    public String getTitle_Exam_By_CourseID(Long courseID, String titleExam)
+            throws JpaSystemException {
+        return examRepository.getTitle_Exam_By_CourseID(courseID, titleExam);
     }
 }

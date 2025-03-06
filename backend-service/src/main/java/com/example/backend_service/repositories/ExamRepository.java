@@ -56,4 +56,11 @@ public interface ExamRepository extends JpaRepository<Exam,Long> {
             """,
             nativeQuery = true)
     Map<String, Object> get_Status_Retake_And_Scoring_Method_By_ExamID(@Param("examID") Long examID);
+
+    @Query(value = """
+            select e.title_exam from exam e where 
+            e.course_id = :courseID and e.title_exam = :titleExam;
+            """,
+            nativeQuery = true)
+    String getTitle_Exam_By_CourseID(@Param("courseID") Long courseID,@Param("titleExam") String titleExam);
 }

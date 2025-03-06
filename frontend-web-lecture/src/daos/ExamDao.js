@@ -91,4 +91,30 @@ export default class ExamDao {
              })
         return status;
     }
+
+    static async get_Exist_Title_Exam_By_TitleExam_CourseID(courseID, titleExam) {
+        let responseReturn = null;
+        await ExamService
+            .fetch_Title_Exam_By_TitleExam_CourseID(courseID, titleExam).then(response => {
+               responseReturn = response.data;
+            }).catch(error => {
+                console.error(error);
+            })
+        return responseReturn;
+    }
+
+    static async create_Exam_Java_Core_With_Choose_Question(dataPost ,courseID) {
+        let responseReturn = null;
+        let status = false;
+        await ExamService
+            .post_Exam_Java_Core_With_Choose_Question(dataPost ,courseID).then(response => {
+                responseReturn = response.data;
+            }).catch(error => {
+                console.error(error);
+            })
+        if(responseReturn) {
+            status = true;
+        }
+        return status;
+    }
 }

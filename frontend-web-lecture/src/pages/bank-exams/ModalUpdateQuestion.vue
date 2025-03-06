@@ -13,8 +13,16 @@ export default {
   name: "ModalUpdateQuestion",
   components: {Codemirror},
 
+  props: {
+    bankJavaCoreExam : {
+      type: Array,
+      required: true,
+      default: [],
+    }
+  },
+
   mounted() {
-    //this.setInputContent();
+    this.setInputContent();
     //this.setInputCodeSample();
   },
 
@@ -188,8 +196,19 @@ export default {
     },
 
     setInputContent() {
-      if(this.content) {
+      if(!this.content) {
         this.validationContent = null;
+      } else {
+        if(this.bankJavaCoreExam.length > 0) {
+          const contentQuestion = this.content.trim();
+          const hasMatchingContentQuestion =
+              this.bankJavaCoreExam.some(q => q.contentQuestion === contentQuestion);
+          if (hasMatchingContentQuestion) {
+            this.validationContent = "Content question already exists.";
+          } else {
+            this.validationContent = null;
+          }
+        }
       }
     },
 

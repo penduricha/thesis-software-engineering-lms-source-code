@@ -62,7 +62,7 @@ export default {
     },
 
     filterSearchContentQuestion() {
-      const query = this.searchQuery.toLowerCase();
+      const query = this.searchQuery.toLowerCase().trim();
       this.filteredQuestions = this.bankQuestionJavaCore.filter(question =>
           question.contentQuestion.toLowerCase().includes(query)
       );
@@ -190,7 +190,7 @@ export default {
             >Delete</button>
           </td>
           <td class="style-column-checkbox">
-            <input type="checkbox" class="style-check-box"
+            <input type="checkbox" class="style-check-box check-box-table"
                    :value="question"
                    v-model="selectedQuestions"
             />
@@ -204,8 +204,14 @@ export default {
   <AsideAccount />
   </body>
 
-  <modal-create-question />
-  <modal-update-question ref="modalUpdateQuestion"/>
+  <modal-create-question
+      v-if="bankQuestionJavaCore.length > 0"
+      :bank-java-core-exam="bankQuestionJavaCore"
+  />
+  <modal-update-question ref="modalUpdateQuestion"
+                         v-if="bankQuestionJavaCore.length > 0"
+                         :bank-java-core-exam="bankQuestionJavaCore"
+  />
   <modal-delete-question ref="modalDeleteQuestion"/>
 </template>
 
@@ -214,5 +220,7 @@ export default {
 .style-column-checkbox {
   display: flex;
   justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 </style>

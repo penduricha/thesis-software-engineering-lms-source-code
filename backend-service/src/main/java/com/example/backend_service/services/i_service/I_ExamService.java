@@ -11,8 +11,10 @@ import java.util.Map;
 public interface I_ExamService {
     public Exam createExam(Exam exam, Long courseID);
 
-    public Exam createExam_JavaCore_With_ChooseQuestion
-            (Exam exam, Long courseID, List<QuestionJavaCoreExam> questionJavaCoreExams);
+    public Exam createExam_JavaCore_With_ChooseQuestion(Exam exam,
+                                                        Long courseID,
+                                                        List<Map<String, Object>> questionJavaCoreExams
+    );
 
     public List<Map<String, Object>> getExamsByCourseID(Long courseID);
 
@@ -31,5 +33,7 @@ public interface I_ExamService {
 
     //public Map<String, Object> get_Student_StartDate_Exam_By_StudentID (String studentID);
 
-    public Map<String, Object> get_Status_Retake_And_Scoring_Method_By_ExamID(@Param("examID") Long examID);
+    public Map<String, Object> get_Status_Retake_And_Scoring_Method_By_ExamID(Long examID);
+
+    public String getTitle_Exam_By_CourseID(Long courseID, String titleExam);
 }

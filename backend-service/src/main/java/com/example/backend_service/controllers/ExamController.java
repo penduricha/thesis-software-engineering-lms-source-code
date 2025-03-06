@@ -1,5 +1,6 @@
 package com.example.backend_service.controllers;
 
+import com.example.backend_service.models.BankQuestionJavaCore;
 import com.example.backend_service.models.BankTestCaseJavaCore;
 import com.example.backend_service.models.Exam;
 import com.example.backend_service.models.QuestionJavaCoreExam;
@@ -112,19 +113,24 @@ public class ExamController {
         List<Map<String, Object>> questionJavaCoreExams =
                 (List<Map<String, Object>> ) mapExamPost.get("questionJavaCoreExams");
 
-        List<QuestionJavaCoreExam> convertedQuestionJavaCoreExams = new ArrayList<>();
-        for (Map<String, Object> map : questionJavaCoreExams) {
-            Integer questionJavaCoreIDInteger = (Integer) map.get("questionJavaCoreID");
-            Long questionJavaCoreID = questionJavaCoreIDInteger != null ? questionJavaCoreIDInteger.longValue() : null;
-            String contentQuestion = (String) map.get("contentQuestion");
-            String codeSample = (String) map.get("codeSample");
-            // Create a new BankTestCaseJavaCore object and add it to the list
-            QuestionJavaCoreExam questionJavaCoreExam = new QuestionJavaCoreExam();
-            questionJavaCoreExam.setQuestionJavaCoreExamID(questionJavaCoreID);
-            questionJavaCoreExam.setContentQuestion(contentQuestion);
-            questionJavaCoreExam.setCodeSample(codeSample);
-            convertedQuestionJavaCoreExams.add(questionJavaCoreExam);
-        }
+        //List<QuestionJavaCoreExam> convertedQuestionJavaCoreExams = new ArrayList<>();
+//        List<Long> questionJavaCoreIDs = new ArrayList<>();
+//        for (Map<String, Object> map : questionJavaCoreExams) {
+//            Integer questionJavaCoreIDInteger = (Integer) map.get("questionJavaCoreID");
+//            Long questionJavaCoreID = questionJavaCoreIDInteger != null ? questionJavaCoreIDInteger.longValue() : null;
+//           String contentQuestion = (String) map.get("contentQuestion");
+//            String codeSample = (String) map.get("codeSample");
+//            double score = (Double) map.get("score");
+//            // Create a new BankTestCaseJavaCore object and add it to the list
+//            QuestionJavaCoreExam questionJavaCoreExam = new QuestionJavaCoreExam();
+//            questionJavaCoreIDs.add(questionJavaCoreID);
+//
+//          questionJavaCoreExam.setContentQuestion(contentQuestion);
+//            questionJavaCoreExam.setCodeSample(codeSample);
+//            questionJavaCoreExam.setScore(score);
+//
+//            convertedQuestionJavaCoreExams.add(questionJavaCoreExam);
+//        }
 
         Exam exam = new Exam();
         exam.setTitleExam(titleExam);
@@ -138,7 +144,7 @@ public class ExamController {
         exam.setLinkExamPaper(linkExamPaper); // Assuming there is a setLinkExamPaper method
         exam.setPasswordExam(passwordExam); // Assuming there is a setPasswordExam method
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                examService.createExam_JavaCore_With_ChooseQuestion(exam, courseID, convertedQuestionJavaCoreExams));
+                examService.createExam_JavaCore_With_ChooseQuestion(exam, courseID, questionJavaCoreExams));
     }
 
     @GetMapping("/get_exam_by_course_id/{courseID}")
@@ -236,5 +242,17 @@ public class ExamController {
         exam.setLinkExamPaper(linkExamPaper);
         exam.setPasswordExam(passwordExam);
         return ResponseEntity.ok(examService.updateExam_By_ExamID(exam,examID));
+    }
+
+    @GetMapping("/find-title-exam-by-course-id-title-exam/{courseID}/{titleExam}")
+    public ResponseEntity<Boolean> findTitleExam_By_TitleExam_ExamID
+            (@PathVariable Long courseID,@PathVariable String titleExam)
+            throws HttpClientErrorException{
+        String titleExamFound = examService.getTitle_Exam_By_CourseID(courseID,titleExam);
+        if(titleExamFound != null) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.ok(false);
+        }
     }
 }

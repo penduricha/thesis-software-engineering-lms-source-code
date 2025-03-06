@@ -6,12 +6,18 @@
 </head>
 <body>
     <script>
-        const inputString = `hello public static void main(String[] args) { int a= 5; } hekhlifhlwe`;
+        // const inputString = `hello public static void main(String[] args) { int a= 5; } hekhlifhlwe`;
+        //
+        // // Sử dụng Regular Expression để cắt chuỗi
+        // const result = inputString.match(/(public.*?\})/)[0];
+        //
+        // console.log(result);
+        const arrayA = ['A', 'B', 'C', 'D', 'E'];
+        const arrayB = ['B', 'D'];
+        const result = arrayA.filter(item => !arrayB.includes(item));
 
-        // Sử dụng Regular Expression để cắt chuỗi
-        const result = inputString.match(/(public.*?\})/)[0];
-
-        console.log(result);
+        // In kết quả
+        console.log(result); // Kết quả: ['A', 'C', 'E']
     </script>
 </body>
 </html>

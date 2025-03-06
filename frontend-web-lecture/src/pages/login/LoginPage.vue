@@ -187,7 +187,7 @@ export default {
       >
     </div>
     <div class="view-form-login">
-      <div class="form-login">
+      <form class="form-login" @submit.prevent="handleLogin">
         <h2 class="style-title-login">Login lecture</h2>
         <input type="text"
                class="style-input"
@@ -211,6 +211,7 @@ export default {
         <button class="style-input style-button-login"
                 @click="handleLogin()"
                 @keyup.enter="handleLogin"
+                type="submit"
         >Sign in</button>
 
         <!--  keyup.enter là press enter event -->
@@ -227,7 +228,7 @@ export default {
           />
           <span class="style-remember-me">Remember me</span>
         </div>
-      </div>
+      </form>
     </div>
   </section>
 

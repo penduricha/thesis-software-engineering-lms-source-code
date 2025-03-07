@@ -1,7 +1,7 @@
 <script>
 import './bank-exams.scss';
 import '../../components/span/span-style.scss';
-
+import './modal-create-question.scss';
 
 //import code-mirror
 import {Codemirror} from "vue-codemirror";
@@ -14,6 +14,7 @@ import {autocompletion, completeFromList} from "@codemirror/autocomplete";
 import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
 import SessionStorageTestCase from "@/pages/bank-exams/SessionStorageTestCase.js";
 import Validation from "@/validation/Validation.js";
+import ParameterStorageManager from "@/pages/bank-exams/ParameterStorageManager.js";
 
 
 export default {
@@ -30,6 +31,7 @@ export default {
 
   created() {
     sessionStorage.removeItem("testCases");
+    sessionStorage.removeItem('parameters');
   },
 
   mounted() {
@@ -37,12 +39,15 @@ export default {
     //this.setInputCodeSample();
     this.loadSessionTestCase();
     this.setInputContent();
+    this.setInputNameFunction();
+    this.loadSessionParameters();
   },
 
   data() {
     return {
       content: null,
-      codeSample: "public static int function() {\n\n}\n",
+      //codeSample: "public static int function() {\n\n}\n",
+      codeSample: null,
 
       codeRunToOutput: "public static void main(String[] args) {\n\n}\n",
       input: null,
@@ -59,12 +64,36 @@ export default {
       validationNullTestCases: null,
 
       listTestCases: [],
+
+      //code sample
+      nameFunction: null,
+      validateNameFunction: null,
+
+      dataType: null,
+      validateDataType: null,
+      listDataType: ['int', 'String', 'boolean', 'double', 'Long'],
+
+      //para
+      parameterSession: [],
+      nameParameter: null,
+      dataTypeParameter: null,
+      validateNameParameter: null,
+      validateDataTypeParameter: null,
     }
   },
 
   methods: {
+    loadSessionParameters() {
+      const p = new ParameterStorageManager();
+      if(p.getAllParameters().length > 0) {
+        this.parameterSession = p.getAllParameters();
+      }
+    },
+
     saveTestCase() {
       const testCaseManager = new SessionStorageTestCase();
+
+
       if(!this.input) {
         this.validationInput = "Please enter input test case.";
       }
@@ -208,6 +237,18 @@ export default {
       }
     },
 
+    setSelectDataType() {
+      if(this.dataType) {
+        this.validateDataType = null;
+      }
+    },
+
+    setSelectedDataTypeParameter() {
+      if(this.dataTypeParameter) {
+        this.validateDataTypeParameter = null;
+      }
+    },
+
     setInputCodeSample() {
       if(this.codeSample) {
         this.validationCodeSample = null;
@@ -217,6 +258,30 @@ export default {
     setInputCodeRunToOutput() {
       if(this.codeRunToOutput) {
         this.validationCodeRunToOutput = null;
+      }
+    },
+
+    setInputNameFunction() {
+      if(!this.nameFunction) {
+        this.validateNameFunction = null;
+      } else {
+        if(!Validation.validateNameFunction_Java(this.nameFunction)) {
+          this.validateNameFunction = "Name function is invalid";
+        } else {
+          this.validateNameFunction = null;
+        }
+      }
+    },
+
+    setInputNameParameter() {
+      if(!this.nameParameter) {
+        this.validateNameParameter = null;
+      } else {
+        if(!Validation.validateNameParameter_Java(this.nameParameter)) {
+          this.validateNameParameter = "Name parameter is invalid";
+        } else {
+          this.validateNameParameter = null;
+        }
       }
     },
 
@@ -238,7 +303,53 @@ export default {
       if(this.note){
         this.validationNullTestCases = null;
       }
-    }
+    },
+
+    //save para meter
+    saveParameter() {
+      if(!this.nameParameter) {
+        this.validateNameParameter = "Please enter name parameter.";
+      } else if (!this.dataTypeParameter){
+        this.validateDataTypeParameter = "Please choose data type parameter.";
+      } else {
+        const p = new ParameterStorageManager();
+        p.addParameter(this.nameParameter, this.dataTypeParameter);
+        this.parameterSession = p.getAllParameters();
+        console.log("List parameter: ", this.parameterSession);
+      }
+    },
+
+    deleteParameter(index) {
+      const p = new ParameterStorageManager();
+      p.removeParameter(index);
+      this.parameterSession = p.getAllParameters();
+    },
+
+    //xu li ham generate
+    handleGenerateFunction() {
+      if(!this.nameFunction) {
+        this.validateNameFunction = "Please enter name function.";
+      }
+
+      if(!this.dataType) {
+        this.validateDataType = "Please choose data type.";
+      }
+
+      const validationsToGenerate = [
+        this.validateNameFunction,
+        this.validateDataType
+      ];
+      const validateGenerateEmpty = validationsToGenerate.every(val => val === null);
+      if (validateGenerateEmpty) {
+        if (this.parameterSession.length > 0) {
+          // Create parameter string from parameterSession
+          const params = this.parameterSession.map(param => `${param.dataType} ${param.name}`).join(', ');
+          this.codeSample = `public static ${this.dataType} ${this.nameFunction}(${params}) {\n\n}\n`;
+        } else {
+          this.codeSample = `public static ${this.dataType} ${this.nameFunction}() {\n\n}\n`;
+        }
+      }
+    },
   },
 
   setup() {
@@ -278,7 +389,7 @@ export default {
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form @submit.prevent="submitQuestion">
+          <div>
             <div class="mb-3">
               <label class="form-label">Content:</label>
               <textarea v-model="content"
@@ -296,25 +407,109 @@ export default {
               <label class="form-label">Code sample:</label>
               <codemirror
                   v-model="codeSample"
-                  placeholder="Write code run to out put hear ..."
+                  placeholder="Write code sample ..."
                   :autofocus="true"
                   :indent-with-tab="true"
                   :tab-size="4"
                   :extensions="extensions"
                   @ready="handleReady"
-                  style="width: 100%; height: 5rem;"
+                  style="width: 100%; height: 5rem; cursor: not-allowed"
                   @input="setInputCodeSample"
+                  disabled
+              />
+
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Name function:</label>
+              <input  class="form-control"
+                      v-model="nameFunction"
+                      :class="[{'is-invalid': validateNameFunction !== null}]"
+                     placeholder="Name function"
+                      @input="setInputNameFunction()"
               />
               <span
-                  v-if="validationCodeSample"
+                  v-if="validateNameFunction"
                   class="span-validate-modal-form"
-              >{{validationCodeSample}}</span>
+                  @input="nameFunction"
+              >{{validateNameFunction}}</span>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Select data type:</label>
+              <select class="form-select"
+                      @change="setSelectDataType"
+                      :class="[{'is-invalid': validateDataType !== null}]"
+                      v-model="dataType"
+              >
+                <option v-for="d in listDataType">{{d}}</option>
+              </select>
+              <span
+                  v-if="validateDataType"
+                  class="span-validate-modal-form"
+              >{{validateDataType}}</span>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Add parameter:</label>
+              <div style="display: flex; gap: 3rem">
+                <input  class="form-control"
+                        v-model="nameParameter"
+                        @input="setInputNameParameter"
+                        :class="[{'is-invalid': validateNameParameter !== null}]"
+                        placeholder="Name parameter"
+                />
+                <select class="form-select"
+                        v-model="dataTypeParameter"
+                        :class="[{'is-invalid': validateDataTypeParameter !== null}]"
+                        @change="setSelectedDataTypeParameter()"
+                >
+                  <option v-for="d in listDataType">{{d}}</option>
+                </select>
+                <button type="button"
+                        class="button-purple style-button-save-para"
+                        @click="saveParameter"
+                >Save parameter</button>
+              </div>
+              <span
+                  v-if="validateNameParameter"
+                  class="span-validate-modal-form"
+              >{{validateNameParameter}}</span>
+              <span
+                  v-if="validateDataTypeParameter"
+                  class="span-validate-modal-form"
+              >{{validateDataTypeParameter}}</span>
+            </div>
+
+            <table class="table table-bordered mt-3">
+              <thead>
+              <tr>
+                <th>Index</th>
+                <th>Name parameter</th>
+                <th>Data type</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-if="parameterSession.length > 0" v-for="(p, index) in parameterSession" :key="index">
+                <td>{{ index + 1 }}</td>
+                <td>{{ p.name }}</td>
+                <td>{{ p.dataType }}</td>
+                <td>
+                  <button class="btn btn-sm btn-danger" @click="deleteParameter(index)">Delete</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+
+            <div class="mb-3">
+              <button class="button-purple style-button-generate-func"
+                      @click="handleGenerateFunction()"
+              >Generate function</button>
             </div>
             <div class="mb-3">
               <label class="form-label">Code test out put:</label>
               <codemirror
                   v-model="codeRunToOutput"
-                  placeholder="Write code run to out put hear ..."
+                  placeholder="Code run..."
                   :autofocus="true"
                   :indent-with-tab="true"
                   :tab-size="4"
@@ -358,7 +553,7 @@ export default {
                        @input="setNote()"
                 />
               </div>
-              <button type="button" class="btn button-purple" @click="saveTestCase">Save Test Case</button>
+              <button type="button" class="btn button-purple" @click="saveTestCase">Save test case</button>
 
               <table class="table table-bordered mt-3">
                 <thead>
@@ -392,7 +587,7 @@ export default {
                       @click="createQuestion"
               >Create question</button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>

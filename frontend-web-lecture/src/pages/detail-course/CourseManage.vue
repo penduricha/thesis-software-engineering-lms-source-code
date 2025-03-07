@@ -21,6 +21,7 @@ import ModalUpdateExam from "@/pages/detail-course/ModalUpdateExam.vue";
 import ExamDao from "@/daos/ExamDao.js";
 import ModalDeleteExam from "@/pages/detail-course/ModalDeleteExam.vue";
 import ListExam from "@/pages/detail-course/component-menu-course/ListExam.vue";
+import ModalUpdateQuestionExam from "@/pages/detail-course/component-menu-course/ModalUpdateQuestionExam.vue";
 
 export default {
   name: "CourseManage",
@@ -33,6 +34,7 @@ export default {
   },
 
   components: {
+    ModalUpdateQuestionExam,
     ListExam,
     ModalDeleteExam,
     ModalUpdateExam,
@@ -707,6 +709,8 @@ export default {
                      :lecture-i-d="this.lectureID"
                      :course-i-d-to-delete="this.courseID"
   />
+
+  <modal-update-question-exam />
 </template>
 
 <style scoped lang="scss">

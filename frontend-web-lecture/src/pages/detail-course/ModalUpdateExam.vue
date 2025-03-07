@@ -420,8 +420,7 @@ export default {
                         :class="[{'is-invalid': validateTopicExam !== null}]"
                 >
                   <option value = "Java core">Java core</option>
-<!--                  <option value = "Java class single">Java class single</option>-->
-<!--                  <option value = "Java class mapping">Java class mapping</option>-->
+
                 </select>
                 <span
                     v-if="validateTopicExam"

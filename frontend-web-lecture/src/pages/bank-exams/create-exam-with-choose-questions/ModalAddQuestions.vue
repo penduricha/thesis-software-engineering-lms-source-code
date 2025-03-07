@@ -1,6 +1,7 @@
 <script>
 import SessionStorageQuestionJavaCoreChoose
   from "@/pages/bank-exams/create-exam-with-choose-questions/SessionStorageQuestionJavaCoreChoose.js";
+import './modal-add-question.scss';
 
 export default {
   name: "ModalAddQuestions",

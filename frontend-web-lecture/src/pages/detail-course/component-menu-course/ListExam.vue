@@ -14,7 +14,14 @@
             data-bs-toggle="modal"
             data-bs-target="#updateExamModal"
             @click="handleViewModal(e.examID)"
-        >View</button>
+        >Edit exam</button>
+      </div>
+      <div class="view-button-view-exam">
+        <button
+            class="text-exam color-status-view"
+            data-bs-toggle="modal"
+            data-bs-target="#modal-update-questions-exam"
+        >Edit questions</button>
       </div>
       <div class="view-button-view-delete">
         <button
@@ -29,6 +36,7 @@
       Create new exam
     </button>
   </div>
+
 </template>
 
 <script>
@@ -37,9 +45,11 @@ import '../../main/list-courses.scss';
 // import '../../components/aside/aside-menu-style.scss';
 import '../course-manage.scss';
 import '../../../components/span/span-style.scss';
+import ModalUpdateQuestionExam from "@/pages/detail-course/component-menu-course/ModalUpdateQuestionExam.vue";
 
 export default {
   name: "ListExam",
+  components: {ModalUpdateQuestionExam},
   props: {
     exams: {
       type: Array,

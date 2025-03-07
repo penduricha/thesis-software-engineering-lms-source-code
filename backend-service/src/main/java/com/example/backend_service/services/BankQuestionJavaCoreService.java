@@ -82,6 +82,8 @@ public class BankQuestionJavaCoreService implements I_BankQuestionJavaCoreServic
     public Long deleteBankQuestionJavaCore(Long questionJavaCoreID) throws JpaSystemException {
         BankQuestionJavaCore bankQuestionJavaCore = bankQuestionJavaCoreRepository
                 .findBankQuestionJavaCoreByQuestionJavaCoreID(questionJavaCoreID);
+
+
         if(bankQuestionJavaCore !=null) {
             String sqlDeleteTestCases =
                     "delete from bank_test_case_java_core where question_java_core_id = :questionJavaCoreID";
@@ -89,7 +91,16 @@ public class BankQuestionJavaCoreService implements I_BankQuestionJavaCoreServic
             String sqlDeleteBankQuestionJavaCore =
                     "delete from bank_question_java_core where question_java_core_id = :questionJavaCoreID";
 
+            String sqlDeleteQuestionJavaCoreExam =
+                    "delete from question_java_core_exam where question_java_core_id = :questionJavaCoreID";
+
+
             entityManager.createNativeQuery(sqlDeleteTestCases)
+                    .setParameter("questionJavaCoreID",
+                            bankQuestionJavaCore.getQuestionJavaCoreID())
+                    .executeUpdate();
+
+            entityManager.createNativeQuery(sqlDeleteQuestionJavaCoreExam)
                     .setParameter("questionJavaCoreID",
                             bankQuestionJavaCore.getQuestionJavaCoreID())
                     .executeUpdate();

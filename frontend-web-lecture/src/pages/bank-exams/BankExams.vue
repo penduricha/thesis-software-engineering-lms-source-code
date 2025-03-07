@@ -12,6 +12,7 @@ import ModalUpdateQuestion from "@/pages/bank-exams/ModalUpdateQuestion.vue";
 import ModalDeleteQuestion from "@/pages/bank-exams/ModalDeleteQuestion.vue";
 import SessionStorageQuestionJavaCoreChoose
   from "@/pages/bank-exams/create-exam-with-choose-questions/SessionStorageQuestionJavaCoreChoose.js";
+import SessionStorageTestCase from "@/pages/bank-exams/SessionStorageTestCase.js";
 
 export default {
   name: "BankExams",
@@ -52,6 +53,10 @@ export default {
     saveRouter_Path(route) {
       const routerDao = new RouterDao();
       routerDao.savePath_To_SessionStorage(route);
+      const storedParameters = sessionStorage.getItem('parameters');
+      // if (storedParameters) {
+      //   sessionStorage.removeItem('parameters');
+      // }
     },
 
     async setListBankQuestionJavaCore() {
@@ -108,6 +113,13 @@ export default {
         this.navigateTo_CreateExam();
       }
     },
+
+    handleOpenModalAddQuestion() {
+      const testCaseManager = new SessionStorageTestCase();
+      if(testCaseManager.getAllTestCases().length > 0) {
+        sessionStorage.removeItem("testCases");
+      }
+    },
   },
 
   computed: {
@@ -150,6 +162,7 @@ export default {
           <button class="btn btn-primary button-purple"
                   data-bs-toggle="modal"
                   data-bs-target="#modal-create-question"
+                  @click="handleOpenModalAddQuestion()"
           >Add Question</button>
         </div>
         <div class="col-md-3">

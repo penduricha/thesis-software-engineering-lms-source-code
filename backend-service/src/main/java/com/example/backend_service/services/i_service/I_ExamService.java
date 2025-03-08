@@ -1,0 +1,39 @@
+package com.example.backend_service.services.i_service;
+
+import com.example.backend_service.models.Exam;
+import com.example.backend_service.models.QuestionJavaCoreExam;
+import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+
+public interface I_ExamService {
+    public Exam createExam(Exam exam, Long courseID);
+
+    public Exam createExam_JavaCore_With_ChooseQuestion(Exam exam,
+                                                        Long courseID,
+                                                        List<Map<String, Object>> questionJavaCoreExams
+    );
+
+    public List<Map<String, Object>> getExamsByCourseID(Long courseID);
+
+    public Map<String, Object> viewExam_By_ExamID(Long examID, Long courseID);
+
+    public Map<String, Object> view_Information_Exam_Before_Student(Long examID, Long courseID);
+
+    public Long deleteExam_By_ExamID(Long examID);
+
+    public Exam findExam_By_ExamID(Long examID);
+
+    public Exam updateExam_By_ExamID(Exam exam, Long examID);
+
+    public List<Map<String, Object>>
+    getExams_Calendar_Lecture_By_StartDate(String lectureID,int yearStartDate, int monthStartDate, int dateStartDate);
+
+    //public Map<String, Object> get_Student_StartDate_Exam_By_StudentID (String studentID);
+
+    public Map<String, Object> get_Status_Retake_And_Scoring_Method_By_ExamID(Long examID);
+
+    public String getTitle_Exam_By_CourseID(Long courseID, String titleExam);
+}

@@ -1,0 +1,41 @@
+.card-course {
+  width: 20rem;
+  background-color: #fff;
+  border-radius: 2px;
+  overflow: hidden;
+  border-width: 1px;
+  border-color: #000;
+  border-style: solid;
+}
+
+.card-course:hover {
+  opacity: 0.9;
+}
+
+.card-course .top {
+  background-color: #2c2c84;
+  height: 5rem;
+}
+
+.card-course .bottom {
+  display: flex;
+  height: 5rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottom .title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.bottom .text {
+  font-size: 16px;
+}
+
+.text{
+  font-weight: bold;
+  font-size: 18px;
+}

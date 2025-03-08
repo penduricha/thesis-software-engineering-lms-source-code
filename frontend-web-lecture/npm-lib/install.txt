@@ -1,0 +1,5 @@
+Install:
+npm i vue-router
+
+text editor coding
+npm install vue-codemirror @codemirror/theme-one-dark @codemirror/lang-java @codemirror/view @codemirror/autocomplete

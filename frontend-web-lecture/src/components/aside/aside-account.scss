@@ -1,0 +1,38 @@
+.button-item-dropdown {
+  height: 2.5rem;
+  width: 100%;
+  font-size: 17px;
+}
+
+.text-no-exam {
+  text-align: center;
+  font-size: 18px;
+}
+
+.button-item-dropdown:active {
+  background-color: var(--purple-iuh);
+  color: var(--white);
+}
+
+.style-icon-drop-down {
+  transform: rotate(270deg);
+  margin-top: 2rem
+}
+
+.view-menu-dropdown {
+  width: 250px;
+  height: auto;
+  border-radius: 0;
+}
+
+.btn-update-password {
+  width: 100%;
+  background-color: var(--purple-iuh);
+  color: var(--white);
+  height: 2.5rem;
+  border-radius: 4px;
+}
+
+.btn-update-password:hover {
+  opacity: 0.8;
+}

@@ -6,6 +6,8 @@ import App from './App.vue'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 
+// npm i @fortawesome/fontawesome-free
+import "@fortawesome/fontawesome-free/css/all.min.css";
 //import vue routers
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -18,10 +20,14 @@ import 'vuetify/dist/vuetify-labs.min.css';
 const vuetify = createVuetify();
 
 //import routers
-import routers from "@/assets/list-routes/routers.js";
+import routers from "@/routes/list-routes/routers.js";
+import RouterDao from "@/routes/RoutersDao.js";
+import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 
 const app = createApp(App);
 app.use(vuetify);
+
+//font awesome
 
 function initPage(routers, routerPath) {
     const router = createRouter({
@@ -41,10 +47,27 @@ function initPage(routers, routerPath) {
 }
 
 function execute(){
-    //co the doi path khac
+    const routerDao = new RouterDao();
+    const studentLocalStorage = new StudentLocalStorage();
     const startPagePath = '/';
-    initPage(routers, startPagePath);
+    const checkPath_And_ID = routerDao.getPath_From_LocalStorage() && studentLocalStorage.getStudentID_From_LocalStorage();
+    if(checkPath_And_ID && !routerDao.getPath_From_SessionStorage()) {
+        initPage(routers, routerDao.getPath_From_LocalStorage());
+    } else {
+        if(!routerDao.getPath_From_SessionStorage()) {
+            initPage(routers, startPagePath);
+        } else {
+            initPage(routers, routerDao.getPath_From_SessionStorage());
+        }
+    }
+
 }
+
+// khi break
+// function execute() {
+//     const startPagePath = '/';
+//     initPage(routers, startPagePath);
+// }
 
 execute();
 //createApp(App).mount('#app')

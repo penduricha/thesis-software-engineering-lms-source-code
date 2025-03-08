@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" 
+          href=
+"https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" />
+
+    <!-- Bootstrap Javascript -->
+    <script src=
+"https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js">
+    </script>
+    <script src=
+"https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js">
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="mt-5">
+            <h1 class="text-success">
+                GeeksforGeeks
+            </h1>
+            <strong>
+                Bootstrap 5 Modal getInstance() Method
+            </strong>
+        </div>
+
+        <div class="modal fade" id="gfg" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title">
+                            DSA Self Paced
+                        </h1>
+                    </div>
+                    <div class="modal-body">
+                        Most popular course on DSA trusted by 
+                        over 75,000 students! Built with years 
+                        of experience by industry experts and 
+                        gives you a complete package of video 
+                        lectures, practice problems, 
+                        quizzes, discussion forums and contests. 
+                        Start Today!
+                    </div>
+                    <button class="btn btn-danger mt-4" 
+                        onclick="hideModal()">
+                        Hide
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+
+        <button class="btn btn-success mt-4" 
+                onclick="showModal()">
+            Show Modal
+        </button>
+
+        <button class="btn btn-danger mt-4" 
+            onclick="getInstanceAndDispose()">
+            Get Modal Instance and Dispose It
+        </button>
+
+
+    </div>
+
+    <script>
+        // Initialize the modal
+        const myModal = new bootstrap.Modal('#gfg');
+
+        function hideModal() {
+           const modal = bootstrap.Modal.getInstance('#gfg');
+           modal.hide();
+          
+        }
+
+        // Function Called on click of the Dispose Button
+        function getInstanceAndDispose()
+        {
+            // Get the Instance
+            const modal = bootstrap.Modal.getInstance('#gfg');
+            // Dispose the Modal
+            modal.dispose();
+        }
+
+        // Function Called on click of the Show Button
+        function showModal()
+        {
+            // Get the Instance
+            const modal = bootstrap.Modal.getInstance('#gfg');
+            // Show the Modal if It is not destroyed
+            modal.show();
+        }
+    </script>
+</body>
+
+</html>

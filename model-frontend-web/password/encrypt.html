@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XOR Encryption Example</title>
+</head>
+<body>
+    <script>
+        function xorEncryptDecrypt(input, key) {
+            let output = '';
+            for (let i = 0; i < input.length; i++) {
+                // Mã hóa/giải mã bằng phép toán XOR
+                output += String.fromCharCode(input.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            }
+            return output;
+        }
+
+        const password = '1234';
+        const key = 'mysecretkey';
+
+        // Mã hó
+
+        // Giải mã
+        const decryptedPassword = xorEncryptDecrypt(xorEncryptDecrypt(null, key), key);
+        console.log('Decrypted Password:', decryptedPassword);
+    </script>
+</body>
+</html>

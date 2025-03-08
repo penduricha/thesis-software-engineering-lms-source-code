@@ -1,17 +1,44 @@
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/project_thesis_final
+    url: jdbc:mariadb://localhost:3307/project_thesis_final?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8
     username: root
     password: 123
     driver-class-name: org.mariadb.jdbc.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 10
+      auto-commit: true
+
+
+
+#      minimum-idle: Số lượng kết nối tối thiểu trong pool.
+#      maximum-pool-size: Số lượng kết nối tối đa trong pool.
+#      auto-commit: Chế độ tự động commit.
+#      transaction-isolation: Mức độ phân cách giao dịch.
   jpa:
-    #    t�nh n?ng open-in-view ???c b?t theo m?c ??nh.
-    #  ?i?u n�y c� th? g�y ra c�c truy v?n c? s? d? li?u kh�ng c?n thi?t trong qu� tr�nh render view,
-    #  ?nh h??ng ??n hi?u su?t v� kh? n?ng qu?n l� giao d?ch.
     open-in-view: false
     hibernate:
       ddl-auto: update
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MariaDBDialect
+
+  ai:
+    openai:
+      api-key: "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"
+
+#  openai:
+#    api:
+#      key: "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"
+#      url: "https://api.openai.com/v1/chat/completions"
+
+
+#  session:
+#    store-type: jdbc
+#    jdbc:
+#      table-name: spring_session # Tên bảng cho session
+
+server:
+  servlet:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+

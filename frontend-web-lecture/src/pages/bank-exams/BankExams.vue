@@ -114,6 +114,18 @@ export default {
       }
     },
 
+    handleNavigateCreateExamJavaCoreRandom() {
+      this.$router.replace({
+        path: '/main-page/bank-exams/java-core/create-exam-random',
+        query: {
+          //selectedQuestionIDs: this.selectedQuestionIDs,
+        }
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
+    },
+
     handleOpenModalAddQuestion() {
       const testCaseManager = new SessionStorageTestCase();
       if(testCaseManager.getAllTestCases().length > 0) {
@@ -163,13 +175,18 @@ export default {
                   data-bs-toggle="modal"
                   data-bs-target="#modal-create-question"
                   @click="handleOpenModalAddQuestion()"
-          >Add Question</button>
+          >Add question</button>
         </div>
         <div class="col-md-3">
           <button class="btn btn-primary button-purple"
                   @click="handleNavigateCreateExam()"
           >Create exam java core</button>
         </div>
+      </div>
+      <div class="row-mb-3">
+        <button class="btn btn-primary button-purple"
+                @click="handleNavigateCreateExamJavaCoreRandom()"
+        >Create exam java core by random</button>
       </div>
 
       <table class="table table-striped">

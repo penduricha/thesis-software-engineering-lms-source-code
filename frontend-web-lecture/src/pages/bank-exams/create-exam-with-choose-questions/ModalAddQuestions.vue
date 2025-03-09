@@ -52,6 +52,8 @@ export default {
         const sessionQuestionJavaCoreChoose = new SessionStorageQuestionJavaCoreChoose();
         const allQuestions = sessionQuestionJavaCoreChoose.getAllQuestions();
         const idsToRemove = allQuestions.map(question => question.questionJavaCoreID);
+
+        //trich xuat data chua duoc them vao
         this.tableQuestions = this.bankQuestionJavaCore.filter(question =>
             !idsToRemove.includes(question.questionJavaCoreID)
         );

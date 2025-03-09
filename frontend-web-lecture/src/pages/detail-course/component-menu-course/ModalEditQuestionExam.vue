@@ -1,5 +1,6 @@
 <script>
-import './modal-update-question-exam.scss';
+import './modal-edit-question-exam.scss';
+import QuestionJavaCoreExamDao from "@/daos/QuestionJavaCoreExamDao.js";
 
 export default {
   name: "ModalUpdateQuestionExam",
@@ -9,12 +10,24 @@ export default {
   },
 
   data() {
-    return {}
+    return {
+      questionJavaCoreExams: [],
+
+      bankQuestionJavaCoreExam: [],
+
+      tableQuestionJavaCoreExamChoose: [],
+
+      numbersScore: Array.from({ length: 10 }, (_, i) => i + 1),
+    }
   },
 
   methods: {
-    async setQuestions(examID) {
-
+    async setQuestions(examID, topicExam) {
+      if(topicExam === "Java core") {
+        this.questionJavaCoreExams = await
+            QuestionJavaCoreExamDao.getQuestions_By_ExamID(examID);
+        console.log("List questions java core in exam: ", this.questionJavaCoreExams);
+      }
     }
   }
 }

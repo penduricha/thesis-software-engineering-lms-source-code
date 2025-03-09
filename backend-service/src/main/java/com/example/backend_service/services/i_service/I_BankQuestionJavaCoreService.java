@@ -19,4 +19,6 @@ public interface I_BankQuestionJavaCoreService {
 
     public BankQuestionJavaCore updateBankQuestionJavaCore(BankQuestionJavaCore bankQuestionJavaCore,
                                                            List<BankTestCaseJavaCore> bankTestCaseJavaCoreList);
+
+    public Long getTotalBankQuestionJavaCore();
 }

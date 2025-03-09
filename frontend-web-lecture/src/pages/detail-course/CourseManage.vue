@@ -21,7 +21,7 @@ import ModalUpdateExam from "@/pages/detail-course/ModalUpdateExam.vue";
 import ExamDao from "@/daos/ExamDao.js";
 import ModalDeleteExam from "@/pages/detail-course/ModalDeleteExam.vue";
 import ListExam from "@/pages/detail-course/component-menu-course/ListExam.vue";
-import ModalUpdateQuestionExam from "@/pages/detail-course/component-menu-course/ModalUpdateQuestionExam.vue";
+import ModalUpdateQuestionExam from "@/pages/detail-course/component-menu-course/ModalEditQuestionExam.vue";
 
 export default {
   name: "CourseManage",
@@ -342,6 +342,10 @@ export default {
       await this.$refs.modalDeleteExam.setExam(this.examIDToDelete);
     },
 
+    async handleOpenEditQuestionsModal(examID, topicExam) {
+      await this.$refs.modalUpdateQuestionExams.setQuestions(examID, topicExam);
+    },
+
     async handleCreateExam() {
       this.validationNullField();
       //tạo danh sách ktra các validate xem còn nào còn thông báo ko
@@ -452,7 +456,11 @@ export default {
         <button class="button-nav-in-course">Student Grades List</button>
         <button class="button-nav-in-course">Statistic</button>
       </div>
-      <list-exam :exams="exams" @view-exam="handleViewModal" @delete-exam="handleOpenDeleteModal"/>
+      <list-exam :exams="exams"
+                 @view-exam="handleViewModal"
+                 @delete-exam="handleOpenDeleteModal"
+                 @edit-questions-exam="handleOpenEditQuestionsModal"
+      />
     </section>
   </main>
   <AsideAccount/>
@@ -710,7 +718,7 @@ export default {
                      :course-i-d-to-delete="this.courseID"
   />
 
-  <modal-update-question-exam />
+  <modal-update-question-exam ref="modalUpdateQuestionExams"  />
 </template>
 
 <style scoped lang="scss">

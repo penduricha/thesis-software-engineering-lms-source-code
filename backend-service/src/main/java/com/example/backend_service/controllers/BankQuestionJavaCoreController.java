@@ -127,4 +127,9 @@ public class BankQuestionJavaCoreController {
             throws HttpClientErrorException{
         return ResponseEntity.ok(bankTestCaseJavaCoreService.getTestCases_By_QuestionJavaCoreID(questionJavaCoreID));
     }
+
+    @GetMapping("/bank-question-java-core/get-total-bank-question-java-core")
+    public ResponseEntity<Long> getTotalBankQuestionJavaCore() throws HttpClientErrorException{
+        return ResponseEntity.ok(bankQuestionJavaCoreService.getTotalBankQuestionJavaCore());
+    }
 }

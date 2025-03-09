@@ -6,6 +6,8 @@ import ModalCreateExamJavaCoreFromBank
     from "@/pages/bank-exams/create-exam-with-choose-questions/CreateExamJavaCoreFromBank.vue";
 import CreateExamJavaCoreFromBank
     from "@/pages/bank-exams/create-exam-with-choose-questions/CreateExamJavaCoreFromBank.vue";
+import CreateExamJavaCoreRandomQuestions
+    from "@/pages/bank-exams/create-exam-with-random-questions/CreateExamJavaCoreRandomQuestions.vue";
 
 const routers = [
     // '/' khi init trang
@@ -19,9 +21,9 @@ const routers = [
     },
     { path: '/main-page/bank-exams/java-core/create-exam-choose',
         component: CreateExamJavaCoreFromBank ,
-        // props: (route) => ({
-        //     selectedQuestionIDs: route.query.selectedQuestionIDs,
-        // })
+    },
+    { path: '/main-page/bank-exams/java-core/create-exam-random',
+        component: CreateExamJavaCoreRandomQuestions ,
     },
 ];
 export default routers;

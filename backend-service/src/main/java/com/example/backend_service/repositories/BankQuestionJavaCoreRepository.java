@@ -17,4 +17,10 @@ public interface BankQuestionJavaCoreRepository extends JpaRepository<BankQuesti
     List<Map<String, Object>> getRandom_10_Questions_JavaCore();
 
     BankQuestionJavaCore findBankQuestionJavaCoreByQuestionJavaCoreID(Long questionJavaCoreID);
+
+    @Query(value = """
+            select count(*) from bank_question_java_core;
+            """,
+            nativeQuery = true)
+    Long getTotalBankQuestionJavaCore();
 }

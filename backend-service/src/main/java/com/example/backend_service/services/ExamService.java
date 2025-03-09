@@ -101,14 +101,11 @@ public class ExamService implements I_ExamService {
             //set relationship
             course.getExams().add(exam);
             exam.setCourse(course);
-
             for (Map<String, Object> map : questionJavaCoreExams) {
                 Integer questionJavaCoreIDInteger = (Integer) map.get("questionJavaCoreID");
                 Long questionJavaCoreID = questionJavaCoreIDInteger != null ? questionJavaCoreIDInteger.longValue() : null;
-
                 Object scoreObject = map.get("score");
                 double score = 0.0;
-
                 if (scoreObject instanceof Integer) {
                     score = (Integer) scoreObject;
                 } else if (scoreObject instanceof Double) {
@@ -128,18 +125,26 @@ public class ExamService implements I_ExamService {
                     questionJavaCoreExam.setContentQuestion(bankQuestionJavaCoreFound.getContentQuestion());
                     questionJavaCoreExam.setCodeSample(bankQuestionJavaCoreFound.getCodeSample());
                     questionJavaCoreExam.setScore(score);
-
                     // relationship
                     exam.getQuestionJavaCoreExams().add(questionJavaCoreExam);
                     questionJavaCoreExam.setExam(exam);
-
                     bankQuestionJavaCoreFound.getQuestionJavaCoreExams().add(questionJavaCoreExam);
                     questionJavaCoreExam.setBankQuestionJavaCore(bankQuestionJavaCoreFound);
                 }
             }
-
             return examRepository.save(exam);
         }
+        return null;
+    }
+
+    @Override
+    public Exam createExam_JavaCore_With_RandomQuestion(Exam exam, Long courseID, int numberOfQuestions)
+            throws JpaSystemException {
+        // Retrieve the course using the provided courseID
+        Course course = courseRepository.findCourseByCourseID(courseID);
+        //neu java khác sẽ có kiểu khác
+        String javaCore = "Java Core";
+
         return null;
     }
 

@@ -79,6 +79,10 @@ export default {
       dataTypeParameter: null,
       validateNameParameter: null,
       validateDataTypeParameter: null,
+
+      dataParameter: null,
+      validateDataInputParameter: null,
+      dataInputParameters: [],
     }
   },
 
@@ -305,15 +309,36 @@ export default {
       }
     },
 
+    handleGenerateInputData() {
+      if (!this.nameFunction) {
+        this.validateNameFunction = "Please enter name function.";
+      } else if (this.dataInputParameters.length > 0) {
+        const params = this.dataInputParameters.join(",");
+        let codeLines = this.codeRunToOutput.split('\n');
+        const insertIndex = codeLines.length - 2; // Insert before the last line
+        codeLines.splice(insertIndex, 0, `\tSystem.out.println(${this.nameFunction}(${params}));`);
+        this.codeRunToOutput = codeLines.join('\n') + '';
+      }
+    },
+
     //save para meter
     saveParameter() {
       if(!this.nameParameter) {
         this.validateNameParameter = "Please enter name parameter.";
-      } else if (!this.dataTypeParameter){
+      } else if (this.parameterSession.length > 0) {
+        const hasMatchingNameParameter =
+            this.parameterSession.some(p => p.name === this.nameParameter.trim());
+        if (hasMatchingNameParameter) {
+          this.validateNameParameter = "Name parameter is exist.";
+        } else {
+          this.validateNameParameter = null;
+        }
+      }
+     if (!this.dataTypeParameter){
         this.validateDataTypeParameter = "Please choose data type parameter.";
       } else {
         const p = new ParameterStorageManager();
-        p.addParameter(this.nameParameter, this.dataTypeParameter);
+        p.addParameter(this.nameParameter.trim(), this.dataTypeParameter);
         this.parameterSession = p.getAllParameters();
         console.log("List parameter: ", this.parameterSession);
       }
@@ -348,6 +373,29 @@ export default {
         } else {
           this.codeSample = `public static ${this.dataType} ${this.nameFunction}() {\n\n}\n`;
         }
+      }
+    },
+
+    handleSaveDataParameter() {
+      if(!this.dataParameter) {
+        this.validateDataInputParameter = "Please enter data parameter."
+      } else {
+        this.dataInputParameters.push(this.dataParameter);
+        this.dataParameter = null;
+      }
+    },
+
+    setInputDataParameter() {
+      if(this.dataParameter) {
+        this.validateDataInputParameter = null;
+      }
+    },
+
+    deleteDataInputParameter(index) {
+      if (index >= 0 && index < this.dataInputParameters.length) {
+        this.dataInputParameters.splice(index, 1);
+      } else {
+        console.error('Index out of bounds');
       }
     },
   },
@@ -516,17 +564,55 @@ export default {
                   :extensions="extensions"
                   @ready="handleReady"
                   style="width: 100%; height: 30rem;"
-                  @input="setInputCodeRunToOutput()"
               />
-              <span
-                  v-if="validationCodeRunToOutput"
-                  class="span-validate-modal-form"
-              >{{validationCodeRunToOutput}}</span>
             </div>
             <div>
-              <h5>Test Cases</h5>
+              <h5>Test cases</h5>
               <div class="mb-3">
-                <label class="form-label">Input:</label>
+                <h5>Input parameter</h5>
+                <div style="display: flex; gap: 3rem">
+                  <input  class="form-control"
+                          placeholder="Data parameter"
+                          v-model="dataParameter"
+                          @input="setInputDataParameter"
+                          :class="[{'is-invalid': validateDataInputParameter !== null}]"
+                  />
+                  <button type="button"
+                          class="button-purple style-button-save-para"
+                          @click="handleSaveDataParameter()"
+                  >Save data parameter</button>
+                </div>
+                <span
+                    v-if="validateDataInputParameter"
+                    class="span-validate-modal-form"
+                >{{validateDataInputParameter}}</span>
+                <table class="table table-bordered mt-3">
+                  <thead>
+                  <tr>
+                    <th>Index</th>
+                    <th>Input data</th>
+                    <th>Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="(d, index) in dataInputParameters" :key="index">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ d }}</td>
+                    <td>
+                      <button class="btn btn-sm btn-danger" @click="deleteDataInputParameter(index)">Delete</button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="mb-3">
+                <button type="button"
+                        class="button-purple style-button-generate-func"
+                        @click="handleGenerateInputData"
+                >Generate input data</button>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Input data (text):</label>
                 <input v-model="input" class="form-control"
                        :class="[{'is-invalid': validationInput !== null}]"
                        @input="setInput()"

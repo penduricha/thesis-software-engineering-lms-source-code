@@ -14,7 +14,7 @@ import {autocompletion, completeFromList} from "@codemirror/autocomplete";
 import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import StudentDao from "@/daos/StudentDao.js";
 
-import QuestionJavaCoreDao from "@/daos/QuestionJavaCoreDao.js";
+import QuestionJavaCoreExamDao from "@/daos/QuestionJavaCoreExamDao.js";
 import ModalNotificationAfterSubmit from "@/pages/ui-exam-questions/ModalNotificationAfterSubmit.vue";
 import CodeStorageDao from "@/daos/CodeStorageDao.js";
 
@@ -109,14 +109,14 @@ export default {
     },
 
     async setQuestion_By_ExamID() {
-      this.questions = await QuestionJavaCoreDao.getQuestions_By_ExamID(this.examID);
+      this.questions = await QuestionJavaCoreExamDao.getQuestions_By_ExamID(this.examID);
       console.log("10 questions: ", this.questions);
       this.questionInit = this.questions[this.indexQuestion];
       const studentLocalStorage  = new StudentLocalStorage();
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
       if(studentID) {
         if (this.questionInit) {
-            this.testCasesInit = await QuestionJavaCoreDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
+            this.testCasesInit = await QuestionJavaCoreExamDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
             //console.log("Test case: ", this.testCasesInit);
             this.contentQuestion = this.questionInit.contentQuestion;
             this.score = this.questionInit.score;
@@ -198,7 +198,7 @@ export default {
       this.indexQuestion = Number(sessionStorage.getItem('indexQuestion'));
       this.questionInit = q;
       if(this.questionInit) {
-        this.testCasesInit = await QuestionJavaCoreDao
+        this.testCasesInit = await QuestionJavaCoreExamDao
             .getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
         console.log("Test case: ", this.testCasesInit);
         this.contentQuestion = this.questionInit.contentQuestion;
@@ -299,9 +299,13 @@ export default {
       }
     },
 
-    handleReset() {
+    handleOpenModalTestDebugJava() {
 
-    }
+    },
+
+    // handleReset() {
+    //
+    // }
   },
 
   setup() {
@@ -429,10 +433,16 @@ export default {
             >Save all
             </button>
 
+<!--            <button-->
+<!--                class="button-text-editor"-->
+<!--                @click="handleReset()"-->
+<!--            >Reset-->
+<!--            </button>-->
             <button
+                ref="testDebug"
                 class="button-text-editor"
-                @click="handleReset()"
-            >Reset
+                @click="handleOpenModalTestDebugJava()"
+            >Test Debug Java
             </button>
           </div>
           <div class="view-text-editor">

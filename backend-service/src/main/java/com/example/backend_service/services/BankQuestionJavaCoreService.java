@@ -149,4 +149,9 @@ public class BankQuestionJavaCoreService implements I_BankQuestionJavaCoreServic
         throw new EntityNotFoundException("BankQuestionJavaCore not found with ID: "
                 + bankQuestionJavaCore.getQuestionJavaCoreID());
     }
+
+    @Override
+    public Long getTotalBankQuestionJavaCore() {
+        return bankQuestionJavaCoreRepository.getTotalBankQuestionJavaCore();
+    }
 }

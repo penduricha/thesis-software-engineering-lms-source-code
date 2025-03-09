@@ -16,6 +16,8 @@ public interface I_ExamService {
                                                         List<Map<String, Object>> questionJavaCoreExams
     );
 
+    public Exam createExam_JavaCore_With_RandomQuestion(Exam exam, Long courseID, int numberOfQuestions);
+
     public List<Map<String, Object>> getExamsByCourseID(Long courseID);
 
     public Map<String, Object> viewExam_By_ExamID(Long examID, Long courseID);

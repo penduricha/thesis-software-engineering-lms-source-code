@@ -188,8 +188,8 @@ public class ExamService implements I_ExamService {
     public List<Map<String, Object>> getExamsByCourseID(Long courseID) throws JpaSystemException {
         List<Map<String, Object>> queryList = examRepository.getExamsByCourseID(courseID);
         List<Map<String, Object>> convertedList = new ArrayList<>();
-
-        LocalDateTime now = LocalDateTime.now(); // Khởi tạo LocalDateTime now
+        // Khởi tạo LocalDateTime now
+        LocalDateTime now = LocalDateTime.now();
 
         if (!queryList.isEmpty()) {
             for (Map<String, Object> queryMap : queryList) {

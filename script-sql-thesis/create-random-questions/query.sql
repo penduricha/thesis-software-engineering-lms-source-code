@@ -10,9 +10,11 @@ from bank_question_java_core b order by rand() limit 2;
 select * from question_java_core_exam
 where exam_id = 45;
 
-select exam_id from exam;
+select exam_id, title_exam from exam;
 
 select * from question_java_core_exam
 where exam_id = 45;
+
+select * from question_java_core_exam;
 
 

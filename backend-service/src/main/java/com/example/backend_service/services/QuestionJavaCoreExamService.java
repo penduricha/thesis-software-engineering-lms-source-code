@@ -5,6 +5,9 @@ import com.example.backend_service.models.QuestionJavaCoreExam;
 import com.example.backend_service.repositories.ExamRepository;
 import com.example.backend_service.repositories.QuestionJavaCoreExamRepository;
 import com.example.backend_service.services.i_service.I_QuestionJavaCoreExamService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,9 @@ public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamServic
     private final QuestionJavaCoreExamRepository questionJavaCoreExamRepository;
 
     private final ExamRepository examRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public QuestionJavaCoreExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ExamRepository examRepository) {
         this.questionJavaCoreExamRepository = questionJavaCoreExamRepository;
@@ -62,9 +68,34 @@ public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamServic
     }
 
     @Override
+    @Transactional
     public Exam updateQuestionJavaCoreExams_By_ExamID
             (Long examID, List<QuestionJavaCoreExam> questionJavaCoreExams)
             throws JpaSystemException {
+        Exam examFound = examRepository.findExamByExamID(examID);
+        if(examFound != null) {
+            //delete all
+            String sqlDeleteAl_By_ExamID = "delete from question_java_core_exam where exam_id = ?";
+            entityManager.createNativeQuery(sqlDeleteAl_By_ExamID)
+                    .setParameter(1, examFound.getExamID())
+                    .executeUpdate();
+
+            if(!questionJavaCoreExams.isEmpty()) {
+                for(QuestionJavaCoreExam questionJavaCoreExam: questionJavaCoreExams) {
+                    String sqlInsert =
+                    "insert into question_java_core_exam (code_sample, content_question, question_java_core_id, exam_id, score) " +
+                    "values (?, ?, ? ,? ,?)";
+                    entityManager.createNativeQuery(sqlInsert)
+                            .setParameter(1, questionJavaCoreExam.getCodeSample())
+                            .setParameter(2, questionJavaCoreExam.getContentQuestion())
+                            .setParameter(3, questionJavaCoreExam.getBankQuestionJavaCore().getQuestionJavaCoreID())
+                            .setParameter(4, examFound.getExamID())
+                            .setParameter(5, questionJavaCoreExam.getScore())
+                            .executeUpdate();
+                }
+                return examFound;
+            }
+        }
         return null;
     }
 

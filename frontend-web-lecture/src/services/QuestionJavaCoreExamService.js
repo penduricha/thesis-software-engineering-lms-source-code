@@ -11,4 +11,9 @@ export default class QuestionJavaCoreExamService {
         return axiosConfig.getAPIClient()
             .get(`/bank_test_cases/get_test_case_by_question_java_core_exam_id/${questionJavaCoreExamID}`);
     }
+
+    static put_Questions_JavaCoreExam(dataPut, examID) {
+        return axiosConfig.getAPIClient()
+            .put(`/put_all_questions_java_core_exam_by_exam_id/${examID}`, dataPut, {});
+    }
 }

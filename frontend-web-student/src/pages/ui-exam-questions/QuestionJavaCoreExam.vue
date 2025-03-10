@@ -19,7 +19,7 @@ import ModalNotificationAfterSubmit from "@/pages/ui-exam-questions/ModalNotific
 import CodeStorageDao from "@/daos/CodeStorageDao.js";
 
 export default {
-  name: "QuestionExam",
+  name: "QuestionJavaCoreExam",
   components: {
     ModalNotificationAfterSubmit,
     Codemirror,

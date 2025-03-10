@@ -35,4 +35,6 @@ public interface QuestionJavaCoreExamRepository extends JpaRepository<QuestionJa
 //                    """, nativeQuery = true)
 //    Map<String, Object>  findQuestionJavaCoreExams_Content_Question_CodeRunToOutput_Score_By_QuestionJavaCoreExamID
 //            (@Param("questionJavaCoreExamID") Long questionJavaCoreExamID);
+
+    void deleteAllByExam_ExamID(Long examID);
 }

@@ -23,11 +23,14 @@ export default {
       //numbersScore: Array.from({length: 10}, (_, i) => i + 1),
 
       searchQuery: null,
+
+      examID: null,
     }
   },
 
   methods: {
     async setQuestions(examID, topicExam) {
+      this.examID = examID;
       if (topicExam === "Java core") {
         this.questionJavaCoreExams = await
             QuestionJavaCoreExamDao.getQuestions_By_ExamID(examID);
@@ -94,6 +97,14 @@ export default {
         alert("Total score must be 10.");
       } else {
         console.log("Data to put: ", this.questionJavaCoreExams);
+        if(this.examID) {
+          let statusPut = await QuestionJavaCoreExamDao.update_Questions_JavaCoreExam(this.questionJavaCoreExams, this.examID);
+          if(statusPut) {
+            window.location.reload()
+          } else {
+            alert("Update failed.");
+          }
+        }
       }
     },
 

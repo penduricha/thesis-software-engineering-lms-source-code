@@ -24,4 +24,21 @@ export default class QuestionJavaCoreExamDao {
             })
         return testCases;
     }
+
+    static async update_Questions_JavaCoreExam(dataPut, examID){
+        let status = false;
+        let responseReturn = null;;
+        await QuestionJavaCoreExamService
+            .put_Questions_JavaCoreExam(dataPut, examID)
+            .then(response => {
+                responseReturn = response.data;
+            }).catch(error => {
+                console.error(error);
+            })
+
+        if(responseReturn) {
+            status = true;
+        }
+        return status;
+    }
 }

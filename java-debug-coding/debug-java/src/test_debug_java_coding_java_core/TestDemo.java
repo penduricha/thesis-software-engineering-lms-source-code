@@ -15,4 +15,5 @@ public class TestDemo {
         String output = executeJavaCoreByStudentID.executeJava(code);
         System.out.println(output);
     }
+
 }

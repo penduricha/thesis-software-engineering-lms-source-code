@@ -83,7 +83,7 @@ export default {
     },
 
     navigateTo_CreateExam() {
-      this.$router.replace({
+      this.$router.push({
         path: '/main-page/bank-exams/java-core/create-exam-choose',
         query: {
           //selectedQuestionIDs: this.selectedQuestionIDs,
@@ -95,12 +95,13 @@ export default {
     },
 
     handleNavigateCreateExam() {
-      if(this.selectedQuestions.length === 0) {
+      if(this.selectedQuestions.length <= 0) {
         alert("Please select a question.");
       } else {
         //don sach session
         sessionStorage.removeItem("questionsSelected");
-
+        let score = 10.0 / this.selectedQuestions.length;
+        let roundedScore = Math.round(score * 4) / 4;
         //tao moi
         const sessionQuestionJavaCoreChoose = new SessionStorageQuestionJavaCoreChoose();
         this.selectedQuestions.forEach((question) => {
@@ -108,6 +109,7 @@ export default {
             question.questionJavaCoreID,
             question.contentQuestion,
             question.codeSample,
+            Number(roundedScore),
           )
         })
         this.navigateTo_CreateExam();
@@ -115,7 +117,7 @@ export default {
     },
 
     handleNavigateCreateExamJavaCoreRandom() {
-      this.$router.replace({
+      this.$router.push({
         path: '/main-page/bank-exams/java-core/create-exam-random',
         query: {
           //selectedQuestionIDs: this.selectedQuestionIDs,

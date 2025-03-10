@@ -11,6 +11,7 @@ import ExamDao from "@/daos/ExamDao.js";
 import ModalAddQuestions from "@/pages/bank-exams/create-exam-with-choose-questions/ModalAddQuestions.vue";
 import AsideAccount from "@/components/aside/AsideAccount.vue";
 import AsideMenu from "@/components/aside/AsideMenu.vue";
+import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
 
 export default {
   name: "CreateExamJavaCoreRandomQuestions",
@@ -34,6 +35,7 @@ export default {
     this.setLectureID();
     //this.setExams();
     this.setCourses();
+    this.setTotalBankQuestionJavaCore();
   },
 
   mounted() {
@@ -52,6 +54,8 @@ export default {
     return {
       lectureID: null,
       courses: [],
+      numberOfQuestions: 0,
+      //validateNumberOfQuestions: null,
 
       titleExam: null,
       typeExam: null,
@@ -81,7 +85,8 @@ export default {
       passwordExam: null,
       passwordExamHashed: null,
 
-
+      numberOfQuestionsToRandom: 1,
+      validateNumberOfQuestionsToRandom: null,
 
     }
   },
@@ -109,6 +114,10 @@ export default {
       if(!this.courses) {
         alert("No course found.");
       }
+    },
+
+    async setTotalBankQuestionJavaCore() {
+      this.numberOfQuestions = await BankQuestionJavaCoreDao.get_Total_Questions_JavaCore();
     },
 
     getRoute() {
@@ -333,33 +342,34 @@ export default {
           "endDateMinute": dateEndDate.getMinutes(),
           "linkExamPaper": this.examPaper,
           "passwordExam": this.passwordExamHashed,
-
         }
         console.log("Exam post: ",examPost);
         console.log("Course ID choose: ", this.courseIDChoose);
 
-        if(this.courseIDChoose && this.titleExam) {
+        if(this.courseIDChoose && this.titleExam && this.numberOfQuestionsToRandom) {
           let isExistTitleExam = await ExamDao
               .get_Exist_Title_Exam_By_TitleExam_CourseID(Number(this.courseIDChoose), this.titleExam.trim());
           if(isExistTitleExam) {
             this.validateTitleExam = "Title exam is exist";
           } else {
-            // let statusPost =
-            //     await ExamDao.create_Exam_Java_Core_With_Choose_Question(examPost, Number(this.courseIDChoose));
-            // if(statusPost) {
-            //   //navigate
-            //   this.$router.replace({
-            //     path: '/main-page/list-courses/course-manage',
-            //     query: {
-            //       courseID: this.courseIDChoose,
-            //     }
-            //   }).catch((error) => {
-            //     console.error('Error navigating :', error);
-            //     alert(error);
-            //   });
-            // } else {
-            //   alert("Create exam failed.");
-            // }
+            let statusPost =
+                await ExamDao.create_Exam_Java_Core_With_Random_Question(examPost,
+                    Number(this.courseIDChoose),
+                    Number(this.numberOfQuestionsToRandom));
+            if(statusPost) {
+              //navigate
+              this.$router.replace({
+                path: '/main-page/list-courses/course-manage',
+                query: {
+                  courseID: this.courseIDChoose,
+                }
+              }).catch((error) => {
+                console.error('Error navigating :', error);
+                alert(error);
+              });
+            } else {
+              alert("Create exam failed.");
+            }
           }
         }
 
@@ -510,6 +520,22 @@ export default {
                       v-if="validateDuration"
                       class="span-validate-modal-form"
                   >{{validateDuration}}</span>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">
+                  Number questions random:<span class="required-star">*</span>
+                </label>
+                <div class="col-sm-9">
+                  <select class="form-select"
+                          v-model="numberOfQuestionsToRandom"
+                  >
+                    <option
+                        v-for="index in Array.from({ length: this.numberOfQuestions - 1 },
+                        (v, i) => i + 1)">{{index}}</option>
+                  </select>
+
                 </div>
               </div>
 

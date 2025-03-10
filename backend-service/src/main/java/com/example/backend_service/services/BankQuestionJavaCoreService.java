@@ -151,7 +151,27 @@ public class BankQuestionJavaCoreService implements I_BankQuestionJavaCoreServic
     }
 
     @Override
-    public Long getTotalBankQuestionJavaCore() {
+    public Long getTotalBankQuestionJavaCore() throws JpaSystemException {
         return bankQuestionJavaCoreRepository.getTotalBankQuestionJavaCore();
+    }
+
+    @Override
+    public List<Map<String, Object>> getRandom_Questions_JavaCore_By_NumberQuestions(int numberOfQuestions)
+            throws JpaSystemException {
+        if(getBankQuestions_JavaCore().size() <  numberOfQuestions) {
+            return null;
+        } else {
+            return
+                    bankQuestionJavaCoreRepository
+                            .getRandom_Questions_JavaCore_By_NumberQuestions(numberOfQuestions).stream()
+                    .map(originalMap -> {
+                        Map<String, Object> newMap = new HashMap<>();
+                        newMap.put("codeSample", originalMap.get("code_sample"));
+                        newMap.put("contentQuestion", originalMap.get("content_question"));
+                        newMap.put("questionJavaCoreID", originalMap.get("question_java_core_id"));
+                        return newMap;
+                    })
+                    .collect(Collectors.toList());
+        }
     }
 }

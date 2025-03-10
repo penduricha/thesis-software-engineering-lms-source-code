@@ -47,4 +47,11 @@ export default class ExamService {
             .getAPIClient()
             .post (`/post_exam_java_core_with_choose_questions/${courseID}`, dataPost, {});
     }
+
+    static post_Exam_Java_Core_With_Random_Question(dataPost, courseID, numberOfQuestionsToRandom) {
+        return axiosConfig
+            .getAPIClient()
+            .post (`/post_exam_java_core_random_question/${courseID}/${numberOfQuestionsToRandom}`,
+                dataPost, {});
+    }
 }

@@ -144,7 +144,43 @@ public class ExamService implements I_ExamService {
         Course course = courseRepository.findCourseByCourseID(courseID);
         //neu java khác sẽ có kiểu khác
         String javaCore = "Java Core";
+        if(exam.getTopicExam().equalsIgnoreCase(javaCore)) {
+            List<Map<String, Object>> questionRandomJavaCore = bankQuestionJavaCoreService
+                    .getRandom_Questions_JavaCore_By_NumberQuestions(numberOfQuestions);
+            if (course != null && !questionRandomJavaCore.isEmpty()) {
+                // Set initial properties for the exam
+                course.getExams().add(exam);
+                exam.setCourse(course);
+                // Iterate over the list of random questions
+                for (Map<String, Object> questionMap : questionRandomJavaCore) {
+                    Long questionJavaCoreID = (Long) questionMap.get("questionJavaCoreID");
+                    String contentQuestion = (String) questionMap.get("contentQuestion");
+                    String codeSample = (String) questionMap.get("codeSample");
+                    // Create the BankQuestionJavaCore instance for this specific question
+                    BankQuestionJavaCore bankQuestionJavaCore = new BankQuestionJavaCore();
+                    bankQuestionJavaCore.setQuestionJavaCoreID(questionJavaCoreID);
 
+                    // Create the QuestionJavaCoreExam instance
+                    QuestionJavaCoreExam questionJavaCoreExam = new QuestionJavaCoreExam();
+                    questionJavaCoreExam.setContentQuestion(contentQuestion);
+                    questionJavaCoreExam.setCodeSample(codeSample);
+                    //set điểm
+                    double score = 10.0 / numberOfQuestions;
+                    double roundedScore = Math.round(score * 4.0) / 4.0;
+                    questionJavaCoreExam.setScore(roundedScore);
+
+                    exam.getQuestionJavaCoreExams().add(questionJavaCoreExam);
+                    questionJavaCoreExam.setExam(exam);
+                    questionJavaCoreExam.setBankQuestionJavaCore(bankQuestionJavaCore);
+
+                    // Associate the question with its bank
+                    bankQuestionJavaCore.getQuestionJavaCoreExams().add(questionJavaCoreExam);
+                }
+                return examRepository.save(exam);
+            }
+            return null;
+        }
+        // Return null if course or questions are not found
         return null;
     }
 

@@ -1,6 +1,8 @@
 package com.example.backend_service.services;
 
+import com.example.backend_service.models.Exam;
 import com.example.backend_service.models.QuestionJavaCoreExam;
+import com.example.backend_service.repositories.ExamRepository;
 import com.example.backend_service.repositories.QuestionJavaCoreExamRepository;
 import com.example.backend_service.services.i_service.I_QuestionJavaCoreExamService;
 import org.springframework.orm.jpa.JpaSystemException;
@@ -16,8 +18,11 @@ import java.util.stream.Collectors;
 public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamService {
     private final QuestionJavaCoreExamRepository questionJavaCoreExamRepository;
 
-    public QuestionJavaCoreExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository) {
+    private final ExamRepository examRepository;
+
+    public QuestionJavaCoreExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ExamRepository examRepository) {
         this.questionJavaCoreExamRepository = questionJavaCoreExamRepository;
+        this.examRepository = examRepository;
     }
 
 
@@ -48,10 +53,18 @@ public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamServic
                         newMap.put("codeSample", originalMap.get("code_sample"));
                         newMap.put("contentQuestion", originalMap.get("content_question"));
                         newMap.put("score", originalMap.get("score"));
+                        newMap.put("questionJavaCoreID", originalMap.get("question_java_core_id"));
                         return newMap;
                     })
                     .collect(Collectors.toList());
         }
+        return null;
+    }
+
+    @Override
+    public Exam updateQuestionJavaCoreExams_By_ExamID
+            (Long examID, List<QuestionJavaCoreExam> questionJavaCoreExams)
+            throws JpaSystemException {
         return null;
     }
 

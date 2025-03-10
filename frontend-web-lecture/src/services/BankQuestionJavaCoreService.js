@@ -35,4 +35,10 @@ export default class BankQuestionJavaCoreService {
             .getAPIClient()
             .get(`/bank-question-java-core/get-test-cases-by-question-java-core-id/${questionJavaCoreID}`);
     }
+
+    static fetch_Total_Questions_JavaCore() {
+        return axiosConfig
+            .getAPIClient()
+            .get(`/bank-question-java-core/get-total-bank-question-java-core`);
+    }
 }

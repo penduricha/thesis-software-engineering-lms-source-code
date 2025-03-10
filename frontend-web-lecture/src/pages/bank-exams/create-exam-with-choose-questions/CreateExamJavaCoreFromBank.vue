@@ -344,6 +344,17 @@ export default {
       }
     },
 
+    totalScoreExceptCurrent(index) {
+      // Tính tổng điểm của các câu hỏi ngoại trừ câu hỏi hiện tại
+      /*ràng buộc input number đáp ứng số điểm tổng === 10 */
+      return this.selectedQuestions.reduce((total, question, i) => {
+        if (i !== index) {
+          return total + parseFloat(question.score) || 0;
+        }
+        return total;
+      }, 0);
+    },
+
     async handleCreateExam() {
       this.validationNullField();
       this.validationSelectedQuestion();
@@ -694,7 +705,7 @@ export default {
                 Add questions
               </button>
             </div>
-            <table class="table table-striped" >
+            <table class="table table-striped">
               <thead>
               <tr>
                 <th>Index</th>
@@ -704,29 +715,28 @@ export default {
               </tr>
               </thead>
               <tbody>
-              <tr
-                  v-for="(question, index) in selectedQuestions"
-                  :key="index"
-              >
-                <td>{{index + 1}}</td>
+              <tr v-for="(question, index) in selectedQuestions" :key="index">
+                <td>{{ index + 1 }}</td>
                 <td>{{ question.contentQuestion }}</td>
                 <td>
                   <button class="btn btn-sm btn-danger"
                           data-bs-toggle="modal"
                           data-bs-target="#modal-delete-question"
-                          @click="handleDeleteQuestion(index)"
-                  >Delete</button>
+                          @click="handleDeleteQuestion(index)">
+                    Delete
+                  </button>
                 </td>
                 <td>
-                  <select
-                      class="form-select"
+                  <input
+                      type="number"
+                      class="form-control"
                       v-model="question.score"
-                      @change="updateScoreByIndex(index, question.score)"
-                  >
-                    <option v-for="number in numbersScore" :key="number" :value="number">
-                      {{ number }}
-                    </option>
-                  </select>
+                      @input="updateScoreByIndex(index, question.score)"
+                      :max="10 - totalScoreExceptCurrent(index)"
+                      min="0.25"
+                      step="0.25"
+                      @keydown.prevent
+                  />
                 </td>
               </tr>
               </tbody>

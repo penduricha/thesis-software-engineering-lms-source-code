@@ -76,6 +76,55 @@ public class ExamController {
         return ResponseEntity.status(HttpStatus.CREATED).body(examService.createExam(exam,courseID));
     }
 
+    @PostMapping("/post_exam_java_core_random_question/{courseID}/{numberOfQuestions}")
+    public ResponseEntity<Exam> post_Exam_JavaCore_With_RandomQuestion
+            (@RequestBody Map<String,Object> mapExam, @PathVariable Long courseID, @PathVariable int numberOfQuestions) throws HttpClientErrorException {
+        String titleExam = (String) mapExam.get("titleExam");
+        String typeExam = (String) mapExam.get("typeExam");
+        String topicExam = (String) mapExam.get("topicExam");
+        String retakeExamValue = (String) mapExam.get("retakeExam");
+        boolean retakeExam = "Yes".equalsIgnoreCase(retakeExamValue);
+        String scoringMethod = (String) mapExam.get("scoringMethod");
+        int duration = (Integer) mapExam.get("duration");
+
+        LocalDateTime startDate = LocalDateTime.of(
+                (Integer) mapExam.get("startDateYear"),
+                (Integer) mapExam.get("startDateMonth"),
+                (Integer) mapExam.get("startDateDay"),
+                (Integer) mapExam.get("startDateHour"),
+                (Integer) mapExam.get("startDateMinute"),
+                0
+        );
+
+        // Extracting end date and time
+        LocalDateTime endDate = LocalDateTime.of(
+                (Integer) mapExam.get("endDateYear"),
+                (Integer) mapExam.get("endDateMonth"),
+                (Integer) mapExam.get("endDateDay"),
+                (Integer) mapExam.get("endDateHour"),
+                (Integer) mapExam.get("endDateMinute"),
+                0
+        );
+
+        String linkExamPaper = (String) mapExam.get("linkExamPaper");
+        String passwordExam = (String) mapExam.get("passwordExam");
+
+        Exam exam = new Exam();
+        exam.setTitleExam(titleExam);
+        exam.setTypeExam(typeExam); // Assuming there is a setType method
+        exam.setTopicExam(topicExam); // Assuming there is a setTopic method
+        exam.setRetakeExam(retakeExam);
+        exam.setScoringMethod(scoringMethod); // Assuming there is a setScoringMethod method
+        exam.setDuration(duration);
+        exam.setStartDate(startDate); // Assuming there is a setStartDate method
+        exam.setEndDate(endDate); // Assuming there is a setEndDate method
+        exam.setLinkExamPaper(linkExamPaper); // Assuming there is a setLinkExamPaper method
+        exam.setPasswordExam(passwordExam); // Assuming there is a setPasswordExam method
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(examService
+                .createExam_JavaCore_With_RandomQuestion(exam,courseID,numberOfQuestions));
+    }
+
     @PostMapping("/post_exam_java_core_with_choose_questions/{courseID}")
     public ResponseEntity<Exam> post_Exam_JavaCore_With_Choose_Questions
             (@RequestBody Map<String,Object> mapExamPost,

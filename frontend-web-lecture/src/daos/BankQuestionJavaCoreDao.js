@@ -69,4 +69,16 @@ export default class BankQuestionJavaCoreDao {
             })
         return Number(questionJavaCoreID) === Number(responseReturn);
     }
+
+    static async get_Total_Questions_JavaCore(){
+        let numberOfQuestions = 0;
+        await BankQuestionJavaCoreService.fetch_Total_Questions_JavaCore()
+            .then(response => {
+                numberOfQuestions = Number(response.data);
+            }).catch(error => {
+                console.error(error);
+                //alert(error)
+            })
+        return numberOfQuestions;
+    }
 }

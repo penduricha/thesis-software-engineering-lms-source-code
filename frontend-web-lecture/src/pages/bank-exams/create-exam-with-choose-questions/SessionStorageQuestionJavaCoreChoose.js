@@ -6,12 +6,12 @@ export default class SessionStorageQuestionJavaCoreChoose {
     }
 
     // Function to add a question
-    addQuestion(questionJavaCoreID, content, codeSample) {
+    addQuestion(questionJavaCoreID, content, codeSample, score) {
         const question = {
             questionJavaCoreID: questionJavaCoreID,
             contentQuestion: content,
             codeSample: codeSample,
-            score: 1,
+            score: score,
         };
         this.questions.push(question);
         this.saveToSessionStorage();

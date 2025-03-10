@@ -117,4 +117,20 @@ export default class ExamDao {
         }
         return status;
     }
+
+    static async create_Exam_Java_Core_With_Random_Question(dataPost, courseID, numberOfQuestionsToRandom) {
+        let responseReturn = null;
+        let status = false;
+        await ExamService
+            .post_Exam_Java_Core_With_Random_Question(dataPost, courseID, numberOfQuestionsToRandom)
+            .then(response => {
+            responseReturn = response.data;
+        }).catch(error => {
+            console.error(error);
+        })
+        if(responseReturn) {
+            status = true;
+        }
+        return status;
+    }
 }

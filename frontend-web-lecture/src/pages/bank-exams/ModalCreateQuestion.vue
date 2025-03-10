@@ -15,11 +15,15 @@ import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
 import SessionStorageTestCase from "@/pages/bank-exams/SessionStorageTestCase.js";
 import Validation from "@/validation/Validation.js";
 import ParameterStorageManager from "@/pages/bank-exams/ParameterStorageManager.js";
-
+//npm i vue-csv-import
+import { VueCsvImport, VueCsvToggleHeaders, VueCsvInput, VueCsvMap, VueCsvSubmit, VueCsvErrors } from "vue-csv-import";
 
 export default {
   name: "ModalCreateQuestion",
-  components: {Codemirror},
+  components: {
+    Codemirror,
+    VueCsvImport, VueCsvToggleHeaders, VueCsvInput, VueCsvMap, VueCsvSubmit, VueCsvErrors
+  },
 
   props: {
     bankJavaCoreExam : {
@@ -398,6 +402,34 @@ export default {
         console.error('Index out of bounds');
       }
     },
+
+    //import csv
+    parseCsvData(csvText) {
+      const rows = csvText.split('\n').filter(row => row.trim() !== ''); // Loại bỏ các dòng trống
+      const dataRows = rows.slice(1); // Bỏ qua dòng tiêu đề (dòng đầu tiên)
+
+      return dataRows.map(row => {
+        const columns = row.split(',');
+        return {
+          inputTest: columns[0] || "",
+          outputExpect: columns[1] || "",
+          note: columns[2] || ''
+        };
+      });
+    },
+
+    handleCsvChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const text = e.target.result;
+          this.listTestCases = this.parseCsvData(text);
+          console.log("Dữ liệu CSV nhận được:", this.listTestCases);
+        };
+        reader.readAsText(file);
+      }
+    },
   },
 
   setup() {
@@ -641,6 +673,19 @@ export default {
               </div>
               <button type="button" class="btn button-purple" @click="saveTestCase">Save test case</button>
 
+              <vue-csv-import v-model="csvData" :fields="{
+                inputTest: { required: true, label: 'Input Test' },
+                outputExpect: { required: true, label: 'Output Expect' },
+                note: { required: false, label: 'Note' }
+              }">
+                <vue-csv-input v-slot="{ file, change }">
+                  <label for="fileInput" class="btn button-purple ml-3">
+                    📂 Upload file CSV
+                  </label>
+                  <input type="file" id="fileInput" @change="handleCsvChange" style="display: none;" />
+                </vue-csv-input>
+              </vue-csv-import>
+
               <table class="table table-bordered mt-3">
                 <thead>
                 <tr>
@@ -668,6 +713,8 @@ export default {
                 v-if="validationNullTestCases"
                 class="span-validate-modal-form"
             >{{validationNullTestCases}}</span>
+
+
             <div class="text-center mt-3">
               <button type="submit" class="btn button-purple"
                       @click="createQuestion"

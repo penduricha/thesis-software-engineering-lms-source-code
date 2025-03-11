@@ -1,12 +1,12 @@
-package test_debug_java_coding_java_core;
+package com.example.backend_service.debugs;
+
 
 import javax.tools.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-
-public class ExecuteJavaCoreByStudentID {
+public class ExecuteJavaCoreByStudentID implements Serializable {
     private String studentID;
     private Long examID;
     private Long questionJavaCoreExamID;
@@ -44,34 +44,25 @@ public class ExecuteJavaCoreByStudentID {
     public ExecuteJavaCoreByStudentID() {
     }
 
+    private String getPathSaveCompiler() {
+        return "service_compiler/" + studentID + "/" + examID + "/"+ questionJavaCoreExamID + "/";
+    }
+
+//    private String getMainClassName() {
+//        return
+//    }
+
     public String executeJava(String code) {
         try {
             //thay đổi tùy theo cấu trúc
-            String path = "service_compiler/"+studentID+"/"+examID+"/";
-            String mainClassName = "Main_" + questionJavaCoreExamID;
-            String mainFilePath =  path + mainClassName + ".java";
-
-            // Create directory if it doesn't exist
-            File directory = new File(path);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-
-            // Save the source code to a file
-            try (PrintWriter writer = new PrintWriter(mainFilePath)) {
-                //writer.println("package " + packageName + ";");
-                writer.println("import java.util.ArrayList;  // For using ArrayList\n" +
-                        "import java.util.Random;     // For using Random\n" +
-                        "import java.util.regex.*;    // For using regular expressions (Regex)\n" +
-                        "import java.util.*;          // For importing all classes in java.util package\n" +
-                        "import java.lang.StringBuilder; // For using StringBuilder\n" +
-                        "import java.time.format.DateTimeFormatter; // For formatting dates\n" +
-                        "import java.lang.*; // For exception\n" +
-                        "import java.io.*; // For exception\n" +
-                        "import java.text.*; // For exception\n" +
-                        "import java.time.*; // For using LocalDateTime");
-                writer.println(code);
-            }
+            /*
+                Cấu trúc lưu file biên dịch sẽ là
+                service_compiler/<studentID>/<examID./<questionJavaCoreExamID>
+                vd: service_compiler/21107601/45/263
+             */
+            String path = getPathSaveCompiler();
+            String mainClassName = "Main";
+            String mainFilePath = getString(code, path, mainClassName);
 
             // Compile the source code
             JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -79,9 +70,7 @@ public class ExecuteJavaCoreByStudentID {
             StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
             Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjects(mainFilePath);
             JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
-
             boolean success = task.call();
-
             if (!success) {
                 //StringBuilder errorMessage = new StringBuilder("Compilation Error:\n");
                 String errorMessage = "";
@@ -120,4 +109,30 @@ public class ExecuteJavaCoreByStudentID {
             return "Error: " + e.getMessage();
         }
     }
+
+    private static String getString(String code, String path, String mainClassName) throws FileNotFoundException{
+        String mainFilePath =  path + mainClassName + ".java";
+
+        // Create directory if it doesn't exist
+        File directory = new File(path);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        // Save the source code to a file
+        try (PrintWriter writer = new PrintWriter(mainFilePath)) {
+            //writer.println("package " + packageName + ";");
+            writer.println("import java.util.ArrayList;  // For using ArrayList\n" +
+                    "import java.util.Random;     // For using Random\n" +
+                    "import java.util.regex.*;    // For using regular expressions (Regex)\n" +
+                    "import java.util.*;          // For importing all classes in java.util package\n" +
+                    "import java.lang.*; // For exception\n" +
+                    "import java.io.*; // For exception\n" +
+                    "import java.text.*; // For exception\n" +
+                    "import java.time.*; // For using LocalDateTime");
+            writer.println(code);
+        }
+        return mainFilePath;
+    }
 }
+

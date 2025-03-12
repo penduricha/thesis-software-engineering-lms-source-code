@@ -54,10 +54,12 @@
   font-weight: bold;
   font-size: 20px;
 }
-
+.bi-flag{
+  margin-left: 9px;
+  color: #28a745;
+}
 .button-number-question{
   width: 2.25rem;
-  height: 2.5rem;
   font-size: 20px;
   border-radius: 4px;
   cursor: pointer;
@@ -67,6 +69,7 @@
 .button-number-question-done{
   background-color: var(--purple-iuh);
   color: var(--white);
+  
 }
 
 .button-number-question-no-done:hover {
@@ -77,7 +80,9 @@
   background-color: var(--grey);
   color: var(--black);
 }
-
+.button-number-question-flag{
+  margin-bottom: 24px;
+}
 .border-color-button-choose {
   &.border-choose {
     border: solid #FE0000;

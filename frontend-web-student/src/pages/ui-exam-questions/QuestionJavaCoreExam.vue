@@ -67,6 +67,8 @@ export default {
       //code saved
       codeSaved: [],
       indexQuestionSaved: [],
+      codeFlag:[],
+      indexQuestionFlag: []
     }
   },
 
@@ -298,7 +300,13 @@ export default {
         console.log("Index question saved: ", this.indexQuestionSaved);
       }
     },
-
+    async handleFlat(){
+      this.codeFlag = [...this.codeFlag ,this.indexQuestion]
+      console.log("this.codeFlg",this.codeFlag );
+      this.indexQuestionFlag = this.codeFlag.map(c => c)
+      console.log("this",this.indexQuestionFlag);
+      
+    },
     handleOpenModalTestDebugJava() {
 
     },
@@ -417,7 +425,14 @@ export default {
             : 'button-number-question-no-done';
       };
     },
-
+    setQuestionFlag(){
+      return (index) => {
+        return (this.indexQuestionFlag.includes(index))
+            && 'button-number-question-flag'
+            
+      };
+    },
+     
     // Tính toán thời gian còn lại
     formattedTime() {
       const minutes = Math.floor(this.timeLeft / 60);
@@ -437,15 +452,19 @@ export default {
             <span class="span-questions">Questions:</span>
             <div class="view-list-questions">
               <!--              button-number-question-done-->
-              <button class="button-number-question"
+              <button 
                       v-for="(q, index) in questions"
                       @click="handleButtonQuestion(q, index)"
-                      :class="[
-                        'border-color-button-choose', setBorderColorChoose(index),
-                        'button-color-saved', setButtonColorSavedCode(index)
-                      ]"
+                    
               >
+              <i v-if="codeFlag.includes(index)" class="bi bi-flag"></i> 
+               <div class="button-number-question"   :class="[
+                        'border-color-button-choose', setBorderColorChoose(index),
+                        'button-color-saved', setButtonColorSavedCode(index),
+                        setQuestionFlag(index)
+                      ]"  >
                 {{index + 1}}
+               </div>
               </button>
               <!--              Nếu dùng nhiều hàm scss-->
               <button class="button-number-question button-submit"
@@ -509,6 +528,18 @@ export default {
                 @click="handleOpenModalTestDebugJava()"
             >Test Debug Java
             </button>
+            <button
+                ref="flat"
+                class="button-text-editor"
+                @click="handleFlat()"
+                :class="[
+                        
+                        setQuestionFlag(index)
+                      ]"
+            >{{ codeFlag.includes(indexQuestion) ? "Xóa cờ":"Đặt cờ" }}
+            
+            </button>
+         
           </div>
           <div class="view-text-editor">
             <codemirror

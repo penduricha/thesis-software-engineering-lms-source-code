@@ -1,0 +1,33 @@
+//.style-title-modal-create-exam {
+//  text-align: center;
+//}
+
+.modal-content-create-exam {
+  padding: 20px;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.form-text {
+  font-size: 0.9em;
+  color: gray;
+}
+
+.btn-create-exam {
+  background-color: var(--purple-iuh);
+  color: var(--white);
+  padding: 10px 6rem;
+  font-size: 18px;
+  border-radius: 4px;
+}
+
+.btn-create-exam:hover {
+  opacity: 0.8;
+}
+
+.required-star {
+  color: var(--danger-color-red);
+  margin-left: 4px;
+}

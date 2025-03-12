@@ -1,0 +1,53 @@
+body {
+  background-color: #f9f9f9;
+}
+
+.content-info-exam {
+  padding: 20px;
+}
+
+label {
+  font-weight: 600;
+  display: block;
+}
+
+.text-danger {
+  font-weight: bold;
+}
+
+.btn-do-exam {
+  background-color: #2c2c84;
+  color: white;
+  font-weight: bold;
+  padding: 10px 3rem;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.btn-do-exam:hover {
+  background-color: #2c2c84;
+  color: white;
+  opacity: 0.8;
+}
+
+.input-exam {
+  width: 55%;
+  border-width: 1px;
+  border-color: black;
+  margin-bottom: 50px;
+}
+
+
+.btn-do-exam:hover {
+  background-color: #007bff;
+  height: 40px;
+}
+
+.open-exam-btn {
+  background-color: #2c2c84;
+  color: white;
+  font-weight: bold;
+  padding: 10px 2rem;
+  border-radius: 5px;
+}

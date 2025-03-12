@@ -74,11 +74,30 @@ body {
     align-items: center;
 }
 
-.style-check-box{
+.style-check-box {
+    /* Default checkbox styling */
+    appearance: none; 
     height: 90%;
-    width: 1.25rem;
+    width: 1.55rem;
+    border: 2px solid var(--purple-iuh); 
     border-radius: 4px;
-    background-color: var(--background-color);
+    cursor: pointer;
+    outline: none; 
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.style-check-box:checked {
+    background-color: var(--purple-iuh); 
+    color: var(--white);
+}
+
+/* Optional: Add a checkmark when checked */
+.style-check-box:checked::after {
+    content: '✔'; 
+    color: var(--white); 
+    display: block;
+    text-align: center;
+    line-height: 1.25rem;
 }
 
 .style-remember-me{

@@ -1,8 +1,0 @@
-Install: npm i bootstrap
-View version: npm list bootstrap
-=> boostrap 5.3.3
-
-Install library Vue:
-npm install -D sass-embedded (scss)
-npm install vuetify@next @mdi/font
-

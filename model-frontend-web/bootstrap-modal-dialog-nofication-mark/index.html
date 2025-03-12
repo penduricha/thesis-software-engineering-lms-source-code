@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Notification Modal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="container text-center py-5">
+        <!-- Button mở modal -->
+        <button class="btn btn-primary open-modal-btn" data-bs-toggle="modal" data-bs-target="#modal-notification-mark">
+            Show Exam Result
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-notification-mark" tabindex="-1" aria-labelledby="modalNotificationMarkLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modal-content-notify-mark">
+                <div class="modal-header border-0 text-center">
+                    <div class="modal-title w-100 modal-title-notify-mark" id="modalNotificationMarkLabel">
+                        <i class="fa-solid fa-circle-check"></i>  
+                        <h4 class="style-notification">Your mark is 8.00</h4>
+                    </div>
+                </div>
+                <div class="modal-body text-center">
+                    <span class="mark-notification-text">You have successfully completed the exam.</span>
+                </div>
+                <div class="modal-footer d-flex justify-content-center border-0">
+                    <a href="list-exams.html" class="btn-return-list">Return to list exams</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

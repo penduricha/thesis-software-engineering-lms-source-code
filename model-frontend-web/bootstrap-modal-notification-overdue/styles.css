@@ -1,0 +1,49 @@
+/* Background */
+body {
+    background: linear-gradient(to right, #f9f9f9, #e2ebf0);
+}
+
+/* Modal Styling */
+.custom-modal {
+    padding: 20px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Nội dung thông báo */
+.exam-overdue-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #dc3545; /* Màu đỏ cảnh báo */
+}
+
+/* Nút OK */
+.btn-confirm-ok {
+    background-color: var(--purple-iuh);
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 8px 20px;
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+}
+
+.btn-confirm-ok:hover {
+    opacity: 0.8;
+}
+
+/* Button mở modal */
+.open-modal-btn {
+    background-color: #dc3545;
+    color: white;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+}
+
+.open-modal-btn:hover {
+    background-color: #c82333;
+}

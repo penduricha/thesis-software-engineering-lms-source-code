@@ -6,3 +6,5 @@ Install library Vue:
 npm install -D sass-embedded (scss)
 npm install vuetify@next @mdi/font
 
+//font awesome
+npm install --save font-awesome

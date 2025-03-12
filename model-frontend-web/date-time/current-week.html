@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function getCurrentWeek() {
+            const today = new Date();
+            const currentDay = today.getDay(); // 0 = Chủ nhật, 1 = Thứ hai, ..., 6 = Thứ bảy
+            const startOfWeek = new Date(today);
+            
+            // Tính toán ngày đầu tuần (Thứ Hai)
+            startOfWeek.setDate(today.getDate() - (currentDay === 0 ? 6 : currentDay - 1));
+        
+            const weekDays = [];
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            
+            for (let i = 0; i < 7; i++) {
+                const day = new Date(startOfWeek);
+                day.setDate(startOfWeek.getDate() + i);
+        
+                const dayName = day.toLocaleString('en-US', { weekday: 'short' });
+                const dayNumber = day.getDate();
+        
+                weekDays.push({
+                    dayName: dayName,
+                    dayNumber: dayNumber
+                });
+            }
+        
+            return {
+                month: monthNames[today.getMonth()],
+                year: today.getFullYear(),
+                weekDays: weekDays
+            };
+        }
+        
+        const currentWeekInfo = getCurrentWeek();
+        console.log(`Tháng: ${currentWeekInfo.month}`);
+        console.log(`Năm: ${currentWeekInfo.year}`);
+        console.log(`7 ngày trong tuần:`, currentWeekInfo.weekDays);
+
+        function getCurrentDayInfo() {
+            const today = new Date();
+            const dayName = today.toLocaleString('en-US', { weekday: 'short' });
+            const dayNumber = today.getDate();
+        
+            return {
+                dayName: dayName,
+                dayNumber: dayNumber
+            };
+        }
+        
+        const currentDayInfo = getCurrentDayInfo();
+        console.log(currentDayInfo);
+    </script>
+</body>
+</html>

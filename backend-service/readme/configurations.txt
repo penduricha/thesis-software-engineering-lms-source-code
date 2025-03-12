@@ -4,9 +4,10 @@ Step 1: Install mariaDB with:
 - port: 3306.
 
 Step 2: Create database that name is project_thesis_final;
-- jdbc:mariadb://localhost:3306/project_thesis_final String jdbc
-- create database project_thesis_final;
-- select version() to view version mariadb => 11.3.0-MariaDB
+- Use tool Database management: DataGrip, DBeaver.
+- jdbc:mariadb://localhost:3306/project_thesis_final String jdbc.
+- SQL cmd create: create database project_thesis_final;
+- select version() to view version mariadb => 11.3.0 - MariaDB ok.
 
 Step 3: Import all dataset in folder data insert that following step.
 

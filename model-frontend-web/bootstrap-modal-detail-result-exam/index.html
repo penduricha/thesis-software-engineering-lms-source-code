@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Result Modal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="container text-center py-5">
+        <!-- Button mở modal -->
+        <button class="btn btn-primary open-modal-btn" data-bs-toggle="modal" data-bs-target="#modal-detail-result-exam">
+            View Exam Result
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-detail-result-exam" tabindex="-1" aria-labelledby="modalResultLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content custom-modal">
+                <div class="modal-title-wrapper">
+                    <h5 class="custom-title">Result Java Core 1</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                  <div class="modal-body">
+                    <p class="result-text">Your mark is <strong>8.00</strong>. Your correct answer(s): <strong>4/5</strong>.</p>
+
+                    <!-- Question 1 -->
+                   <div class="question-container">
+                    <h6 class="question-title">Question 1: Viết hàm tính tổng 2 số nguyên.</h6>
+                    <div class="table-responsive">
+                        <table class="table table-striped custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Input</th>
+                                    <th>Output expect</th>
+                                    <th>Output</th>
+                                    <th>Result</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1, 2</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td class="pass-result">Pass</td>
+                                </tr>
+                                <tr>
+                                    <td>1.1</td>
+                                    <td>2.2</td>
+                                    <td>0</td>
+                                    <td class="pass-result">Pass</td>
+                                </tr>
+                                <tr>
+                                    <td>0, -10</td>
+                                    <td>0, -10</td>
+                                    <td>-10</td>
+                                    <td class="pass-result">Pass</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="point">Point: 1/1</p>
+
+                    <!-- Question 2 -->
+                    <h6 class="question-title">Question 2: Viết hàm kiểm tra số nguyên tố.</h6>
+                    <div class="table-responsive">
+                        <table class="table table-striped custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Input</th>
+                                    <th>Output expect</th>
+                                    <th>Output</th>
+                                    <th>Result</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td class="fail-result">Fail</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td class="pass-result">Pass</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td class="pass-result">Pass</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="point">Point: 0/1</p>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

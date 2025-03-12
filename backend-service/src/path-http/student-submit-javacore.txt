@@ -1,0 +1,17 @@
+data cần post nếu sv submitted
+
+{
+    studentID: "21107601",
+    examID: 10,
+    answerQuestions: [
+        {
+            questionJavaCoreID: 1,
+            codeStudentSubmitted: "code"
+        },
+        {
+            questionJavaCoreID: 5,
+            codeStudentSubmitted: "code"
+        }
+    ]
+
+}

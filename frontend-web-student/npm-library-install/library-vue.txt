@@ -1,0 +1,29 @@
+Install: npm i bootstrap
+View version: npm list bootstrap
+=> boostrap 5.3.3
+
+build vite: npm run build
+
+Install library Vue:
+npm install -D sass-embedded (scss)
+npm install vuetify@next @mdi/font
+
+Install axios call api
+npm i axios
+
+Install library to text editor code
+npm install vue-codemirror
+npm install @codemirror/theme-one-dark
+npm install @codemirror/lang-java
+npm install @codemirror/autocomplete
+npm install @codemirror/view
+
+or
+
+npm install vue-codemirror
+npm install @codemirror/theme-one-dark
+npm install @codemirror/lang-java
+npm install @codemirror/view
+npm install @codemirror/autocomplete
+
+Cài npm install jquery

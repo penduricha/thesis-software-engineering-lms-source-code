@@ -1,0 +1,19 @@
+@startuml
+
+class Car {
+    - licensePlate: String
+    - manufacturer: String
+    - manufactureYear: int
+    - color: String
+    - price: double
+
+    + Car(licensePlate: String, manufacturer: String, manufactureYear: int, color: String, price: double)
+    + getLicensePlate(): String
+    + getManufacturer(): String
+    + getColor(): String
+    + getPrice(): double
+    + getManufactureYear(): int
+    + getReducedPrice(): double
+}
+
+@enduml

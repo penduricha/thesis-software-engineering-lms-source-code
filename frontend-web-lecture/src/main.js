@@ -1,3 +1,4 @@
+
 import './assets/main.css'
 
 import { createApp } from 'vue'
@@ -17,8 +18,12 @@ import 'vuetify/styles';
 import 'vuetify/dist/vuetify-labs.min.css';
 const vuetify = createVuetify();
 
+//font awesome
+import '@fortawesome/fontawesome-free/css/all.min.css';
 //import routers
-import routers from "@/assets/list-routes/routers.js";
+import routers from "@/routes/list-routes/routers.js";
+import RouterDao from "@/routes/RoutersDao.js";
+import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
 
 const app = createApp(App);
 app.use(vuetify);
@@ -42,8 +47,23 @@ function initPage(routers, routerPath) {
 
 function execute(){
     //co the doi path khac
+    const routerDao = new RouterDao();
+    const lectureLocalStorage = new LectureLocalStorage();
     const startPagePath = '/';
-    initPage(routers, startPagePath);
+
+    const checkPath_And_ID =
+        routerDao.getPath_From_LocalStorage() &&
+        lectureLocalStorage.getLectureID_From_LocalStorage();
+
+    if(checkPath_And_ID && !routerDao.getPath_From_SessionStorage()) {
+        initPage(routers, routerDao.getPath_From_LocalStorage());
+    } else {
+        if(!routerDao.getPath_From_SessionStorage()) {
+            initPage(routers, startPagePath);
+        } else {
+            initPage(routers, routerDao.getPath_From_SessionStorage());
+        }
+    }
 }
 
 execute();

@@ -4,6 +4,12 @@
     --height-screen: 51rem;
     --purple-iuh: #2C2C84;
     --white: #FFFFFF;
+    --grey: #D9D9D9;
+    --black: #000000;
+    --grey-item: #EBEBEB;
+    --background-linear: linear-gradient(to right,#786BDE, rgba(187, 183, 215, 0.5));
+    --danger-color-red: #FF0000;
+    --grey-exam: #F7F3F3;
 }
 
 body {

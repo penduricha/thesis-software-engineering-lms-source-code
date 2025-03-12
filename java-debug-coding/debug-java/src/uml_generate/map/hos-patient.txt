@@ -1,0 +1,35 @@
+@startuml
+
+class Hospital {
+    - hospitalCode: String
+    - hospitalName: String
+    + Hospital()
+    + Hospital(hospitalCode: String, hospitalName: String)
+    + getHospitalCode(): String
+    + setHospitalCode(hospitalCode: String): void
+    + getHospitalName(): String
+    + setHospitalName(hospitalName: String): void
+    + toString(): String
+}
+
+class Patient {
+    - name: String
+    - age: int
+    - medicalRecordNumber: String
+    - hospital: Hospital
+    + Patient()
+    + Patient(name: String, age: int, medicalRecordNumber: String, hospital: Hospital)
+    + getName(): String
+    + setName(name: String): void
+    + getAge(): int
+    + setAge(age: int): void
+    + getMedicalRecordNumber(): String
+    + setMedicalRecordNumber(medicalRecordNumber: String): void
+    + getHospital(): Hospital
+    + setHospital(hospital: Hospital): void
+    + toString(): String
+}
+
+Patient "*" -- "1" Hospital
+
+@enduml

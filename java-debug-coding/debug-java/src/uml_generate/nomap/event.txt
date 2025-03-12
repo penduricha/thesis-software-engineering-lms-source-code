@@ -1,0 +1,26 @@
+@startuml
+class Event {
+    - eventCode: String
+    - eventName: String
+    - eventDate: LocalDate
+    - location: String
+    - participantNumber: int
+    - cost: double
+    + getEventCode(): String
+    + getEventName(): String
+    + getEventDate(): LocalDate
+    + getLocation(): String
+    + getParticipantNumber(): int
+    + getCost(): double
+    + setEventCode(eventCode: String): void
+    + setEventName(eventName: String): void
+    + setEventDate(eventDate: LocalDate): void
+    + setLocation(location: String): void
+    + setParticipantNumber(participantNumber: int): void
+    + setCost(cost: double): void
+    + Event()
+    + Event(String, String, LocalDate, String, int , double)
+    + getCostPerParticipant(): double
+    + toString(): String
+}
+@enduml

@@ -1,0 +1,161 @@
+@use '@/scss/main.scss';
+
+//body {
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  background-color: #FFFAFA;
+//  overflow: hidden;
+//}
+
+.container-login {
+  //width: var(--width-screen);
+  width: 100%;
+  height: var(--height-screen);
+  display: flex;
+  background-color: #FFFAFA;
+}
+
+.view-image-iuh {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.style-logo-iuh {
+  width: 628px;
+  height: 209px;
+  object-fit: contain;
+}
+
+.view-form-login {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-login {
+  width: 60%;
+  height: 23rem;
+  font-weight: bold;
+  gap: 1.5rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.style-title-login{
+  width: 100%;
+  text-align: center;
+}
+
+.style-input{
+  width: 25rem;
+  height: 3rem;
+  border: solid 2px grey;
+  border-radius: 10px;
+  padding-left: 1.5rem;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: var(--background-color);
+}
+
+.style-button-login{
+  width: 25rem;
+  background-color: var(--purple-iuh);
+  height: 3rem;
+  font-size: 18px;
+  color: var(--white);
+  cursor: pointer;
+  padding: 0;
+}
+
+.view-check-box{
+  border-radius: 0;
+  height: 1.75rem;
+  width: 25rem;
+  display: flex;
+  align-items: center;
+}
+
+.style-check-box {
+  accent-color: var(--purple-iuh);
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+}
+
+//.style-check-box {
+//  /* Default checkbox styling */
+//  appearance: none;
+//  height: 90%;
+//  width: 1.55rem;
+//  border: 2px solid var(--purple-iuh);
+//  border-radius: 4px;
+//  cursor: pointer;
+//  outline: none;
+//  transition: background-color 0.3s, color 0.3s;
+//}
+//
+//.style-check-box:checked {
+//  background-color: var(--purple-iuh);
+//  color: var(--white);
+//}
+//
+///* Optional: Add a checkmark when checked */
+//.style-check-box:checked::after {
+//  content: '✓';
+//  color: var(--white);
+//  display: block;
+//  text-align: center;
+//  line-height: 1.25rem;
+//}
+
+.style-remember-me{
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: 1rem;
+  margin-top: 1px;
+}
+
+.span-validate-login {
+  font-size: 17px;
+  color: var(--danger-color-red);
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+
+@media (max-width: 1068px) {
+  .container-login {
+    flex-direction: column;
+    width: auto;
+  }
+
+  .style-logo-iuh{
+    width: 25rem;
+    height: auto;
+  }
+
+  .view-image-iuh {
+    flex: none;
+    width: 100%;
+    height: 10rem;
+    padding-top: 10rem;
+  }
+
+  .view-form-login {
+    flex: none;
+    width: 100%;
+    height: auto;
+    margin-top: 10rem;
+  }
+
+  .form-login {
+    width: 90%;
+  }
+}

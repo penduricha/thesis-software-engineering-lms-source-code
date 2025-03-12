@@ -37,4 +37,6 @@ public interface QuestionJavaCoreExamRepository extends JpaRepository<QuestionJa
 //            (@Param("questionJavaCoreExamID") Long questionJavaCoreExamID);
 
     void deleteAllByExam_ExamID(Long examID);
+
+    QuestionJavaCoreExam findQuestionJavaCoreExamsByQuestionJavaCoreExamID(Long questionJavaCoreExamID);
 }

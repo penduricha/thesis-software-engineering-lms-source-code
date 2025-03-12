@@ -246,7 +246,7 @@ export default {
         const codeSavedItem = this.codeSaved
             .find(item => item.indexQuestion === this.questions.indexOf(question));
         return {
-          questionJavaCoreID: question.questionJavaCoreExamID,
+          questionJavaCoreExamID: question.questionJavaCoreExamID,
           // Nếu không có mã code thì dùng codeSample
           codeStudentSubmitted: codeSavedItem ? codeSavedItem.codeSave : question.codeSample
         };
@@ -258,6 +258,7 @@ export default {
         answerQuestions: answerQuestions === null ? [] : answerQuestions,
       }
       console.log("Data to submit: ", dataToSubmit);
+
     },
 
     async handleSave() {
@@ -320,7 +321,7 @@ export default {
     // Danh sách kiểu dữ liệu Java (hỗ trợ khi khai báo biến)
     const javaDataTypes = [
       "boolean", "char", "byte", "short", "int", "long", "float", "double", "String",
-      "List", "ArrayList", "LinkedList", "Set", "HashSet", "TreeSet", "Map", "HashMap", "TreeMap"
+      "List", "ArrayList", "LinkedList", "Set", "HashSet", "TreeSet", "Map", "HashMap", "TreeMap", "null"
     ];
     // Danh sách hàm getter, setter, constructors
     const javaMethods = [

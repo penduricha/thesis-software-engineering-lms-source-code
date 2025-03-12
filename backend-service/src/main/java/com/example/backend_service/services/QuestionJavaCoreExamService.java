@@ -83,14 +83,16 @@ public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamServic
             if(!questionJavaCoreExams.isEmpty()) {
                 for(QuestionJavaCoreExam questionJavaCoreExam: questionJavaCoreExams) {
                     String sqlInsert =
-                    "insert into question_java_core_exam (code_sample, content_question, question_java_core_id, exam_id, score) " +
-                    "values (?, ?, ? ,? ,?)";
+                    "insert into " +
+                    "question_java_core_exam (code_sample, content_question, is_marked_flag, question_java_core_id, exam_id, score) " +
+                    "values (?, ?, ? ,? ,?, ?)";
                     entityManager.createNativeQuery(sqlInsert)
                             .setParameter(1, questionJavaCoreExam.getCodeSample())
                             .setParameter(2, questionJavaCoreExam.getContentQuestion())
-                            .setParameter(3, questionJavaCoreExam.getBankQuestionJavaCore().getQuestionJavaCoreID())
-                            .setParameter(4, examFound.getExamID())
-                            .setParameter(5, questionJavaCoreExam.getScore())
+                            .setParameter(3, false)
+                            .setParameter(4, questionJavaCoreExam.getBankQuestionJavaCore().getQuestionJavaCoreID())
+                            .setParameter(5, examFound.getExamID())
+                            .setParameter(6, questionJavaCoreExam.getScore())
                             .executeUpdate();
                 }
                 return examFound;

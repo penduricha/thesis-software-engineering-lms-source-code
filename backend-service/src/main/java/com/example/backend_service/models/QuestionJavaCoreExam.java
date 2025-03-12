@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -29,6 +30,19 @@ public class QuestionJavaCoreExam implements Serializable {
 
     @Column(nullable = false)
     private double score;
+
+    @Column(nullable = false)
+    private boolean isMarkedFlag;
+
+    @PrePersist
+    protected void onCreated(){
+        isMarkedFlag = false;
+    }
+
+//    @PreUpdate
+//    protected void onUpdated(){
+//        updateAt = LocalDateTime.now();
+//    }
 
     public double getScore() {
         return score;

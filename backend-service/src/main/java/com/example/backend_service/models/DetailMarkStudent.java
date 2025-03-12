@@ -24,6 +24,46 @@ public class DetailMarkStudent implements Serializable {
 
     private double detailMarkExam;
 
+    public Long getDetailMarkStudentID() {
+        return detailMarkStudentID;
+    }
+
+    public void setDetailMarkStudentID(Long detailMarkStudentID) {
+        this.detailMarkStudentID = detailMarkStudentID;
+    }
+
+    public double getDetailMarkExam() {
+        return detailMarkExam;
+    }
+
+    public void setDetailMarkExam(double detailMarkExam) {
+        this.detailMarkExam = detailMarkExam;
+    }
+
+    public MarkStudent getMarkStudent() {
+        return markStudent;
+    }
+
+    public void setMarkStudent(MarkStudent markStudent) {
+        this.markStudent = markStudent;
+    }
+
+    public LocalDateTime getDateSubmitted() {
+        return dateSubmitted;
+    }
+
+    public void setDateSubmitted(LocalDateTime dateSubmitted) {
+        this.dateSubmitted = dateSubmitted;
+    }
+
+    public List<ResultQuestionJavaCore> getResultQuestionJavaCoreList() {
+        return resultQuestionJavaCoreList;
+    }
+
+    public void setResultQuestionJavaCoreList(List<ResultQuestionJavaCore> resultQuestionJavaCoreList) {
+        this.resultQuestionJavaCoreList = resultQuestionJavaCoreList;
+    }
+
     //map n-1 mark student
     @ManyToOne
     @JoinColumn(name = "mark_student_id")

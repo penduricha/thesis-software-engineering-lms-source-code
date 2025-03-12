@@ -115,6 +115,7 @@ public class BankQuestionJavaCoreService implements I_BankQuestionJavaCoreServic
     }
 
     @Override
+    @Transactional
     public BankQuestionJavaCore updateBankQuestionJavaCore(
             BankQuestionJavaCore bankQuestionJavaCore,
             List<BankTestCaseJavaCore> bankTestCaseJavaCoreList) throws JpaSystemException {
@@ -124,24 +125,33 @@ public class BankQuestionJavaCoreService implements I_BankQuestionJavaCoreServic
             bankQuestionJavaCoreFound.setContentQuestion(bankQuestionJavaCore.getContentQuestion());
             bankQuestionJavaCoreFound.setCodeSample(bankQuestionJavaCore.getCodeSample());
             bankQuestionJavaCoreFound.setCodeRunToOutput(bankQuestionJavaCore.getCodeRunToOutput());
-            List<BankTestCaseJavaCore> existingTestCases = bankTestCaseJavaCoreRepository
-                    .getBankTestCaseJavaCoresByBankQuestionJavaCore_QuestionJavaCoreID
-                            (bankQuestionJavaCore.getQuestionJavaCoreID());
-            for (BankTestCaseJavaCore newTestCase : bankTestCaseJavaCoreList) {
-                boolean found = false;
-                for (BankTestCaseJavaCore existingTestCase : existingTestCases) {
-                    if (existingTestCase.getInputTest().equals(newTestCase.getInputTest())) {
-                        // Update the existing test case
-                        existingTestCase.setOutputExpect(newTestCase.getOutputExpect());
-                        existingTestCase.setNote(newTestCase.getNote());
-                        found = true;
-                        break;
-                    }
+
+            //Xóa hết test case
+            String sqlDeleteAllTestCases =
+                    "delete from bank_test_case_java_core where question_java_core_id = ?;";
+            entityManager.createNativeQuery(sqlDeleteAllTestCases)
+                    .setParameter(1,
+                            bankQuestionJavaCoreFound.getQuestionJavaCoreID())
+                    .executeUpdate();
+
+            //insert lai cai moi
+            String sqlInsertTestCase = "insert into " +
+                    "bank_test_case_java_core (input_test, note, output_expect, question_java_core_id) value (?, ?, ?, ?)";
+            if(!bankTestCaseJavaCoreList.isEmpty()) {
+                for(BankTestCaseJavaCore testCaseJavaCore: bankTestCaseJavaCoreList) {
+                    entityManager.createNativeQuery(sqlInsertTestCase)
+                            .setParameter(1,
+                                    testCaseJavaCore.getInputTest())
+                            .setParameter(2,
+                                    testCaseJavaCore.getNote())
+                            .setParameter(3,
+                                    testCaseJavaCore.getOutputExpect())
+                            .setParameter(4,
+                                    bankQuestionJavaCoreFound.getQuestionJavaCoreID())
+                            .executeUpdate();
                 }
-                if (!found) {
-                    newTestCase.setBankQuestionJavaCore(bankQuestionJavaCoreFound);
-                    bankTestCaseJavaCoreRepository.save(newTestCase);
-                }
+            } else {
+                throw new EntityNotFoundException("List of bank_test_case_java_core is empty.");
             }
             // Save the updated question
             return bankQuestionJavaCoreRepository.save(bankQuestionJavaCoreFound);

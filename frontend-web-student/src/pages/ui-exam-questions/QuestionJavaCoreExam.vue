@@ -13,14 +13,16 @@ import {autocompletion, completeFromList} from "@codemirror/autocomplete";
 
 import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import StudentDao from "@/daos/StudentDao.js";
-
+import javaKeyWords from "@/components/data-key-word/javaKeyWords.js";
 import QuestionJavaCoreExamDao from "@/daos/QuestionJavaCoreExamDao.js";
 import ModalNotificationAfterSubmit from "@/pages/ui-exam-questions/ModalNotificationAfterSubmit.vue";
 import CodeStorageDao from "@/daos/CodeStorageDao.js";
+import ModalFormTestDebugJava from "@/pages/ui-exam-questions/ModalFormTestDebugJava.vue";
 
 export default {
   name: "QuestionJavaCoreExam",
   components: {
+    ModalFormTestDebugJava,
     ModalNotificationAfterSubmit,
     Codemirror,
   },
@@ -50,6 +52,7 @@ export default {
       //questions
       questions: [],
       questionInit: null,
+      questionJavaCoreExamID: null,
       testCasesInit: [],
 
       //content
@@ -120,6 +123,7 @@ export default {
             //console.log("Test case: ", this.testCasesInit);
             this.contentQuestion = this.questionInit.contentQuestion;
             this.score = this.questionInit.score;
+            this.questionJavaCoreExamID  = this.questionInit.questionJavaCoreExamID;
             //get code da save
             this.codeSaved = await CodeStorageDao.get_Code_Saved_By_StudentID(studentID);
             if(this.codeSaved.length > 0) {
@@ -204,6 +208,7 @@ export default {
         this.contentQuestion = this.questionInit.contentQuestion;
         //console.log("Content question: ", this.contentQuestion);
         this.score = this.questionInit.score;
+        this.questionJavaCoreExamID  = this.questionInit.questionJavaCoreExamID;
         let codeGet = await CodeStorageDao
             .get_Code_By_IndexQuestion_StudentID(this.studentID, this.indexQuestion);
         if (codeGet) {
@@ -300,7 +305,7 @@ export default {
     },
 
     handleOpenModalTestDebugJava() {
-
+      this.$refs.modalFormTestDebugJava.setCode(this.code);
     },
 
     // handleReset() {
@@ -309,12 +314,53 @@ export default {
   },
 
   setup() {
-    const extensions = [
+    // Danh sách từ khóa Java quan trọng
+    const javaKeywords = javaKeyWords;
+
+    // Danh sách kiểu dữ liệu Java (hỗ trợ khi khai báo biến)
+    const javaDataTypes = [
+      "boolean", "char", "byte", "short", "int", "long", "float", "double", "String",
+      "List", "ArrayList", "LinkedList", "Set", "HashSet", "TreeSet", "Map", "HashMap", "TreeMap"
+    ];
+    // Danh sách hàm getter, setter, constructors
+    const javaMethods = [
+      {label: "getName()", type: "function", detail: "Getter method for name"},
+      {label: "setName(String name)", type: "function", detail: "Setter method for name"},
+      {label: "getAge()", type: "function", detail: "Getter method for age"},
+      {label: "setAge(int age)", type: "function", detail: "Setter method for age"},
+      {label: "toString()", type: "function", detail: "Convert object to string"},
+      {label: "equals(Object obj)", type: "function", detail: "Check object equality"},
+      {label: "hashCode()", type: "function", detail: "Generate hash code"},
+      {label: "compareTo(Object obj)", type: "function", detail: "Compare two objects"},
+      {label: "clone()", type: "function", detail: "Clone the object"},
+      {label: "public class ClassName () { }", type: "snippet", detail: "Create a Java class"},
+      {label: "private int ;", type: "variable", detail: "Declare private int variable"},
+      {label: "private String ;", type: "variable", detail: "Declare private String variable"},
+      {label: "private double ;", type: "variable", detail: "Declare private String variable"},
+      {label: "private float ;", type: "variable", detail: "Declare private String variable"},
+      {label: "private boolean ;", type: "variable", detail: "Declare private String variable"}
+    ];
+
+    // Tích hợp danh sách gợi ý vào CodeMirror
+    const javaCompletion = completeFromList([
+      ...javaKeywords.map((keyword) => ({
+        label: keyword,
+        type: "keyword"
+      })),
+      ...javaDataTypes.map((dataType) => ({
+        label: dataType,
+        type: "type"
+      })),
+      ...javaMethods
+    ]);
+
+    // 🔥 5️⃣ Cấu hình CodeMirror với Java Autocompletion nâng cao
+    const codeMirrorExtensions = [
       java(),
       oneDark,
-      autocompletion(),
+      autocompletion({override: [javaCompletion]}),
       keymap.of([
-        { key: "Ctrl-Space", run: completeFromList }
+        {key: "Ctrl-Space", run: autocompletion()} // Nhấn Ctrl + Space để gợi ý code
       ])
     ];
 
@@ -324,9 +370,9 @@ export default {
     };
 
     return {
-      extensions,
+      extensions: codeMirrorExtensions,
       handleReady,
-    };
+    }
   },
 
   computed: {
@@ -439,10 +485,11 @@ export default {
 <!--            >Reset-->
 <!--            </button>-->
             <button
-                ref="testDebug"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-form-debug-java"
                 class="button-text-editor"
                 @click="handleOpenModalTestDebugJava()"
-            >Test Debug Java
+            >Debug java
             </button>
           </div>
           <div class="view-text-editor">
@@ -464,6 +511,10 @@ export default {
     </div>
 
   <modal-notification-after-submit  :exam-i-d="examID" :timer="timer"/>
+  <modal-form-test-debug-java ref="modalFormTestDebugJava"
+                              :exam-i-d="this.examID"
+                              :question-java-core-exam-i-d="this.questionJavaCoreExamID"
+  />
 </template>
 
 <style scoped lang="scss">

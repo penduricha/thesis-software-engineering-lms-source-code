@@ -155,7 +155,7 @@ export default {
       const testCaseManager = new SessionStorageTestCase();
       this.listTestCases = testCaseManager.loadFromSessionStorage();
       if(this.listTestCases.length === 0) {
-        this.validationNullTestCases = 'Please enter test cases.';
+        this.validationNullTestCases = 'Please enter a test case.';
       }
     },
 
@@ -469,6 +469,7 @@ export default {
                   @ready="handleReady"
                   style="width: 100%; height: 5rem;"
                   @input="setInputCodeSample"
+                  disabled
               />
             </div>
             <div class="mb-3">

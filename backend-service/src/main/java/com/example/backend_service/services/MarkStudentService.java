@@ -1,15 +1,11 @@
 package com.example.backend_service.services;
 
-import com.example.backend_service.models.Exam;
-import com.example.backend_service.models.MarkStudent;
-import com.example.backend_service.models.ResultQuestionJavaCore;
-import com.example.backend_service.models.Student;
-import com.example.backend_service.repositories.ExamRepository;
-import com.example.backend_service.repositories.MarkStudentRepository;
-import com.example.backend_service.repositories.StudentRepository;
+import com.example.backend_service.models.*;
+import com.example.backend_service.repositories.*;
 import com.example.backend_service.services.i_service.I_MarkStudentService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -21,10 +17,16 @@ public class MarkStudentService implements I_MarkStudentService {
 
     private final ExamRepository examRepository;
 
-    public MarkStudentService(MarkStudentRepository markStudentRepository, StudentRepository studentRepository, ExamRepository examRepository) {
+    private final BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository;
+
+    private final QuestionJavaCoreExamRepository questionJavaCoreExamRepository;
+
+    public MarkStudentService(MarkStudentRepository markStudentRepository, StudentRepository studentRepository, ExamRepository examRepository, BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository, QuestionJavaCoreExamRepository questionJavaCoreExamRepository) {
         this.markStudentRepository = markStudentRepository;
         this.studentRepository = studentRepository;
         this.examRepository = examRepository;
+        this.bankQuestionJavaCoreRepository = bankQuestionJavaCoreRepository;
+        this.questionJavaCoreExamRepository = questionJavaCoreExamRepository;
     }
 
     @Override
@@ -45,8 +47,44 @@ public class MarkStudentService implements I_MarkStudentService {
             studentFound.getMarkStudentList().add(markStudent);
             markStudent.setStudent(studentFound);
 
-        }
+            examFound.setMarkStudent(markStudent);
+            markStudent.setExam(examFound);
 
+            DetailMarkStudent detailMarkStudent = new DetailMarkStudent();
+            detailMarkStudent.setDetailMarkExam(0);
+            //date time submit
+            detailMarkStudent.setDateSubmitted(LocalDateTime.now());
+
+            //set relationship
+            markStudent.getDetailMarkStudents().add(detailMarkStudent);
+            detailMarkStudent.setMarkStudent(markStudent);
+
+            if(!answerQuestions.isEmpty()) {
+                for(Map<String, Object> objectMap : answerQuestions) {
+                    Integer questionJavaCoreExamIDInt = (Integer) objectMap.get("questionJavaCoreExamID");
+                    Long questionJavaCoreExamID = questionJavaCoreExamIDInt != null ? questionJavaCoreExamIDInt.longValue() : null;
+                    String codeStudentSubmitted = (String) objectMap.get("codeStudentSubmitted");
+
+                    QuestionJavaCoreExam questionJavaCoreExamFound =
+                            questionJavaCoreExamRepository.findQuestionJavaCoreExamsByQuestionJavaCoreExamID(questionJavaCoreExamID);
+                    if(questionJavaCoreExamFound !=null) {
+                        ResultQuestionJavaCore resultQuestionJavaCore = new ResultQuestionJavaCore();
+                        resultQuestionJavaCore.setCodeStudentSubmitted(codeStudentSubmitted);
+
+                        //Chỗ này sẽ xuất code output ra và set vào, nma thư nghiệm trước thì cho null trước
+                        resultQuestionJavaCore.setOutputCodeStudent(null);
+
+                        //set relationship
+                        questionJavaCoreExamFound.setResultQuestionJavaCore(resultQuestionJavaCore);
+                        resultQuestionJavaCore.setQuestionJavaCoreExam(questionJavaCoreExamFound);
+
+                        detailMarkStudent.getResultQuestionJavaCoreList().add(resultQuestionJavaCore);
+                        resultQuestionJavaCore.setDetailMarkStudent(detailMarkStudent);
+                    }
+                }
+                return markStudentRepository.save(markStudent);
+            }
+        }
         return null;
     }
 

@@ -13,14 +13,16 @@ import {autocompletion, completeFromList} from "@codemirror/autocomplete";
 
 import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import StudentDao from "@/daos/StudentDao.js";
-
+import javaKeyWords from "@/components/data-key-word/javaKeyWords.js";
 import QuestionJavaCoreExamDao from "@/daos/QuestionJavaCoreExamDao.js";
 import ModalNotificationAfterSubmit from "@/pages/ui-exam-questions/ModalNotificationAfterSubmit.vue";
 import CodeStorageDao from "@/daos/CodeStorageDao.js";
+import ModalFormTestDebugJava from "@/pages/ui-exam-questions/ModalFormTestDebugJava.vue";
 
 export default {
   name: "QuestionJavaCoreExam",
   components: {
+    ModalFormTestDebugJava,
     ModalNotificationAfterSubmit,
     Codemirror,
   },
@@ -50,6 +52,7 @@ export default {
       //questions
       questions: [],
       questionInit: null,
+      questionJavaCoreExamID: null,
       testCasesInit: [],
 
       //content
@@ -122,6 +125,7 @@ export default {
             //console.log("Test case: ", this.testCasesInit);
             this.contentQuestion = this.questionInit.contentQuestion;
             this.score = this.questionInit.score;
+            this.questionJavaCoreExamID  = this.questionInit.questionJavaCoreExamID;
             //get code da save
             this.codeSaved = await CodeStorageDao.get_Code_Saved_By_StudentID(studentID);
             if(this.codeSaved.length > 0) {
@@ -206,6 +210,7 @@ export default {
         this.contentQuestion = this.questionInit.contentQuestion;
         //console.log("Content question: ", this.contentQuestion);
         this.score = this.questionInit.score;
+        this.questionJavaCoreExamID  = this.questionInit.questionJavaCoreExamID;
         let codeGet = await CodeStorageDao
             .get_Code_By_IndexQuestion_StudentID(this.studentID, this.indexQuestion);
         if (codeGet) {
@@ -243,7 +248,7 @@ export default {
         const codeSavedItem = this.codeSaved
             .find(item => item.indexQuestion === this.questions.indexOf(question));
         return {
-          questionJavaCoreID: question.questionJavaCoreExamID,
+          questionJavaCoreExamID: question.questionJavaCoreExamID,
           // Nếu không có mã code thì dùng codeSample
           codeStudentSubmitted: codeSavedItem ? codeSavedItem.codeSave : question.codeSample
         };
@@ -255,6 +260,7 @@ export default {
         answerQuestions: answerQuestions === null ? [] : answerQuestions,
       }
       console.log("Data to submit: ", dataToSubmit);
+
     },
 
     async handleSave() {
@@ -308,7 +314,7 @@ export default {
       
     },
     handleOpenModalTestDebugJava() {
-
+      this.$refs.modalFormTestDebugJava.setCode(this.code);
     },
 
     // handleReset() {
@@ -401,6 +407,7 @@ export default {
   //     handleReady,
   //   };
  },
+
 
   computed: {
     containerStyle() {
@@ -523,10 +530,11 @@ export default {
 <!--            >Reset-->
 <!--            </button>-->
             <button
-                ref="testDebug"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-form-debug-java"
                 class="button-text-editor"
                 @click="handleOpenModalTestDebugJava()"
-            >Test Debug Java
+            >Debug java
             </button>
             <button
                 ref="flat"
@@ -560,6 +568,10 @@ export default {
     </div>
 
   <modal-notification-after-submit  :exam-i-d="examID" :timer="timer"/>
+  <modal-form-test-debug-java ref="modalFormTestDebugJava"
+                              :exam-i-d="this.examID"
+                              :question-java-core-exam-i-d="this.questionJavaCoreExamID"
+  />
 </template>
 
 <style scoped lang="scss">

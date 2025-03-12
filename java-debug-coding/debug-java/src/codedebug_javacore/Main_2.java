@@ -18,7 +18,6 @@ public class Main_2 {
 	public static void main(String[] args) {
 		System.out.println(calculate_Sum_Series_Of_Numbers(0));
 		System.out.println(calculate_Sum_Series_Of_Numbers(-2));
-		System.out.println(calculate_Sum_Series_Of_Numbers((int) 1.5));
 		System.out.println(calculate_Sum_Series_Of_Numbers(5));
 		System.out.println(calculate_Sum_Series_Of_Numbers(6));
 	}

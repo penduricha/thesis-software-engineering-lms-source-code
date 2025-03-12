@@ -119,7 +119,7 @@ export default {
             path: path,
             query: {
               examID: informationDoExam.examID,
-              duration: Number(informationDoExam.remainMinutes)
+              duration: Number(informationDoExam.remainMinutes) + 2
             }
           }).catch((error) => {
             console.error('Error navigating :', error);

@@ -75,7 +75,7 @@ export default {
       //codeFlag:[],
       //indexQuestionFlag: []
       //button mark flag
-      nameButtonMarkFlag: 'Mark flag',
+      nameButtonMarkFlag: "Mark flag",
     }
   },
 
@@ -89,6 +89,7 @@ export default {
     this.checkTimeLeft();
     this.setDuration();
     //this.clickButtonSubmit();
+    //this.setNameButtonMarkFlag();
   },
 
   beforeDestroy() {
@@ -246,6 +247,16 @@ export default {
       }
     },
 
+    // setNameButtonMarkFlag() {
+    //   if(this.questionInit) {
+    //     if(this.questionInit.isMarkedFlag === true){
+    //       this.nameButtonMarkFlag = "Remove flag";
+    //     } else {
+    //       this.nameButtonMarkFlag = "Mark flag";
+    //     }
+    //   }
+    // },
+
     handlePaste(event) {
       event.preventDefault();
       // Prevent paste action
@@ -326,19 +337,30 @@ export default {
 
     async handleMarkFlag() {
       if(this.examID && this.questionInit) {
-        if(this.nameButtonMarkFlag === "Mark flag"){
-          this.questions =
-              await QuestionJavaCoreExamDao
-                  .getQuestions_By_ExamID_After_Mark_Or_Remove_Flag(this.examID, this.questionInit.questionJavaCoreExamID);
+        // if(this.nameButtonMarkFlag === "Mark flag"){
+        //   this.questions =
+        //       await QuestionJavaCoreExamDao
+        //           .getQuestions_By_ExamID_After_Mark_Or_Remove_Flag(this.examID, this.questionInit.questionJavaCoreExamID);
+        //   //this.nameButtonMarkFlag = "Remove flag";
+        //   //this.nameButtonMarkFlag = "Remove flag";
+        // } else {
+        //   if(this.nameButtonMarkFlag === "Remove flag")
+        //   {
+        //     this.questions =
+        //         await QuestionJavaCoreExamDao
+        //             .getQuestions_By_ExamID_After_Mark_Or_Remove_Flag(this.examID, this.questionInit.questionJavaCoreExamID);
+        //     //this.nameButtonMarkFlag = "Mark flag";
+        //   }
+        // }
+
+        this.questions = await QuestionJavaCoreExamDao
+            .getQuestions_By_ExamID_After_Mark_Or_Remove_Flag(this.examID, this.questionInit.questionJavaCoreExamID);
+        this.questionInit = this.questions[this.indexQuestion];
+
+        if(this.questionInit.isMarkedFlag === true){
           this.nameButtonMarkFlag = "Remove flag";
         } else {
-          if(this.nameButtonMarkFlag === "Remove flag")
-          {
-            this.questions =
-                await QuestionJavaCoreExamDao
-                    .getQuestions_By_ExamID_After_Mark_Or_Remove_Flag(this.examID, this.questionInit.questionJavaCoreExamID);
-            this.nameButtonMarkFlag = "Mark flag";
-          }
+          this.nameButtonMarkFlag = "Mark flag";
         }
       }
     },
@@ -563,7 +585,7 @@ export default {
 
           <button
               class="button-text-editor"
-              @click="handleMarkFlag()"
+              @click ="handleMarkFlag()"
           >{{nameButtonMarkFlag}}
           </button>
 

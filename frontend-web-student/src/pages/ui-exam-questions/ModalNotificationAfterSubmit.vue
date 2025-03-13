@@ -6,6 +6,7 @@ import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import ExamDao from "@/daos/ExamDao.js";
 import StudentDao from "@/daos/StudentDao.js";
 import CodeStorageDao from "@/daos/CodeStorageDao.js";
+import QuestionJavaCoreExamDao from "@/daos/QuestionJavaCoreExamDao.js";
 
 export default {
   name: "ModalNotificationAfterSubmit",
@@ -56,7 +57,8 @@ export default {
 
       let statusResetDate = await StudentDao.reset_Date_Time_Start_Exam(studentID);
       let statusDeleteCodeStorage = await CodeStorageDao.delete_Code_Storage_By_StudentID(studentID);
-      if(!status || !statusResetDate || !statusDeleteCodeStorage) {
+      let statusSetMarkedFlag = await QuestionJavaCoreExamDao.setMarkedFlag_False_By_ExamID(this.examID);
+      if(!status || !statusResetDate || !statusDeleteCodeStorage || !statusSetMarkedFlag) {
         alert("Can't return page because error system.");
       } else {
         window.location.reload();

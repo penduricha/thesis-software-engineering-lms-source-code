@@ -40,4 +40,20 @@ export default class QuestionJavaCoreExamDao {
         }
         return questions;
     }
+
+    static async setMarkedFlag_False_By_ExamID (examID) {
+        let status = false;
+        let responseReturn = null;
+        await QuestionJavaCoreExamService
+            .fetch_Switch_Mark_Flag_False_By_ExamID(examID)
+            .then(response => {
+                responseReturn = response.data;
+            }).catch(error => {
+                console.error(error);
+            })
+        if(responseReturn) {
+            status = true;
+        }
+        return status;
+    }
 }

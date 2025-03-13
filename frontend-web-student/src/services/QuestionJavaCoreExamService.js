@@ -16,4 +16,9 @@ export default class QuestionJavaCoreExamService {
         return axiosConfig.getAPIClient()
             .get(`/switch-marked-flag-by-question-java-core-exam-id/${questionJavaCoreExamID}`);
     }
+
+    static fetch_Switch_Mark_Flag_False_By_ExamID (examID) {
+        return axiosConfig.getAPIClient()
+            .get(`/switch-marked-flag-false-by-exam-id/${examID}`);
+    }
 }

@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamService {
+
     private final QuestionJavaCoreExamRepository questionJavaCoreExamRepository;
 
     private final ExamRepository examRepository;
@@ -110,6 +111,22 @@ public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamServic
         if(questionJavaCoreExamFound != null) {
             questionJavaCoreExamFound.setMarkedFlag(!questionJavaCoreExamFound.isMarkedFlag());
             return questionJavaCoreExamRepository.save(questionJavaCoreExamFound);
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public Exam update_Marked_Flag_False_By_ExamID(Long examID) throws JpaSystemException{
+        Exam examFound = examRepository.findExamByExamID(examID);
+        if(examFound != null) {
+            //System.out.println(examFound.getExamID());
+            String sqlUpdate_Mark_Flag_By_ExamID = "update question_java_core_exam set is_marked_flag = ? where exam_id = ?;" ;
+            entityManager.createNativeQuery(sqlUpdate_Mark_Flag_By_ExamID)
+                    .setParameter(1, false)
+                    .setParameter(2, examFound.getExamID())
+                    .executeUpdate();
+            return examFound;
         }
         return null;
     }

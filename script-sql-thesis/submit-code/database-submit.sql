@@ -22,4 +22,7 @@ and m.student_id = '22662361' and e.exam_id = 24;
 # question_java_core_exam where question_java_core_exam_id = 7;
 
 select exam_id from exam;
+update question_java_core_exam set is_marked_flag = false
+where exam_id = 45;
+
 

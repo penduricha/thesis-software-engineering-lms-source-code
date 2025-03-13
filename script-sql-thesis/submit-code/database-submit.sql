@@ -18,3 +18,8 @@ left join exam e on m.exam_id = e.exam_id
 where e.retake_exam = true
 and m.student_id = '22662361' and e.exam_id = 24;
 
+# select is_marked_flag from
+# question_java_core_exam where question_java_core_exam_id = 7;
+
+select exam_id from exam;
+

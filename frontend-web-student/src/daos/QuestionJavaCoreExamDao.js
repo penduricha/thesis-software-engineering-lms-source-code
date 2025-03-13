@@ -24,4 +24,20 @@ export default class QuestionJavaCoreExamDao {
             })
         return testCases;
     }
+
+    static async getQuestions_By_ExamID_After_Mark_Or_Remove_Flag(examID ,questionJavaCoreExamID) {
+        let questions = [];
+        let responseReturn = null;
+        await QuestionJavaCoreExamService
+            .fetch_Switch_Mark_Flag_QuestionJavaCoreExamID(questionJavaCoreExamID)
+            .then(response => {
+                responseReturn = response.data;
+            }).catch(error => {
+                console.error(error);
+            })
+        if(responseReturn) {
+            questions = await this.getQuestions_By_ExamID (examID);
+        }
+        return questions;
+    }
 }

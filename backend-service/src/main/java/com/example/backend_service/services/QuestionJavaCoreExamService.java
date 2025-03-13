@@ -59,6 +59,7 @@ public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamServic
                         newMap.put("codeSample", originalMap.get("code_sample"));
                         newMap.put("contentQuestion", originalMap.get("content_question"));
                         newMap.put("score", originalMap.get("score"));
+                        newMap.put("isMarkedFlag", originalMap.get("is_marked_flag"));
                         newMap.put("questionJavaCoreID", originalMap.get("question_java_core_id"));
                         return newMap;
                     })
@@ -101,5 +102,15 @@ public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamServic
         return null;
     }
 
-
+    @Override
+    public QuestionJavaCoreExam update_Switch_Marked_Flag_By_QuestionJavaCoreExam_ID(Long questionJavaCoreExamID)
+        throws JpaSystemException{
+        QuestionJavaCoreExam questionJavaCoreExamFound =
+                questionJavaCoreExamRepository.findQuestionJavaCoreExamsByQuestionJavaCoreExamID(questionJavaCoreExamID);
+        if(questionJavaCoreExamFound != null) {
+            questionJavaCoreExamFound.setMarkedFlag(!questionJavaCoreExamFound.isMarkedFlag());
+            return questionJavaCoreExamRepository.save(questionJavaCoreExamFound);
+        }
+        return null;
+    }
 }

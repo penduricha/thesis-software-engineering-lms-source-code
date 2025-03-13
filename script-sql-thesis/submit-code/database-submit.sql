@@ -25,4 +25,4 @@ select exam_id from exam;
 update question_java_core_exam set is_marked_flag = false
 where exam_id = 45;
 
-
+select * from result_question_java_core;

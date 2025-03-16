@@ -1,6 +1,7 @@
 package com.example.backend_service.controllers;
 
 import com.example.backend_service.models.*;
+import com.example.backend_service.services.ExecuteJavaService;
 import com.example.backend_service.services.LectureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,12 @@ import java.util.Map;
 public class LectureController {
     private final LectureService lectureService;
 
+    private final ExecuteJavaService executeJavaService;
+
     @Autowired
-    public LectureController(LectureService lectureService) {
+    public LectureController(LectureService lectureService, ExecuteJavaService executeJavaService) {
         this.lectureService = lectureService;
+        this.executeJavaService = executeJavaService;
     }
 
 //    public ResponseEntity<Lecture> findLectureByLectureID(@PathVariable String lectureID) throws HttpClientErrorException {
@@ -96,5 +100,8 @@ public class LectureController {
 //        Lecture updatedLecture = lectureService.updatePasswordLecture(lectureID, newPassword);
 //        return ResponseEntity.ok(updatedLecture.getPassword());
 //    }
-
+    @PostMapping("/lecture/compiler_main_code_in_create_update_question")
+    public ResponseEntity<Boolean> post_TestCompiler_MainCode_By_LectureID(@RequestBody Map<String, Object> mapCodeMainLecture) {
+        return ResponseEntity.ok(executeJavaService.testCompiler_MainCode_By_LectureID(mapCodeMainLecture));
+    }
 }

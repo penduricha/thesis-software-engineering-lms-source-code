@@ -13,6 +13,19 @@ export default class QuestionJavaCoreExamDao {
         return questions;
     }
 
+    static async startPolling_GetQuestions_By_ExamID(examID, callback) {
+        let lastFetchedQuestions = await this.getQuestions_By_ExamID(examID);
+        // Check every 5 seconds
+        return setInterval(async () => {
+            const currentQuestions = await this.getQuestions_By_ExamID(examID);
+            // Compare the current questions with the last fetched questions
+            if (JSON.stringify(currentQuestions) !== JSON.stringify(lastFetchedQuestions)) {
+                lastFetchedQuestions = currentQuestions; // Update last fetched questions
+                callback(currentQuestions); // Call the callback to update data
+            }
+        }, 5000);
+    }
+
     static async getTestCases_By_QuestionJavaCoreExamID (questionJavaCoreExamID) {
         let testCases = [];
         await QuestionJavaCoreExamService

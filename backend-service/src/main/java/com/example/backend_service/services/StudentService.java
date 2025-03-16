@@ -129,11 +129,15 @@ public class StudentService implements I_StudentService {
         Student studentFind = findStudentByStudentId(studentID);
         Exam examFind = examRepository.findExamByExamID(examID);
         if(studentFind !=null && examFind !=null) {
-            String sqlInsertRecord = "insert into student_access_exam (student_id, exam_id) values (?,?)";
-            entityManager.createNativeQuery(sqlInsertRecord)
-                    .setParameter(1, studentFind.getStudentID())
-                    .setParameter(2, examFind.getExamID()).executeUpdate();
-            return examFind.getExamID();
+            Map<String, Object> studentAccessFound = findStudent_Access_Exam_By_ExamID(examID);
+            if(studentAccessFound.isEmpty()) {
+                String sqlInsertRecord = "insert into student_access_exam (student_id, exam_id) values (?,?)";
+                entityManager.createNativeQuery(sqlInsertRecord)
+                        .setParameter(1, studentFind.getStudentID())
+                        .setParameter(2, examFind.getExamID()).executeUpdate();
+                return examFind.getExamID();
+            }
+            return null;
         }
         return null;
     }
@@ -144,12 +148,16 @@ public class StudentService implements I_StudentService {
         Student studentFind = findStudentByStudentId(studentID);
         Exam examFind = examRepository.findExamByExamID(examID);
         if(studentFind !=null && examFind != null) {
-            String sqlDeleteRecord = "delete from student_access_exam where student_id = ? and exam_id = ? ";
-            entityManager.createNativeQuery(sqlDeleteRecord)
-                    .setParameter(1, studentFind.getStudentID())
-                    .setParameter(2, examFind.getExamID())
-                    .executeUpdate();
-            return studentFind.getStudentID();
+            Map<String, Object> studentAccessFound = findStudent_Access_Exam_By_ExamID(examID);
+            if(!studentAccessFound.isEmpty()) {
+                String sqlDeleteRecord = "delete from student_access_exam where student_id = ? and exam_id = ? ";
+                entityManager.createNativeQuery(sqlDeleteRecord)
+                        .setParameter(1, studentFind.getStudentID())
+                        .setParameter(2, examFind.getExamID())
+                        .executeUpdate();
+                return studentFind.getStudentID();
+            }
+            return null;
         }
         return null;
     }

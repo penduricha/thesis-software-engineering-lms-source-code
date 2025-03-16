@@ -72,7 +72,7 @@ public class MarkStudentService implements I_MarkStudentService {
                         resultQuestionJavaCore.setCodeStudentSubmitted(codeStudentSubmitted);
 
                         //Chỗ này sẽ xuất code output ra và set vào, nma thư nghiệm trước thì cho null trước
-                        resultQuestionJavaCore.setOutputCodeStudent(null);
+                        //resultQuestionJavaCore.setOutputCodeStudent(null);
 
                         //set relationship
                         questionJavaCoreExamFound.setResultQuestionJavaCore(resultQuestionJavaCore);
@@ -80,6 +80,10 @@ public class MarkStudentService implements I_MarkStudentService {
 
                         detailMarkStudent.getResultQuestionJavaCoreList().add(resultQuestionJavaCore);
                         resultQuestionJavaCore.setDetailMarkStudent(detailMarkStudent);
+
+                        //save kq da code vao, neu code bi fail syntax, save la fail syntax
+                        //suy nghi ki
+
                     }
                 }
                 return markStudentRepository.save(markStudent);

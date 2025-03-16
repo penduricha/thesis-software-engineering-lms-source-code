@@ -20,4 +20,8 @@ export default class LectureService {
     static fetchLecturePassword_By_LectureID(lectureID) {
         return axiosConfig.getAPIClient().get(`/lecture/getPassword_By_LectureID/${lectureID}`);
     }
+
+    static postCompiler_Code_Run_To_Output ( dataPost ) {
+        return axiosConfig.getAPIClient().post(`/lecture/compiler_main_code_in_create_update_question`, dataPost, {});
+    }
 }

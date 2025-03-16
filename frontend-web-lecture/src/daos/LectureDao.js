@@ -51,4 +51,15 @@ export default class LectureDao {
         console.log('patched password: ', newPasswordReturned);
         return status;
     }
+
+    static async test_Compiler_Code_Run_To_Output( dataPost ) {
+        let status = false;
+        await LectureService.postCompiler_Code_Run_To_Output(dataPost).then(response => {
+            status = response.data;
+        }).catch(error => {
+            console.error(error);
+            // alert(error)
+        });
+        return status;
+    }
 }

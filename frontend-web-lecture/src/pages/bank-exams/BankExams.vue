@@ -179,11 +179,16 @@ export default {
                   @click="handleOpenModalAddQuestion()"
           >Add question</button>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-5">
           <button class="btn btn-primary button-purple"
                   @click="handleNavigateCreateExam()"
           >Create exam java core</button>
         </div>
+<!--        <div class="col-md-8">-->
+<!--          <button class="btn btn-primary button-purple"-->
+<!--                  @click="handleNavigateCreateExamJavaCoreRandom()"-->
+<!--          >Create exam java core by random</button>-->
+<!--        </div>-->
       </div>
       <div class="row-mb-3">
         <button class="btn btn-primary button-purple"

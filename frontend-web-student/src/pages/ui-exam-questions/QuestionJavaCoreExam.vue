@@ -18,6 +18,7 @@ import QuestionJavaCoreExamDao from "@/daos/QuestionJavaCoreExamDao.js";
 import ModalNotificationAfterSubmit from "@/pages/ui-exam-questions/ModalNotificationAfterSubmit.vue";
 import CodeStorageDao from "@/daos/CodeStorageDao.js";
 import ModalFormTestDebugJava from "@/pages/ui-exam-questions/ModalFormTestDebugJava.vue";
+import ExamDao from "@/daos/ExamDao.js";
 
 export default {
   name: "QuestionJavaCoreExam",
@@ -75,7 +76,10 @@ export default {
       //codeFlag:[],
       //indexQuestionFlag: []
       //button mark flag
-      nameButtonMarkFlag: "Mark flag",
+      //nameButtonMarkFlag: "Mark flag",
+
+      //polling
+      pollingInterval: null,
     }
   },
 
@@ -95,6 +99,7 @@ export default {
   beforeDestroy() {
     // Dọn dẹp khi component bị hủy
     clearInterval(this.timer);
+    clearInterval(this.pollingInterval);
   },
 
   methods: {
@@ -111,15 +116,17 @@ export default {
       const routerDao = new RouterDao();
       routerDao.savePath_To_SessionStorage(route);
       this.indexQuestion = Number(sessionStorage.getItem("indexQuestion"));
-      // const savedTime = localStorage.getItem('timeLeft');
-      // if(savedTime) {
-      //   localStorage.removeItem("timeLeft");
-      // }
     },
 
     async setQuestion_By_ExamID() {
       this.questions = await QuestionJavaCoreExamDao.getQuestions_By_ExamID(this.examID);
       console.log("10 questions: ", this.questions);
+
+      //xu li neu co thay doi
+      this.pollingInterval = await QuestionJavaCoreExamDao.startPolling_GetQuestions_By_ExamID(this.examID, (updated) => {
+        this.questions = updated;
+        // Cập nhật danh sách bài kiểm tra
+      });
       this.questionInit = this.questions[this.indexQuestion];
       const studentLocalStorage  = new StudentLocalStorage();
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
@@ -146,11 +153,11 @@ export default {
           }
 
           //check button mark flag
-          if(this.questionInit.isMarkedFlag === true){
-            this.nameButtonMarkFlag = "Remove flag";
-          } else {
-            this.nameButtonMarkFlag = "Mark flag";
-          }
+          // if(this.questionInit.isMarkedFlag === true){
+          //   this.nameButtonMarkFlag = "Remove flag";
+          // } else {
+          //   this.nameButtonMarkFlag = "Mark flag";
+          // }
         }
       }
     },
@@ -168,7 +175,6 @@ export default {
         if(courseID) {
           this.courseID = courseID;
         }
-
       }
     },
 
@@ -239,11 +245,11 @@ export default {
         }
 
         //check button mark flag
-        if(this.questionInit.isMarkedFlag === true){
-          this.nameButtonMarkFlag = "Remove flag";
-        } else {
-          this.nameButtonMarkFlag = "Mark flag";
-        }
+        // if(this.questionInit.isMarkedFlag === true){
+        //   this.nameButtonMarkFlag = "Remove flag";
+        // } else {
+        //   this.nameButtonMarkFlag = "Mark flag";
+        // }
       }
     },
 
@@ -337,31 +343,18 @@ export default {
 
     async handleMarkFlag() {
       if(this.examID && this.questionInit) {
-        // if(this.nameButtonMarkFlag === "Mark flag"){
-        //   this.questions =
-        //       await QuestionJavaCoreExamDao
-        //           .getQuestions_By_ExamID_After_Mark_Or_Remove_Flag(this.examID, this.questionInit.questionJavaCoreExamID);
-        //   //this.nameButtonMarkFlag = "Remove flag";
-        //   //this.nameButtonMarkFlag = "Remove flag";
-        // } else {
-        //   if(this.nameButtonMarkFlag === "Remove flag")
-        //   {
-        //     this.questions =
-        //         await QuestionJavaCoreExamDao
-        //             .getQuestions_By_ExamID_After_Mark_Or_Remove_Flag(this.examID, this.questionInit.questionJavaCoreExamID);
-        //     //this.nameButtonMarkFlag = "Mark flag";
-        //   }
-        // }
-
-        this.questions = await QuestionJavaCoreExamDao
-            .getQuestions_By_ExamID_After_Mark_Or_Remove_Flag(this.examID, this.questionInit.questionJavaCoreExamID);
-        this.questionInit = this.questions[this.indexQuestion];
-
-        if(this.questionInit.isMarkedFlag === true){
+        //gắn cờ vào và save
+        this.questionInit.isMarkedFlag = !this.questionInit.isMarkedFlag;
+        if(this.questionInit.isMarkedFlag){
           this.nameButtonMarkFlag = "Remove flag";
         } else {
           this.nameButtonMarkFlag = "Mark flag";
         }
+
+        //save sau khi mark xong
+        this.questions = await QuestionJavaCoreExamDao
+            .getQuestions_By_ExamID_After_Mark_Or_Remove_Flag(this.examID, this.questionInit.questionJavaCoreExamID);
+        this.questionInit = this.questions[this.indexQuestion];
       }
     },
 
@@ -492,6 +485,10 @@ export default {
       const minutes = Math.floor(this.timeLeft / 60);
       const seconds = this.timeLeft % 60;
       return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    },
+
+    nameButtonMarkFlag() {
+      return this.questionInit.isMarkedFlag ? "Remove flag" : "Mark flag";
     },
 
   },

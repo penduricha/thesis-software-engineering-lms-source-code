@@ -126,6 +126,7 @@ public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamServic
                     .setParameter(1, false)
                     .setParameter(2, examFound.getExamID())
                     .executeUpdate();
+            //xóa hết
             return examFound;
         }
         return null;

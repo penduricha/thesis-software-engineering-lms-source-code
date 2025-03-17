@@ -171,15 +171,13 @@ export default {
     preventPaste(event) {
       event.preventDefault();
     },
-
-
   }
 }
 </script>
 
 <template>
 
-  <section class="container-login">
+  <section class="container-login" @keyup.enter="handleLogin">
     <div class="view-image-iuh">
       <img src="@/assets/image/iuh-logo.png"
            alt="iuh logo"
@@ -210,7 +208,6 @@ export default {
 
         <button class="style-input style-button-login"
                 @click="handleLogin()"
-                @keyup.enter="handleLogin"
                 type="submit"
         >Sign in</button>
 

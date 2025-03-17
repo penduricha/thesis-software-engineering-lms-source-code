@@ -1,8 +1,10 @@
 package com.example.backend_service.controllers;
 
+import com.example.backend_service.models.DetailMarkStudent;
 import com.example.backend_service.models.MarkStudent;
 import com.example.backend_service.repositories.MarkStudentRepository;
 import com.example.backend_service.services.MarkStudentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -28,14 +30,25 @@ public class MarkStudentController {
     }
 
     @PostMapping("/mark_student/post-mark-student-after-submit-exam-java-core")
-    public ResponseEntity<MarkStudent> postMarkStudent_Java_Core_Exam(@RequestBody Map<String, Object> dataSubmitPost) throws HttpClientErrorException {
-        String studentID = (String) dataSubmitPost.get("studentID");
-        Integer examIDInt = (Integer) dataSubmitPost.get("examID");
-        Long examID = examIDInt != null ? examIDInt.longValue() : null;
-        String scoringMethod = markStudentRepository.getScoringMethod_If_Student_Had_MarkExam_And_Exam_Retake(studentID, examID);
-        if(scoringMethod == null) {
-            return ResponseEntity.ok(markStudentService.createMarkStudent(dataSubmitPost));
+    public ResponseEntity<?> postMarkStudent_Java_Core_Exam(@RequestBody Map<String, Object> dataSubmitPost) {
+        try {
+            String studentID = (String) dataSubmitPost.get("studentID");
+            Integer examIDInt = (Integer) dataSubmitPost.get("examID");
+            Long examID = examIDInt != null ? examIDInt.longValue() : null;
+            String scoringMethod = markStudentRepository.getScoringMethod_If_Student_Had_MarkExam_And_Exam_Retake(studentID, examID);
+            // If the exam can only be taken once, do not allow retakes
+            if (scoringMethod == null) {
+                DetailMarkStudent detailMarkStudent =
+                        markStudentService.insertOutput_From_JavaCore_Code_Submitted(dataSubmitPost);
+                return ResponseEntity.ok(detailMarkStudent);
+            }
+            return ResponseEntity.ok(null);
+        } catch (HttpClientErrorException e) {
+            // Handle specific HTTP client errors
+            return ResponseEntity.status(e.getStatusCode()).body(e.getStatusText());
+        } catch (Exception e) {
+            // Handle general exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
-        return ResponseEntity.ok(null);
     }
 }

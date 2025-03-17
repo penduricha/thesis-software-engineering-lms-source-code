@@ -1,5 +1,6 @@
 package com.example.backend_service.services;
 
+import com.example.backend_service.debugs.ExecuteJavaCoreResultQuestions;
 import com.example.backend_service.models.CodeStorageSave;
 import com.example.backend_service.models.Student;
 import com.example.backend_service.repositories.CodeStorageServiceRepository;
@@ -94,6 +95,13 @@ public class CodeStorageSaveService implements I_CodeStorageSaveService {
             entityManager.createNativeQuery(sqlDelete)
                     .setParameter("studentID", student.getStudentID())
                     .executeUpdate();
+
+            //delete thêm folder debug code trong lam ktra
+            String path = "service_compiler/" + student.getStudentID();
+            ExecuteJavaCoreResultQuestions executeJavaCoreResultQuestions =
+                    new ExecuteJavaCoreResultQuestions();
+            executeJavaCoreResultQuestions.deleteFolder(path);
+
             return student.getStudentID();
         }
         return null;

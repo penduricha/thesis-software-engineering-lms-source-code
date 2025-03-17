@@ -75,4 +75,12 @@ public class ResultQuestionJavaCore implements Serializable {
     public void setQuestionJavaCoreExam(QuestionJavaCoreExam questionJavaCoreExam) {
         this.questionJavaCoreExam = questionJavaCoreExam;
     }
+
+    public List<OutputDebugResultJavaCore> getOutputDebugResultJavaCores() {
+        return outputDebugResultJavaCores;
+    }
+
+    public void setOutputDebugResultJavaCores(List<OutputDebugResultJavaCore> outputDebugResultJavaCores) {
+        this.outputDebugResultJavaCores = outputDebugResultJavaCores;
+    }
 }

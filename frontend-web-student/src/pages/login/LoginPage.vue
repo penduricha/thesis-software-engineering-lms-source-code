@@ -174,7 +174,7 @@ export default {
 
 <template>
 
-  <section class="container-login">
+  <section class="container-login" @keyup.enter="handleLogin">
     <div class="view-image-iuh">
       <img src="@/assets/image/iuh-logo.png"
            alt="iuh logo"
@@ -205,12 +205,8 @@ export default {
 
         <button class="style-input style-button-login"
                 @click="handleLogin()"
-                @keyup.enter="handleLogin"
-        >Sign in</button>
 
-        <!--  keyup.enter là press enter event -->
-        <!-- <input type="checkbox" value="Remember me">
-        <label>Remember me</label> -->
+        >Sign in</button>
 
         <div class="view-check-box">
           <input

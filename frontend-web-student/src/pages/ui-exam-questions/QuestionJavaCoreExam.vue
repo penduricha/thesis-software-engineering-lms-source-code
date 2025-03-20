@@ -517,7 +517,6 @@ export default {
                         'border-color-button-choose', setBorderColorChoose(index),
                         'button-color-saved', setButtonColorSavedCode(index),]">
                 {{index + 1}}
-               </div>
               </button>
             </div>
             <!--              Nếu dùng nhiều hàm scss-->

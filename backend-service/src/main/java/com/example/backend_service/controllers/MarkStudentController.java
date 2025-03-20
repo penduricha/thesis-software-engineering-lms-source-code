@@ -32,17 +32,20 @@ public class MarkStudentController {
     @PostMapping("/mark_student/post-mark-student-after-submit-exam-java-core")
     public ResponseEntity<?> postMarkStudent_Java_Core_Exam(@RequestBody Map<String, Object> dataSubmitPost) {
         try {
-            String studentID = (String) dataSubmitPost.get("studentID");
-            Integer examIDInt = (Integer) dataSubmitPost.get("examID");
-            Long examID = examIDInt != null ? examIDInt.longValue() : null;
-            String scoringMethod = markStudentRepository.getScoringMethod_If_Student_Had_MarkExam_And_Exam_Retake(studentID, examID);
-            // If the exam can only be taken once, do not allow retakes
-            if (scoringMethod == null) {
-                DetailMarkStudent detailMarkStudent =
-                        markStudentService.insertOutput_From_JavaCore_Code_Submitted(dataSubmitPost);
-                return ResponseEntity.ok(detailMarkStudent);
-            }
-            return ResponseEntity.ok(null);
+            //String studentID = (String) dataSubmitPost.get("studentID");
+//            Integer examIDInt = (Integer) dataSubmitPost.get("examID");
+//            Long examID = examIDInt != null ? examIDInt.longValue() : null;
+//            String scoringMethod = markStudentRepository.getScoringMethod_If_Student_Had_MarkExam_And_Exam_Retake(studentID, examID);
+//            // If the exam can only be taken once, do not allow retakes
+//            if (scoringMethod == null) {
+//
+//            }
+//
+//            return ResponseEntity.ok(null);
+//            DetailMarkStudent detailMarkStudent =
+//                    markStudentService.setDetailMarkStudent_After_SetMarkAchieve(dataSubmitPost);
+            MarkStudent markStudent = markStudentService.setMarkExam_After_SetDetailMarkExam(dataSubmitPost);
+            return ResponseEntity.ok(markStudent);
         } catch (HttpClientErrorException e) {
             // Handle specific HTTP client errors
             return ResponseEntity.status(e.getStatusCode()).body(e.getStatusText());

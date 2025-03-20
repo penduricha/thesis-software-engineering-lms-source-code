@@ -21,8 +21,18 @@ public class OutputDebugResultJavaCore implements Serializable{
     @Column(columnDefinition = "longtext")
     private String outputCodeStudent;
 
+    public boolean isSyntaxError() {
+        return syntaxError;
+    }
+
+    public void setSyntaxError(boolean syntaxError) {
+        this.syntaxError = syntaxError;
+    }
+
     //field này sẽ cập nhật so sánh bên sql đưa trên fail hay pass.
     private boolean fail;
+
+    private boolean syntaxError;
 
     @PrePersist
     protected void onCreate() {

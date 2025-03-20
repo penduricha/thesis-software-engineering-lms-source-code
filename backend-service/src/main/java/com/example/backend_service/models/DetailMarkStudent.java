@@ -82,4 +82,13 @@ public class DetailMarkStudent implements Serializable {
     @OneToMany(mappedBy = "detailMarkStudent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<ResultQuestionJavaCore> resultQuestionJavaCoreList = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "DetailMarkStudent{" +
+                "dateSubmitted=" + dateSubmitted +
+                ", detailMarkExam=" + detailMarkExam +
+                ", detailMarkStudentID=" + detailMarkStudentID +
+                '}';
+    }
 }

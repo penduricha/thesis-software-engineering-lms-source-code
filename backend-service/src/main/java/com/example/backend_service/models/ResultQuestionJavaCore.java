@@ -26,6 +26,15 @@ public class ResultQuestionJavaCore implements Serializable {
     @Column(nullable = false, columnDefinition = "longtext")
     private String codeStudentSubmitted;
 
+    private double markAchieve;
+
+    public double getMarkAchieve() {
+        return markAchieve;
+    }
+
+    public void setMarkAchieve(double markAchieve) {
+        this.markAchieve = markAchieve;
+    }
 //    @Column(columnDefinition = "longtext")
 //    private String outputCodeStudent;
 

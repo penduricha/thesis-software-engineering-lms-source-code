@@ -239,10 +239,12 @@ table {
 .view-text-editor {
   width: 100%;
   min-height: calc(100vh - 6rem - 2.5rem);
+  cursor: text;
 }
 
 .style-text-editor {
   width: 100%;
+
 }
 
 

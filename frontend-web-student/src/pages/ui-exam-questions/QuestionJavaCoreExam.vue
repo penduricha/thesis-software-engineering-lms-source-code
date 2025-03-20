@@ -275,7 +275,7 @@ export default {
       }
     },
 
-    handleSubmit_And_Notification_Mark() {
+    async handleSubmit_And_Notification_Mark() {
       const studentLocalStorage  = new StudentLocalStorage();
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
       let answerQuestions = this.questions.map(question => {
@@ -294,6 +294,9 @@ export default {
         answerQuestions: answerQuestions === null ? [] : answerQuestions,
       }
       console.log("Data to submit: ", dataToSubmit);
+
+      await this.$refs.modalNotificationAfterSubmit
+           .submit_Transaction_And_Get_Mark(dataToSubmit);
 
     },
 
@@ -597,7 +600,7 @@ export default {
               :extensions="extensions"
               @ready="handleReady"
               class="style-text-editor"
-              :style="{ height: '50rem', minHeight: 'calc(100vh - 6rem - 2.5rem)' }"
+              :style="{ height: '50rem', minHeight: 'calc(100vh - 6rem - 2.5rem)', cursor: 'text' }"
               @paste="handlePaste"
           />
         </div>
@@ -605,7 +608,7 @@ export default {
     </div>
   </div>
 
-  <modal-notification-after-submit  :exam-i-d="examID" :timer="timer"/>
+  <modal-notification-after-submit ref="modalNotificationAfterSubmit"  :exam-i-d="examID" :timer="timer"/>
   <modal-form-test-debug-java ref="modalFormTestDebugJava"
                               :exam-i-d="this.examID"
                               :question-java-core-exam-i-d="this.questionJavaCoreExamID"

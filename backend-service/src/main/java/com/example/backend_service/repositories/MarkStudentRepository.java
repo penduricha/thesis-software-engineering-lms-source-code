@@ -21,4 +21,6 @@ public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> 
             nativeQuery = true)
     String getScoringMethod_If_Student_Had_MarkExam_And_Exam_Retake
     (@Param("studentID") String studentID, @Param("examID") Long examID);
+
+    MarkStudent findMarkStudentByMarkStudentID(Long markStudentID);
 }

@@ -58,4 +58,24 @@ public interface ResultQuestionJavaCoreRepository extends JpaRepository<ResultQu
             nativeQuery = true)
     List<Map<String, Object>> getOutputCode_By_ResultQuestionJavaCoreID
             (@Param("resultQuestionJavaCoreID") Long resultQuestionJavaCoreID);
+
+    List<ResultQuestionJavaCore> getResultQuestionJavaCoresByDetailMarkStudent_DetailMarkStudentID(Long detailMarkStudentID);
+
+    @Query(value = """
+            select q.score from question_java_core_exam q
+            left join result_question_java_core r
+            on q.question_java_core_exam_id = r.question_java_core_exam_id
+            where result_question_java_core_id = :resultQuestionJavaCoreID;
+            """,
+            nativeQuery = true)
+    Double getScoreQuestionJavaCoreExamBy_Result_Question_JavaCore_ID
+            (@Param("resultQuestionJavaCoreID") Long resultQuestionJavaCoreID);
+
+    @Query(value = """
+            select sum(r.mark_achieve) 
+            from result_question_java_core r
+            where detail_mark_student_id = :detailMarkStudentID;
+            """,
+            nativeQuery = true)
+    Double getTotal_MarkAchieve_By_Detail_MarkStudent(@Param("detailMarkStudentID") Long detailMarkStudentID);
 }

@@ -73,7 +73,7 @@ public class ExecuteJavaCoreResultQuestions implements Serializable {
                 //neu sai syntax
                 //StringBuilder errorMessage = new StringBuilder("Compilation Error:\n");
                 for(int i = 0; i < sizeTestCases; i++) {
-                    outputCodeJava_From_CodeSubmitAndCodeMain.add("Failed syntax");
+                    outputCodeJava_From_CodeSubmitAndCodeMain.add("Syntax error");
                 }
                 deleteFolder(folderPath);
                 return outputCodeJava_From_CodeSubmitAndCodeMain;

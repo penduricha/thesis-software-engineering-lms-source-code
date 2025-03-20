@@ -34,6 +34,14 @@ public class QuestionJavaCoreExam implements Serializable {
     @Column(nullable = false)
     private boolean isMarkedFlag;
 
+    public boolean isMarkedFlag() {
+        return isMarkedFlag;
+    }
+
+    public void setMarkedFlag(boolean markedFlag) {
+        isMarkedFlag = markedFlag;
+    }
+
     @PrePersist
     protected void onCreated(){
         isMarkedFlag = false;

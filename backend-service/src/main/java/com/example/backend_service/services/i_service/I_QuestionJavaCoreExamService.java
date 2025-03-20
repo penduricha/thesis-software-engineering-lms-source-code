@@ -11,4 +11,8 @@ public interface I_QuestionJavaCoreExamService {
     public List<Map<String, Object>> getQuestionJavaCoreExam_By_ExamID_To_Student_Exam(Long examID);
 
     public Exam updateQuestionJavaCoreExams_By_ExamID (Long examID, List<QuestionJavaCoreExam> questionJavaCoreExams);
+
+    public QuestionJavaCoreExam update_Switch_Marked_Flag_By_QuestionJavaCoreExam_ID(Long questionJavaCoreExamID);
+
+    public Exam update_Marked_Flag_False_By_ExamID (Long examID);
 }

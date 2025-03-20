@@ -3,6 +3,7 @@ import AsideMenu from "@/components/aside/AsideMenu.vue";
 import AsideAccount from "@/components/aside/AsideAccount.vue";
 import RouterDao from "@/routes/RoutersDao.js";
 import './list-exams-components.scss';
+import './list-result-exams.scss';
 
 export default {
   name: "ListResultExams",

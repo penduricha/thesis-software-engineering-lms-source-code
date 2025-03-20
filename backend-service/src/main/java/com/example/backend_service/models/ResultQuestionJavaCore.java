@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter
@@ -24,9 +26,21 @@ public class ResultQuestionJavaCore implements Serializable {
     @Column(nullable = false, columnDefinition = "longtext")
     private String codeStudentSubmitted;
 
-    @Column(columnDefinition = "longtext")
-    private String outputCodeStudent;
+    private double markAchieve;
 
+    public double getMarkAchieve() {
+        return markAchieve;
+    }
+
+    public void setMarkAchieve(double markAchieve) {
+        this.markAchieve = markAchieve;
+    }
+//    @Column(columnDefinition = "longtext")
+//    private String outputCodeStudent;
+
+    @OneToMany(mappedBy = "resultQuestionJavaCore", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<OutputDebugResultJavaCore> outputDebugResultJavaCores = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "detail_mark_student_id")
@@ -54,13 +68,6 @@ public class ResultQuestionJavaCore implements Serializable {
         this.codeStudentSubmitted = codeStudentSubmitted;
     }
 
-    public String getOutputCodeStudent() {
-        return outputCodeStudent;
-    }
-
-    public void setOutputCodeStudent(String outputCodeStudent) {
-        this.outputCodeStudent = outputCodeStudent;
-    }
 
     public DetailMarkStudent getDetailMarkStudent() {
         return detailMarkStudent;
@@ -76,5 +83,13 @@ public class ResultQuestionJavaCore implements Serializable {
 
     public void setQuestionJavaCoreExam(QuestionJavaCoreExam questionJavaCoreExam) {
         this.questionJavaCoreExam = questionJavaCoreExam;
+    }
+
+    public List<OutputDebugResultJavaCore> getOutputDebugResultJavaCores() {
+        return outputDebugResultJavaCores;
+    }
+
+    public void setOutputDebugResultJavaCores(List<OutputDebugResultJavaCore> outputDebugResultJavaCores) {
+        this.outputDebugResultJavaCores = outputDebugResultJavaCores;
     }
 }

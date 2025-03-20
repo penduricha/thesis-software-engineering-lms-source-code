@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class BankTestCaseJavaCoreService implements I_BankTestCaseJavaCoreServic
             return bankTestCaseJavaCoreRepository
                     .getBankTestCaseJavaCoresByBankQuestionJavaCore_QuestionJavaCoreID(questionJavaCoreID);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

@@ -16,7 +16,9 @@ import SessionStorageTestCase from "@/pages/bank-exams/SessionStorageTestCase.js
 import Validation from "@/validation/Validation.js";
 import ParameterStorageManager from "@/pages/bank-exams/ParameterStorageManager.js";
 //npm i vue-csv-import
-import { VueCsvImport, VueCsvToggleHeaders, VueCsvInput, VueCsvMap, VueCsvSubmit, VueCsvErrors } from "vue-csv-import";
+import { VueCsvImport, VueCsvToggleHeaders, VueCsvInput, VueCsvMap, VueCsvSubmit, VueCsvErrors } from 'vue-csv-import';
+import LectureDao from "@/daos/LectureDao.js";
+import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
 
 export default {
   name: "ModalCreateQuestion",
@@ -403,11 +405,9 @@ export default {
       }
     },
 
-    //import csv
     parseCsvData(csvText) {
-      const rows = csvText.split('\n').filter(row => row.trim() !== ''); // Loại bỏ các dòng trống
-      const dataRows = rows.slice(1); // Bỏ qua dòng tiêu đề (dòng đầu tiên)
-
+      const rows = csvText.split('\n').filter(row => row.trim() !== '');
+      const dataRows = rows.slice(1);
       return dataRows.map(row => {
         const columns = row.split(',');
         return {
@@ -421,15 +421,23 @@ export default {
     handleCsvChange(event) {
       const file = event.target.files[0];
       if (file) {
+        // Kiểm tra đuôi tệp
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (fileExtension !== 'csv') {
+          alert('Vui lòng chọn tệp có đuôi .csv');
+          return;
+        }
         const reader = new FileReader();
         reader.onload = (e) => {
           const text = e.target.result;
+          sessionStorage.removeItem("testCases");
+          this.listTestCases = [];
           this.listTestCases = this.parseCsvData(text);
-          console.log("Dữ liệu CSV nhận được:", this.listTestCases);
+          sessionStorage.setItem("testCases", JSON.stringify(this.listTestCases));
         };
         reader.readAsText(file);
       }
-    },
+    }
   },
 
   setup() {
@@ -452,7 +460,6 @@ export default {
       handleReady,
     };
   },
-
 
   computed: {
 
@@ -673,14 +680,14 @@ export default {
               </div>
               <button type="button" class="btn button-purple" @click="saveTestCase">Save test case</button>
 
-              <vue-csv-import v-model="csvData" :fields="{
+              <vue-csv-import :fields="{
                 inputTest: { required: true, label: 'Input Test' },
                 outputExpect: { required: true, label: 'Output Expect' },
                 note: { required: false, label: 'Note' }
               }">
-                <vue-csv-input v-slot="{ file, change }">
+                <vue-csv-input>
                   <label for="fileInput" class="btn button-purple ml-3">
-                    📂 Upload file CSV
+                    Upload file CSV
                   </label>
                   <input type="file" id="fileInput" @change="handleCsvChange" style="display: none;" />
                 </vue-csv-input>
@@ -691,7 +698,7 @@ export default {
                 <tr>
                   <th>Index</th>
                   <th>Input</th>
-                  <th>Expected Output</th>
+                  <th>Expected output</th>
                   <th>Note</th>
                   <th>Actions</th>
                 </tr>

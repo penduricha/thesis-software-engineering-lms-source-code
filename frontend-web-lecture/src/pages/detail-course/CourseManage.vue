@@ -343,6 +343,7 @@ export default {
     },
 
     async handleOpenEditQuestionsModal(examID, topicExam) {
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Trì hoãn 5 giây
       await this.$refs.modalUpdateQuestionExams.setQuestions(examID, topicExam);
     },
 

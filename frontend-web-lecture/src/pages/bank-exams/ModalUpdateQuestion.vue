@@ -439,7 +439,7 @@ export default {
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Edit Question</h5>
+          <h5 class="modal-title">Edit question</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -633,7 +633,7 @@ export default {
                 >{{validationInput}}</span>
               </div>
               <div class="mb-3">
-                <label class="form-label">Expected Output:</label>
+                <label class="form-label">Expected output:</label>
                 <input v-model="output" class="form-control"
                        :class="[{'is-invalid': validationOutput !== null}]"
                        @input="setOutput"
@@ -681,7 +681,7 @@ export default {
             <div class="text-center mt-3">
               <button class="btn button-purple"
                       @click="updateQuestion"
-              >Update Question</button>
+              >Update question</button>
             </div>
           </div>
         </div>

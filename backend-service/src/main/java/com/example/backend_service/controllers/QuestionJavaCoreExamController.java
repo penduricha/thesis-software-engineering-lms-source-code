@@ -38,6 +38,21 @@ public class QuestionJavaCoreExamController {
         return ResponseEntity.ok(questionJavaCoreExamService.getQuestionJavaCoreExam_By_ExamID_To_Student_Exam(examID));
     }
 
+    @GetMapping("/switch-marked-flag-by-question-java-core-exam-id/{questionJavaCoreExamID}")
+    public ResponseEntity<QuestionJavaCoreExam>
+        get_Switch_Marked_Flag_By_QuestionJavaCoreExam_ID(@PathVariable Long questionJavaCoreExamID)
+        throws HttpClientErrorException {
+        return ResponseEntity.ok(questionJavaCoreExamService.
+                update_Switch_Marked_Flag_By_QuestionJavaCoreExam_ID(questionJavaCoreExamID));
+    }
+
+    @GetMapping("/switch-marked-flag-false-by-exam-id/{examID}")
+    public ResponseEntity<Exam>
+    get_Switch_Marked_Flag_False_By_Exam_ID(@PathVariable Long examID)
+            throws HttpClientErrorException {
+        return ResponseEntity.ok(questionJavaCoreExamService.update_Marked_Flag_False_By_ExamID(examID));
+    }
+
     @PutMapping("/put_all_questions_java_core_exam_by_exam_id/{examID}")
     public ResponseEntity<Exam> putQuestionJavaCoreExams_By_ExamID
             (@RequestBody List<Map<String, Object>> dataPut, @PathVariable Long examID)

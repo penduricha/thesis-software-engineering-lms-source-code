@@ -1,3 +1,4 @@
+
 //
 //
 //.container-page-exam {
@@ -11,10 +12,11 @@
 //}
 
 .page-header {
-  height: 6rem;
+  height: auto;
   background-color: var(--white);
   display: flex;
-  padding: 0;
+  align-items: center;
+  padding-top: 1rem;
 }
 
 .aside-account-in-exam {
@@ -58,18 +60,21 @@
   margin-left: 9px;
   color: #28a745;
 }
+
 .button-number-question{
   width: 2.25rem;
   font-size: 20px;
   border-radius: 4px;
   cursor: pointer;
-  border: none;
+
+  height: 2.25rem;
 }
 
 .button-number-question-done{
   background-color: var(--purple-iuh);
   color: var(--white);
   
+
 }
 
 .button-number-question-no-done:hover {
@@ -81,6 +86,8 @@
   color: var(--black);
 }
 .button-number-question-flag{
+  margin-bottom: 24px;
+}.button-number-question-flag{
   margin-bottom: 24px;
 }
 .border-color-button-choose {
@@ -172,12 +179,20 @@ table {
   background-color: var(--background-color);
 }
 
-.view-list-questions{
+.view-list-questions {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.view-flag-and-btn-questions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
 }
 
 .button-navigate-page-exam {
@@ -208,6 +223,12 @@ table {
   background-color: var(--background-color);
 }
 
+.style-flag {
+  position: absolute;
+  top: 0.5rem;
+  object-fit: contain;
+}
+
 .button-text-editor {
   background-color: var(--purple-iuh);
   color: var(--white);
@@ -215,7 +236,6 @@ table {
   height: 100%;
   width: 9rem;
   border-radius: 2px;
-
 }
 
 .button-text-editor:hover {
@@ -225,10 +245,12 @@ table {
 .view-text-editor {
   width: 100%;
   min-height: calc(100vh - 6rem - 2.5rem);
+  cursor: text;
 }
 
 .style-text-editor {
   width: 100%;
+
 }
 
 

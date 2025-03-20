@@ -6,6 +6,8 @@ import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import ExamDao from "@/daos/ExamDao.js";
 import StudentDao from "@/daos/StudentDao.js";
 import CodeStorageDao from "@/daos/CodeStorageDao.js";
+import QuestionJavaCoreExamDao from "@/daos/QuestionJavaCoreExamDao.js";
+import DetailMarkStudentDao from "@/daos/DetailMarkStudentDao.js";
 
 export default {
   name: "ModalNotificationAfterSubmit",
@@ -31,7 +33,7 @@ export default {
 
   data() {
     return {
-
+      mark: null,
     }
   },
 
@@ -41,8 +43,8 @@ export default {
       routerDao.savePath_To_LocalStorage(path);
     },
 
-    async submit_Transaction_And_Get_Mark() {
-
+    async submit_Transaction_And_Get_Mark(dataToSubmit) {
+      this.mark = await DetailMarkStudentDao.getMarkExam_After_Submitted_JavaCore(dataToSubmit);
     },
 
     async navigateTo_MainPage() {
@@ -56,7 +58,8 @@ export default {
 
       let statusResetDate = await StudentDao.reset_Date_Time_Start_Exam(studentID);
       let statusDeleteCodeStorage = await CodeStorageDao.delete_Code_Storage_By_StudentID(studentID);
-      if(!status || !statusResetDate || !statusDeleteCodeStorage) {
+      let statusSetMarkedFlag = await QuestionJavaCoreExamDao.setMarkedFlag_False_By_ExamID(this.examID);
+      if(!status || !statusResetDate || !statusDeleteCodeStorage || !statusSetMarkedFlag) {
         alert("Can't return page because error system.");
       } else {
         window.location.reload();
@@ -78,13 +81,23 @@ export default {
 </script>
 
 <template>
-  <div class="modal fade" id="modal-notification-mark" tabindex="-1" aria-labelledby="modalNotificationMarkLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div
+       class="modal fade"
+       id="modal-notification-mark"
+       tabindex="-1"
+       aria-labelledby="modalNotificationMarkLabel"
+       aria-hidden="true"
+       data-bs-backdrop="static"
+       data-bs-keyboard="false">
     <div class="modal-dialog modal-sm">
       <div class="modal-content modal-content-notify-mark">
         <div class="modal-header border-0 text-center">
           <div class="modal-title w-100 modal-title-notify-mark" id="modalNotificationMarkLabel">
             <i class="fa-solid fa-circle-check"></i>
-            <h4 class="style-notification">Your mark is 8.00</h4>
+            <div v-if="!mark" class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <h4 v-if="mark" class="style-notification">Your mark is {{mark}}</h4>
           </div>
         </div>
         <div class="modal-body text-center">

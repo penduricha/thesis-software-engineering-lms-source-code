@@ -2,6 +2,7 @@
 import './modal-edit-question-exam.scss';
 import QuestionJavaCoreExamDao from "@/daos/QuestionJavaCoreExamDao.js";
 import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
+import ExamDao from "@/daos/ExamDao.js";
 
 export default {
   name: "ModalUpdateQuestionExam",
@@ -17,6 +18,7 @@ export default {
       bankQuestionJavaCore: [],
 
       tableQuestions: [],
+      validateScoreTotal: null,
 
       filteredQuestions: [],
 
@@ -96,20 +98,32 @@ export default {
       }else if(this.getTotalScoreQuestionJavaCoreExams() < 10) {
         alert("Total score must be 10.");
       } else {
-        console.log("Data to put: ", this.questionJavaCoreExams);
-        if(this.examID) {
-          let statusPut = await QuestionJavaCoreExamDao.update_Questions_JavaCoreExam(this.questionJavaCoreExams, this.examID);
-          if(statusPut) {
-            window.location.reload()
+        if(!this.validateScoreTotal) {
+          let statusStudentAccess = await ExamDao
+              .getStatus_Access_Student_To_Exam_By_ExamID(this.examID);
+          if(!statusStudentAccess) {
+            console.log("Data to put: ", this.questionJavaCoreExams);
+            if(this.examID) {
+              let statusPut = await QuestionJavaCoreExamDao.update_Questions_JavaCoreExam(this.questionJavaCoreExams, this.examID);
+              if(statusPut) {
+                window.location.reload()
+              } else {
+                alert("Update failed.");
+              }
+            }
           } else {
-            alert("Update failed.");
+            alert("There is student is currently accessing the test. Please wait until finish.");
           }
         }
       }
     },
 
     updateScoreByIndex(index, score) {
-
+      if(this.getTotalScoreQuestionJavaCoreExams() > 10) {
+        this.validateScoreTotal = "Total score can't greater than 10.";
+      } else {
+        this.validateScoreTotal = null;
+      }
     },
 
     totalScoreExceptCurrent(index) {
@@ -121,6 +135,10 @@ export default {
         }
         return total;
       }, 0);
+    },
+
+    getTotalScore() {
+      return this.questionJavaCoreExams.reduce((total, score) => total + score, 0);
     },
 
     handleDeleteQuestion(index) {
@@ -185,11 +203,12 @@ export default {
                       class="form-control"
                       v-model="question.score"
                       @input="updateScoreByIndex(index, question.score)"
-                      :max="10 - totalScoreExceptCurrent(index)"
+
                       min="0.25"
                       step="0.25"
                       @keydown.prevent
                   />
+<!--                  :max="10 - totalScoreExceptCurrent(index)"-->
                 </td>
                 <td>
                   <button class="btn btn-sm btn-danger"
@@ -201,6 +220,12 @@ export default {
               </tbody>
             </table>
           </div>
+
+          <span
+              v-if="(getTotalScoreQuestionJavaCoreExams() > 10)"
+              class="span-validate-modal-form"
+          >{{validateScoreTotal}}</span>
+
           <div class="mb-3 row" style="display: flex; justify-content: center;">
             <button class="button-purple btn-edit-questions"
                     @click="handleUpdateQuestionExam()"

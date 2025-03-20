@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamService {
+
     private final QuestionJavaCoreExamRepository questionJavaCoreExamRepository;
 
     private final ExamRepository examRepository;
@@ -59,6 +60,7 @@ public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamServic
                         newMap.put("codeSample", originalMap.get("code_sample"));
                         newMap.put("contentQuestion", originalMap.get("content_question"));
                         newMap.put("score", originalMap.get("score"));
+                        newMap.put("isMarkedFlag", originalMap.get("is_marked_flag"));
                         newMap.put("questionJavaCoreID", originalMap.get("question_java_core_id"));
                         return newMap;
                     })
@@ -101,5 +103,32 @@ public class QuestionJavaCoreExamService implements I_QuestionJavaCoreExamServic
         return null;
     }
 
+    @Override
+    public QuestionJavaCoreExam update_Switch_Marked_Flag_By_QuestionJavaCoreExam_ID(Long questionJavaCoreExamID)
+        throws JpaSystemException{
+        QuestionJavaCoreExam questionJavaCoreExamFound =
+                questionJavaCoreExamRepository.findQuestionJavaCoreExamsByQuestionJavaCoreExamID(questionJavaCoreExamID);
+        if(questionJavaCoreExamFound != null) {
+            questionJavaCoreExamFound.setMarkedFlag(!questionJavaCoreExamFound.isMarkedFlag());
+            return questionJavaCoreExamRepository.save(questionJavaCoreExamFound);
+        }
+        return null;
+    }
 
+    @Override
+    @Transactional
+    public Exam update_Marked_Flag_False_By_ExamID(Long examID) throws JpaSystemException{
+        Exam examFound = examRepository.findExamByExamID(examID);
+        if(examFound != null) {
+            //System.out.println(examFound.getExamID());
+            String sqlUpdate_Mark_Flag_By_ExamID = "update question_java_core_exam set is_marked_flag = ? where exam_id = ?;" ;
+            entityManager.createNativeQuery(sqlUpdate_Mark_Flag_By_ExamID)
+                    .setParameter(1, false)
+                    .setParameter(2, examFound.getExamID())
+                    .executeUpdate();
+            //xóa hết
+            return examFound;
+        }
+        return null;
+    }
 }

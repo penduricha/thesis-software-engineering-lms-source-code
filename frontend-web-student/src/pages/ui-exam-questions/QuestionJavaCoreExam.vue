@@ -18,6 +18,7 @@ import QuestionJavaCoreExamDao from "@/daos/QuestionJavaCoreExamDao.js";
 import ModalNotificationAfterSubmit from "@/pages/ui-exam-questions/ModalNotificationAfterSubmit.vue";
 import CodeStorageDao from "@/daos/CodeStorageDao.js";
 import ModalFormTestDebugJava from "@/pages/ui-exam-questions/ModalFormTestDebugJava.vue";
+import ExamDao from "@/daos/ExamDao.js";
 
 export default {
   name: "QuestionJavaCoreExam",
@@ -70,8 +71,15 @@ export default {
       //code saved
       codeSaved: [],
       indexQuestionSaved: [],
-      codeFlag:[],
-      indexQuestionFlag: []
+
+      //flag
+      //codeFlag:[],
+      //indexQuestionFlag: []
+      //button mark flag
+      //nameButtonMarkFlag: "Mark flag",
+
+      //polling
+      pollingInterval: null,
     }
   },
 
@@ -85,11 +93,13 @@ export default {
     this.checkTimeLeft();
     this.setDuration();
     //this.clickButtonSubmit();
+    //this.setNameButtonMarkFlag();
   },
 
   beforeDestroy() {
     // Dọn dẹp khi component bị hủy
     clearInterval(this.timer);
+    clearInterval(this.pollingInterval);
   },
 
   methods: {
@@ -106,41 +116,49 @@ export default {
       const routerDao = new RouterDao();
       routerDao.savePath_To_SessionStorage(route);
       this.indexQuestion = Number(sessionStorage.getItem("indexQuestion"));
-      // const savedTime = localStorage.getItem('timeLeft');
-      // if(savedTime) {
-      //   localStorage.removeItem("timeLeft");
-      // }
-
     },
 
     async setQuestion_By_ExamID() {
       this.questions = await QuestionJavaCoreExamDao.getQuestions_By_ExamID(this.examID);
       console.log("10 questions: ", this.questions);
+
+      //xu li neu co thay doi
+      this.pollingInterval = await QuestionJavaCoreExamDao.startPolling_GetQuestions_By_ExamID(this.examID, (updated) => {
+        this.questions = updated;
+        // Cập nhật danh sách bài kiểm tra
+      });
       this.questionInit = this.questions[this.indexQuestion];
       const studentLocalStorage  = new StudentLocalStorage();
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
       if(studentID) {
         if (this.questionInit) {
-            this.testCasesInit = await QuestionJavaCoreExamDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
-            //console.log("Test case: ", this.testCasesInit);
-            this.contentQuestion = this.questionInit.contentQuestion;
-            this.score = this.questionInit.score;
-            this.questionJavaCoreExamID  = this.questionInit.questionJavaCoreExamID;
-            //get code da save
-            this.codeSaved = await CodeStorageDao.get_Code_Saved_By_StudentID(studentID);
-            if(this.codeSaved.length > 0) {
-              this.indexQuestionSaved = this.codeSaved.map(c => c.indexQuestion);
-              console.log("Index question saved: ", this.indexQuestionSaved);
-            }
-            console.log("Code saved: ", this.codeSaved);
-            let codeGet = await CodeStorageDao
-                .get_Code_By_IndexQuestion_StudentID(studentID, Number(this.indexQuestion));
-            if (codeGet) {
-              this.code = codeGet;
-            } else {
-              this.code = this.questionInit.codeSample;
-            }
+          this.testCasesInit = await QuestionJavaCoreExamDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
+          //console.log("Test case: ", this.testCasesInit);
+          this.contentQuestion = this.questionInit.contentQuestion;
+          this.score = this.questionInit.score;
+          this.questionJavaCoreExamID  = this.questionInit.questionJavaCoreExamID;
+          //get code da save
+          this.codeSaved = await CodeStorageDao.get_Code_Saved_By_StudentID(studentID);
+          if(this.codeSaved.length > 0) {
+            this.indexQuestionSaved = this.codeSaved.map(c => c.indexQuestion);
+            console.log("Index question saved: ", this.indexQuestionSaved);
           }
+          console.log("Code saved: ", this.codeSaved);
+          let codeGet = await CodeStorageDao
+              .get_Code_By_IndexQuestion_StudentID(studentID, Number(this.indexQuestion));
+          if (codeGet) {
+            this.code = codeGet;
+          } else {
+            this.code = this.questionInit.codeSample;
+          }
+
+          //check button mark flag
+          // if(this.questionInit.isMarkedFlag === true){
+          //   this.nameButtonMarkFlag = "Remove flag";
+          // } else {
+          //   this.nameButtonMarkFlag = "Mark flag";
+          // }
+        }
       }
     },
 
@@ -157,7 +175,6 @@ export default {
         if(courseID) {
           this.courseID = courseID;
         }
-
       }
     },
 
@@ -226,8 +243,25 @@ export default {
           this.indexQuestionSaved = this.codeSaved.map(c => c.indexQuestion);
           console.log("Index question saved: ", this.indexQuestionSaved);
         }
+
+        //check button mark flag
+        // if(this.questionInit.isMarkedFlag === true){
+        //   this.nameButtonMarkFlag = "Remove flag";
+        // } else {
+        //   this.nameButtonMarkFlag = "Mark flag";
+        // }
       }
     },
+
+    // setNameButtonMarkFlag() {
+    //   if(this.questionInit) {
+    //     if(this.questionInit.isMarkedFlag === true){
+    //       this.nameButtonMarkFlag = "Remove flag";
+    //     } else {
+    //       this.nameButtonMarkFlag = "Mark flag";
+    //     }
+    //   }
+    // },
 
     handlePaste(event) {
       event.preventDefault();
@@ -241,7 +275,7 @@ export default {
       }
     },
 
-    handleSubmit_And_Notification_Mark() {
+    async handleSubmit_And_Notification_Mark() {
       const studentLocalStorage  = new StudentLocalStorage();
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
       let answerQuestions = this.questions.map(question => {
@@ -261,6 +295,9 @@ export default {
       }
       console.log("Data to submit: ", dataToSubmit);
 
+      await this.$refs.modalNotificationAfterSubmit
+           .submit_Transaction_And_Get_Mark(dataToSubmit);
+
     },
 
     async handleSave() {
@@ -279,7 +316,7 @@ export default {
           // Thay thế tab đầu dòng nếu có
           .map(line => line.replace(/^\t/, '\t'))
           .join('\n');
-          // Kết hợp các dòng lại với nhau
+      // Kết hợp các dòng lại với nhau
       const codeSaveStoragePost = {
         "codeSave" : codeExport,
         "indexQuestionSave" : this.indexQuestion
@@ -306,13 +343,24 @@ export default {
         console.log("Index question saved: ", this.indexQuestionSaved);
       }
     },
-    async handleFlat(){
-      this.codeFlag = [...this.codeFlag ,this.indexQuestion]
-      console.log("this.codeFlg",this.codeFlag );
-      this.indexQuestionFlag = this.codeFlag.map(c => c)
-      console.log("this",this.indexQuestionFlag);
-      
+
+    async handleMarkFlag() {
+      if(this.examID && this.questionInit) {
+        //gắn cờ vào và save
+        this.questionInit.isMarkedFlag = !this.questionInit.isMarkedFlag;
+        if(this.questionInit.isMarkedFlag){
+          this.nameButtonMarkFlag = "Remove flag";
+        } else {
+          this.nameButtonMarkFlag = "Mark flag";
+        }
+
+        //save sau khi mark xong
+        this.questions = await QuestionJavaCoreExamDao
+            .getQuestions_By_ExamID_After_Mark_Or_Remove_Flag(this.examID, this.questionInit.questionJavaCoreExamID);
+        this.questionInit = this.questions[this.indexQuestion];
+      }
     },
+
     handleOpenModalTestDebugJava() {
       this.$refs.modalFormTestDebugJava.setCode(this.code);
     },
@@ -324,89 +372,83 @@ export default {
 
   setup() {
     // Danh sách từ khóa Java quan trọng
-   const javaKeywords = [
-     "public", "private", "protected", "static", "final", "void", "class", "interface", "enum",
-     "extends", "implements", "abstract", "new", "this", "super", "return", "import", "package",
-     "if", "else", "switch", "case", "default", "break", "continue", "while", "do", "for", "try",
-     "catch", "finally", "throw", "throws", "synchronized", "volatile", "transient", "native",
-     "strictfp", "assert", "instanceof"
-   ];
- 
-   // Danh sách kiểu dữ liệu Java (hỗ trợ khi khai báo biến)
-   const javaDataTypes = [
-     "boolean", "char", "byte", "short", "int", "long", "float", "double", "String",
-     "List", "ArrayList", "LinkedList", "Set", "HashSet", "TreeSet", "Map", "HashMap", "TreeMap"
-   ];
- 
-   // Danh sách hàm getter, setter, constructors
-   const javaMethods = [
-     { label: "getName()", type: "function", detail: "Getter method for name" },
-     { label: "setName(String name)", type: "function", detail: "Setter method for name" },
-     { label: "getAge()", type: "function", detail: "Getter method for age" },
-     { label: "setAge(int age)", type: "function", detail: "Setter method for age" },
-     { label: "toString()", type: "function", detail: "Convert object to string" },
-     { label: "equals(Object obj)", type: "function", detail: "Check object equality" },
-     { label: "hashCode()", type: "function", detail: "Generate hash code" },
-     { label: "compareTo(Object obj)", type: "function", detail: "Compare two objects" },
-     { label: "clone()", type: "function", detail: "Clone the object" },
-     { label: "public class ClassName () { }", type: "snippet", detail: "Create a Java class" },
-     { label: "private int ;", type: "variable", detail: "Declare private int variable" },
-     { label: "private String ;", type: "variable", detail: "Declare private String variable" },
-     { label: "private double ;", type: "variable", detail: "Declare private String variable" },
-     { label: "private float ;", type: "variable", detail: "Declare private String variable" },
-     { label: "private boolean ;", type: "variable", detail: "Declare private String variable" }
-   ];
-   // Tích hợp danh sách gợi ý vào CodeMirror
-   const javaCompletion = completeFromList([
-     ...javaKeywords.map((keyword) => ({
-       label: keyword,
-       type: "keyword"
-     })),
-     ...javaDataTypes.map((dataType) => ({
-       label: dataType,
-       type: "type"
-     })),
-     ...javaMethods
-   ]);
- 
-   // 🔥 5️⃣ Cấu hình CodeMirror với Java Autocompletion nâng cao
-   const codeMirrorExtensions = [
-     java(),
-     oneDark,
-     autocompletion({ override: [javaCompletion] }),
-     keymap.of([
-       { key: "Ctrl-Space", run: autocompletion() } // Nhấn Ctrl + Space để gợi ý code
-     ])
-   ];
- 
-   const view = shallowRef();
-   const handleReady = (payload) => {
-     view.value = payload.view;
-   };
-   return {
-     extensions: codeMirrorExtensions,
-     handleReady,
-   };
- 
-  //   const extensions = [
-  //     java(),
-  //     oneDark,
-  //     autocompletion(),
-  //     keymap.of([
-  //       { key: "Ctrl-Space", run: completeFromList }
-  //     ])
-  //   ];
+    const javaKeywords = javaKeyWords;
 
-  //   const view = shallowRef();
-  //   const handleReady = (payload) => {
-  //     view.value = payload.view;
-  //   };
+    // Danh sách kiểu dữ liệu Java (hỗ trợ khi khai báo biến)
+    const javaDataTypes = [
+      "boolean", "char", "byte", "short", "int", "long", "float", "double", "String",
+      "List", "ArrayList", "LinkedList", "Set", "HashSet", "TreeSet", "Map", "HashMap", "TreeMap"
+    ];
 
-  //   return {
-  //     extensions,
-  //     handleReady,
-  //   };
- },
+    // Danh sách hàm getter, setter, constructors
+    const javaMethods = [
+      { label: "getName()", type: "function", detail: "Getter method for name" },
+      { label: "setName(String name)", type: "function", detail: "Setter method for name" },
+      { label: "getAge()", type: "function", detail: "Getter method for age" },
+      { label: "setAge(int age)", type: "function", detail: "Setter method for age" },
+      { label: "toString()", type: "function", detail: "Convert object to string" },
+      { label: "equals(Object obj)", type: "function", detail: "Check object equality" },
+      { label: "hashCode()", type: "function", detail: "Generate hash code" },
+      { label: "compareTo(Object obj)", type: "function", detail: "Compare two objects" },
+      { label: "clone()", type: "function", detail: "Clone the object" },
+      { label: "public class ClassName () { }", type: "snippet", detail: "Create a Java class" },
+      { label: "private int ;", type: "variable", detail: "Declare private int variable" },
+      { label: "private String ;", type: "variable", detail: "Declare private String variable" },
+      { label: "private double ;", type: "variable", detail: "Declare private String variable" },
+      { label: "private float ;", type: "variable", detail: "Declare private String variable" },
+      { label: "private boolean ;", type: "variable", detail: "Declare private String variable" }
+    ];
+    // Tích hợp danh sách gợi ý vào CodeMirror
+    const javaCompletion = completeFromList([
+      ...javaKeywords.map((keyword) => ({
+        label: keyword,
+        type: "keyword"
+      })),
+      ...javaDataTypes.map((dataType) => ({
+        label: dataType,
+        type: "type"
+      })),
+      ...javaMethods
+    ]);
+
+    // 🔥 5️⃣ Cấu hình CodeMirror với Java Autocompletion nâng cao
+    const codeMirrorExtensions = [
+      java(),
+      oneDark,
+      autocompletion({ override: [javaCompletion] }),
+      keymap.of([
+        { key: "Ctrl-Space", run: autocompletion() } // Nhấn Ctrl + Space để gợi ý code
+      ])
+    ];
+
+    const view = shallowRef();
+    const handleReady = (payload) => {
+      view.value = payload.view;
+    };
+    return {
+      extensions: codeMirrorExtensions,
+      handleReady,
+    };
+
+    //   const extensions = [
+    //     java(),
+    //     oneDark,
+    //     autocompletion(),
+    //     keymap.of([
+    //       { key: "Ctrl-Space", run: completeFromList }
+    //     ])
+    //   ];
+
+    //   const view = shallowRef();
+    //   const handleReady = (payload) => {
+    //     view.value = payload.view;
+    //   };
+
+    //   return {
+    //     extensions,
+    //     handleReady,
+    //   };
+  },
 
 
   computed: {
@@ -432,14 +474,15 @@ export default {
             : 'button-number-question-no-done';
       };
     },
-    setQuestionFlag(){
-      return (index) => {
-        return (this.indexQuestionFlag.includes(index))
-            && 'button-number-question-flag'
-            
-      };
-    },
-     
+
+    // setQuestionFlag(){
+    //   return (index) => {
+    //     return (this.indexQuestionFlag.includes(index))
+    //         && 'button-number-question-flag'
+    //
+    //   };
+    // },
+
     // Tính toán thời gian còn lại
     formattedTime() {
       const minutes = Math.floor(this.timeLeft / 60);
@@ -447,127 +490,126 @@ export default {
       return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     },
 
+    nameButtonMarkFlag() {
+      return this.questionInit.isMarkedFlag ? "Remove flag" : "Mark flag";
+    },
+
   },
 }
 </script>
 
 <template >
-    <div :style="containerStyle" >
-      <header class="page-header">
-        <div class="aside-questions">
-          <div class="style-view-questions">
-            <span class="span-questions">Questions:</span>
-            <div class="view-list-questions">
-              <!--              button-number-question-done-->
-              <button 
-                      v-for="(q, index) in questions"
-                      @click="handleButtonQuestion(q, index)"
-                    
-              >
-              <i v-if="codeFlag.includes(index)" class="bi bi-flag"></i> 
-               <div class="button-number-question"   :class="[
+  <div :style="containerStyle" >
+    <header class="page-header">
+      <div class="aside-questions">
+        <div class="style-view-questions">
+          <span class="span-questions">Questions:</span>
+          <div class="view-list-questions">
+            <!--  button-number-question-done-->
+            <div
+                v-for="(q, index) in questions"
+                @click="handleButtonQuestion(q, index)"
+                class="view-flag-and-btn-questions"
+            >
+              <i v-if="q.isMarkedFlag" class="bi bi-flag style-flag"></i>
+<!--              <i class="bi bi-flag style-flag"></i>-->
+              <button class="button-number-question"   :class="[
                         'border-color-button-choose', setBorderColorChoose(index),
-                        'button-color-saved', setButtonColorSavedCode(index),
-                        setQuestionFlag(index)
-                      ]"  >
+                        'button-color-saved', setButtonColorSavedCode(index),]">
                 {{index + 1}}
                </div>
               </button>
-              <!--              Nếu dùng nhiều hàm scss-->
-              <button class="button-number-question button-submit"
-                      ref="submitButton"
-                      @click = "handleSubmit_And_Notification_Mark()"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modal-notification-mark"
-              >Submit</button>
             </div>
+            <!--              Nếu dùng nhiều hàm scss-->
+            <button class="button-number-question button-submit"
+                    ref="submitButton"
+                    @click = "handleSubmit_And_Notification_Mark()"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modal-notification-mark"
+            >Submit</button>
           </div>
-          <span class="style-time">Time: {{formattedTime}}</span>
         </div>
-        <div class="aside-account-in-exam">
-          <h1 class="style-name-student-exam">
-            <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo-in-exam">
-            <span v-if="studentID" class="style-span-information">{{lastName}} {{firstName}} - {{studentID}}</span>
-          </h1>
-        </div>
-      </header>
-      <div class="style-main">
-        <section class="section-exam">
-          <span class="text-exam">Score: {{score}}</span>
-          <p class="text-exam">{{contentQuestion}}</p>
-          <table class="table table-striped" v-if="testCasesInit.length > 0">
-            <thead>
-            <tr>
-              <th>Index</th>
-              <th>Input</th>
-              <th>Output Expect</th>
-              <th>Note</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(t, index) in testCasesInit">
-              <td>{{index + 1}}</td>
-              <td>{{t.inputTest}}</td>
-              <td>{{t.outputExpect}}</td>
-              <td>{{t.note}}</td>
-            </tr>
-            <!-- Thêm các hàng khác nếu cần -->
-            </tbody>
-          </table>
-        </section>
-        <section class="section-code-editor">
-          <div class="view-button-text-editor">
-            <button
-                ref="saveCode"
-                class="button-text-editor"
-                @click="handleSave()"
-            >Save all
-            </button>
-
-<!--            <button-->
-<!--                class="button-text-editor"-->
-<!--                @click="handleReset()"-->
-<!--            >Reset-->
-<!--            </button>-->
-            <button
-                data-bs-toggle="modal"
-                data-bs-target="#modal-form-debug-java"
-                class="button-text-editor"
-                @click="handleOpenModalTestDebugJava()"
-            >Debug java
-            </button>
-            <button
-                ref="flat"
-                class="button-text-editor"
-                @click="handleFlat()"
-                :class="[
-                        
-                        setQuestionFlag(index)
-                      ]"
-            >{{ codeFlag.includes(indexQuestion) ? "Xóa cờ":"Đặt cờ" }}
-            
-            </button>
-         
-          </div>
-          <div class="view-text-editor">
-            <codemirror
-                v-model="code"
-                placeholder="Write code hear ..."
-                :autofocus="true"
-                :indent-with-tab="true"
-                :tab-size="4"
-                :extensions="extensions"
-                @ready="handleReady"
-                class="style-text-editor"
-                :style="{ height: '50rem', minHeight: 'calc(100vh - 6rem - 2.5rem)' }"
-                @paste="handlePaste"
-            />
-          </div>
-        </section>
+        <span class="style-time">Time: {{formattedTime}}</span>
       </div>
-    </div>
+      <div class="aside-account-in-exam">
+        <h1 class="style-name-student-exam">
+          <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo-in-exam">
+          <span v-if="studentID" class="style-span-information">{{lastName}} {{firstName}} - {{studentID}}</span>
+        </h1>
+      </div>
+    </header>
+    <div class="style-main">
+      <section class="section-exam">
+        <span class="text-exam">Score: {{score}}</span>
+        <p class="text-exam">{{contentQuestion}}</p>
+        <table class="table table-striped" v-if="testCasesInit.length > 0">
+          <thead>
+          <tr>
+            <th>Index</th>
+            <th>Input</th>
+            <th>Output Expect</th>
+            <th>Note</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(t, index) in testCasesInit">
+            <td>{{index + 1}}</td>
+            <td>{{t.inputTest}}</td>
+            <td>{{t.outputExpect}}</td>
+            <td>{{t.note}}</td>
+          </tr>
+          <!-- Thêm các hàng khác nếu cần -->
+          </tbody>
+        </table>
+      </section>
+      <section class="section-code-editor">
+        <div class="view-button-text-editor">
+          <button
+              ref="saveCode"
+              class="button-text-editor"
+              @click="handleSave()"
+          >Save all
+          </button>
 
-  <modal-notification-after-submit  :exam-i-d="examID" :timer="timer"/>
+          <!--            <button-->
+          <!--                class="button-text-editor"-->
+          <!--                @click="handleReset()"-->
+          <!--            >Reset-->
+          <!--            </button>-->
+          <button
+              data-bs-toggle="modal"
+              data-bs-target="#modal-form-debug-java"
+              class="button-text-editor"
+              @click="handleOpenModalTestDebugJava()"
+          >Debug java
+          </button>
+
+          <button
+              class="button-text-editor"
+              @click ="handleMarkFlag()"
+          >{{nameButtonMarkFlag}}
+          </button>
+
+        </div>
+        <div class="view-text-editor">
+          <codemirror
+              v-model="code"
+              placeholder="Write code hear ..."
+              :autofocus="true"
+              :indent-with-tab="true"
+              :tab-size="4"
+              :extensions="extensions"
+              @ready="handleReady"
+              class="style-text-editor"
+              :style="{ height: '50rem', minHeight: 'calc(100vh - 6rem - 2.5rem)', cursor: 'text' }"
+              @paste="handlePaste"
+          />
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <modal-notification-after-submit ref="modalNotificationAfterSubmit"  :exam-i-d="examID" :timer="timer"/>
   <modal-form-test-debug-java ref="modalFormTestDebugJava"
                               :exam-i-d="this.examID"
                               :question-java-core-exam-i-d="this.questionJavaCoreExamID"

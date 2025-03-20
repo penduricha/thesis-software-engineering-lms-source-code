@@ -19,6 +19,7 @@ public interface QuestionJavaCoreExamRepository extends JpaRepository<QuestionJa
                            code_sample,
                            content_question,
                             score,
+                        is_marked_flag,
                         question_java_core_id
                     from question_java_core_exam where exam_id = :examID;
                     """, nativeQuery = true)

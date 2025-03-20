@@ -212,6 +212,7 @@ public class ExamService implements I_ExamService {
                 LocalDateTime startDate = startDateTimestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 LocalDateTime endDate = endDateTimestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 // Kiểm tra trạng thái
+                // xét thêm bảng mark cho ra trạng thái complete
                 if (now.isBefore(startDate)) {
                     convertedMap.put("status", "Locked");
                 }

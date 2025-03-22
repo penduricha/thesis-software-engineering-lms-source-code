@@ -14,7 +14,6 @@ import java.util.List;
 @Entity
 @Setter
 @ToString
-@NoArgsConstructor
 @AllArgsConstructor
 public class MarkStudent implements Serializable {
     @Id
@@ -35,7 +34,8 @@ public class MarkStudent implements Serializable {
     @JsonIgnore
     private Exam exam;
 
-    @OneToMany(mappedBy = "markStudent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    //orphanRemoval = true Điều này đảm bảo rằng nếu một không còn liên kết với
+    @OneToMany(mappedBy = "markStudent", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonIgnore
     private List<DetailMarkStudent> detailMarkStudents = new ArrayList<>();
 

@@ -277,7 +277,12 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
                                 getResultQuestionJavaCoresByDetailMarkStudent_DetailMarkStudentID(detailMarkStudent
                                         .getDetailMarkStudentID());
                 for(ResultQuestionJavaCore resultQuestionJavaCore: resultQuestionJavaCoreList) {
-                    resultQuestionJavaCore.getDetailMarkStudent().setDetailMarkExam(totalMark);
+                    if(totalMark > 10) {
+                        resultQuestionJavaCore.getDetailMarkStudent().setDetailMarkExam(10);
+                    } else {
+                        //lam tron diem
+                        resultQuestionJavaCore.getDetailMarkStudent().setDetailMarkExam(Math.round(totalMark * 10.0) / 10.0);
+                    }
                     resultQuestionJavaCoreRepository.save(resultQuestionJavaCore);
                     return resultQuestionJavaCore.getDetailMarkStudent();
                 }
@@ -312,7 +317,7 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
 //                        return markStudentRepository.save(markStudent);
                         detailMarkStudent.getMarkStudent().setMarkExam(detailMarkStudent.getDetailMarkExam());
                         detailMarkStudentRepository.save(detailMarkStudent);
-                        return detailMarkStudent.getMarkStudent();
+                        return markStudentRepository.save(detailMarkStudent.getMarkStudent());
                     }
             }
 //            else {

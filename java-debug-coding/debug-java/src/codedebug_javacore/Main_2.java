@@ -6,7 +6,7 @@ public class Main_2 {
 	 * calculate_Sum_Series_Of_Numbers(int n) { }
 	 */
 	public static int calculate_Sum_Series_Of_Numbers(int n) {
-		if (n <= 0 || n % 1 != 0)
+		if (n <= 0)
 			return -1;
 		int sum = 0;
 		for (int i = (n % 2 == 0 ? 2 : 1); i <= n; i += 2) {

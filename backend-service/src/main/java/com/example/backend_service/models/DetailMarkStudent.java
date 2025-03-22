@@ -79,7 +79,7 @@ public class DetailMarkStudent implements Serializable {
         dateSubmitted = LocalDateTime.now();
     }
 
-    @OneToMany(mappedBy = "detailMarkStudent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "detailMarkStudent", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonIgnore
     private List<ResultQuestionJavaCore> resultQuestionJavaCoreList = new ArrayList<>();
 

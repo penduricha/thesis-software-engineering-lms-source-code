@@ -76,6 +76,14 @@ export default {
         });
       }
     },
+  },
+
+  computed: {
+    setButtonNavigateTo_MainPage() {
+      return !this.mark
+          ? 'lock-button'
+          : 'not-lock-button';
+    }
   }
 }
 </script>
@@ -106,6 +114,8 @@ export default {
         <div class="modal-footer d-flex justify-content-center border-0">
           <button class="btn-return-list"
                   @click="navigateTo_MainPage"
+                  :disabled="!mark"
+                  :class="['button-navigate-page-exam-set' ,setButtonNavigateTo_MainPage]"
           >Return to list exams</button>
         </div>
       </div>

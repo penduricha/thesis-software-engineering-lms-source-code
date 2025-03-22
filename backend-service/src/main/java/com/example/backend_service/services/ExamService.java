@@ -1,14 +1,9 @@
 package com.example.backend_service.services;
 
-import com.example.backend_service.models.BankQuestionJavaCore;
-import com.example.backend_service.models.Course;
-import com.example.backend_service.models.Exam;
-import com.example.backend_service.models.QuestionJavaCoreExam;
-import com.example.backend_service.repositories.BankQuestionJavaCoreRepository;
-import com.example.backend_service.repositories.CourseRepository;
-import com.example.backend_service.repositories.ExamRepository;
-import com.example.backend_service.repositories.QuestionJavaCoreExamRepository;
+import com.example.backend_service.models.*;
+import com.example.backend_service.repositories.*;
 import com.example.backend_service.services.i_service.I_ExamService;
+import com.example.backend_service.services.i_service.I_Transaction_MarkExam;
 import jakarta.persistence.EntityManager;
 
 import jakarta.persistence.PersistenceContext;
@@ -17,14 +12,13 @@ import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class ExamService implements I_ExamService {
+public class ExamService implements I_ExamService, I_Transaction_MarkExam {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -39,12 +33,15 @@ public class ExamService implements I_ExamService {
 
     private final BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository;
 
-    public ExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ExamRepository examRepository, CourseRepository courseRepository, BankQuestionJavaCoreService bankQuestionJavaCoreService, BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository) {
+    private final MarkStudentRepository markStudentRepository;
+
+    public ExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ExamRepository examRepository, CourseRepository courseRepository, BankQuestionJavaCoreService bankQuestionJavaCoreService, BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository, MarkStudentRepository markStudentRepository) {
         this.questionJavaCoreExamRepository = questionJavaCoreExamRepository;
         this.examRepository = examRepository;
         this.courseRepository = courseRepository;
         this.bankQuestionJavaCoreService = bankQuestionJavaCoreService;
         this.bankQuestionJavaCoreRepository = bankQuestionJavaCoreRepository;
+        this.markStudentRepository = markStudentRepository;
     }
 
     @Override
@@ -191,6 +188,8 @@ public class ExamService implements I_ExamService {
         // Khởi tạo LocalDateTime now
         LocalDateTime now = LocalDateTime.now();
 
+
+
         if (!queryList.isEmpty()) {
             for (Map<String, Object> queryMap : queryList) {
                 Map<String, Object> convertedMap = new HashMap<>();
@@ -211,6 +210,12 @@ public class ExamService implements I_ExamService {
                 // Chuyển đổi Timestamp thành LocalDateTime
                 LocalDateTime startDate = startDateTimestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 LocalDateTime endDate = endDateTimestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+                //xem them ktra
+                //Integer examIDInt = (Integer) queryMap.get("exam_id");
+                Long examID =  (Long) queryMap.get("exam_id");
+                MarkStudent markStudent_DoneExam = examRepository.findMarkStudent_By_ExamID(examID);
+
                 // Kiểm tra trạng thái
                 // xét thêm bảng mark cho ra trạng thái complete
                 if (now.isBefore(startDate)) {
@@ -219,7 +224,11 @@ public class ExamService implements I_ExamService {
                 //if neu hoan thanh
                 else if (now.isAfter(endDate)) {
                     convertedMap.put("status", "Overdue");
-                } else {
+                }
+                else if(markStudent_DoneExam != null) {
+                    convertedMap.put("status", "Completed");
+                }
+                else {
                     convertedMap.put("status", "Open");
                 }
                 convertedList.add(convertedMap);
@@ -257,19 +266,20 @@ public class ExamService implements I_ExamService {
     public Long deleteExam_By_ExamID(Long examID) throws JpaSystemException {
         Exam exam = examRepository.findExamByExamID(examID);
         if(exam != null) {
+            MarkStudent markStudentFound_By_ExamID = markStudentRepository.
+                    findMarkStudentByExam_ExamID(exam.getExamID());
+            if(markStudentFound_By_ExamID != null) {
+                //xoá phan diem thi nếu sv làm xong
+                deleteMarkStudentID_By_MarkStudentID(markStudentFound_By_ExamID.getMarkStudentID());
+            }
+            //Xoa bai ktra
             entityManager.createNativeQuery("delete from question_java_core_exam where exam_id = :examID")
-                    .setParameter("examID", exam.getExamID())
-                    .executeUpdate();
-
-            entityManager.createNativeQuery("delete from mark_student where exam_id = :examID")
                     .setParameter("examID", exam.getExamID())
                     .executeUpdate();
 
             entityManager.createNativeQuery("delete from exam where exam_id = :examID")
                     .setParameter("examID", exam.getExamID())
                     .executeUpdate();
-
-            //xoa them diem ktra (Nho lam)
             return exam.getExamID();
         }
         return null;
@@ -359,5 +369,70 @@ public class ExamService implements I_ExamService {
     public String getTitle_Exam_By_CourseID(Long courseID, String titleExam)
             throws JpaSystemException {
         return examRepository.getTitle_Exam_By_CourseID(courseID, titleExam);
+    }
+
+    @Override
+    public List<Long> getListDetailMarkStudentID_By_MarkStudentID(Long markStudentID)
+            throws JpaSystemException{
+        return markStudentRepository.getListDetailMarkStudentID_By_MarkStudentID(markStudentID);
+    }
+
+    @Override
+    public List<Long> getListResultQuestionJavaCoreID_By_MarkStudentID(Long markStudentID)
+            throws JpaSystemException{
+        return markStudentRepository.getListResultQuestionJavaCoreID_By_MarkStudentID(markStudentID);
+    }
+
+    @Override
+    public List<Long> getListOutputDebugResultJavaCoreID_By_MarkStudentID(Long markStudentID)
+            throws JpaSystemException{
+        return markStudentRepository.getListOutputDebugResultJavaCoreID_By_MarkStudentID(markStudentID);
+    }
+
+    @Override
+    @Transactional
+    public void deleteMarkStudentID_By_MarkStudentID(Long markStudentID)
+            throws JpaSystemException{
+        //get ds tu query sql
+        List<Long> queryListOutputID = getListOutputDebugResultJavaCoreID_By_MarkStudentID(markStudentID);
+
+        List<Long> queryListResultQuestionJavaCoreID = getListResultQuestionJavaCoreID_By_MarkStudentID(markStudentID);
+
+        List<Long> queryListDetailMarkStudentID = getListDetailMarkStudentID_By_MarkStudentID(markStudentID);
+
+        //Các bước xóa record.
+        if(!queryListOutputID.isEmpty()) {
+            for(Long id: queryListOutputID) {
+                String sqlDeleteID_Output = "delete from output_debug_result_java_core where output_debug_java_core_id = ?";
+                entityManager.createNativeQuery(sqlDeleteID_Output)
+                        .setParameter(1, id)
+                        .executeUpdate();
+            }
+        }
+
+        if(!queryListResultQuestionJavaCoreID.isEmpty()) {
+            for(Long id: queryListResultQuestionJavaCoreID) {
+                String sqlDeleteID_Result = "delete from result_question_java_core where result_question_java_core_id = ?";
+                entityManager.createNativeQuery(sqlDeleteID_Result)
+                        .setParameter(1, id)
+                        .executeUpdate();
+            }
+        }
+
+        if(!queryListDetailMarkStudentID.isEmpty()) {
+            for(Long id: queryListDetailMarkStudentID) {
+                String sqlDeleteID_DetailMarkStudent
+                        = "delete from detail_mark_student where detail_mark_student_id = ?";
+                entityManager.createNativeQuery(sqlDeleteID_DetailMarkStudent)
+                        .setParameter(1, id)
+                        .executeUpdate();
+            }
+        }
+
+        //delete mark student
+        String sqlDeleteMarkStudent = "delete from mark_student where mark_student_id = ?";
+        entityManager.createNativeQuery(sqlDeleteMarkStudent)
+                .setParameter(1, markStudentID)
+                .executeUpdate();
     }
 }

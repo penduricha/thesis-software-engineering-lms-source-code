@@ -126,6 +126,7 @@ export default {
         testCaseManager.addTestCase(this.input.trim(), this.output.trim(), this.note);
         this.listTestCases = testCaseManager.loadFromSessionStorage();
         this.resetFieldInputTestCase();
+        this.validationNullTestCases = null;
       }
     },
 
@@ -155,7 +156,10 @@ export default {
 
       //check list session test case
       const testCaseManager = new SessionStorageTestCase();
-      this.listTestCases = testCaseManager.loadFromSessionStorage();
+      if(this.listTestCases.length === 0) {
+        this.listTestCases = testCaseManager.loadFromSessionStorage();
+      }
+
       if(this.listTestCases.length === 0) {
         this.validationNullTestCases = 'Please enter test cases.';
       }

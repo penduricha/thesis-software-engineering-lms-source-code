@@ -38,7 +38,7 @@ public class ResultQuestionJavaCore implements Serializable {
 //    @Column(columnDefinition = "longtext")
 //    private String outputCodeStudent;
 
-    @OneToMany(mappedBy = "resultQuestionJavaCore", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "resultQuestionJavaCore", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonIgnore
     private List<OutputDebugResultJavaCore> outputDebugResultJavaCores = new ArrayList<>();
 

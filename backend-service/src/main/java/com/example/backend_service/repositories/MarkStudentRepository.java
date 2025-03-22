@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> {
     MarkStudent findMarkStudentByExam_ExamID(Long examID);
 
@@ -22,5 +24,45 @@ public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> 
     String getScoringMethod_If_Student_Had_MarkExam_And_Exam_Retake
     (@Param("studentID") String studentID, @Param("examID") Long examID);
 
+    @Query(value = """
+            select m.mark_student_id from mark_student m 
+            where m.exam_id = :examID;
+            """,
+            nativeQuery = true)
+    Long getMarkStudentID_By_Exam_ExamID(@Param("examID") Long examID);
+
     MarkStudent findMarkStudentByMarkStudentID(Long markStudentID);
+
+    @Query(value = """
+            select odrjc.output_debug_java_core_id from mark_student m
+            left join  detail_mark_student dms
+            on m.mark_student_id = dms.mark_student_id
+            left join result_question_java_core rqjc
+            on dms.detail_mark_student_id = rqjc.detail_mark_student_id
+            left join output_debug_result_java_core odrjc
+            on rqjc.result_question_java_core_id = odrjc.result_question_java_core_id
+            where m.mark_student_id = :markStudentID;
+            """,
+            nativeQuery = true)
+    List<Long> getListOutputDebugResultJavaCoreID_By_MarkStudentID(@Param("markStudentID") Long markStudentID);
+
+    @Query(value = """
+            select rqjc.result_question_java_core_id from mark_student m
+            left join  detail_mark_student dms
+            on m.mark_student_id = dms.mark_student_id
+            left join result_question_java_core rqjc
+            on dms.detail_mark_student_id = rqjc.detail_mark_student_id
+            where m.mark_student_id = :markStudentID;
+            """,
+            nativeQuery = true)
+    List<Long> getListResultQuestionJavaCoreID_By_MarkStudentID(@Param("markStudentID") Long markStudentID);
+
+    @Query(value = """
+            select dms.detail_mark_student_id from mark_student m
+            left join detail_mark_student dms
+            on m.mark_student_id = dms.mark_student_id
+            where m.mark_student_id = :markStudentID;
+            """,
+            nativeQuery = true)
+    List<Long> getListDetailMarkStudentID_By_MarkStudentID(@Param("markStudentID") Long markStudentID);
 }

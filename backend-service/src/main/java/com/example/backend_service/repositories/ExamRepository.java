@@ -63,4 +63,11 @@ public interface ExamRepository extends JpaRepository<Exam,Long> {
             """,
             nativeQuery = true)
     String getTitle_Exam_By_CourseID(@Param("courseID") Long courseID,@Param("titleExam") String titleExam);
+
+    //select * from mark_student where exam_id = 47;
+    @Query(value = """
+            select * from mark_student where exam_id = :examID;
+            """,
+            nativeQuery = true)
+    MarkStudent findMarkStudent_By_ExamID(@Param("examID")Long examID);
 }

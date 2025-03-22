@@ -112,11 +112,13 @@ select * from result_question_java_core;
 select * from output_debug_result_java_core;
 -- delete record mark_student
 delete from output_debug_result_java_core
-where result_question_java_core_id between 164 and 168;
-delete from result_question_java_core where detail_mark_student_id = 60;
-delete from detail_mark_student where mark_student_id = 1815;
-delete from mark_student where mark_student_id = 1815;
-select * from result_question_java_core where result_question_java_core_id = 167;
+where result_question_java_core_id between 182 and 185;
+delete from result_question_java_core where detail_mark_student_id = 64;
+delete from detail_mark_student where mark_student_id = 1821;
+delete from mark_student where mark_student_id = 1821;
+select * from result_question_java_core where result_question_java_core_id = 170;
 
 
 select * from result_question_java_core;
+
+select * from bank_test_case_java_core;

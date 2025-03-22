@@ -158,13 +158,16 @@ export default {
 
       //check list session test case
       const testCaseManager = new SessionStorageTestCase();
-      this.listTestCases = testCaseManager.loadFromSessionStorage();
+      if (this.listTestCases.length === 0) {
+        this.testCaseManager = testCaseManager.loadFromSessionStorage();
+      }
       if (this.listTestCases.length === 0) {
         this.validationNullTestCases = 'Please enter test cases.';
       }
     },
 
     async createQuestion() {
+      // console.log("this",this.listTestCases);
       this.validateNull();
       const validations = [
         this.validationContent,
@@ -471,6 +474,7 @@ export default {
 
         console.log("cleanedData", cleanedData); // In ra mảng kết quả
         this.listTestCases = JSON.parse(cleanedData)
+        
 
       } catch (err) {
         console.log("err Gen Testcase", err);

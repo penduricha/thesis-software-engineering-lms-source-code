@@ -49,7 +49,7 @@ export default {
     <h4 class="title-menu">Exam result</h4>
     <section class="section-welcome">
       <div class="background-welcome">
-        <span class="span-welcome">Hello Nhat, there are your exam results.</span>
+        <span class="span-welcome">Hello, there are your exam results.</span>
       </div>
     </section>
     <section class="section-list-exams">
@@ -59,7 +59,6 @@ export default {
         <div class="div-type-exam flex-type-exam">
           <span class="text-button-exam">Type exam</span>
         </div>
-        <span class="text-button-exam flex-date">Date open</span>
         <span class="text-button-exam flex-status">Mark</span>
       </div>
       <button class="button-exam">
@@ -67,7 +66,6 @@ export default {
         <div class="div-type-exam flex-type-exam">
           <span class="text-button-exam">Theory 1</span>
         </div>
-        <span class="text-button-exam flex-date">9:00 10/5/2025</span>
         <span class="text-button-exam flex-status">8.00</span>
       </button>
       <button class="button-exam">
@@ -75,7 +73,6 @@ export default {
         <div class="div-type-exam flex-type-exam">
           <span class="text-button-exam">Theory 1</span>
         </div>
-        <span class="text-button-exam flex-date">9:00 15/5/2025</span>
         <span class="text-button-exam flex-status">10.00</span>
       </button>
     </section>

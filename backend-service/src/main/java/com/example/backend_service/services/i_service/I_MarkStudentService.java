@@ -32,5 +32,7 @@ public interface I_MarkStudentService {
     public int getSizeOfTestCases_JavaCore_By_Result_Question_JavaCore_ID
             (Long resultQuestionJavaCoreID);
 
+    public Void deleteMarkStudent_By_ExamID(Long examID);
 
+    public List<Map<String, Object>> getListResultExam_By_StudentID (String studentID);
 }

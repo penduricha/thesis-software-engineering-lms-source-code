@@ -20,6 +20,7 @@ public interface ExamRepository extends JpaRepository<Exam,Long> {
                    e.duration,            
                    e.start_date,
                    e.end_date,
+                    e.view_table,
                    e.link_exam_paper,
                    e.password_exam,
                    l.name

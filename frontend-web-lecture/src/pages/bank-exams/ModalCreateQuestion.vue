@@ -155,10 +155,10 @@ export default {
       }
 
       //check list session test case
-      const testCaseManager = new SessionStorageTestCase();
-      if(this.listTestCases.length === 0) {
-        this.listTestCases = testCaseManager.loadFromSessionStorage();
-      }
+      // const testCaseManager = new SessionStorageTestCase();
+      // if(this.listTestCases.length === 0) {
+      //   this.listTestCases = testCaseManager.loadFromSessionStorage();
+      // }
 
       if(this.listTestCases.length === 0) {
         this.validationNullTestCases = 'Please enter test cases.';

@@ -8,5 +8,5 @@ public interface I_Transaction_MarkExam {
 
     public List<Long> getListOutputDebugResultJavaCoreID_By_MarkStudentID(Long markStudentID);
 
-    public void deleteMarkStudentID_By_MarkStudentID(Long markStudentID);
+    public Void deleteMarkStudentID_By_MarkStudentID(Long markStudentID);
 }

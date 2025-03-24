@@ -14,4 +14,12 @@ export default class MarkStudentDao{
         return responseReturn;
     }
 
+    static async delete_Mark_Student_By_ExamID(examID) {
+        await MarkStudentService
+            .delete_Mark_Student_By_Mark_Student_ID(examID)
+            .then(response => {
+            }).catch(error => {
+                console.error(error);
+            })
+    }
 }

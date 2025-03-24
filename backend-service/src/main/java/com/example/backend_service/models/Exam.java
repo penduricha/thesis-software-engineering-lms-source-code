@@ -51,6 +51,16 @@ public class Exam implements Serializable {
     @Column(nullable = false, columnDefinition = "nvarchar(20)")
     private String topicExam;
 
+    public boolean isViewTable() {
+        return viewTable;
+    }
+
+    public void setViewTable(boolean viewTable) {
+        this.viewTable = viewTable;
+    }
+
+    private boolean viewTable;
+
     @Column(nullable = false)
     private boolean retakeExam;
 

@@ -8,6 +8,7 @@ import StudentDao from "@/daos/StudentDao.js";
 import CodeStorageDao from "@/daos/CodeStorageDao.js";
 import QuestionJavaCoreExamDao from "@/daos/QuestionJavaCoreExamDao.js";
 import DetailMarkStudentDao from "@/daos/DetailMarkStudentDao.js";
+import MarkStudentDao from "@/daos/MarkStudentDao.js";
 
 export default {
   name: "ModalNotificationAfterSubmit",
@@ -34,6 +35,7 @@ export default {
   data() {
     return {
       mark: null,
+      loading: true,
     }
   },
 
@@ -44,7 +46,14 @@ export default {
     },
 
     async submit_Transaction_And_Get_Mark(dataToSubmit) {
+
       this.mark = await DetailMarkStudentDao.getMarkExam_After_Submitted_JavaCore(dataToSubmit);
+
+      if(this.mark ===  -1) {
+        await MarkStudentDao.delete_Mark_Student_By_ExamID(this.examID);
+        await this.navigateTo_MainPage();
+      }
+      this.loading = false;
     },
 
     async navigateTo_MainPage() {
@@ -80,7 +89,7 @@ export default {
 
   computed: {
     setButtonNavigateTo_MainPage() {
-      return !this.mark
+      return this.loading
           ? 'lock-button'
           : 'not-lock-button';
     }
@@ -102,10 +111,10 @@ export default {
         <div class="modal-header border-0 text-center">
           <div class="modal-title w-100 modal-title-notify-mark" id="modalNotificationMarkLabel">
             <i class="fa-solid fa-circle-check"></i>
-            <div v-if="!mark" class="spinner-border" role="status">
+            <div v-if="loading" class="spinner-border" role="status">
               <span class="sr-only">Loading...</span>
             </div>
-            <h4 v-if="mark" class="style-notification">Your mark is {{mark}}</h4>
+            <h4 v-if="!loading" class="style-notification">Your mark is {{mark}}</h4>
           </div>
         </div>
         <div class="modal-body text-center">
@@ -114,10 +123,11 @@ export default {
         <div class="modal-footer d-flex justify-content-center border-0">
           <button class="btn-return-list"
                   @click="navigateTo_MainPage"
-                  :disabled="!mark"
+                  :disabled="loading"
                   :class="['button-navigate-page-exam-set' ,setButtonNavigateTo_MainPage]"
           >Return to list exams</button>
         </div>
+<!--        -->
       </div>
     </div>
   </div>

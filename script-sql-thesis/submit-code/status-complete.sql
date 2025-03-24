@@ -28,13 +28,26 @@ on dms.detail_mark_student_id = rqjc.detail_mark_student_id
 where m.mark_student_id = 1806;
 
 -- lay field output_debug_result_java_core_id
-select odrjc.output_debug_java_core_id from mark_student m
+select odrjc.output_debug_java_core_id, odrjc.output_code_student, odrjc.output_debug_java_core_id
+from mark_student m
 left join  detail_mark_student dms
 on m.mark_student_id = dms.mark_student_id
 left join result_question_java_core rqjc
 on dms.detail_mark_student_id = rqjc.detail_mark_student_id
 left join output_debug_result_java_core odrjc
 on rqjc.result_question_java_core_id = odrjc.result_question_java_core_id
-where m.mark_student_id = 1806;
+where m.mark_student_id = 1835;
+
+
+update exam set start_date = '2025-03-23 17:55:00'
+where exam_id = 58;
+
+select * from exam;
+
+select * from mark_student;
 
 select * from output_debug_result_java_core;
+
+select * from output_debug_result_java_core;
+
+

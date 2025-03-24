@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static net.minidev.asm.DefaultConverter.convertToLong;
+
 @Service
 public class MarkStudentService implements I_MarkStudentService, I_ResultQuestionJavaCoreService {
 
@@ -39,7 +41,9 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
 
     private final OutputDebugResultJavaCoreRepository outputDebugResultJavaCoreRepository;
 
-    public MarkStudentService(MarkStudentRepository markStudentRepository, StudentRepository studentRepository, ExamRepository examRepository, BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository, QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ResultQuestionJavaCoreRepository resultQuestionJavaCoreRepository, DetailMarkStudentRepository detailMarkStudentRepository, OutputDebugResultJavaCoreRepository outputDebugResultJavaCoreRepository) {
+    private final ExamService examService;
+
+    public MarkStudentService(MarkStudentRepository markStudentRepository, StudentRepository studentRepository, ExamRepository examRepository, BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository, QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ResultQuestionJavaCoreRepository resultQuestionJavaCoreRepository, DetailMarkStudentRepository detailMarkStudentRepository, OutputDebugResultJavaCoreRepository outputDebugResultJavaCoreRepository, ExamService examService) {
         this.markStudentRepository = markStudentRepository;
         this.studentRepository = studentRepository;
         this.examRepository = examRepository;
@@ -48,6 +52,7 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
         this.resultQuestionJavaCoreRepository = resultQuestionJavaCoreRepository;
         this.detailMarkStudentRepository = detailMarkStudentRepository;
         this.outputDebugResultJavaCoreRepository = outputDebugResultJavaCoreRepository;
+        this.examService = examService;
     }
 
     /*
@@ -65,6 +70,76 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
         public DetailMarkStudent setMarkAchieve_After_Output(Map<String, Object> dataSubmitPost);
 
      */
+
+//    @Override
+//    public DetailMarkStudent createMarkStudent(Map<String, Object> dataSubmitPost) throws JpaSystemException{
+//        // System.out.println(dataSubmitPost);
+//        String studentID = (String) dataSubmitPost.get("studentID");
+//        //System.out.println(studentID);
+//        Object examIDObj = dataSubmitPost.get("examID");
+//        if (examIDObj instanceof Long examID) {
+//            List<Map<String, Object>> answerQuestions = (List<Map<String, Object>>) dataSubmitPost.get("answerQuestions");
+//            Student studentFound = studentRepository.findStudentByStudentID(studentID);
+//            Exam examFound = examRepository.findExamByExamID(examID);
+//
+//            if(studentFound != null && examFound !=null ) {
+//                MarkStudent markStudent = new MarkStudent();
+//                //set attribute
+//                //set 0d, xem truong hop sv qua han
+//                markStudent.setMarkExam(0);
+//
+//                //set relationship
+//                studentFound.getMarkStudentList().add(markStudent);
+//                markStudent.setStudent(studentFound);
+//
+//                examFound.setMarkStudent(markStudent);
+//                markStudent.setExam(examFound);
+//
+//                DetailMarkStudent detailMarkStudent = new DetailMarkStudent();
+//                detailMarkStudent.setDetailMarkExam(0);
+//                //date time submit
+//                detailMarkStudent.setDateSubmitted(LocalDateTime.now());
+//
+//                //set relationship
+//                markStudent.getDetailMarkStudents().add(detailMarkStudent);
+//                detailMarkStudent.setMarkStudent(markStudent);
+//
+//                if(!answerQuestions.isEmpty()) {
+//                    for(Map<String, Object> objectMap : answerQuestions) {
+//                        Integer questionJavaCoreExamIDInt = (Integer) objectMap.get("questionJavaCoreExamID");
+//                        Long questionJavaCoreExamID = questionJavaCoreExamIDInt != null ? questionJavaCoreExamIDInt.longValue() : null;
+//                        String codeStudentSubmitted = (String) objectMap.get("codeStudentSubmitted");
+//
+//                        QuestionJavaCoreExam questionJavaCoreExamFound =
+//                                questionJavaCoreExamRepository.findQuestionJavaCoreExamsByQuestionJavaCoreExamID(questionJavaCoreExamID);
+//                        if(questionJavaCoreExamFound !=null) {
+//                            ResultQuestionJavaCore resultQuestionJavaCore = new ResultQuestionJavaCore();
+//                            resultQuestionJavaCore.setCodeStudentSubmitted(codeStudentSubmitted);
+//                            resultQuestionJavaCore.setMarkAchieve(0);
+//
+//                            //Chỗ này sẽ xuất code output ra và set vào, nma thư nghiệm trước thì cho null trước
+//                            //resultQuestionJavaCore.setOutputCodeStudent(null);
+//
+//                            //set relationship
+//                            questionJavaCoreExamFound.setResultQuestionJavaCore(resultQuestionJavaCore);
+//                            resultQuestionJavaCore.setQuestionJavaCoreExam(questionJavaCoreExamFound);
+//
+//                            detailMarkStudent.getResultQuestionJavaCoreList().add(resultQuestionJavaCore);
+//                            resultQuestionJavaCore.setDetailMarkStudent(detailMarkStudent);
+//
+//                            //save kq da code vao, neu code bi fail syntax, save la fail syntax
+//                            //suy nghi ki out put có thể vi
+//                        }
+//                    }
+//                    markStudentRepository.save(markStudent);
+//                    return detailMarkStudent;
+//                }
+//            }
+//        }
+//
+//
+//        return null;
+//    }
 
     @Override
     public DetailMarkStudent createMarkStudent(Map<String, Object> dataSubmitPost) throws JpaSystemException{
@@ -392,6 +467,37 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
             throws JpaSystemException {
         return resultQuestionJavaCoreRepository
                 .getSizeOfTestCases_JavaCore_By_Result_Question_JavaCore_ID(resultQuestionJavaCoreID);
+    }
+
+    @Override
+    public Void deleteMarkStudent_By_ExamID(Long examID) throws JpaSystemException{
+        Exam examFound = examRepository.findExamByExamID(examID);
+        if(examFound != null) {
+            Long markStudentID = markStudentRepository.getMarkStudentID_By_Exam_ExamID(examID);
+            if(markStudentID != null) {
+                examService.deleteMarkStudentID_By_MarkStudentID(markStudentID);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<Map<String, Object>> getListResultExam_By_StudentID(String studentID) throws JpaSystemException{
+        Student studentFound = studentRepository.findStudentByStudentID(studentID);
+        if(studentFound != null) {
+            List<Map<String, Object>> queryList = markStudentRepository.getListResultExam_By_StudentID(studentID);
+            if(!queryList.isEmpty()) {
+                return queryList.stream()
+                        .map(originalMap -> {
+                            Map<String, Object> newMap = new HashMap<>();
+                            newMap.put("titleExam", originalMap.get("title_exam"));
+                            newMap.put("typeExam", originalMap.get("type_exam"));
+                            newMap.put("markStudent", originalMap.get("mark_student"));
+                            return newMap;
+                        }).toList();
+            }
+        }
+        return new ArrayList<>();
     }
 
     @Override

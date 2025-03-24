@@ -4,6 +4,7 @@ import StringFormat from "@/models/StringFormat.js";
 import Password from "@/models/Password.js";
 import ExamDao from "@/daos/ExamDao.js";
 import ManageDateTime from "@/date-time/ManageDateTime.js";
+import '../../components/checkbox/checkbox-view-table.scss';
 
 export default {
   name: "ModalUpdateExam",
@@ -44,6 +45,7 @@ export default {
     this.setInputStartDate();
     this.setInputEndDate();
     this.setInputExamPaper();
+    //this.setViewTable();
   },
 
   data() {
@@ -57,6 +59,7 @@ export default {
       duration: null,
       startDate: null,
       endDate: null,
+      viewTable: true,
       examPaper: null,
 
       //validate form exam;
@@ -101,6 +104,11 @@ export default {
           const passwordClass = new Password(exam.passwordExam);
           this.passwordExam = passwordClass.xorEncryptDecrypt();
         }
+
+        if(this.topicExam === 'Java core') {
+          this.viewTable = exam.viewTable;
+        }
+
       }
     },
 
@@ -320,7 +328,8 @@ export default {
           "endDateMonth" : dateEndDate.getMonth() + 1,
           "endDateYear" : dateEndDate.getFullYear(),
           "endDateHour" : dateEndDate.getHours(),
-          "endDateMinute" : dateEndDate.getMinutes() ,
+          "endDateMinute" : dateEndDate.getMinutes(),
+          "viewTable" : this.viewTable,
           "linkExamPaper" : this.examPaper,
           "passwordExam" : this.passwordExamHashed,
         }
@@ -409,25 +418,25 @@ export default {
               </div>
             </div>
 
-            <div class="mb-3 row">
-              <label class="col-sm-3 col-form-label">
-                Topic:<span class="required-star">*</span>
-              </label>
-              <div class="col-sm-9">
-                <select class="form-select"
-                        @change="setSelectTopicExam()"
-                        v-model="topicExam"
-                        :class="[{'is-invalid': validateTopicExam !== null}]"
-                >
-                  <option value = "Java core">Java core</option>
+<!--            <div class="mb-3 row">-->
+<!--              <label class="col-sm-3 col-form-label">-->
+<!--                Topic:<span class="required-star">*</span>-->
+<!--              </label>-->
+<!--              <div class="col-sm-9">-->
+<!--                <select class="form-select"-->
+<!--                        @change="setSelectTopicExam()"-->
+<!--                        v-model="topicExam"-->
+<!--                        :class="[{'is-invalid': validateTopicExam !== null}]"-->
+<!--                >-->
+<!--                  <option value = "Java core">Java core</option>-->
 
-                </select>
-                <span
-                    v-if="validateTopicExam"
-                    class="span-validate-modal-form"
-                >{{validateTopicExam}}.</span>
-              </div>
-            </div>
+<!--                </select>-->
+<!--                <span-->
+<!--                    v-if="validateTopicExam"-->
+<!--                    class="span-validate-modal-form"-->
+<!--                >{{validateTopicExam}}.</span>-->
+<!--              </div>-->
+<!--            </div>-->
 
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">
@@ -530,6 +539,19 @@ export default {
                   v-if="validateEndDate"
                   class="span-validate-modal-form"
               >{{validateEndDate}}</span>
+            </div>
+          </div>
+
+          <div class="mb-3 row" v-if="topicExam === 'Java core'">
+            <label for="viewTable" class="col-sm-3 col-form-label">
+              View table
+            </label>
+            <div class="col-sm-9" style="display: flex; align-items: center">
+              <input
+                  type="checkbox"
+                  class="style-check-box-view-exam"
+                  v-model="viewTable"
+              />
             </div>
           </div>
 

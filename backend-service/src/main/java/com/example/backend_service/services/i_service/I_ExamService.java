@@ -38,4 +38,6 @@ public interface I_ExamService {
     public Map<String, Object> get_Status_Retake_And_Scoring_Method_By_ExamID(Long examID);
 
     public String getTitle_Exam_By_CourseID(Long courseID, String titleExam);
+
+    public Boolean getViewTable_From_ExamID(Long examID);
 }

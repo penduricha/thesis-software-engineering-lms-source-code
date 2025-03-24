@@ -38,6 +38,7 @@ public class ExamController {
         boolean retakeExam = "Yes".equalsIgnoreCase(retakeExamValue);
         String scoringMethod = (String) mapExam.get("scoringMethod");
         int duration = (Integer) mapExam.get("duration");
+        boolean viewTable = (Boolean) mapExam.get("viewTable");
 
         LocalDateTime startDate = LocalDateTime.of(
                 (Integer) mapExam.get("startDateYear"),
@@ -72,6 +73,7 @@ public class ExamController {
         exam.setEndDate(endDate); // Assuming there is a setEndDate method
         exam.setLinkExamPaper(linkExamPaper); // Assuming there is a setLinkExamPaper method
         exam.setPasswordExam(passwordExam); // Assuming there is a setPasswordExam method
+        exam.setViewTable(viewTable);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(examService.createExam(exam,courseID));
     }
@@ -86,6 +88,7 @@ public class ExamController {
         boolean retakeExam = "Yes".equalsIgnoreCase(retakeExamValue);
         String scoringMethod = (String) mapExam.get("scoringMethod");
         int duration = (Integer) mapExam.get("duration");
+        boolean viewTable = (Boolean) mapExam.get("viewTable");
 
         LocalDateTime startDate = LocalDateTime.of(
                 (Integer) mapExam.get("startDateYear"),
@@ -120,6 +123,7 @@ public class ExamController {
         exam.setEndDate(endDate); // Assuming there is a setEndDate method
         exam.setLinkExamPaper(linkExamPaper); // Assuming there is a setLinkExamPaper method
         exam.setPasswordExam(passwordExam); // Assuming there is a setPasswordExam method
+        exam.setViewTable(viewTable);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(examService
                 .createExam_JavaCore_With_RandomQuestion(exam,courseID,numberOfQuestions));
@@ -137,6 +141,7 @@ public class ExamController {
         boolean retakeExam = "Yes".equalsIgnoreCase(retakeExamValue);
         String scoringMethod = (String) mapExamPost.get("scoringMethod");
         int duration = (Integer) mapExamPost.get("duration");
+        boolean viewTable = (Boolean) mapExamPost.get("viewTable");
 
         LocalDateTime startDate = LocalDateTime.of(
                 (Integer) mapExamPost.get("startDateYear"),
@@ -162,24 +167,6 @@ public class ExamController {
         List<Map<String, Object>> questionJavaCoreExams =
                 (List<Map<String, Object>> ) mapExamPost.get("questionJavaCoreExams");
 
-        //List<QuestionJavaCoreExam> convertedQuestionJavaCoreExams = new ArrayList<>();
-//        List<Long> questionJavaCoreIDs = new ArrayList<>();
-//        for (Map<String, Object> map : questionJavaCoreExams) {
-//            Integer questionJavaCoreIDInteger = (Integer) map.get("questionJavaCoreID");
-//            Long questionJavaCoreID = questionJavaCoreIDInteger != null ? questionJavaCoreIDInteger.longValue() : null;
-//           String contentQuestion = (String) map.get("contentQuestion");
-//            String codeSample = (String) map.get("codeSample");
-//            double score = (Double) map.get("score");
-//            // Create a new BankTestCaseJavaCore object and add it to the list
-//            QuestionJavaCoreExam questionJavaCoreExam = new QuestionJavaCoreExam();
-//            questionJavaCoreIDs.add(questionJavaCoreID);
-//
-//          questionJavaCoreExam.setContentQuestion(contentQuestion);
-//            questionJavaCoreExam.setCodeSample(codeSample);
-//            questionJavaCoreExam.setScore(score);
-//
-//            convertedQuestionJavaCoreExams.add(questionJavaCoreExam);
-//        }
 
         Exam exam = new Exam();
         exam.setTitleExam(titleExam);
@@ -192,6 +179,7 @@ public class ExamController {
         exam.setEndDate(endDate); // Assuming there is a setEndDate method
         exam.setLinkExamPaper(linkExamPaper); // Assuming there is a setLinkExamPaper method
         exam.setPasswordExam(passwordExam); // Assuming there is a setPasswordExam method
+        exam.setViewTable(viewTable);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 examService.createExam_JavaCore_With_ChooseQuestion(exam, courseID, questionJavaCoreExams));
     }
@@ -255,6 +243,7 @@ public class ExamController {
         boolean retakeExam = "Yes".equalsIgnoreCase(retakeExamValue);
         String scoringMethod = (String) mapExamToPut.get("scoringMethod");
         int duration = (Integer) mapExamToPut.get("duration");
+        boolean viewTable = (Boolean) mapExamToPut.get("viewTable");
 
         LocalDateTime startDate = LocalDateTime.of(
                 (Integer) mapExamToPut.get("startDateYear"),
@@ -290,6 +279,7 @@ public class ExamController {
         exam.setEndDate(endDate);
         exam.setLinkExamPaper(linkExamPaper);
         exam.setPasswordExam(passwordExam);
+        exam.setViewTable(viewTable);
         return ResponseEntity.ok(examService.updateExam_By_ExamID(exam,examID));
     }
 
@@ -303,5 +293,11 @@ public class ExamController {
         } else {
             return ResponseEntity.ok(false);
         }
+    }
+
+    @GetMapping("/exam/get-is-view-table-by-exam-id/{examID}")
+    public ResponseEntity<Boolean> getViewTable_From_ExamID(@PathVariable Long examID)
+            throws HttpClientErrorException {
+        return ResponseEntity.ok(examService.getViewTable_From_ExamID(examID));
     }
 }

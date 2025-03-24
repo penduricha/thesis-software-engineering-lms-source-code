@@ -12,6 +12,7 @@ import ModalAddQuestions from "@/pages/bank-exams/create-exam-with-choose-questi
 import AsideAccount from "@/components/aside/AsideAccount.vue";
 import AsideMenu from "@/components/aside/AsideMenu.vue";
 import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
+//import '../../components/checkbox/checkbox-view-table.scss';
 
 export default {
   name: "CreateExamJavaCoreRandomQuestions",
@@ -59,12 +60,13 @@ export default {
 
       titleExam: null,
       typeExam: null,
-      topicExam: null,
+      topicExam: "Java core",
       retake: null,
       scoringMethod: null,
       duration: null,
       startDate: null,
       endDate: null,
+      //viewTable: false,
       examPaper: null,
       courseIDChoose: null,
 
@@ -340,6 +342,7 @@ export default {
           "endDateYear": dateEndDate.getFullYear(),
           "endDateHour": dateEndDate.getHours(),
           "endDateMinute": dateEndDate.getMinutes(),
+          "viewTable" : true,
           "linkExamPaper": this.examPaper,
           "passwordExam": this.passwordExamHashed,
         }
@@ -440,26 +443,26 @@ export default {
                 </div>
               </div>
 
-              <div class="mb-3 row">
-                <label class="col-sm-3 col-form-label">
-                  Topic:<span class="required-star">*</span>
-                </label>
-                <div class="col-sm-9">
-                  <select class="form-select"
-                          @change="setSelectTopicExam()"
-                          v-model="topicExam"
-                          :class="[{'is-invalid': validateTopicExam !== null}]"
-                  >
-                    <option value = "Java core">Java core</option>
-                    <!--                  <option value = "Java class single">Java class single</option>-->
-                    <!--                  <option value = "Java class mapping">Java class mapping</option>-->
-                  </select>
-                  <span
-                      v-if="validateTopicExam"
-                      class="span-validate-modal-form"
-                  >{{validateTopicExam}}.</span>
-                </div>
-              </div>
+<!--              <div class="mb-3 row">-->
+<!--                <label class="col-sm-3 col-form-label">-->
+<!--                  Topic:<span class="required-star">*</span>-->
+<!--                </label>-->
+<!--                <div class="col-sm-9">-->
+<!--                  <select class="form-select"-->
+<!--                          @change="setSelectTopicExam()"-->
+<!--                          v-model="topicExam"-->
+<!--                          :class="[{'is-invalid': validateTopicExam !== null}]"-->
+<!--                  >-->
+<!--                    <option value = "Java core">Java core</option>-->
+<!--                    &lt;!&ndash;                  <option value = "Java class single">Java class single</option>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                  <option value = "Java class mapping">Java class mapping</option>&ndash;&gt;-->
+<!--                  </select>-->
+<!--                  <span-->
+<!--                      v-if="validateTopicExam"-->
+<!--                      class="span-validate-modal-form"-->
+<!--                  >{{validateTopicExam}}.</span>-->
+<!--                </div>-->
+<!--              </div>-->
 
               <div class="mb-3 row">
                 <label class="col-sm-3 col-form-label">
@@ -580,6 +583,19 @@ export default {
                 >{{validateEndDate}}</span>
               </div>
             </div>
+
+<!--            <div class="mb-3 row">-->
+<!--              <label for="viewTable" class="col-sm-3 col-form-label">-->
+<!--                View table-->
+<!--              </label>-->
+<!--              <div class="col-sm-9" style="display: flex; align-items: center">-->
+<!--                <input-->
+<!--                    type="checkbox"-->
+<!--                    class="style-check-box-view-exam"-->
+<!--                    v-model="viewTable"-->
+<!--                />-->
+<!--              </div>-->
+<!--            </div>-->
 
             <div class="mb-3 row" v-if="courses.length > 0">
               <label class="col-sm-3 col-form-label">

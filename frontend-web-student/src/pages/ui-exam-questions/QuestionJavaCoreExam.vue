@@ -20,6 +20,7 @@ import CodeStorageDao from "@/daos/CodeStorageDao.js";
 import ModalFormTestDebugJava from "@/pages/ui-exam-questions/ModalFormTestDebugJava.vue";
 import ExamDao from "@/daos/ExamDao.js";
 
+
 export default {
   name: "QuestionJavaCoreExam",
   components: {
@@ -80,6 +81,8 @@ export default {
 
       //polling
       pollingInterval: null,
+
+      viewTable: true,
     }
   },
 
@@ -87,6 +90,7 @@ export default {
     this.saveRouter_Path(this.getRoute());
     this.setStudent();
     this.setQuestion_By_ExamID();
+    this.setViewTable();
   },
 
   mounted() {
@@ -122,7 +126,7 @@ export default {
       this.questions = await QuestionJavaCoreExamDao.getQuestions_By_ExamID(this.examID);
       console.log("10 questions: ", this.questions);
 
-      //xu li neu co thay doi
+      //xu li neu co thay doi cau hoi
       this.pollingInterval = await QuestionJavaCoreExamDao.startPolling_GetQuestions_By_ExamID(this.examID, (updated) => {
         this.questions = updated;
         // Cập nhật danh sách bài kiểm tra
@@ -213,6 +217,12 @@ export default {
       }, 1000);
     },
 
+    async setViewTable() {
+      if(this.examID) {
+        this.viewTable = await ExamDao.get_View_Table_By_ExamID(this.examID);
+      }
+    },
+
     async handleButtonQuestion(q, index) {
       //other method
       //save truoc
@@ -288,15 +298,26 @@ export default {
         };
       });
 
+      // map string object
       const dataToSubmit = {
-        studentID: studentID,
-        examID: Number(this.examID),
-        answerQuestions: answerQuestions === null ? [] : answerQuestions,
+        "studentID": studentID,
+        "examID": Number(this.examID),
+        "answerQuestions": answerQuestions === null ? [] : answerQuestions,
       }
       console.log("Data to submit: ", dataToSubmit);
 
-      await this.$refs.modalNotificationAfterSubmit
-           .submit_Transaction_And_Get_Mark(dataToSubmit);
+      // const jsonString = JSON.stringify(dataToSubmit, null, 2);
+      // const blob = new Blob([jsonString], { type: 'application/json' });
+      // const link = document.createElement('a');
+      // link.href = URL.createObjectURL(blob);
+      // link.download = 'data.json';
+      // document.body.appendChild(link);
+      // link.click();
+      // document.body.removeChild(link);
+
+
+       await this.$refs.modalNotificationAfterSubmit
+            .submit_Transaction_And_Get_Mark(dataToSubmit);
 
     },
 
@@ -541,7 +562,7 @@ export default {
       <section class="section-exam">
         <span class="text-exam">Score: {{score}}</span>
         <p class="text-exam">{{contentQuestion}}</p>
-        <table class="table table-striped" v-if="testCasesInit.length > 0">
+        <table class="table table-striped" v-if="(testCasesInit.length > 0) && (viewTable === true)">
           <thead>
           <tr>
             <th>Index</th>
@@ -567,7 +588,7 @@ export default {
               ref="saveCode"
               class="button-text-editor"
               @click="handleSave()"
-          >Save all
+          >Save
           </button>
 
           <!--            <button-->

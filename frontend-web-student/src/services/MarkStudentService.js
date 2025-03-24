@@ -7,4 +7,8 @@ export default class MarkStudentService {
         return axiosConfig.getAPIClient().get(
             `/mark_student/set_mark_zero/${studentID}/${examID}`);
     }
+
+    static delete_Mark_Student_By_Mark_Student_ID(examID) {
+        return axiosConfig.getAPIClient().delete(`/delete/mark-student-by-examID-id/${examID}`);
+    }
 }

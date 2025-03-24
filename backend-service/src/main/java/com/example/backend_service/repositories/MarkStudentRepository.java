@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> {
     MarkStudent findMarkStudentByExam_ExamID(Long examID);
@@ -65,4 +66,13 @@ public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> 
             """,
             nativeQuery = true)
     List<Long> getListDetailMarkStudentID_By_MarkStudentID(@Param("markStudentID") Long markStudentID);
+
+    @Query(value = """
+            select e.title_exam, e.type_exam,m.mark_exam from mark_student m
+            right join exam e
+            on m.exam_id = e.exam_id
+            where m.student_id = :studentID;
+            """,
+            nativeQuery = true)
+    List<Map<String, Object>> getListResultExam_By_StudentID (@Param("studentID") String studentID);
 }

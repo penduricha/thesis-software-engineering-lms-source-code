@@ -305,6 +305,7 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
                     "    duration = ?, \n" +
                     "    start_date = ?, \n" +
                     "    end_date = ?, \n" +
+                    "    view_table = ?, \n" +
                     "    link_exam_paper = ?, \n" +
                     "    password_exam = ?\n" +
                     "where \n" +
@@ -319,9 +320,10 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
                     .setParameter(6, exam.getDuration())
                     .setParameter(7, exam.getStartDate())
                     .setParameter(8, exam.getEndDate())
-                    .setParameter(9, exam.getLinkExamPaper())
-                    .setParameter(10, exam.getPasswordExam())
-                    .setParameter(11, exam.getExamID())
+                    .setParameter(9, exam.isViewTable())
+                    .setParameter(10, exam.getLinkExamPaper())
+                    .setParameter(11, exam.getPasswordExam())
+                    .setParameter(12, exam.getExamID())
                     .executeUpdate();
             return examFound;
         }
@@ -372,6 +374,15 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
     }
 
     @Override
+    public Boolean getViewTable_From_ExamID(Long examID)  throws JpaSystemException {
+        Exam examFound = findExam_By_ExamID(examID);
+        if(examFound != null) {
+            return examFound.isViewTable();
+        }
+        return null;
+    }
+
+    @Override
     public List<Long> getListDetailMarkStudentID_By_MarkStudentID(Long markStudentID)
             throws JpaSystemException{
         return markStudentRepository.getListDetailMarkStudentID_By_MarkStudentID(markStudentID);
@@ -391,7 +402,7 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
 
     @Override
     @Transactional
-    public void deleteMarkStudentID_By_MarkStudentID(Long markStudentID)
+    public Void deleteMarkStudentID_By_MarkStudentID(Long markStudentID)
             throws JpaSystemException{
         //get ds tu query sql
         List<Long> queryListOutputID = getListOutputDebugResultJavaCoreID_By_MarkStudentID(markStudentID);
@@ -429,10 +440,15 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
             }
         }
 
-        //delete mark student
-        String sqlDeleteMarkStudent = "delete from mark_student where mark_student_id = ?";
-        entityManager.createNativeQuery(sqlDeleteMarkStudent)
-                .setParameter(1, markStudentID)
-                .executeUpdate();
+        //find mark student
+        MarkStudent markStudentFound = markStudentRepository.findMarkStudentByMarkStudentID(markStudentID);
+        if(markStudentFound != null) {
+            //delete mark student
+            String sqlDeleteMarkStudent = "delete from mark_student where mark_student_id = ?";
+            entityManager.createNativeQuery(sqlDeleteMarkStudent)
+                    .setParameter(1, markStudentID)
+                    .executeUpdate();
+        }
+        return null;
     }
 }

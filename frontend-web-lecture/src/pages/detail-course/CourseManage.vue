@@ -9,6 +9,7 @@ import '../../components/aside/aside-menu-style.scss';
 import './course-manage.scss';
 import './modal-create-exam.scss';
 import '../../components/span/span-style.scss';
+import '../../components/checkbox/checkbox-view-table.scss';
 
 //others
 import CourseDao from "@/daos/CourseDao.js";
@@ -57,6 +58,9 @@ export default {
       duration: null,
       startDate: null,
       endDate: null,
+
+      //view table
+      //viewTable: false,
       examPaper: null,
 
       //validate form exam;
@@ -79,6 +83,8 @@ export default {
 
       passwordExam: null,
       passwordExamHashed: null,
+
+
     }
   },
 
@@ -392,6 +398,7 @@ export default {
           "endDateYear": dateEndDate.getFullYear(),
           "endDateHour": dateEndDate.getHours(),
           "endDateMinute": dateEndDate.getMinutes(),
+          "viewTable" : true,
           "linkExamPaper": this.examPaper,
           "passwordExam": this.passwordExamHashed,
         }
@@ -656,6 +663,19 @@ export default {
               >{{ validateEndDate }}</span>
             </div>
           </div>
+
+<!--          <div class="mb-3 row">-->
+<!--            <label for="viewTable" class="col-sm-3 col-form-label">-->
+<!--              View table-->
+<!--            </label>-->
+<!--            <div class="col-sm-9" style="display: flex; align-items: center">-->
+<!--              <input-->
+<!--                  type="checkbox"-->
+<!--                  class="style-check-box-view-exam"-->
+<!--                  v-model="viewTable"-->
+<!--              />-->
+<!--            </div>-->
+<!--          </div>-->
 
           <div class="mb-3 row">
             <label for="examPaper" class="col-sm-3 col-form-label">

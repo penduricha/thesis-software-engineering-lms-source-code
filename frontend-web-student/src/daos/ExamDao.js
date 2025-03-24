@@ -97,4 +97,14 @@ export default class ExamDao {
         })
         return Number(studentID) === Number(studentIDResponse);
     }
+
+    static async get_View_Table_By_ExamID(examID){
+        let result = true;
+        await ExamService.fetch_View_Table_By_ExamID(examID).then(response => {
+           result = response.data;
+        }).catch(error => {
+            console.error(error);
+        })
+        return result;
+    }
 }

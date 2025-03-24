@@ -36,4 +36,10 @@ export default class ExamService {
             .getAPIClient()
             .delete(`/student/student_access_exam_delete/${studentID}/${examID}`);
     }
+
+    static fetch_View_Table_By_ExamID(examID) {
+        return axiosConfig
+            .getAPIClient()
+            .get(`/exam/get-is-view-table-by-exam-id/${examID}`);
+    }
 }

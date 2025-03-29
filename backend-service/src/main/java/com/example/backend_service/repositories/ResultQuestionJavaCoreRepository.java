@@ -78,4 +78,41 @@ public interface ResultQuestionJavaCoreRepository extends JpaRepository<ResultQu
             """,
             nativeQuery = true)
     Double getTotal_MarkAchieve_By_Detail_MarkStudent(@Param("detailMarkStudentID") Long detailMarkStudentID);
+
+    @Query(value = """
+            with first_query as (
+                select btcjc.input_test, btcjc.output_expect
+                from result_question_java_core rqjc
+                         right join question_java_core_exam qjce
+                                    on rqjc.question_java_core_exam_id = qjce.question_java_core_exam_id
+                         right join bank_question_java_core bqjc
+                                    on qjce.question_java_core_id = bqjc.question_java_core_id
+                         left join bank_test_case_java_core btcjc
+                                   on bqjc.question_java_core_id = btcjc.question_java_core_id
+                where rqjc.result_question_java_core_id = :resultQuestionJavaCoreID
+            ),
+                 second_query as (
+                     select o.output_debug_java_core_id, o.output_code_student, o.fail
+                     from output_debug_result_java_core o
+                     where o.result_question_java_core_id = :resultQuestionJavaCoreID
+                 )
+            select fq.input_test, fq.output_expect, sq.output_code_student, sq.fail
+            from first_query fq
+            join second_query sq
+            on length(fq.output_expect) = length(sq.output_code_student);
+            """,
+            nativeQuery = true)
+    List<Map<String, Object>> getListTestCase_And_OutputStudent_By_Result_Question_JavaCore_ID
+            (@Param("resultQuestionJavaCoreID") Long resultQuestionJavaCoreID);
+
+    @Query(value = """
+            select r.result_question_java_core_id, q.content_question, r.mark_achieve, q.score
+            from result_question_java_core r
+            right join question_java_core_exam q
+            on r.question_java_core_exam_id = q.question_java_core_exam_id
+            where detail_mark_student_id = :detailMarkStudentID;
+            """,
+            nativeQuery = true)
+    List<Map<String, Object>> getListQuestionJavaCoreExamAndResult_By_Detail_MarkStudent_ID
+            (@Param("detailMarkStudentID") Long detailMarkStudentID);
 }

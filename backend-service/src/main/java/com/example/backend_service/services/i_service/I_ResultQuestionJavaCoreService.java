@@ -12,4 +12,7 @@ public interface I_ResultQuestionJavaCoreService {
             (Long resultQuestionJavaCoreID);
 
     public List<Long> getList_Output_Debug_JavaCoreID_To_Update_Pass (Long resultQuestionJavaCoreID) throws Exception;
+
+    public List<Map<String, Object>> getListTestCase_And_OutputStudent_By_Result_Question_JavaCore_ID
+            (Long resultQuestionJavaCoreID);
 }

@@ -47,10 +47,17 @@ public class ResultQuestionJavaCore implements Serializable {
     @JsonIgnore
     private DetailMarkStudent detailMarkStudent;
 
-    @OneToOne
-    @JoinColumn(name = "question_java_core_exam_id")
-    @JsonIgnore
-    private QuestionJavaCoreExam questionJavaCoreExam;
+//    @ManyToOne
+//    @JoinColumn(name = "question_java_core_exam_id")
+//    @JsonIgnore
+//    private QuestionJavaCoreExam questionJavaCoreExam;
+
+//    @OneToMany(mappedBy = "resultQuestionJavaCore", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JsonIgnore
+//    private List<QuestionJavaCoreExam> questionJavaCoreExams = new ArrayList<>();
+    //Ko map với questionJavaCoreExam
+    @Column(name = "question_java_core_exam_id", nullable = false)
+    private Long questionJavaCoreExamID;
 
     public Long getResultQuestionJavaCoreID() {
         return resultQuestionJavaCoreID;
@@ -77,12 +84,12 @@ public class ResultQuestionJavaCore implements Serializable {
         this.detailMarkStudent = detailMarkStudent;
     }
 
-    public QuestionJavaCoreExam getQuestionJavaCoreExam() {
-        return questionJavaCoreExam;
+    public Long getQuestionJavaCoreExamID() {
+        return questionJavaCoreExamID;
     }
 
-    public void setQuestionJavaCoreExam(QuestionJavaCoreExam questionJavaCoreExam) {
-        this.questionJavaCoreExam = questionJavaCoreExam;
+    public void setQuestionJavaCoreExamID(Long questionJavaCoreExamID) {
+        this.questionJavaCoreExamID = questionJavaCoreExamID;
     }
 
     public List<OutputDebugResultJavaCore> getOutputDebugResultJavaCores() {

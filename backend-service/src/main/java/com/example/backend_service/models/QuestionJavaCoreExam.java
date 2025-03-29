@@ -6,6 +6,8 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -71,9 +73,10 @@ public class QuestionJavaCoreExam implements Serializable {
     @JsonIgnore
     private BankQuestionJavaCore bankQuestionJavaCore;
 
-    @OneToOne(mappedBy = "questionJavaCoreExam", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnore
-    private ResultQuestionJavaCore resultQuestionJavaCore;
+//    @ManyToOne
+//    @JoinColumn(name = "result_question_java_core_id")
+//    @JsonIgnore
+//    private ResultQuestionJavaCore resultQuestionJavaCore;
 
 //    public QuestionJavaCoreExam(String contentQuestion, String codeSample) {
 //        this.contentQuestion = contentQuestion;
@@ -96,14 +99,13 @@ public class QuestionJavaCoreExam implements Serializable {
         this.bankQuestionJavaCore = bankQuestionJavaCore;
     }
 
-    public ResultQuestionJavaCore getResultQuestionJavaCore() {
-        return resultQuestionJavaCore;
-    }
-
-    public void setResultQuestionJavaCore(ResultQuestionJavaCore resultQuestionJavaCore) {
-        this.resultQuestionJavaCore = resultQuestionJavaCore;
-    }
-
+//    public ResultQuestionJavaCore getResultQuestionJavaCore() {
+//        return resultQuestionJavaCore;
+//    }
+//
+//    public void setResultQuestionJavaCore(ResultQuestionJavaCore resultQuestionJavaCore) {
+//        this.resultQuestionJavaCore = resultQuestionJavaCore;
+//    }
 //    public QuestionJavaCoreExam(Long questionJavaCoreExamID, String contentQuestion, String codeSample) {
 //        this.questionJavaCoreExamID = questionJavaCoreExamID;
 //        this.contentQuestion = contentQuestion;

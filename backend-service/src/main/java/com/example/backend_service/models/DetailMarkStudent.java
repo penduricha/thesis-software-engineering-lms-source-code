@@ -24,6 +24,15 @@ public class DetailMarkStudent implements Serializable {
 
     private double detailMarkExam;
 
+    @Override
+    public String toString() {
+        return "DetailMarkStudent{" +
+                "dateSubmitted=" + dateSubmitted +
+                ", detailMarkExam=" + detailMarkExam +
+                ", detailMarkStudentID=" + detailMarkStudentID +
+                '}';
+    }
+
     public Long getDetailMarkStudentID() {
         return detailMarkStudentID;
     }
@@ -83,12 +92,4 @@ public class DetailMarkStudent implements Serializable {
     @JsonIgnore
     private List<ResultQuestionJavaCore> resultQuestionJavaCoreList = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return "DetailMarkStudent{" +
-                "dateSubmitted=" + dateSubmitted +
-                ", detailMarkExam=" + detailMarkExam +
-                ", detailMarkStudentID=" + detailMarkStudentID +
-                '}';
-    }
 }

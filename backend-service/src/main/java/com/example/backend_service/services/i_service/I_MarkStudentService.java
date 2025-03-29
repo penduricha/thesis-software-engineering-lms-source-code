@@ -13,6 +13,8 @@ public interface I_MarkStudentService {
     //public MarkStudent createMarkStudent(Map<String, Object> dataSubmitPost);
 
     public DetailMarkStudent createMarkStudent(Map<String, Object> dataSubmitPost);
+
+    //public DetailMarkStudent createDetailMarkStudentIfMarkStudentExist(Map<String, Object> dataSubmitPost);
     
     public DetailMarkStudent insertOutput_From_JavaCore_Code_Submitted(Map<String, Object> dataSubmitPost);
 
@@ -35,4 +37,6 @@ public interface I_MarkStudentService {
     public Void deleteMarkStudent_By_ExamID(Long examID);
 
     public List<Map<String, Object>> getListResultExam_By_StudentID (String studentID);
+
+    public List<Map<String, Object>> getListDetailMarkStudent_By_MarkStudentID(Long markStudentID);
 }

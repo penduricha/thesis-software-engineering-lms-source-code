@@ -1,5 +1,6 @@
 
 import DetailMarkStudentService from "@/services/DetailMarkStudentService.js";
+import ExamService from "@/services/ExamService.js";
 
 export default class DetailMarkStudentDao {
     static async getMarkExam_After_Submitted_JavaCore(dataPost) {
@@ -9,7 +10,11 @@ export default class DetailMarkStudentDao {
             const response = await DetailMarkStudentService.post_Data_Submit_JavaCore(dataPost);
             dataResponseReturn = response.data;
             if (dataResponseReturn) {
-                mark = dataResponseReturn.markExam;
+                if (dataResponseReturn.markExam !== undefined) {
+                    mark = dataResponseReturn.markExam;
+                } else if (dataResponseReturn.detailMarkExam !== undefined) {
+                    mark = dataResponseReturn.detailMarkExam;
+                }
             }
         } catch (error) {
             console.error(error);
@@ -17,5 +22,15 @@ export default class DetailMarkStudentDao {
             mark = -1;
         }
         return mark;
+    }
+
+    static async get_Detail_Mark_Student_By_MarkStudentID( markStudentID ) {
+        let listDetailMarkStudent = [];
+        await DetailMarkStudentService.fetch_Detail_Mark_Student_By_MarkStudentID(markStudentID).then(response => {
+            listDetailMarkStudent = response.data;
+        }).catch(error => {
+            console.error(error);
+        })
+        return listDetailMarkStudent;
     }
 }

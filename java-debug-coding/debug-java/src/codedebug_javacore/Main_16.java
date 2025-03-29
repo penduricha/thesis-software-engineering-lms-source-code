@@ -7,7 +7,9 @@ public class Main_16 {
     public int permutation(int n, int k) { }
     */
     public static int permutation(int n, int k) {
-        if (k > n || k < 0 || n < 0) return 0;
+        if (k > n || k < 0) {
+            return 0;
+        }
         int result = 1;
         for (int i = n; i > n - k; i--) {
             result *= i;

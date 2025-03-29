@@ -11,6 +11,8 @@ import java.util.Map;
 public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> {
     MarkStudent findMarkStudentByExam_ExamID(Long examID);
 
+    //MarkStudent findMarkStudentByMarkStudentID(Long markStudentID);
+
     /*
         Truy xuất dbs sinh viên làm xong bài kiểm tra (exam) và đã có điểm ở (mark_student)
         ứng với bài kiểm tra đó. Mà bài kiểm tra đó có được phép làm lại
@@ -68,11 +70,15 @@ public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> 
     List<Long> getListDetailMarkStudentID_By_MarkStudentID(@Param("markStudentID") Long markStudentID);
 
     @Query(value = """
-            select e.title_exam, e.type_exam,m.mark_exam from mark_student m
+            select 
+            m.mark_student_id, e.title_exam, e.type_exam,
+            m.mark_exam, e.exam_id, e.retake_exam, e.topic_exam from mark_student m
             right join exam e
             on m.exam_id = e.exam_id
-            where m.student_id = :studentID;
+            where m.student_id = :studentID order by e.title_exam;
             """,
             nativeQuery = true)
     List<Map<String, Object>> getListResultExam_By_StudentID (@Param("studentID") String studentID);
+
+
 }

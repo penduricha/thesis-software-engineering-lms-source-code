@@ -11,4 +11,8 @@ export default class MarkStudentService {
     static delete_Mark_Student_By_Mark_Student_ID(examID) {
         return axiosConfig.getAPIClient().delete(`/delete/mark-student-by-examID-id/${examID}`);
     }
+
+    static fetch_List_Mark_Student_By_Student_ID(studentID) {
+        return axiosConfig.getAPIClient().get(`/mark_student/get-list-mark-student-by-student-id/${studentID}`)
+    }
 }

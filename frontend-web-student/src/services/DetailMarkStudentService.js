@@ -8,4 +8,10 @@ export default class DetailMarkStudentService {
             .getAPIClient()
             .post(`/mark_student/post-mark-student-after-submit-exam-java-core`, dataPost, {});
     }
+
+    static fetch_Detail_Mark_Student_By_MarkStudentID( markStudentID ) {
+        return axiosConfig
+            .getAPIClient()
+            .get(`/mark_student/get-list-detail-mark-student-by-mark-student-id/${markStudentID}`);
+    }
 }

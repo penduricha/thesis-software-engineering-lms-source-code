@@ -22,4 +22,31 @@ export default class MarkStudentDao{
                 console.error(error);
             })
     }
+
+    static async get_List_Mark_Student_By_Student_ID(studentID) {
+        let listMarkStudent = [];
+        await MarkStudentService
+            .fetch_List_Mark_Student_By_Student_ID(studentID)
+            .then(response => {
+                listMarkStudent = response.data;
+            }).catch(error => {
+                console.error(error);
+            })
+        return listMarkStudent;
+    }
+
+    static async startPolling_Get_List_Mark_Student_By_Student_ID(studentID, callback){
+        let lastFetched = await this.get_List_Mark_Student_By_Student_ID(studentID)
+        // Kiểm tra mỗi 5 giây
+        // Trả về interval để có thể dọn dẹp sau này
+        return setInterval(async () => {
+            const data = await this.get_List_Mark_Student_By_Student_ID(studentID);
+            if (JSON.stringify(data) !== JSON.stringify(lastFetched)) {
+                lastFetched = data;
+                callback(data);
+                // Gọi lại callback để cập nhật dữ liệu
+                //cho time 4 giay
+            }
+        }, 4000);
+    }
 }

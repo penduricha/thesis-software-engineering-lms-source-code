@@ -39,15 +39,29 @@ on rqjc.result_question_java_core_id = odrjc.result_question_java_core_id
 where m.mark_student_id = 1835;
 
 
-update exam set start_date = '2025-03-23 17:55:00'
-where exam_id = 58;
+update exam set start_date = '2025-03-27 18:40:00'
+where exam_id = 2;
 
 select * from exam;
 
+select * from detail_mark_student;
+
+
+select * from question_java_core_exam;
+
+select btcjc.output_expect from result_question_java_core rqjc
+right join question_java_core_exam qjce
+on rqjc.question_java_core_exam_id = qjce.question_java_core_exam_id
+right join bank_question_java_core bqjc
+on qjce.question_java_core_id = bqjc.question_java_core_id
+left join bank_test_case_java_core btcjc
+on bqjc.question_java_core_id = btcjc.question_java_core_id;
+
+select * from detail_mark_student;
+
+select avg(d.detail_mark_exam) from detail_mark_student d
+where d.mark_student_id = 3;
+
 select * from mark_student;
 
-select * from output_debug_result_java_core;
-
-select * from output_debug_result_java_core;
-
-
+# Trích xuất bảng

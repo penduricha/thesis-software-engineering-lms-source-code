@@ -28,6 +28,16 @@ public class ResultQuestionJavaCore implements Serializable {
 
     private double markAchieve;
 
+//    public String getNoteCompiler() {
+//        return noteCompiler;
+//    }
+//
+//    public void setNoteCompiler(String noteCompiler) {
+//        this.noteCompiler = noteCompiler;
+//    }
+//
+//    private String noteCompiler;
+
     public double getMarkAchieve() {
         return markAchieve;
     }

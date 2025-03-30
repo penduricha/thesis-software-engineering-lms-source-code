@@ -30,20 +30,48 @@ public class ResultQuestionJavaCoreService {
         ResultQuestionJavaCore resultQuestionJavaCore = resultQuestionJavaCoreRepository
                 .findResultQuestionJavaCoreByResultQuestionJavaCoreID(resultQuestionJavaCoreID);
         if(resultQuestionJavaCore != null) {
-            List<Map<String, Object>> queryList = resultQuestionJavaCoreRepository
-                    .getListTestCase_And_OutputStudent_By_Result_Question_JavaCore_ID(resultQuestionJavaCoreID);
-            if(!queryList.isEmpty()) {
-                return queryList.stream()
+            //Khai bao list chuyen doi
+            List<Map<String, Object>> listTableTestCases = new ArrayList<>();
+
+            List<Map<String, Object>> listOutputStudents = new ArrayList<>();
+
+            List<Map<String, Object>> queryTableTestCase = resultQuestionJavaCoreRepository
+                    .getListTestCase_By_Result_Question_JavaCore_ID(resultQuestionJavaCore.getResultQuestionJavaCoreID());
+
+            List<Map<String, Object>> queryTableOutputStudents = resultQuestionJavaCoreRepository
+                    .getOutputTestCase_By_Result_Question_JavaCore_ID(resultQuestionJavaCore.getResultQuestionJavaCoreID());
+            if(!queryTableTestCase.isEmpty()) {
+                listTableTestCases = queryTableTestCase.stream()
                         .map(originalMap -> {
                             Map<String, Object> newMap = new HashMap<>();
                             newMap.put("inputTest", originalMap.get("input_test"));
                             newMap.put("outputExpect", originalMap.get("output_expect"));
+                            return newMap;
+                        }).toList();
+            }
+
+            if(!queryTableOutputStudents.isEmpty()) {
+                listOutputStudents = queryTableOutputStudents.stream()
+                        .map(originalMap -> {
+                            Map<String, Object> newMap = new HashMap<>();
+                            newMap.put("outputDebugJavaCoreID", originalMap.get("output_debug_java_core_id"));
                             newMap.put("outputCodeStudent", originalMap.get("output_code_student"));
                             newMap.put("fail", originalMap.get("fail"));
                             return newMap;
                         }).toList();
-
             }
+
+            if((!listOutputStudents.isEmpty() && !listTableTestCases.isEmpty()) && listOutputStudents.size() == listTableTestCases.size()) {
+                List<Map<String, Object>> combinedList = new ArrayList<>();
+                for (int i = 0; i < listTableTestCases.size(); i++) {
+                    Map<String, Object> combinedMap = new HashMap<>();
+                    combinedMap.putAll(listTableTestCases.get(i));
+                    combinedMap.putAll(listOutputStudents.get(i));
+                    combinedList.add(combinedMap);
+                }
+                return combinedList;
+            }
+            return new ArrayList<>();
         }
         return new ArrayList<>();
     }
@@ -61,11 +89,11 @@ public class ResultQuestionJavaCoreService {
                             Map<String, Object> newMap = new HashMap<>();
                             newMap.put("resultQuestionJavaCoreID", originalMap.get("result_question_java_core_id"));
                             newMap.put("contentQuestion", originalMap.get("content_question"));
+                            newMap.put("codeStudentSubmitted", originalMap.get("code_student_submitted"));
                             newMap.put("markAchieve", originalMap.get("mark_achieve"));
                             newMap.put("score", originalMap.get("score"));
                             return newMap;
                         }).toList();
-
             }
         }
         return new ArrayList<>();

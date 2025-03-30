@@ -675,6 +675,7 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
                                 resultQuestionJavaCoreRepository.save(resultQuestionJavaCore);
                             }
                         }
+
                     }
                 }
             }

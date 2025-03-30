@@ -12,9 +12,9 @@ import {java,} from "@codemirror/lang-java";
 import {keymap} from "@codemirror/view";
 import {autocompletion, completeFromList} from "@codemirror/autocomplete";
 import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
-import SessionStorageTestCase from "@/pages/bank-exams/SessionStorageTestCase.js";
+import SessionStorageTestCase from "@/pages/bank-exams-java-core/SessionStorageTestCase.js";
 import Validation from "@/validation/Validation.js";
-import ParameterStorageManager from "@/pages/bank-exams/ParameterStorageManager.js";
+import ParameterStorageManager from "@/pages/bank-exams-java-core/ParameterStorageManager.js";
 //npm i vue-csv-import
 import { VueCsvImport, VueCsvToggleHeaders, VueCsvInput, VueCsvMap, VueCsvSubmit, VueCsvErrors } from 'vue-csv-import';
 import LectureDao from "@/daos/LectureDao.js";

@@ -12,8 +12,8 @@ import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
 import CourseDao from "@/daos/CourseDao.js";
 import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
 import SessionStorageQuestionJavaCoreChoose
-  from "@/pages/bank-exams/create-exam-with-choose-questions/SessionStorageQuestionJavaCoreChoose.js";
-import ModalAddQuestions from "@/pages/bank-exams/create-exam-with-choose-questions/ModalAddQuestions.vue";
+  from "@/pages/bank-exams-java-core/create-exam-with-choose-questions/SessionStorageQuestionJavaCoreChoose.js";
+import ModalAddQuestions from "@/pages/bank-exams-java-core/create-exam-with-choose-questions/ModalAddQuestions.vue";
 // import '../../../components/checkbox/checkbox-view-table.scss';
 
 export default {

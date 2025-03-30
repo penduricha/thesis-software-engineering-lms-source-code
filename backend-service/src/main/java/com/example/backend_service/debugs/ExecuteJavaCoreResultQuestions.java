@@ -13,6 +13,16 @@ import java.util.List;
 public class ExecuteJavaCoreResultQuestions implements Serializable {
     private String studentID;
 
+    private String noteCompiler;
+
+    public String getNoteCompiler() {
+        return noteCompiler;
+    }
+
+    public void setNoteCompiler(String noteCompiler) {
+        this.noteCompiler = noteCompiler;
+    }
+
     private CodeSubmitAndCodeMain codeSubmitAndCodeMain;
 
     private int sizeTestCases;
@@ -72,9 +82,14 @@ public class ExecuteJavaCoreResultQuestions implements Serializable {
             if (!success) {
                 //neu sai syntax
                 //StringBuilder errorMessage = new StringBuilder("Compilation Error:\n");
-                for(int i = 0; i < sizeTestCases; i++) {
-                    outputCodeJava_From_CodeSubmitAndCodeMain.add("Syntax error");
+                String errorMessage = "";
+                for (Diagnostic<?> diagnostic : diagnostics.getDiagnostics()) {
+                    errorMessage = diagnostic.toString();
                 }
+                for(int i = 0; i < sizeTestCases; i++) {
+                    outputCodeJava_From_CodeSubmitAndCodeMain.add(errorMessage);
+                }
+                setNoteCompiler(errorMessage);
                 deleteFolder(folderPath);
                 return outputCodeJava_From_CodeSubmitAndCodeMain;
             }

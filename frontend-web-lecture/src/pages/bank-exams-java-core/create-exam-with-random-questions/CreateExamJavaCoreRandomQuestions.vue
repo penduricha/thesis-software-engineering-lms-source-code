@@ -8,7 +8,7 @@ import RouterDao from "@/routes/RoutersDao.js";
 import StringFormat from "@/models/StringFormat.js";
 import Password from "@/models/Password.js";
 import ExamDao from "@/daos/ExamDao.js";
-import ModalAddQuestions from "@/pages/bank-exams/create-exam-with-choose-questions/ModalAddQuestions.vue";
+import ModalAddQuestions from "@/pages/bank-exams-java-core/create-exam-with-choose-questions/ModalAddQuestions.vue";
 import AsideAccount from "@/components/aside/AsideAccount.vue";
 import AsideMenu from "@/components/aside/AsideMenu.vue";
 import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";

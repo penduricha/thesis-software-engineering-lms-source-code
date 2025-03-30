@@ -74,6 +74,9 @@ export default {
           <div class="question-container">
             <div v-if="listQuestions.length > 0" v-for="(q, index) in listQuestions" :key="q.resultQuestionJavaCoreID">
               <h6 class="question-title">Question {{ index + 1 }}: {{ q.contentQuestion }}</h6>
+              <h6 class="question-title">Code submitted:</h6>
+              <p class="point"><pre>{{q.codeStudentSubmitted}}</pre></p>
+
               <div class="table-responsive">
                 <table class="table table-striped custom-table">
                   <thead>

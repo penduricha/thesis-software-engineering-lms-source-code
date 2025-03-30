@@ -10,8 +10,8 @@ select * from question_java_core_exam where exam_id = 46;
 
 select * from exam;
 
-update exam set start_date = '2025-03-22 10:25:00'
-where exam_id = 48;
+update exam set start_date = '2025-03-29 17:25:00'
+where exam_id = 8;
 
 -- Lay field detail_mark_student_id, lay 1806 lam chuan
 select dms.detail_mark_student_id from mark_student m
@@ -39,8 +39,8 @@ on rqjc.result_question_java_core_id = odrjc.result_question_java_core_id
 where m.mark_student_id = 1835;
 
 
-update exam set start_date = '2025-03-27 18:40:00'
-where exam_id = 2;
+update exam set start_date = '2025-03-29 10:40:00'
+where exam_id = 3;
 
 select * from exam;
 
@@ -65,3 +65,4 @@ where d.mark_student_id = 3;
 select * from mark_student;
 
 # Trích xuất bảng
+select * from output_debug_result_java_core;

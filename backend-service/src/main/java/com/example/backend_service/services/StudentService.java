@@ -202,4 +202,9 @@ public class StudentService implements I_StudentService {
         //System.out.println(queryMap);
         return returnMap;
     }
+
+    @Override
+    public List<Map<String, Object>> get_Information_Student_Detail_By_StudentID(String studentID) {
+        return List.of();
+    }
 }

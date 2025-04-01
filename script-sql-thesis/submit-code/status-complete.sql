@@ -39,8 +39,8 @@ on rqjc.result_question_java_core_id = odrjc.result_question_java_core_id
 where m.mark_student_id = 1835;
 
 
-update exam set start_date = '2025-03-29 10:40:00'
-where exam_id = 3;
+update exam set start_date = '2025-03-30 18:40:00'
+where exam_id = 9;
 
 select * from exam;
 

@@ -39,4 +39,4 @@ select * from result_question_java_core where detail_mark_student_id;
 
 select * from detail_mark_student;
 
-
+select * from exam;

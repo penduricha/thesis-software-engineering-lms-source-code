@@ -20,6 +20,7 @@ import { VueCsvImport, VueCsvToggleHeaders, VueCsvInput, VueCsvMap, VueCsvSubmit
 import LectureDao from "@/daos/LectureDao.js";
 import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
 import axios from 'axios';
+import GenTestCase from "@/pages/bank-exams-java-core/GenTestCase.js";
 // import { Alert } from 'bootstrap';
 
 export default {
@@ -447,39 +448,39 @@ export default {
         reader.readAsText(file);
       }
     },
+
     async handleGenerateTestCase() {
       this.loaddingGenTestCase = true
       try {
-        const res = await axios.post("https://api.coze.com/v1/workflow/run", {
-          "parameters": {
-            "input": this.content
-          },
-          "workflow_id": "7483910122122657799"
-        }, {
-          headers: {
-            'Authorization': 'Bearer pat_808iJDthzF5JN5t51ea6CyzEoaN8KjkIfQMi7BhUKC0nxcFQPArpIQwuc8BKuIRm',
-            'Content-Type': 'application/json'
-          }
-        });
-        // Lấy dữ liệu từ API
-        let data = res.data.data;
-        console.log("data", data);
-
-        let cleanedData = data.slice(10, -1);
-        console.log("cleanedData", cleanedData);
-
-        cleanedData = cleanedData.replace(/\\/g, '');
-
-
-
-        console.log("cleanedData", cleanedData); // In ra mảng kết quả
-        this.listTestCases = JSON.parse(cleanedData)
-        
-
+        // const res = await axios.post("https://api.coze.com/v1/workflow/run", {
+        //   "parameters": {
+        //     "input": this.content
+        //   },
+        //   "workflow_id": "7483910122122657799"
+        // }, {
+        //   headers: {
+        //     'Authorization': 'Bearer pat_808iJDthzF5JN5t51ea6CyzEoaN8KjkIfQMi7BhUKC0nxcFQPArpIQwuc8BKuIRm',
+        //     'Content-Type': 'application/json'
+        //   }
+        // });
+        // // Lấy dữ liệu từ API
+        // let data = res.data.data;
+        // console.log("data", data);
+        //
+        // let cleanedData = data.slice(10, -1);
+        // console.log("cleanedData", cleanedData);
+        // cleanedData = cleanedData.replace(/\\/g, '');
+        //
+        // console.log("cleanedData", cleanedData); // In ra mảng kết quả
+        // this.listTestCases = JSON.parse(cleanedData)
+        if(this.content) {
+          this.listTestCases = await GenTestCase.getTestCaseGenerate(this.content);
+        } else {
+          this.validationContent = "Please enter content question.";
+        }
       } catch (err) {
         console.log("err Gen Testcase", err);
-      }
-      finally {
+      } finally {
         this.loaddingGenTestCase = false
       }
     }

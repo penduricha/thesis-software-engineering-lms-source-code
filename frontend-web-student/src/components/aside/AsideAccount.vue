@@ -125,7 +125,7 @@ export default {
       const studentLocalStorage = new StudentLocalStorage();
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
       let student = await StudentDao.getStudentName_And_StudentID(studentID);
-      //console.log(student);
+
       this.studentID = student.studentID;
       this.lastName = student.lastName;
       this.firstName = student.firstName;
@@ -149,8 +149,6 @@ export default {
         }
       }
     },
-
-
 
     //lock paste
     preventPaste(event) {

@@ -41,4 +41,8 @@ export default class StudentService {
         return axiosConfig.getAPIClient()
             .get(`/student/get_information_exam_and_remain_minutes/${studentID}`);
     }
+
+    static fetch_Detail_Information_Student_By_StudentID(studentID) {
+        return axiosConfig.getAPIClient().get(`/student/get_detail_information_student_by_student_id/${studentID}`);
+    }
 }

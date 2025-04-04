@@ -81,6 +81,7 @@ export default {
                 <table class="table table-striped custom-table">
                   <thead>
                   <tr>
+                    <th>Index</th>
                     <th>Input</th>
                     <th>Output expect</th>
                     <th>Output</th>
@@ -89,6 +90,7 @@ export default {
                   </thead>
                   <tbody>
                   <tr v-for="(l, lIndex) in q.listResultTestCase || []" :key="lIndex">
+                    <td>{{ lIndex + 1 }}</td>
                     <td>{{ l.inputTest }}</td>
                     <td>{{ l.outputExpect }}</td>
                     <td>{{ l.outputCodeStudent }}</td>

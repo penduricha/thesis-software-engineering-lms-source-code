@@ -196,15 +196,34 @@ public class StudentService implements I_StudentService {
     public Map<String, Object> get_Information_Student_Do_Exam(String studentID)
             throws JpaSystemException {
         Map<String, Object> queryMap = studentRepository.get_Information_Student_Do_Exam(studentID);
-        Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("examID", queryMap.get("exam_id"));
-        returnMap.put("remainMinutes", queryMap.get("remain_minutes"));
-        //System.out.println(queryMap);
-        return returnMap;
+        if(!queryMap.isEmpty()) {
+            Map<String, Object> returnMap = new HashMap<>();
+            returnMap.put("examID", queryMap.get("exam_id"));
+            returnMap.put("remainMinutes", queryMap.get("remain_minutes"));
+            //System.out.println(queryMap);
+            return returnMap;
+        }
+        return new HashMap<>();
     }
 
     @Override
-    public List<Map<String, Object>> get_Information_Student_Detail_By_StudentID(String studentID) {
-        return List.of();
+    public Map<String, Object> get_Information_Student_Detail_By_StudentID(String studentID) throws JpaSystemException {
+        //s.student_id, date_of_birth, last_name, first_name, gender, c.course_name, c.class_name
+        Student studentFound = findStudentByStudentId(studentID);
+        if(studentFound != null) {
+            Map<String, Object> queryMap = studentRepository.get_Information_Student_Detail_By_StudentID(studentID);
+            if(!queryMap.isEmpty()) {
+                Map<String, Object> newMap = new HashMap<>();
+                newMap.put("studentID", queryMap.get("student_id"));
+                newMap.put("dateOfBirth", queryMap.get("date_of_birth"));
+                newMap.put("lastname", queryMap.get("last_name"));
+                newMap.put("firstName", queryMap.get("first_name"));
+                newMap.put("gender", queryMap.get("gender"));
+                newMap.put("courseName", queryMap.get("course_name"));
+                newMap.put("className", queryMap.get("class_name"));
+                return newMap;
+            }
+        }
+        return new HashMap<>();
     }
 }

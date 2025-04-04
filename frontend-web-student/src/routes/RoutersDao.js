@@ -31,6 +31,10 @@ export default class RouterDao {
         }
     }
 
+    destroyPath_From_SessionStorage() {
+        return sessionStorage.removeItem(this.getVariableRouterPathSession());
+    }
+
     getPath_From_SessionStorage(){
         const routerPath = sessionStorage.getItem(this.getVariableRouterPathSession());
         return routerPath || null;

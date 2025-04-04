@@ -98,8 +98,8 @@ export default {
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
       //kiem tra co lam bai ktra hay ko
       let informationDoExam = await StudentDao.get_Information_Student_Access_Exam_And_RemainMinutes(studentID);
-      let accessExam = (informationDoExam.examID === null) && (informationDoExam.remainMinutes === null);
-      if(!accessExam) {
+
+      if(informationDoExam.examID !== undefined) {
         const path = '/main-page/list-exams-page/exam-open/java-core-exam';
         sessionStorage.setItem('indexQuestion', 0);
         window.location.reload();
@@ -119,7 +119,7 @@ export default {
             path: path,
             query: {
               examID: informationDoExam.examID,
-              duration: Number(informationDoExam.remainMinutes) + 2
+              duration: Number(informationDoExam.remainMinutes)
             }
           }).catch((error) => {
             console.error('Error navigating :', error);
@@ -189,7 +189,6 @@ export default {
         } else if (status === "Completed") {
           return "color-status-complete";
         }
-        return ""; // Default case, if needed
       };
     },
 

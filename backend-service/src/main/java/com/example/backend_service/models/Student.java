@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class Student implements Serializable {
     private String lastName;
 
     @Column(nullable = false, columnDefinition = "nvarchar(10)")
+//    @ColumnDefault("")
     private String firstName;
 
     @Column(nullable = false)
@@ -43,6 +46,8 @@ public class Student implements Serializable {
     @Column(columnDefinition = "datetime", nullable = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateTimeStartExam;
+
+//    private Instant createAt;
 
     public List<MarkStudent> getMarkStudentList() {
         return markStudentList;

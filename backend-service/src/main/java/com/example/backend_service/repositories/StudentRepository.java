@@ -52,4 +52,13 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             """,
             nativeQuery = true)
     Map<String, Object> get_Information_Student_Do_Exam(@Param("studentID") String studentID);
+
+    @Query(value = """
+            select s.student_id, date_of_birth, last_name, first_name, gender, c.course_name, c.class_name
+            from student s
+            left join course c on s.course_id = c.course_id
+            where student_id = :studentID;
+            """,
+            nativeQuery = true)
+    Map<String, Object> get_Information_Student_Detail_By_StudentID(@Param("studentID") String studentID);
 }

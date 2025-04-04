@@ -19,6 +19,7 @@ import ModalNotificationAfterSubmit from "@/pages/ui-exam-questions/ModalNotific
 import CodeStorageDao from "@/daos/CodeStorageDao.js";
 import ModalFormTestDebugJava from "@/pages/ui-exam-questions/ModalFormTestDebugJava.vue";
 import ExamDao from "@/daos/ExamDao.js";
+import listMenu from "@/components/aside/list-menu.js";
 
 
 export default {
@@ -91,6 +92,7 @@ export default {
     this.setStudent();
     this.setQuestion_By_ExamID();
     this.setViewTable();
+    this.exitException();
   },
 
   mounted() {
@@ -122,48 +124,65 @@ export default {
       this.indexQuestion = Number(sessionStorage.getItem("indexQuestion"));
     },
 
-    async setQuestion_By_ExamID() {
-      this.questions = await QuestionJavaCoreExamDao.getQuestions_By_ExamID(this.examID);
-      console.log("10 questions: ", this.questions);
+    async exitException() {
+      // if (this.questions.length === 0) {
+      //   await this.navigateTo_MainPage();
+      // }
+    },
 
-      //xu li neu co thay doi cau hoi
-      this.pollingInterval = await QuestionJavaCoreExamDao.startPolling_GetQuestions_By_ExamID(this.examID, (updated) => {
-        this.questions = updated;
-        // Cập nhật danh sách bài kiểm tra
-      });
-      this.questionInit = this.questions[this.indexQuestion];
-      const studentLocalStorage  = new StudentLocalStorage();
-      let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
-      if(studentID) {
-        if (this.questionInit) {
-          this.testCasesInit = await QuestionJavaCoreExamDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
-          //console.log("Test case: ", this.testCasesInit);
-          this.contentQuestion = this.questionInit.contentQuestion;
-          this.score = this.questionInit.score;
-          this.questionJavaCoreExamID  = this.questionInit.questionJavaCoreExamID;
-          //get code da save
-          this.codeSaved = await CodeStorageDao.get_Code_Saved_By_StudentID(studentID);
-          if(this.codeSaved.length > 0) {
-            this.indexQuestionSaved = this.codeSaved.map(c => c.indexQuestion);
-            console.log("Index question saved: ", this.indexQuestionSaved);
-          }
-          console.log("Code saved: ", this.codeSaved);
-          let codeGet = await CodeStorageDao
-              .get_Code_By_IndexQuestion_StudentID(studentID, Number(this.indexQuestion));
-          if (codeGet) {
-            this.code = codeGet;
-          } else {
-            this.code = this.questionInit.codeSample;
-          }
-
-          //check button mark flag
-          // if(this.questionInit.isMarkedFlag === true){
-          //   this.nameButtonMarkFlag = "Remove flag";
-          // } else {
-          //   this.nameButtonMarkFlag = "Mark flag";
+    async navigateTo_MainPage() {
+      clearInterval(this.timer);
+      // Xóa thời gian khi đã hết
+      sessionStorage.removeItem('timeLeft');
+      const itemsMenu = listMenu;
+      const path = itemsMenu.find(item => item.index === 1)?.path;
+      this.savePath_Init_To_LocalStorage(path);
+      this.$router.replace({
+          path: path,
+          // query: {
           // }
+      }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+      });
+    },
+
+    async setQuestion_By_ExamID() {
+        this.questions = await QuestionJavaCoreExamDao.getQuestions_By_ExamID(this.examID);
+        console.log("10 questions: ", this.questions);
+
+        //xu li neu co thay doi cau hoi
+        this.pollingInterval = await QuestionJavaCoreExamDao.startPolling_GetQuestions_By_ExamID(this.examID, (updated) => {
+          this.questions = updated;
+          // Cập nhật danh sách bài kiểm tra
+        });
+        this.questionInit = this.questions[this.indexQuestion];
+        const studentLocalStorage  = new StudentLocalStorage();
+        let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
+        if(studentID) {
+          if (this.questionInit) {
+            this.testCasesInit = await QuestionJavaCoreExamDao.getTestCases_By_QuestionJavaCoreExamID(this.questionInit.questionJavaCoreExamID);
+            //console.log("Test case: ", this.testCasesInit);
+            this.contentQuestion = this.questionInit.contentQuestion;
+            this.score = this.questionInit.score;
+            this.questionJavaCoreExamID  = this.questionInit.questionJavaCoreExamID;
+            //get code da save
+            this.codeSaved = await CodeStorageDao.get_Code_Saved_By_StudentID(studentID);
+            if(this.codeSaved.length > 0) {
+              this.indexQuestionSaved = this.codeSaved.map(c => c.indexQuestion);
+              console.log("Index question saved: ", this.indexQuestionSaved);
+            }
+            console.log("Code saved: ", this.codeSaved);
+            let codeGet = await CodeStorageDao
+                .get_Code_By_IndexQuestion_StudentID(studentID, Number(this.indexQuestion));
+            if (codeGet) {
+              this.code = codeGet;
+            } else {
+              this.code = this.questionInit.codeSample;
+            }
+          }
         }
-      }
+
     },
 
     async setStudent() {

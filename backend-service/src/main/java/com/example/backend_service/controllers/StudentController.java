@@ -34,7 +34,7 @@ public class StudentController {
     }
 
     @GetMapping("/student/studentID_password/{studentID}")
-    public Map<String, Object> findStudentByStudentId(@PathVariable String studentID)
+    public ResponseEntity<Map<String, Object>> findStudentByStudentId(@PathVariable String studentID)
             throws HttpClientErrorException{
         Map<String, Object> studentMap = new HashMap<>();
         Student student = studentService.findStudentByStudentId(studentID);
@@ -42,11 +42,11 @@ public class StudentController {
             studentMap.put("studentID",student.getStudentID());
             studentMap.put("password",student.getPassword());
         }
-        return studentMap;
+        return ResponseEntity.ok(studentMap);
     }
 
     @GetMapping("/student/studentID_name/{studentID}")
-    public Map<String, Object> findStudentID_Name_ByStudentId(@PathVariable String studentID)
+    public ResponseEntity<Map<String, Object>> findStudentID_Name_ByStudentId(@PathVariable String studentID)
             throws HttpClientErrorException{
         Map<String, Object> studentNameMap = new HashMap<>();
         Student student = studentService.findStudentByStudentId(studentID);
@@ -55,7 +55,7 @@ public class StudentController {
             studentNameMap.put("lastName",student.getLastName());
             studentNameMap.put("firstName",student.getFirstName());
         }
-        return studentNameMap;
+        return ResponseEntity.ok(studentNameMap);
     }
 
     @GetMapping("/student/getPassword_By_StudentID/{studentID}")
@@ -149,5 +149,11 @@ public class StudentController {
     public ResponseEntity<List<Map<String, Object>>> get_Code_Storage_Saved_By_Student_ID(@PathVariable String studentID)
             throws HttpClientErrorException{
         return ResponseEntity.ok(codeStorageSaveService.get_Code_Storage_Saved_By_Student_ID(studentID));
+    }
+
+    @GetMapping("/student/get_detail_information_student_by_student_id/{studentID}")
+    public ResponseEntity<Map<String, Object>> get_Information_Student_Detail_By_StudentID(@PathVariable String studentID)
+            throws HttpClientErrorException {
+        return ResponseEntity.ok(studentService.get_Information_Student_Detail_By_StudentID(studentID));
     }
 }

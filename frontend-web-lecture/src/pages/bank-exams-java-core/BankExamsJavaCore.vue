@@ -13,11 +13,13 @@ import ModalDeleteQuestion from "@/pages/bank-exams-java-core/ModalDeleteQuestio
 import SessionStorageQuestionJavaCoreChoose
   from "@/pages/bank-exams-java-core/create-exam-with-choose-questions/SessionStorageQuestionJavaCoreChoose.js";
 import SessionStorageTestCase from "@/pages/bank-exams-java-core/SessionStorageTestCase.js";
+import NavBarBankExam from "@/pages/bank-exams-nav-bar/NavBarBankExam.vue";
 
 export default {
   name: "BankExams",
 
   components: {
+    NavBarBankExam,
     ModalDeleteQuestion,
     ModalUpdateQuestion,
     ModalCreateQuestion,
@@ -27,7 +29,6 @@ export default {
   data() {
     return {
       searchQuery: null,
-      selectedTopic: "All Topics",
       bankQuestionJavaCore: [],
 
       filteredQuestions: [],
@@ -53,10 +54,10 @@ export default {
     saveRouter_Path(route) {
       const routerDao = new RouterDao();
       routerDao.savePath_To_SessionStorage(route);
-      const storedParameters = sessionStorage.getItem('parameters');
-      // if (storedParameters) {
-      //   sessionStorage.removeItem('parameters');
-      // }
+      // const storedParameters = sessionStorage.getItem('parameters');
+      // // if (storedParameters) {
+      // //   sessionStorage.removeItem('parameters');
+      // // }
     },
 
     async setListBankQuestionJavaCore() {
@@ -84,7 +85,7 @@ export default {
 
     navigateTo_CreateExam() {
       this.$router.push({
-        path: '/main-page/bank-exams-java-core/java-core/create-exam-choose',
+        path: '/main-page/bank-exams/java-core/create-exam-choose',
         query: {
           //selectedQuestionIDs: this.selectedQuestionIDs,
         }
@@ -118,7 +119,7 @@ export default {
 
     handleNavigateCreateExamJavaCoreRandom() {
       this.$router.push({
-        path: '/main-page/bank-exams-java-core/java-core/create-exam-random',
+        path: '/main-page/bank-exams/java-core/create-exam-random',
         query: {
           //selectedQuestionIDs: this.selectedQuestionIDs,
         }
@@ -138,7 +139,7 @@ export default {
 
   computed: {
     setActiveButtonNavTopic() {
-      if(this.getRoute() === "/main-page/bank-exams-java-core/java-core"){
+      if(this.getRoute().includes("/main-page/bank-exams/java-core")){
         return "button-nav-course-active";
       } else {
         return null;
@@ -153,14 +154,14 @@ export default {
   <AsideMenu />
   <main >
     <section class="section-banks">
-      <h5>Bank Exam Java Core</h5>
-      <div class="tab-container">
-        <button class="button-nav-in-course"
-                :class="['active-button', setActiveButtonNavTopic]"
-        >Java Core</button>
-        <button class="button-nav-in-course">Java Single Class</button>
-        <button class="button-nav-in-course">Java Mapping Class</button>
-      </div>
+      <h5>Bank Exam</h5>
+<!--      <div class="tab-container">-->
+<!--        <button class="button-nav-in-course"-->
+<!--                :class="['active-button', setActiveButtonNavTopic]"-->
+<!--        >Java Core</button>-->
+<!--        <button class="button-nav-in-course">Java Oop Class</button>-->
+<!--      </div>-->
+      <nav-bar-bank-exam />
       <div class="row mb-3">
         <div class="col-md-4">
           <div class="input-group">
@@ -184,11 +185,6 @@ export default {
                   @click="handleNavigateCreateExam()"
           >Create exam java core</button>
         </div>
-<!--        <div class="col-md-8">-->
-<!--          <button class="btn btn-primary button-purple"-->
-<!--                  @click="handleNavigateCreateExamJavaCoreRandom()"-->
-<!--          >Create exam java core by random</button>-->
-<!--        </div>-->
       </div>
       <div class="row-mb-3">
         <button class="btn btn-primary button-purple"

@@ -387,7 +387,7 @@ export default {
                     class="form-control"
                     :class="[{'is-invalid': validateTitleExam !== null}]"
                     placeholder="Enter exam title"
-                    maxlength="15"
+                    maxlength="30"
                     @input="setInputExamTitle()"
                     v-model="titleExam"
                 />

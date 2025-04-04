@@ -104,4 +104,16 @@ export default class StudentDao {
         })
         return responseReturn;
     }
+
+    static async get_Detail_Information_Student_By_StudentID(studentID){
+        let detailInformation = {}
+        await StudentService.fetch_Detail_Information_Student_By_StudentID(studentID)
+            .then(response => {
+                detailInformation = response.data;
+            }).catch(error => {
+                console.error(error);
+                //alert(error)
+            })
+        return detailInformation;
+    }
 }

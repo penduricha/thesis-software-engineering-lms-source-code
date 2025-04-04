@@ -33,7 +33,7 @@ public class LectureController {
 //            return ResponseEntity.notFound().build();
 //    }
     @GetMapping("/lecture/lectureID_password/{lectureID}")
-    public Map<String, Object> findLectureByLectureID(@PathVariable String lectureID) throws HttpClientErrorException {
+    public ResponseEntity<Map<String, Object>> findLectureByLectureID(@PathVariable String lectureID) throws HttpClientErrorException {
         Map<String, Object> lectureMap = new HashMap<>();
         if(lectureID.charAt(0) == '0'){
             String lectureIDFind = lectureID.substring(1);
@@ -43,11 +43,11 @@ public class LectureController {
                 lectureMap.put("password", lecture.getPassword());
             }
         }
-        return lectureMap;
+        return ResponseEntity.ok(lectureMap);
     }
 
     @GetMapping("/lecture/lectureID_name/{lectureID}")
-    public Map<String, Object> findLectureID_Name_ByLectureId(@PathVariable String lectureID) throws HttpClientErrorException{
+    public ResponseEntity<Map<String, Object>> findLectureID_Name_ByLectureId(@PathVariable String lectureID) throws HttpClientErrorException{
         Map<String, Object> lectureNameMap = new HashMap<>();
         if(lectureID.charAt(0) == '0'){
             String lectureIDFind = lectureID.substring(1);
@@ -57,7 +57,7 @@ public class LectureController {
                 lectureNameMap.put("name", lecture.getName());
             }
         }
-        return lectureNameMap;
+        return ResponseEntity.ok(lectureNameMap);
     }
 
     @GetMapping("/lecture/getPassword_By_LectureID/{lectureID}")

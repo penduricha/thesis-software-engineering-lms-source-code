@@ -33,5 +33,5 @@ public interface I_StudentService {
 
     public Map<String, Object> get_Information_Student_Do_Exam(String studentID);
 
-    public List<Map<String, Object>> get_Information_Student_Detail_By_StudentID(String studentID);
+    public Map<String, Object> get_Information_Student_Detail_By_StudentID(String studentID);
 }

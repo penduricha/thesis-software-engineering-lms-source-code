@@ -439,10 +439,7 @@ export default {
           const text = e.target.result;
           sessionStorage.removeItem("testCases");
           this.listTestCases = [];
-
           this.listTestCases = this.parseCsvData(text);
-          console.log("lis", this.listTestCases);
-
           sessionStorage.setItem("testCases", JSON.stringify(this.listTestCases));
         };
         reader.readAsText(file);
@@ -701,7 +698,6 @@ export default {
               </table>
             </div>
             <span v-if="validationNullTestCases" class="span-validate-modal-form">{{ validationNullTestCases }}</span>
-
 
             <div class="text-center mt-3">
               <button type="submit" class="btn button-purple" @click="createQuestion">Create question</button>

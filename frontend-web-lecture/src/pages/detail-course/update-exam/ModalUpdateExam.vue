@@ -5,7 +5,7 @@ import Password from "@/models/Password.js";
 import ExamDao from "@/daos/ExamDao.js";
 import ManageDateTime from "@/date-time/ManageDateTime.js";
 import '../../components/checkbox/checkbox-view-table.scss';
-
+import listMinuteDuration from "@/assets/data/listMinuteDuration.js";
 export default {
   name: "ModalUpdateExam",
 
@@ -38,6 +38,7 @@ export default {
   mounted() {
     //call method set input
     this.setInputExamTitle();
+    this.setListDuration();
     // this.setSelectExamType();
     // this.setSelectTopicExam();
     // this.setSelectRetake();
@@ -77,12 +78,19 @@ export default {
       passwordExamHashed: null,
 
       examIDToUpdate: null,
+
+      //set list duration
+      listMinuteDuration: [],
     }
   },
 
   methods: {
     preventPaste(event) {
       event.preventDefault();
+    },
+
+    setListDuration() {
+      this.listMinuteDuration = listMinuteDuration;
     },
 
     async setExam(examIDToUpdate) {
@@ -490,8 +498,10 @@ export default {
                         :class="[{'is-invalid': validateDuration !== null}]"
                         v-model="duration"
                 >
-                  <option value=30>30 minutes</option>
-                  <option value=60>60 minutes</option>
+                  <option v-if="listMinuteDuration.length > 0"
+                          v-for="l in listMinuteDuration" :value="l.duration">
+                    {{l.durationText}}
+                  </option>
                 </select>
                 <span
                     v-if="validateDuration"
@@ -544,7 +554,7 @@ export default {
 
           <div class="mb-3 row" v-if="topicExam === 'Java core'">
             <label for="viewTable" class="col-sm-3 col-form-label">
-              View table
+              View table / diagram
             </label>
             <div class="col-sm-9" style="display: flex; align-items: center">
               <input

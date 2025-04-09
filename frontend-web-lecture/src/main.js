@@ -17,7 +17,6 @@ import { createVuetify } from 'vuetify';
 import 'vuetify/styles';
 import 'vuetify/dist/vuetify-labs.min.css';
 const vuetify = createVuetify();
-
 //font awesome
 import '@fortawesome/fontawesome-free/css/all.min.css';
 //import routers

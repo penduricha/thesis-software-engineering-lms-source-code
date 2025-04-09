@@ -11,6 +11,7 @@ import ExamDao from "@/daos/ExamDao.js";
 import ModalBeforeExam from "@/pages/modal-exam/ModalBeforeExam.vue";
 import ModalExamLocked from "@/pages/modal-exam/ModalExamLocked.vue";
 import '../skeleton/loading-skeleton.scss';
+import ModalViewDetailAccount from "@/components/aside/ModalViewDetailAccount.vue";
 
 export default {
   name: 'AsideAccount',
@@ -30,6 +31,7 @@ export default {
   },
 
   components: {
+    ModalViewDetailAccount,
     ModalExamLocked,
     ModalBeforeExam
 
@@ -311,54 +313,6 @@ export default {
       this.validationConfirmNewPassword = null;
     },
 
-    // async handButtonClick(status, exam) {
-    //   if(status === "Open"){
-    //     if(this.courseID)
-    //       await this.handleGoToModalExamBefore(exam.examID, this.courseID);
-    //   }
-    // },
-
-    // async handleGoToModalExamBefore(examID, courseID) {
-    //   await this.$refs.modalExamBefore.setExam_Information(examID, courseID);
-    // },
-
-    // getStatusExam(e) {
-    //   if(this.examsCalendar) {
-    //     const dateTimeNow = new Date();
-    //     const startDate = new Date(e.startDate);
-    //     const endDate = new Date(e.endDate);
-    //     if(dateTimeNow < startDate) {
-    //       return "Locked";
-    //     } else if(dateTimeNow > endDate && e.complete) {
-    //       return "Complete";
-    //     } else if(dateTimeNow > endDate && !e.complete) {
-    //       return "Overdue";
-    //     } else if((dateTimeNow >= startDate) && (dateTimeNow <= endDate)) {
-    //       return "Open";
-    //     }
-    //     return null;
-    //   }
-    //   return null;
-    // },
-    // getStatusExam(e) {
-    //   if(this.examsCalendar.length > 0) {
-    //     const dateTimeNow = new Date();
-    //     const startDate = new Date(e.startDate);
-    //     const endDate = new Date(e.endDate);
-    //     if(dateTimeNow < startDate) {
-    //       return "Locked";
-    //     } else if(dateTimeNow > endDate && e.complete) {
-    //       return "Complete";
-    //     } else if(dateTimeNow > endDate && !e.complete) {
-    //       return "Overdue";
-    //     } else if((dateTimeNow >= startDate) && (dateTimeNow <= endDate)) {
-    //       return "Open";
-    //     }
-    //     return null;
-    //   }
-    //   return null;
-    // },
-
     async handButtonClick(e, status) {
       this.$emit('handleButtonClick', status, e);
     },
@@ -372,11 +326,16 @@ export default {
           return "#modal-exam-overdue";
         } else if(status === "Open") {
           return "#modal-java-core-before-exam";
+        } else if(status === "Completed") {
+          return null;
         }
-        return null;
       }
       return null;
     },
+
+    async handeViewProfile() {
+      await this.$refs.modalViewDetailAccount.setInformationStudent_By_StudentID();
+    }
   },
 
   computed: {
@@ -410,7 +369,10 @@ export default {
            data-bs-toggle="dropdown" aria-expanded="true"
       >
       <ul class="dropdown-menu dropdown-menu-lg-start view-menu-dropdown">
-        <li class="dropdown-item button-item-dropdown">
+        <li class="dropdown-item button-item-dropdown"
+            data-bs-toggle="modal" data-bs-target="#modal-view-detail-account"
+            @click="handeViewProfile()"
+        >
           View Profile
         </li>
         <li class="dropdown-item button-item-dropdown"
@@ -465,9 +427,6 @@ export default {
       <div class="view-items-exams-by-day">
         <button v-if="examsCalendar.length > 0" class="item-exam"
                 v-for="(exam, index) in examsCalendar"
-                data-bs-toggle="modal"
-                :data-bs-target="getModalIDToOpen(exam)"
-                @click="handButtonClick(exam, exam.status)"
         >
           <div class="view-item-exam view-index-exam">
             {{index+1}}
@@ -550,6 +509,7 @@ export default {
 <!--  <modal-before-exam ref="modalExamBefore_From_AsideAccount"/>-->
 <!--  <modal-before-exam ref="modalExamBeforeInAside"/>-->
 <!--  <modal-exam-locked ref="modalExamLockedInAside"/>-->
+  <modal-view-detail-account ref="modalViewDetailAccount"/>
 </template>
 
 <style scoped lang="scss">

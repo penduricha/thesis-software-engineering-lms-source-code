@@ -272,10 +272,12 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
                 //xoá phan diem thi nếu sv làm xong
                 deleteMarkStudentID_By_MarkStudentID(markStudentFound_By_ExamID.getMarkStudentID());
             }
-            //Xoa bai ktra
-            entityManager.createNativeQuery("delete from question_java_core_exam where exam_id = :examID")
-                    .setParameter("examID", exam.getExamID())
-                    .executeUpdate();
+            //Xoa bai ktra neu la java core
+            if(exam.getTopicExam().equalsIgnoreCase("Java core")) {
+                entityManager.createNativeQuery("delete from question_java_core_exam where exam_id = :examID")
+                        .setParameter("examID", exam.getExamID())
+                        .executeUpdate();
+            }
 
             entityManager.createNativeQuery("delete from exam where exam_id = :examID")
                     .setParameter("examID", exam.getExamID())

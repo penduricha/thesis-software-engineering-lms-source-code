@@ -216,7 +216,7 @@ public class StudentService implements I_StudentService {
                 Map<String, Object> newMap = new HashMap<>();
                 newMap.put("studentID", queryMap.get("student_id"));
                 newMap.put("dateOfBirth", queryMap.get("date_of_birth"));
-                newMap.put("lastname", queryMap.get("last_name"));
+                newMap.put("lastName", queryMap.get("last_name"));
                 newMap.put("firstName", queryMap.get("first_name"));
                 newMap.put("gender", queryMap.get("gender"));
                 newMap.put("courseName", queryMap.get("course_name"));

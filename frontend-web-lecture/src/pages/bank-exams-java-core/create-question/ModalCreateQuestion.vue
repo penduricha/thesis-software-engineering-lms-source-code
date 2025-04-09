@@ -1,6 +1,6 @@
 <script>
-import './bank-exams.scss';
-import '../../components/span/span-style.scss';
+import '../bank-exams.scss';
+import '../../../components/span/span-style.scss';
 import './modal-create-question.scss';
 
 //import code-mirror
@@ -516,7 +516,7 @@ export default {
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Add New Question</h5>
+          <h5 class="modal-title">Add new question</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

@@ -18,11 +18,13 @@ import AsideMenu from "@/components/aside/AsideMenu.vue";
 import Validation from "@/validation/Validation.js";
 import StringFormat from "@/models/StringFormat.js";
 import Password from "@/models/Password.js";
-import ModalUpdateExam from "@/pages/detail-course/ModalUpdateExam.vue";
+import ModalUpdateExam from "@/pages/detail-course/update-exam/ModalUpdateExam.vue";
 import ExamDao from "@/daos/ExamDao.js";
-import ModalDeleteExam from "@/pages/detail-course/ModalDeleteExam.vue";
+import ModalDeleteExam from "@/pages/detail-course/delete-exam/ModalDeleteExam.vue";
 import ListExam from "@/pages/detail-course/component-menu-course/ListExam.vue";
 import ModalUpdateQuestionExam from "@/pages/detail-course/component-menu-course/ModalEditQuestionExam.vue";
+import listMinuteDuration from "@/assets/data/listMinuteDuration.js";
+import listTopicExam from "@/assets/data/listTopicExam.js";
 
 export default {
   name: "CourseManage",
@@ -84,7 +86,11 @@ export default {
       passwordExam: null,
       passwordExamHashed: null,
 
+      //set list duration
+      listMinuteDuration: [],
 
+      //list topic exam
+      listTopicExam: listTopicExam,
     }
   },
 
@@ -98,6 +104,7 @@ export default {
   mounted() {
     //call method set input
     this.setInputExamTitle();
+    this.setListDuration();
     // this.setSelectExamType();
     // this.setSelectTopicExam();
     // this.setSelectRetake();
@@ -128,6 +135,10 @@ export default {
         this.lectureID = '1120050';
         //mã bảo hà
       }
+    },
+
+    setListDuration() {
+      this.listMinuteDuration = listMinuteDuration;
     },
 
     async setExams() {
@@ -461,7 +472,7 @@ export default {
         <button class="button-nav-in-course"
                 :class="['active-button', setActiveButtonNavListExam]"
         >List exams</button>
-        <button class="button-nav-in-course">Student Grades List</button>
+        <button class="button-nav-in-course">List student</button>
         <button class="button-nav-in-course">Statistic</button>
       </div>
       <list-exam :exams="exams"
@@ -549,9 +560,9 @@ export default {
                         v-model="topicExam"
                         :class="[{'is-invalid': validateTopicExam !== null}]"
                 >
-                  <option value="Java core">Java core</option>
-<!--                  <option value="Java class single">Java class single</option>-->
-<!--                  <option value="Java class mapping">Java class mapping</option>-->
+                  <option v-for="l in listTopicExam"
+                          :value="l"
+                  >{{l}}</option>
                 </select>
                 <span
                     v-if="validateTopicExam"
@@ -612,8 +623,10 @@ export default {
                         :class="[{'is-invalid': validateDuration !== null}]"
                         v-model="duration"
                 >
-                  <option value="30">30 minutes</option>
-                  <option value="60">60 minutes</option>
+                  <option v-if="listMinuteDuration.length > 0"
+                          v-for="l in listMinuteDuration" :value="l.duration">
+                    {{l.durationText}}
+                  </option>
                 </select>
                 <span
                     v-if="validateDuration"

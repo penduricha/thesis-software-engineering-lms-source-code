@@ -192,6 +192,13 @@ export default {
               </tr>
               </thead>
               <tbody>
+              <tr v-if="questionJavaCoreExams.length === 0">
+                <td colspan="5" class="text-center">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </td>
+              </tr>
               <tr v-for="(question, index) in questionJavaCoreExams"
                   :key="question.questionJavaCoreID"
               >
@@ -255,6 +262,13 @@ export default {
               </tr>
               </thead>
               <tbody>
+              <tr v-if="filteredQuestions.length === 0">
+                <td colspan="5" class="text-center">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </td>
+              </tr>
               <tr v-for="(question, index) in filteredQuestions"
                   :key="question.questionJavaCoreID"
               >

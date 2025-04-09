@@ -81,5 +81,4 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@use '@/scss/main';
 </style>

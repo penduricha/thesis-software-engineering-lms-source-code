@@ -8,7 +8,7 @@ import RouterDao from "@/routes/RoutersDao.js";
 import LectureDao from "@/daos/LectureDao.js";
 import Password from "@/models/Password.js";
 import ExamDao from "@/daos/ExamDao.js";
-import ModalUpdateExam from "@/pages/detail-course/ModalUpdateExam.vue";
+import ModalUpdateExam from "@/pages/detail-course/update-exam/ModalUpdateExam.vue";
 import '../skeleton/loading-skeleton.scss';
 
 export default {

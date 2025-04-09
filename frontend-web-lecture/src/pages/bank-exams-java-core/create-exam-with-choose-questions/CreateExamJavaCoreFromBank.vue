@@ -15,7 +15,7 @@ import SessionStorageQuestionJavaCoreChoose
   from "@/pages/bank-exams-java-core/create-exam-with-choose-questions/SessionStorageQuestionJavaCoreChoose.js";
 import ModalAddQuestions from "@/pages/bank-exams-java-core/create-exam-with-choose-questions/ModalAddQuestions.vue";
 // import '../../../components/checkbox/checkbox-view-table.scss';
-
+import listMinuteDuration from "@/assets/data/listMinuteDuration.js";
 export default {
   name: "ModalCreateExamJavaCoreFromBank",
 
@@ -44,6 +44,7 @@ export default {
   mounted() {
     //call method set input
     this.setInputExamTitle();
+    this.setListDuration();
     // this.setSelectExamType();
     // this.setSelectTopicExam();
     // this.setSelectRetake();
@@ -93,6 +94,9 @@ export default {
 
       //number score
       numbersScore: Array.from({ length: 10 }, (_, i) => i + 1),
+
+      //set list duration
+      listMinuteDuration: [],
     }
   },
 
@@ -110,6 +114,10 @@ export default {
         this.lectureID = '1120050';
         //mã bảo hà
       }
+    },
+
+    setListDuration() {
+      this.listMinuteDuration = listMinuteDuration;
     },
 
     async setCourses(){
@@ -132,6 +140,11 @@ export default {
         this.selectedQuestions = sessionQuestionJavaCoreChoose.getAllQuestions();
         console.log(this.selectedQuestions);
       }
+    },
+
+    fetchSessionQuestions() {
+      const sessionQuestionJavaCoreChoose = new SessionStorageQuestionJavaCoreChoose();
+      this.selectedQuestions = sessionQuestionJavaCoreChoose.getAllQuestions();
     },
 
     getRoute() {
@@ -506,28 +519,6 @@ export default {
                   >{{validateTypeExam}}</span>
                 </div>
               </div>
-
-<!--              <div class="mb-3 row">-->
-<!--                <label class="col-sm-3 col-form-label">-->
-<!--                  Topic:<span class="required-star">*</span>-->
-<!--                </label>-->
-<!--                <div class="col-sm-9">-->
-<!--                  <select class="form-select"-->
-<!--                          @change="setSelectTopicExam()"-->
-<!--                          v-model="topicExam"-->
-<!--                          :class="[{'is-invalid': validateTopicExam !== null}]"-->
-<!--                  >-->
-<!--                    <option value = "Java core">Java core</option>-->
-<!--                    &lt;!&ndash;                  <option value = "Java class single">Java class single</option>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                  <option value = "Java class mapping">Java class mapping</option>&ndash;&gt;-->
-<!--                  </select>-->
-<!--                  <span-->
-<!--                      v-if="validateTopicExam"-->
-<!--                      class="span-validate-modal-form"-->
-<!--                  >{{validateTopicExam}}.</span>-->
-<!--                </div>-->
-<!--              </div>-->
-
               <div class="mb-3 row">
                 <label class="col-sm-3 col-form-label">
                   Retake:<span class="required-star">*</span>
@@ -580,8 +571,10 @@ export default {
                           :class="[{'is-invalid': validateDuration !== null}]"
                           v-model="duration"
                   >
-                    <option value=30>30 minutes</option>
-                    <option value=60>60 minutes</option>
+                    <option v-if="listMinuteDuration.length > 0"
+                            v-for="l in listMinuteDuration" :value="l.duration">
+                      {{l.durationText}}
+                    </option>
                   </select>
                   <span
                       v-if="validateDuration"
@@ -631,20 +624,6 @@ export default {
                 >{{validateEndDate}}</span>
               </div>
             </div>
-
-<!--            <div class="mb-3 row">-->
-<!--              <label for="viewTable" class="col-sm-3 col-form-label">-->
-<!--                View table-->
-<!--              </label>-->
-<!--              <div class="col-sm-9" style="display: flex; align-items: center">-->
-<!--                <input-->
-<!--                    type="checkbox"-->
-<!--                    class="style-check-box-view-exam"-->
-<!--                    v-model="viewTable"-->
-<!--                />-->
-<!--              </div>-->
-<!--            </div>-->
-
             <div class="mb-3 row" v-if="courses.length > 0">
               <label class="col-sm-3 col-form-label">
                 Choose course:<span class="required-star">*</span>
@@ -747,7 +726,6 @@ export default {
                       class="form-control"
                       v-model="question.score"
                       @input="updateScoreByIndex(index, question.score)"
-                      :max="10 - totalScoreExceptCurrent(index)"
                       min="0.25"
                       step="0.25"
                       @keydown.prevent
@@ -778,6 +756,7 @@ export default {
       v-if="bankQuestionJavaCore.length > 0"
       :bank-question-java-core="bankQuestionJavaCore"
       ref="modalAddQuestion"
+      @fetch-questions-session="fetchSessionQuestions"
   />
 </template>
 

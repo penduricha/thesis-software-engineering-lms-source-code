@@ -78,6 +78,34 @@ public class Exam implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endDate;
 
+    public ExamJavaOop getExamJavaOop() {
+        return examJavaOop;
+    }
+
+    public void setExamJavaOop(ExamJavaOop examJavaOop) {
+        this.examJavaOop = examJavaOop;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public LocalDateTime getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(LocalDateTime updateAt) {
+        this.updateAt = updateAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Column(columnDefinition = "nvarchar(50)")
     private String linkExamPaper;
 
@@ -116,6 +144,10 @@ public class Exam implements Serializable {
     @OneToOne(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonIgnore
     private MarkStudent markStudent;
+
+    @OneToOne(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonIgnore
+    private ExamJavaOop examJavaOop;
 
     //map with student
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "exams",

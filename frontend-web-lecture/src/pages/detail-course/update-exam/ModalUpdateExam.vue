@@ -4,7 +4,7 @@ import StringFormat from "@/models/StringFormat.js";
 import Password from "@/models/Password.js";
 import ExamDao from "@/daos/ExamDao.js";
 import ManageDateTime from "@/date-time/ManageDateTime.js";
-import '../../components/checkbox/checkbox-view-table.scss';
+import '../../../components/checkbox/checkbox-view-table.scss';
 import listMinuteDuration from "@/assets/data/listMinuteDuration.js";
 export default {
   name: "ModalUpdateExam",

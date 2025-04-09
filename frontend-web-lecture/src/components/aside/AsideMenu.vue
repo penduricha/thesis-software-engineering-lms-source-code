@@ -130,22 +130,19 @@ export default {
         </svg>
       </button>
     </h1>
-
     <div class="section-menu">
       <button v-for="i in itemsMenu"
               :key="i.index"
               class="style-button-item-menu"
               @click="handleButtonMenu(i)"
               :class="['background-color-button',
-              setBackGroundColor(i.path)]"
+              setBackGroundColor(i.pathToSetBackGround)]"
       >
         <img :src="i.imageSrc" alt="exam-list-icon" class="icon-menu">
         <span
               :class="['expand-text-menu',
               setExpandTextMenu]"
         >{{i.name}}</span>
-        <!--      :class="['expand-text-menu',-->
-        <!--      setExpandTextMenu()]"-->
       </button>
     </div>
   </aside>
@@ -153,11 +150,6 @@ export default {
 
 <style scoped lang="scss">
 @use 'aside-menu-style';
-//@media screen and (max-width: 1068px) {
-//  .section-menu{
-//    flex-direction: row;
-//  }
-//}
 .icon-bar {
   width: 2rem;
   height: 2rem;

@@ -13,7 +13,7 @@ select * from student_access_exam;
 
 select * from exam;
 
-update exam set start_date = '2025-04-03 18:00:00'
-where exam_id = 12;
+update exam set start_date = '2025-04-05 13:00:00'
+where exam_id = 13;
 
 select * from student;

@@ -69,4 +69,9 @@ export default class Validation {
         // If all checks passed, the name is valid
         return true;
     }
+
+    static validateRegexHTMLNull(str) {
+        const regexHtmlNull = /^<p>(<br>)*<\/p>$/;
+        return regexHtmlNull.test(str);
+    }
 }

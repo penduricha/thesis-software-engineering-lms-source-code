@@ -8,3 +8,5 @@ npm install vuetify@next @mdi/font
 
 //font awesome
 npm install --save font-awesome
+
+//text editor include format

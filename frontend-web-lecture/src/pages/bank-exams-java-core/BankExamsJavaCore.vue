@@ -5,11 +5,11 @@ import '../main/list-courses.scss';
 import AsideMenu from "@/components/aside/AsideMenu.vue";
 import AsideAccount from "@/components/aside/AsideAccount.vue";
 import RouterDao from "@/routes/RoutersDao.js";
-import ModalCreateQuestion from "@/pages/bank-exams-java-core/ModalCreateQuestion.vue";
+import ModalCreateQuestion from "@/pages/bank-exams-java-core/create-question/ModalCreateQuestion.vue";
 import '../detail-course/course-manage.scss';
 import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
-import ModalUpdateQuestion from "@/pages/bank-exams-java-core/ModalUpdateQuestion.vue";
-import ModalDeleteQuestion from "@/pages/bank-exams-java-core/ModalDeleteQuestion.vue";
+import ModalUpdateQuestion from "@/pages/bank-exams-java-core/update-question/ModalUpdateQuestion.vue";
+import ModalDeleteQuestion from "@/pages/bank-exams-java-core/delete-question/ModalDeleteQuestion.vue";
 import SessionStorageQuestionJavaCoreChoose
   from "@/pages/bank-exams-java-core/create-exam-with-choose-questions/SessionStorageQuestionJavaCoreChoose.js";
 import SessionStorageTestCase from "@/pages/bank-exams-java-core/SessionStorageTestCase.js";
@@ -64,6 +64,9 @@ export default {
       this.bankQuestionJavaCore = await BankQuestionJavaCoreDao.get_Bank_Questions_JavaCore();
       if(this.bankQuestionJavaCore.length > 0){
         this.filteredQuestions = this.bankQuestionJavaCore;
+      }
+      if(this.bankQuestionJavaCore.length === 0) {
+        alert("No question java core.");
       }
     },
 
@@ -155,12 +158,6 @@ export default {
   <main >
     <section class="section-banks">
       <h5>Bank Exam</h5>
-<!--      <div class="tab-container">-->
-<!--        <button class="button-nav-in-course"-->
-<!--                :class="['active-button', setActiveButtonNavTopic]"-->
-<!--        >Java Core</button>-->
-<!--        <button class="button-nav-in-course">Java Oop Class</button>-->
-<!--      </div>-->
       <nav-bar-bank-exam />
       <div class="row mb-3">
         <div class="col-md-4">

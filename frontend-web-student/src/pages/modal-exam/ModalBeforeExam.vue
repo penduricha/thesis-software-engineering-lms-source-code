@@ -123,6 +123,8 @@ export default {
         if (this.topicExam === "Java core") {
           await this.navigateTo_JavaCoreExam();
         }
+        //ktra java oop
+
       } else {
         if (!this.passwordExamInput) {
           this.validatePasswordExam = "Please enter password.";
@@ -197,27 +199,6 @@ export default {
                 class="span-validate-modal-form"
             >{{ validatePasswordExam }}</span>
           </div>
-<!--          <h5 v-if="retake === 'Yes'"><span>Time retakes:</span> </h5>-->
-<!--          <table class="table table-striped" v-if="retake === 'Yes'">-->
-<!--            <thead>-->
-<!--            <tr>-->
-<!--              <th>Index</th>-->
-<!--              <th>Date submit</th>-->
-<!--              <th>Mark</th>-->
-<!--              <th>View</th>-->
-<!--            </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--            <tr>-->
-<!--              <td>1</td>-->
-<!--              <td>10/3/2025 10:00</td>-->
-<!--              <td>6.00</td>-->
-<!--              <td><button class="button-view-exam">View</button></td>-->
-<!--            </tr>-->
-<!--            &lt;!&ndash; Thêm các hàng khác nếu cần &ndash;&gt;-->
-<!--            </tbody>-->
-<!--          </table>-->
-
           <button class="btn-do-exam"
                   type="submit"
                   @click="handleGoToExam()"

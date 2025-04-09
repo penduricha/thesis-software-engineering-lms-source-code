@@ -13,6 +13,7 @@ import AsideAccount from "@/components/aside/AsideAccount.vue";
 import AsideMenu from "@/components/aside/AsideMenu.vue";
 import BankQuestionJavaCoreDao from "@/daos/BankQuestionJavaCoreDao.js";
 //import '../../components/checkbox/checkbox-view-table.scss';
+import listMinuteDuration from "@/assets/data/listMinuteDuration.js";
 
 export default {
   name: "CreateExamJavaCoreRandomQuestions",
@@ -42,6 +43,7 @@ export default {
   mounted() {
     //call method set input
     this.setInputExamTitle();
+    this.setListDuration();
     // this.setSelectExamType();
     // this.setSelectTopicExam();
     // this.setSelectRetake();
@@ -90,6 +92,8 @@ export default {
       numberOfQuestionsToRandom: 1,
       validateNumberOfQuestionsToRandom: null,
 
+      //set list duration
+      listMinuteDuration: [],
     }
   },
 
@@ -107,6 +111,10 @@ export default {
         this.lectureID = '1120050';
         //mã bảo hà
       }
+    },
+
+    setListDuration() {
+      this.listMinuteDuration = listMinuteDuration;
     },
 
     async setCourses(){
@@ -516,8 +524,10 @@ export default {
                           :class="[{'is-invalid': validateDuration !== null}]"
                           v-model="duration"
                   >
-                    <option value=30>30 minutes</option>
-                    <option value=60>60 minutes</option>
+                    <option v-if="listMinuteDuration.length > 0"
+                            v-for="l in listMinuteDuration" :value="l.duration">
+                      {{l.durationText}}
+                    </option>
                   </select>
                   <span
                       v-if="validateDuration"

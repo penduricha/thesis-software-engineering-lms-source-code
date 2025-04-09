@@ -18,6 +18,7 @@
       </div>
       <div class="view-button-view-exam">
         <button
+            v-if="e.topicExam === 'Java core'"
             class="text-exam color-status-view"
             data-bs-toggle="modal"
             data-bs-target="#modal-update-questions-exam"

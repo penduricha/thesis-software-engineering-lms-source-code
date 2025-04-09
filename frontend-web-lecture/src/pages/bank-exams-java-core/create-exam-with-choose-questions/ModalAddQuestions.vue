@@ -41,9 +41,21 @@ export default {
               question.questionJavaCoreID,
               question.contentQuestion,
               question.codeSample,
+              0.25
           )
         })
-        window.location.reload();
+        //call lai component cha
+        this.$emit('fetch-questions-session');
+        //call lai modal
+        const allQuestions = sessionQuestionJavaCoreChoose.getAllQuestions();
+        const idsToRemove = allQuestions.map(question => question.questionJavaCoreID);
+        this.tableQuestions = this.bankQuestionJavaCore.filter(question =>
+            !idsToRemove.includes(question.questionJavaCoreID)
+        );
+        this.filteredQuestions = this.tableQuestions;
+
+        //reset select
+        this.selectedQuestions = [];
       }
     },
 
@@ -95,6 +107,7 @@ export default {
               @click="handleAddToExam()"
             >
               Add to exam
+<!--              data-bs-dismiss="modal"-->
             </button>
           </div>
           <div class="mb-3 row style-view-table">

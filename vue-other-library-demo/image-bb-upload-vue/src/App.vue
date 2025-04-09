@@ -31,14 +31,12 @@ export default {
 
       const formData = new FormData();
       formData.append('image', this.selectedFile);
-
       try {
         const response = await axios.post('https://api.imgbb.com/1/upload?key=e43c98a286cf7743092254f845c26e56', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
-
         this.imageUrl = response.data.data.url; // Lấy URL của ảnh đã upload
       } catch (error) {
         console.error("Error uploading image: ", error);

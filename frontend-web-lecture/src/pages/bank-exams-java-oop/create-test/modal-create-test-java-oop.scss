@@ -3,6 +3,15 @@
   font-size: 16px;
 }
 
+//.style-text-editor-quill::-webkit-scrollbar-thumb {
+//  background: #2C2C84;
+//  border-radius: 4px;
+//}
+//
+//.style-text-editor-quill::-webkit-scrollbar-track {
+//  background: #e2ebf0;
+//}
+
 .drop-zone {
   border: 2px dashed #ccc;
   padding: 20px;
@@ -48,4 +57,18 @@
 
 .style-btn-create-test:hover {
   opacity: 0.8;
+}
+
+.ql-editor {
+  font-size: 16px;
+}
+
+.editor{
+  height: 400px;
+  overflow-y: auto;
+}
+
+.style-image-to-update {
+  width: 10rem;
+  height: 10rem;
 }

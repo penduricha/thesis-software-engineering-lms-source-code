@@ -5,7 +5,7 @@ import AsideAccount from "@/components/aside/AsideAccount.vue";
 import NavBarBankExam from "@/pages/bank-exams-nav-bar/NavBarBankExam.vue";
 import BankTestJavaOopDao from "@/daos/BankTestJavaOopDao.js";
 import ModalCreateTestJavaOop from "@/pages/bank-exams-java-oop/create-test/ModalCreateTestJavaOop.vue";
-import ModalUpdateTestJavaOop from "@/pages/bank-exams-java-oop/update-test/ModalUpdateTestJavaOop.vue";
+
 import ModalDeleteTestJavaOop from "@/pages/bank-exams-java-oop/delete-test/ModalDeleteTestJavaOop.vue";
 
 export default {
@@ -13,7 +13,6 @@ export default {
 
   components: {
     ModalDeleteTestJavaOop,
-    ModalUpdateTestJavaOop,
     ModalCreateTestJavaOop,
     NavBarBankExam,
     AsideAccount, AsideMenu
@@ -32,6 +31,8 @@ export default {
   data() {
     return {
       listTestJavaOop: [],
+
+      listNameTestJavaOop: [],
 
       searchQuery: null,
       filteredQuestions: [],
@@ -52,6 +53,8 @@ export default {
       this.listTestJavaOop = await BankTestJavaOopDao.get_List_Java_Test_Oop();
       if(this.listTestJavaOop.length > 0) {
         this.filteredQuestions = this.listTestJavaOop;
+        this.listNameTestJavaOop = this.listTestJavaOop.map(e => e.nameTest);
+        console.log("List name title java oop: ", this.listNameTestJavaOop);
       }
       if(this.listTestJavaOop.length === 0) {
         alert("No test exam java oop.");
@@ -66,6 +69,18 @@ export default {
 
     handleCreateExamJavaOop (){
 
+    },
+
+    handleNavigateToUpdateTest(bankTestJavaOopID) {
+      this.$router.push({
+        path: '/main-page/bank-exams/java-oop/page-update',
+        query: {
+          bankTestJavaOopID: Number(bankTestJavaOopID),
+        }
+      }).catch((error) => {
+        console.error('Error navigating :', error);
+        alert(error);
+      });
     },
   },
 
@@ -98,7 +113,7 @@ export default {
         <div class="col-md-3">
           <button class="btn btn-primary button-purple"
                   data-bs-toggle="modal"
-                  data-bs-target="#modal-create-test-java-oop"
+                  data-bs-target="#modal-create-test-java-oop"6
           >Add test exam</button>
         </div>
       </div>
@@ -122,8 +137,7 @@ export default {
             </td>
             <td>
               <button class="btn btn-sm btn-warning"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modal-update-test-java-oop"
+                     @click="handleNavigateToUpdateTest(l.bankTestJavaOopID)"
               >Edit</button>
             </td>
             <td>
@@ -145,8 +159,7 @@ export default {
   </main>
   <AsideAccount />
   </body>
-  <modal-create-test-java-oop />
-  <modal-update-test-java-oop ref="modalUpdateTestJavaOop"/>
+  <modal-create-test-java-oop  :list-name-test-java-oop="listNameTestJavaOop"/>
   <modal-delete-test-java-oop ref="modalDeleteTestJavaOop"/>
 </template>
 

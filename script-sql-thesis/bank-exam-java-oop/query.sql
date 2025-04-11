@@ -12,3 +12,9 @@ where exam_id = 14;
 select * from bank_test_java_oop;
 
 show columns from bank_test_java_oop;
+
+select * from exam_java_oop;
+
+alter table bank_test_java_oop
+drop column delete_url;
+

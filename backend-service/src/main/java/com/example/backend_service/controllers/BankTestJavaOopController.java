@@ -37,4 +37,16 @@ public class BankTestJavaOopController {
         return ResponseEntity.ok(bankTestJavaOopService.updateBankTestJavaOop_By_BankTestJavaOopID(bankTestJavaOopID,bankTestJavaOop));
     }
 
+    @GetMapping("/test-java-oop/get-test-java-oop-by-id/{bankTestJavaOopID}")
+    public ResponseEntity<BankTestJavaOop> findBankTestJavaOop_By_BankTestJavaOopID
+            (@PathVariable Long bankTestJavaOopID)
+            throws HttpClientErrorException {
+        return ResponseEntity.ok(bankTestJavaOopService.findBankTestJavaOop_By_BankTestJavaOopID(bankTestJavaOopID));
+    }
+
+    @DeleteMapping("/test-java-oop/delete-test-java-oop-by-id/{bankTestJavaOopID}")
+    public ResponseEntity<Long> deleteBankTestJavaOop_By_BankTestJavaOopID(@PathVariable Long bankTestJavaOopID)
+            throws HttpClientErrorException {
+        return ResponseEntity.ok(bankTestJavaOopService.deleteBankTestJavaOop(bankTestJavaOopID));
+    }
 }

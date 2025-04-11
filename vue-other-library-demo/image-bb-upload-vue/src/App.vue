@@ -2,6 +2,7 @@
   <div>
     <input type="file" @change="onFileChange" />
     <button @click="uploadImage">Upload</button>
+    <button @click="deleteImage">Delete</button>
     <div v-if="imageUrl">
       <p>Image uploaded successfully:</p>
       <img :src="imageUrl" alt="Uploaded Image" />
@@ -20,6 +21,17 @@ export default {
     };
   },
   methods: {
+    async deleteImage() {
+      try {
+        const response = await axios.post('https://ibb.co/ZRB9hn5y/8084c77c01b008874d560d94b27454f6');
+        this.message = 'Ảnh đã được xóa thành công!';
+        console.log(response.data);
+      } catch (error) {
+        this.message = 'Lỗi khi xóa ảnh: ' + error.message;
+        console.error(error);
+      }
+    },
+
     onFileChange(event) {
       this.selectedFile = event.target.files[0];
     },
@@ -37,7 +49,8 @@ export default {
             'Content-Type': 'multipart/form-data'
           }
         });
-        this.imageUrl = response.data.data.url; // Lấy URL của ảnh đã upload
+        this.imageUrl = response.data.data.display_url; // Lấy URL của ảnh đã upload
+        console.log(response);
       } catch (error) {
         console.error("Error uploading image: ", error);
       }

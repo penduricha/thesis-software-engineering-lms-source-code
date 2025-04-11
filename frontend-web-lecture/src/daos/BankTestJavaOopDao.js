@@ -30,4 +30,38 @@ export default class BankTestJavaOopDao {
         }
         return status;
     }
+
+    static async get_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID){
+        let bankTestJavaOop = {}
+        await BankTestOopService.fetch_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID)
+            .then(response => {
+                bankTestJavaOop = response.data;
+            }).catch(error => {
+                console.error(error);
+                //alert(error)
+            })
+        return bankTestJavaOop;
+    }
+
+    static async update_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID, testToPut){
+        let status = false;
+        let responseReturn = null;
+        await BankTestOopService.put_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID, testToPut)
+            .then(response => {
+                responseReturn = response.data;
+            }).catch(error => {
+                console.error(error);
+                //alert(error)
+                return status;
+            })
+        if(responseReturn) {
+            status = true;
+        }
+        return status;
+    }
+
+    // static async delete_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID){
+    //     let status = false;
+    //     let responseReturn = null;
+    // }
 }

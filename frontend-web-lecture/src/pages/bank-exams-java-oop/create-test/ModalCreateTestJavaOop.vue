@@ -9,6 +9,13 @@ import BankTestJavaOopDao from "@/daos/BankTestJavaOopDao.js";
 export default {
   name: "ModalCreateTestJavaOop",
 
+  props: {
+    listNameTestJavaOop: {
+      type: Array,
+      required: true,
+    }
+  },
+
   data() {
     return {
       //data
@@ -36,9 +43,32 @@ export default {
 
   methods: {
     setInputNameTest() {
-      if (this.nameTest) {
+      if (!this.nameTest) {
         this.validateNameTest = null;
-        //validate field nameTest;
+      } else {
+        const trimmedNameTest = this.nameTest.trim();
+        // Nếu exams rỗng, kiểm tra regex ngay
+        if (this.listNameTestJavaOop.length === 0) {
+          if (Validation.isFullOfSpaces(trimmedNameTest)) {
+            this.validateNameTest= null;
+          } else if (!Validation.validateString_Title(Validation.removeSpaces(trimmedNameTest))) {
+            this.validateNameTest = "Name test is invalid.";
+          } else {
+            this.validateNameTest = null;
+          }
+        } else {
+          // Nếu exams không rỗng, kiểm tra sự tồn tại trước
+          const hasMatching = this.listNameTestJavaOop.some(ln => ln === trimmedNameTest);
+          if (hasMatching) {
+            this.validateNameTest = "Name test already exists.";
+          } else if (Validation.isFullOfSpaces(trimmedNameTest)) {
+            this.validateNameTest = null;
+          } else if (!Validation.validateString_Title(Validation.removeSpaces(trimmedNameTest))) {
+            this.validateNameTest = "Name test is invalid.";
+          } else {
+            this.validateNameTest = null; // Valid title
+          }
+        }
       }
     },
 
@@ -91,6 +121,11 @@ export default {
 
     removeImage() {
       this.imageClassDiagramUrl = null;
+      this.selectFileImage = null;
+      // Reset the file input
+      if (this.$refs.fileInput) {
+        this.$refs.fileInput.value = null;
+      }
     },
 
     validateNullField() {
@@ -122,6 +157,7 @@ export default {
         //b2: call method post
         //b3: reload page
         //upload anh
+        let deleteUrl = null;
         const formData = new FormData();
         formData.append('image', this.selectFileImage);
         try {
@@ -131,12 +167,13 @@ export default {
               'Content-Type': 'multipart/form-data'
             }
           });
-          this.imageDiagram = response.data.data.url;
+          this.imageDiagram = response.data.data.display_url;
+
         } catch (error) {
           console.error("Error uploading image: ", error);
           alert(error);
         }
-        if(this.imageDiagram) {
+        if(this.imageDiagram && deleteUrl) {
           let testToPost = {
             "nameTest": this.nameTest.trim(),
             "descriptionTest": this.htmlContentDescription,
@@ -168,6 +205,7 @@ export default {
             <div class="mb-3">
               <div class="mb-3">
                 <label class="form-label">Name test:</label>
+                <span class="required-star">*</span>
                 <input class="form-control" maxlength="30" v-model="nameTest" @input="setInputNameTest()"
                        :class="[{ 'is-invalid': validateNameTest !== null }]" placeholder="Name test:"
                 />
@@ -177,12 +215,14 @@ export default {
             </div>
             <div class="mb-3">
               <label class="form-label">Description:</label>
+              <span class="required-star">*</span>
               <div ref="editor" class="editor style-text-editor-quill"/>
               <span v-if="validateHtmlContentDescription" class="span-validate-modal-form">
                   {{ validateHtmlContentDescription }}</span>
             </div>
             <div class="mb-3">
               <label class="form-label">Upload image diagram class:</label>
+              <span class="required-star">*</span>
               <div
                   @dragover.prevent
                   @drop.prevent="handleDrop"
@@ -190,7 +230,7 @@ export default {
               >
                 <h5>Drag and drop or choose image</h5>
                 <input type="file" @change="handleFileChange" accept="image/*" hidden ref="fileInput"
-                       class="form-control"/>
+                       class="form-control" :class="[{ 'is-invalid': validateImageClassDiagramUrl !== null }]"/>
                 <button @click="selectFile" class="button-purple style-btn-choose-image-class">Choose image</button>
 
                 <div v-if="imageClassDiagramUrl" class="style-view-image-uploaded">

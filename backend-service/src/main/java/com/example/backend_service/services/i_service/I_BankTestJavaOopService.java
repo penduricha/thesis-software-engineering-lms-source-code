@@ -14,4 +14,6 @@ public interface I_BankTestJavaOopService {
     public BankTestJavaOop findBankTestJavaOop_By_BankTestJavaOopID(Long bankTestJavaOopID);
 
     public BankTestJavaOop updateBankTestJavaOop_By_BankTestJavaOopID(Long bankTestJavaOopID, BankTestJavaOop bankTestJavaOop);
+
+
 }

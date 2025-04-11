@@ -26,6 +26,8 @@ public class BankTestJavaOop implements Serializable {
     @Column(nullable = false, columnDefinition = "longtext")
     private String descriptionTest;
 
+
+
     @Column(columnDefinition = "nvarchar(100)")
     private String imageDiagram;
 

@@ -497,7 +497,7 @@ export default {
       <div class="modal-content modal-content-create-exam">
         <div class="modal-header">
           <h5 class="modal-title" id="createExamModalLabel">
-            Create New Exam by Topic
+            Create new exam by topic
           </h5>
           <button
               type="button"

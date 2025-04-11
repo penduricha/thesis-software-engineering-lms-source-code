@@ -1,6 +1,7 @@
 package com.example.backend_service.services;
 
 import com.example.backend_service.models.BankTestJavaOop;
+import com.example.backend_service.models.ExamJavaOop;
 import com.example.backend_service.repositories.BankTestJavaOopRepository;
 import com.example.backend_service.services.i_service.I_BankTestJavaOopService;
 import jakarta.persistence.EntityManager;
@@ -18,8 +19,11 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
 
     private final BankTestJavaOopRepository bankTestJavaOopRepository;
 
-    public BankTestJavaOopService(BankTestJavaOopRepository bankTestJavaOopRepository) {
+    private final ExamJavaOopService examJavaOopService;
+
+    public BankTestJavaOopService(BankTestJavaOopRepository bankTestJavaOopRepository, ExamJavaOopService examJavaOopService) {
         this.bankTestJavaOopRepository = bankTestJavaOopRepository;
+        this.examJavaOopService = examJavaOopService;
     }
 
     @Override
@@ -35,7 +39,19 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
     @Override
     public Long deleteBankTestJavaOop(Long bankTestJavaOopID) throws JpaSystemException {
         //xet them record lien quan nua;
-        return 0L;
+        BankTestJavaOop bankTestJavaOop = findBankTestJavaOop_By_BankTestJavaOopID(bankTestJavaOopID);
+        if(bankTestJavaOop != null) {
+            ExamJavaOop examJavaOopFound = examJavaOopService
+                    .getExamJavaOopBy_BankTestJavaOopID(bankTestJavaOopID);
+            if(examJavaOopFound == null) {
+                String sqlDeleteBankTestOop = "delete from bank_test_java_oop where bank_test_java_oop_id = ?";
+                entityManager.createNativeQuery(sqlDeleteBankTestOop)
+                        .setParameter(1, bankTestJavaOop.getBankTestJavaOopID())
+                        .executeUpdate();
+                return bankTestJavaOop.getBankTestJavaOopID();
+            }
+        }
+        return null;
     }
 
     @Override

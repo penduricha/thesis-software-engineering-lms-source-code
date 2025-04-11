@@ -8,6 +8,7 @@ import CreateExamJavaCoreFromBank
 import CreateExamJavaCoreRandomQuestions
     from "@/pages/bank-exams-java-core/create-exam-with-random-questions/CreateExamJavaCoreRandomQuestions.vue";
 import BankExamsJavaOop from "@/pages/bank-exams-java-oop/BankExamsJavaOop.vue";
+import PageUpdateTestJavaOop from "@/pages/bank-exams-java-oop/update-test/PageUpdateTestJavaOop.vue";
 
 const routers = [
     // '/' khi init trang
@@ -28,6 +29,10 @@ const routers = [
     {
         path: '/main-page/bank-exams/java-oop',
         component: BankExamsJavaOop
+    },
+    { path: '/main-page/bank-exams/java-oop/page-update',
+        component: PageUpdateTestJavaOop,
+        props: (route) => ({ bankTestJavaOopID: route.query.bankTestJavaOopID })
     },
 ];
 export default routers;

@@ -1,14 +1,35 @@
 <script>
+
+
+import BankTestJavaOopDao from "@/daos/BankTestJavaOopDao.js";
+
 export default {
   name: "ModalDeleteTestJavaOop",
 
   data() {
-
+    return {
+      bankTestJavaOopIDToDelete: null,
+    }
   },
 
   methods: {
-    async handleDeleteTest() {
+    setBankTestJavaOopID(bankTestJavaOopID) {
+      this.bankTestJavaOopIDToDelete = bankTestJavaOopID;
+    },
 
+    handleResetModal() {
+      this.bankTestJavaOopIDToDelete = null;
+    },
+
+    async handleDeleteTest() {
+      if(this.bankTestJavaOopIDToDelete) {
+        let status = BankTestJavaOopDao
+            .delete_Java_Test_Oop_By_BankTestJavaOopID(this.bankTestJavaOopIDToDelete)
+        if(status) {
+          alert("Delete test java oop successfully.");
+          window.location.reload();
+        }
+      }
     }
   }
 }
@@ -30,7 +51,9 @@ export default {
           <button type="button" class="btn btn-confirm-yes"
                   @click="handleDeleteTest()"
           >Yes</button>
-          <button type="button" class="btn btn-cancel-no" data-bs-dismiss="modal">No</button>
+          <button type="button" class="btn btn-cancel-no" data-bs-dismiss="modal"
+                  @click="handleResetModal()"
+          >No</button>
         </div>
       </div>
     </div>

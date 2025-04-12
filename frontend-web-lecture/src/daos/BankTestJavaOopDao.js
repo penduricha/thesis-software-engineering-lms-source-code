@@ -60,8 +60,19 @@ export default class BankTestJavaOopDao {
         return status;
     }
 
-    // static async delete_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID){
-    //     let status = false;
-    //     let responseReturn = null;
-    // }
+    static async delete_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID){
+        let status = false;
+        let responseReturn = null;
+        await BankTestOopService.delete_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID)
+            .then(response => {
+                responseReturn = response.data;
+            }).catch(error => {
+                console.error(error);
+                return status;
+            })
+        if(responseReturn) {
+            status = true;
+        }
+        return status;
+    }
 }

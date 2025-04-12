@@ -71,6 +71,10 @@ export default {
 
     },
 
+    handleSetModalDelete(bankTestJavaOopID) {
+      this.$refs.modalDeleteTestJavaOop.setBankTestJavaOopID(bankTestJavaOopID);
+    },
+
     handleNavigateToUpdateTest(bankTestJavaOopID) {
       this.$router.push({
         path: '/main-page/bank-exams/java-oop/page-update',
@@ -113,7 +117,7 @@ export default {
         <div class="col-md-3">
           <button class="btn btn-primary button-purple"
                   data-bs-toggle="modal"
-                  data-bs-target="#modal-create-test-java-oop"6
+                  data-bs-target="#modal-create-test-java-oop"
           >Add test exam</button>
         </div>
       </div>
@@ -144,6 +148,7 @@ export default {
               <button class="btn btn-sm btn-danger"
                       data-bs-toggle="modal"
                       data-bs-target="#modal-delete-test-java-oop"
+                      @click="handleSetModalDelete(l.bankTestJavaOopID)"
               >Delete</button>
             </td>
             <td>

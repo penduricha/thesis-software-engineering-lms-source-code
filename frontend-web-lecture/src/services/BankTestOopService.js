@@ -27,9 +27,9 @@ export default class BankTestOopService {
     }
 
     //cho nay sua be
-    // static delete_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID) {
-    //     return axiosConfig
-    //         .getAPIClient()
-    //         .delete(``);
-    // }
+    static delete_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID) {
+        return axiosConfig
+            .getAPIClient()
+            .delete(`/test-java-oop/delete-test-java-oop-by-id/${bankTestJavaOopID}`);
+    }
 }

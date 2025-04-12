@@ -7,6 +7,7 @@ import com.example.backend_service.services.i_service.I_BankTestJavaOopService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import jakarta.transaction.Transactional;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
     }
 
     @Override
+    @Transactional
     public Long deleteBankTestJavaOop(Long bankTestJavaOopID) throws JpaSystemException {
         //xet them record lien quan nua;
         BankTestJavaOop bankTestJavaOop = findBankTestJavaOop_By_BankTestJavaOopID(bankTestJavaOopID);

@@ -260,6 +260,7 @@ export default {
         return false;
       } else {
         this.scoringMethod = null;
+        this.validateScoringMethod = null;
         return true;
       }
     },

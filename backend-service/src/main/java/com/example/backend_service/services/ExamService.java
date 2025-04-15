@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Service
 public class ExamService implements I_ExamService, I_Transaction_MarkExam {
 
+    private final BankTestJavaOopRepository bankTestJavaOopRepository;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -35,13 +36,17 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
 
     private final MarkStudentRepository markStudentRepository;
 
-    public ExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ExamRepository examRepository, CourseRepository courseRepository, BankQuestionJavaCoreService bankQuestionJavaCoreService, BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository, MarkStudentRepository markStudentRepository) {
+    private final ExamJavaOopRepository examJavaOopRepository;
+
+    public ExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ExamRepository examRepository, CourseRepository courseRepository, BankQuestionJavaCoreService bankQuestionJavaCoreService, BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository, MarkStudentRepository markStudentRepository, BankTestJavaOopRepository bankTestJavaOopRepository, ExamJavaOopRepository examJavaOopRepository) {
         this.questionJavaCoreExamRepository = questionJavaCoreExamRepository;
         this.examRepository = examRepository;
         this.courseRepository = courseRepository;
         this.bankQuestionJavaCoreService = bankQuestionJavaCoreService;
         this.bankQuestionJavaCoreRepository = bankQuestionJavaCoreRepository;
         this.markStudentRepository = markStudentRepository;
+        this.bankTestJavaOopRepository = bankTestJavaOopRepository;
+        this.examJavaOopRepository = examJavaOopRepository;
     }
 
     @Override
@@ -49,7 +54,8 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
         // Retrieve the course using the provided courseID
         Course course = courseRepository.findCourseByCourseID(courseID);
         //neu java khác sẽ có kiểu khác
-        String javaCore = "Java Core";
+        String javaCore = "Java core";
+        String javaClass = "Java class";
         if(exam.getTopicExam().equalsIgnoreCase(javaCore)) {
             List<Map<String, Object>> questionRandomJavaCore = bankQuestionJavaCoreService.getRandom_10_Questions_JavaCore();
             if (course != null && !questionRandomJavaCore.isEmpty()) {
@@ -82,6 +88,8 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
                 return examRepository.save(exam);
             }
             return null;
+        } else if (exam.getTopicExam().equalsIgnoreCase(javaClass)) {
+
         }
         // Return null if course or questions are not found
         return null;
@@ -182,13 +190,37 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
     }
 
     @Override
+    public Exam createExam_JavaClass_With_ChooseTest(Exam exam, Long courseID, Long bankTestJavaOopID) {
+        Course courseFound = courseRepository.findCourseByCourseID(courseID);
+        //neu java khác sẽ có kiểu khác
+        String javaClass = "Java class";
+        BankTestJavaOop bankTestJavaOopFound = bankTestJavaOopRepository
+                .findBankTestJavaOopByBankTestJavaOopID(bankTestJavaOopID);
+        if(bankTestJavaOopFound != null && courseFound != null && exam.getTopicExam().equalsIgnoreCase(javaClass)) {
+            courseFound.getExams().add(exam);
+            exam.setCourse(courseFound);
+
+            ExamJavaOop examJavaOop = new ExamJavaOop();
+            examJavaOop.setBankTestJavaOop(bankTestJavaOopFound);
+            examJavaOop.setExam(exam);
+            examJavaOop.setDateTimeSubmit(null);
+
+            //map relationship
+            bankTestJavaOopFound.getListExamJavaOop().add(examJavaOop);
+            exam.setExamJavaOop(examJavaOop);
+            examJavaOop.setExam(exam);
+            //examJavaOopRepository.save(examJavaOop);
+            return examRepository.save(exam);
+        }
+        return null;
+    }
+
+    @Override
     public List<Map<String, Object>> getExamsByCourseID(Long courseID) throws JpaSystemException {
         List<Map<String, Object>> queryList = examRepository.getExamsByCourseID(courseID);
         List<Map<String, Object>> convertedList = new ArrayList<>();
         // Khởi tạo LocalDateTime now
         LocalDateTime now = LocalDateTime.now();
-
-
 
         if (!queryList.isEmpty()) {
             for (Map<String, Object> queryMap : queryList) {
@@ -220,15 +252,11 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
                 // xét thêm bảng mark cho ra trạng thái complete
                 if (now.isBefore(startDate)) {
                     convertedMap.put("status", "Locked");
-                }
-                //if neu hoan thanh
-                else if (now.isAfter(endDate)) {
+                } else if (now.isAfter(endDate)) {
                     convertedMap.put("status", "Overdue");
-                }
-                else if(markStudent_DoneExam != null) {
+                } else if(markStudent_DoneExam != null) {
                     convertedMap.put("status", "Completed");
-                }
-                else {
+                } else {
                     convertedMap.put("status", "Open");
                 }
                 convertedList.add(convertedMap);
@@ -275,6 +303,10 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
             //Xoa bai ktra neu la java core
             if(exam.getTopicExam().equalsIgnoreCase("Java core")) {
                 entityManager.createNativeQuery("delete from question_java_core_exam where exam_id = :examID")
+                        .setParameter("examID", exam.getExamID())
+                        .executeUpdate();
+            } else if (exam.getTopicExam().equalsIgnoreCase("Java class")) {
+                entityManager.createNativeQuery("delete from exam_java_oop where exam_id = :examID")
                         .setParameter("examID", exam.getExamID())
                         .executeUpdate();
             }
@@ -382,6 +414,16 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
             return examFound.isViewTable();
         }
         return null;
+    }
+
+    @Override
+    public List<String> getListTitleExam() {
+        List<Exam> examList = examRepository.findAll();
+        List<String> titleExamList = new ArrayList<>();
+        if(!examList.isEmpty()) {
+            titleExamList = examList.stream().map(Exam::getTitleExam).collect(Collectors.toUnmodifiableList());
+        }
+        return titleExamList;
     }
 
     @Override

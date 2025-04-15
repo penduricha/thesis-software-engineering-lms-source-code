@@ -18,6 +18,8 @@ public interface I_ExamService {
 
     public Exam createExam_JavaCore_With_RandomQuestion(Exam exam, Long courseID, int numberOfQuestions);
 
+    public Exam createExam_JavaClass_With_ChooseTest(Exam exam, Long courseID, Long bankTestJavaOopID);
+
     public List<Map<String, Object>> getExamsByCourseID(Long courseID);
 
     public Map<String, Object> viewExam_By_ExamID(Long examID, Long courseID);
@@ -40,4 +42,6 @@ public interface I_ExamService {
     public String getTitle_Exam_By_CourseID(Long courseID, String titleExam);
 
     public Boolean getViewTable_From_ExamID(Long examID);
+
+    public List<String> getListTitleExam();
 }

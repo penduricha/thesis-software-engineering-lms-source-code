@@ -70,5 +70,5 @@ public interface ExamRepository extends JpaRepository<Exam,Long> {
             select * from mark_student where exam_id = :examID;
             """,
             nativeQuery = true)
-    MarkStudent findMarkStudent_By_ExamID(@Param("examID")Long examID);
+    MarkStudent findMarkStudent_By_ExamID(@Param("examID") Long examID);
 }

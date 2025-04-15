@@ -54,4 +54,16 @@ export default class ExamService {
             .post (`/post_exam_java_core_random_question/${courseID}/${numberOfQuestionsToRandom}`,
                 dataPost, {});
     }
+
+    static fetchListTitleExam() {
+        return axiosConfig
+            .getAPIClient()
+            .get(`/exam/get-list-title-exam`);
+    }
+
+    static post_Exam_Java_Class_With_ChooseTest(dataPost, courseID) {
+        return axiosConfig
+            .getAPIClient()
+            .post(`/post_exam_java_class_with_choose_test/${courseID}`, dataPost,{});
+    }
 }

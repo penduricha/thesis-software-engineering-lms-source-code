@@ -81,10 +81,7 @@ public class LectureController {
     }
 
     public String covertLectureID(String lectureID) {
-        if(lectureID.charAt(0) == '0'){
-            return lectureID.substring(1);
-        }
-        return null;
+        return LectureIDFunc.covertLectureID(lectureID);
     }
 
     @GetMapping("/lecture/lecture_Information_By_LectureID/{lectureID}")

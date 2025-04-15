@@ -16,6 +16,18 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Course implements Serializable {
+//    @Override
+//    public String toString() {
+//        return "Course{" +
+//                "courseID=" + courseID +
+//                ", className='" + className + '\'' +
+//                ", courseName='" + courseName + '\'' +
+//                ", semester=" + semester +
+//                ", startYear=" + startYear +
+//                ", endYear=" + endYear +
+//                '}';
+//    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name ="course_id")

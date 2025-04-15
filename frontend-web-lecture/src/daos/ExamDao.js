@@ -133,4 +133,55 @@ export default class ExamDao {
         }
         return status;
     }
+
+    static async getListTitleExam() {
+        let listTitleExam = [];
+        await ExamService
+            .fetchListTitleExam()
+            .then(response => {
+                listTitleExam = response.data;
+            }).catch(error => {
+                console.error(error);
+            })
+        return listTitleExam;
+    }
+
+    static async create_Exam_Java_Class_With_ChooseTest(dataPost, courseID){
+        let responseReturn = null;
+        let status = false;
+        // const dataPost2 = {
+        //     "titleExam": "java class demo 2",
+        //     "typeExam" : "Practice 1",
+        //     "topicExam" : "Java class",
+        //     "retakeExam" : "Yes",
+        //     "scoringMethod" : "Max",
+        //     "duration" : 30,
+        //     "startDateDay" : 15,
+        //     "startDateMonth" : 4,
+        //     "startDateYear" : 2025,
+        //     "startDateHour" : 15,
+        //     "startDateMinute" : 15,
+        //     "endDateDay" : 19,
+        //     "endDateMonth" : 5,
+        //     "endDateYear" : 2025,
+        //     "endDateHour" : 15,
+        //     "endDateMinute" : 15,
+        //     "viewTable" : true,
+        //     "linkExamPaper" : null,
+        //     "password" : null,
+        //     "bankTestJavaOopID" : 1
+        // }
+        await ExamService
+            .post_Exam_Java_Class_With_ChooseTest(dataPost, courseID)
+            .then(response => {
+                responseReturn = response.data;
+                console.log('Response return: ',responseReturn);
+            }).catch(error => {
+                console.error(error);
+            })
+        if(responseReturn) {
+            status = true;
+        }
+        return status;
+    }
 }

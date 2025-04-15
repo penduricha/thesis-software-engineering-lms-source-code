@@ -21,10 +21,11 @@ import Password from "@/models/Password.js";
 import ModalUpdateExam from "@/pages/detail-course/update-exam/ModalUpdateExam.vue";
 import ExamDao from "@/daos/ExamDao.js";
 import ModalDeleteExam from "@/pages/detail-course/delete-exam/ModalDeleteExam.vue";
-import ListExam from "@/pages/detail-course/component-menu-course/ListExam.vue";
-import ModalUpdateQuestionExam from "@/pages/detail-course/component-menu-course/ModalEditQuestionExam.vue";
+import ListExam from "@/pages/detail-course/component-manage-course/ListExam.vue";
+import ModalUpdateQuestionExam from "@/pages/detail-course/component-manage-course/ModalEditQuestionExam.vue";
 import listMinuteDuration from "@/assets/data/listMinuteDuration.js";
 import listTopicExam from "@/assets/data/listTopicExam.js";
+import ModalEditJavaClassExam from "@/pages/detail-course/component-manage-course/ModalEditJavaClassExam.vue";
 
 export default {
   name: "CourseManage",
@@ -37,6 +38,7 @@ export default {
   },
 
   components: {
+    ModalEditJavaClassExam,
     ModalUpdateQuestionExam,
     ListExam,
     ModalDeleteExam,
@@ -309,6 +311,7 @@ export default {
         return false;
       } else {
         this.scoringMethod = null;
+        this.validateScoringMethod = null;
         return true;
       }
     },
@@ -364,6 +367,11 @@ export default {
       await this.$refs.modalUpdateQuestionExams.setQuestions(examID, topicExam);
     },
 
+    async handleOpenEditTestJavaClassModal(examID, topicExam) {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      await this.$refs.modalEditJavaCLassExams.setListTestJavaOop(examID, topicExam);
+    },
+
     async handleCreateExam() {
       this.validationNullField();
       //tạo danh sách ktra các validate xem còn nào còn thông báo ko
@@ -413,8 +421,6 @@ export default {
           "linkExamPaper": this.examPaper,
           "passwordExam": this.passwordExamHashed,
         }
-        //console.log("Exam post: ",examPost);
-
         let statusCreate = await ExamDao.create_Exam_By_CourseID(this.courseID, examPost);
         if (statusCreate) {
           alert("Created exam successfully");
@@ -479,6 +485,7 @@ export default {
                  @view-exam="handleViewModal"
                  @delete-exam="handleOpenDeleteModal"
                  @edit-questions-exam="handleOpenEditQuestionsModal"
+                 @edit-test-java-class-exam=" handleOpenEditTestJavaClassModal"
       />
     </section>
   </main>
@@ -753,6 +760,7 @@ export default {
   />
 
   <modal-update-question-exam ref="modalUpdateQuestionExams"  />
+  <modal-edit-java-class-exam ref="modalEditJavaCLassExams" />
 </template>
 
 <style scoped lang="scss">

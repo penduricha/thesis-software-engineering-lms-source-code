@@ -7,11 +7,14 @@ import BankTestJavaOopDao from "@/daos/BankTestJavaOopDao.js";
 import ModalCreateTestJavaOop from "@/pages/bank-exams-java-oop/create-test/ModalCreateTestJavaOop.vue";
 
 import ModalDeleteTestJavaOop from "@/pages/bank-exams-java-oop/delete-test/ModalDeleteTestJavaOop.vue";
+import ModalCreateExamJavaClass
+  from "@/pages/bank-exams-java-oop/modal-create-exam-java-class/ModalCreateExamJavaClass.vue";
 
 export default {
   name: "BankExamsJavaOop",
 
   components: {
+    ModalCreateExamJavaClass,
     ModalDeleteTestJavaOop,
     ModalCreateTestJavaOop,
     NavBarBankExam,
@@ -67,8 +70,8 @@ export default {
             l.nameTest.toLowerCase().includes(query));
     },
 
-    handleCreateExamJavaOop (){
-
+    handleSetModalCreateExamJavaOop (bankTestJavaOopID){
+      this.$refs.modalCreateExamJavaClass.setBankTestJavaOopID(bankTestJavaOopID);
     },
 
     handleSetModalDelete(bankTestJavaOopID) {
@@ -125,7 +128,7 @@ export default {
         <thead>
         <tr>
           <th>Index</th>
-          <th>Name exam</th>
+          <th>Name test</th>
           <th>Edit</th>
           <th>Delete</th>
           <th>Create exam</th>
@@ -153,7 +156,9 @@ export default {
             </td>
             <td>
               <button class="btn btn-sm btn-primary"
-                      @click="handleCreateExamJavaOop"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modal-create-exam-java-class"
+                      @click="handleSetModalCreateExamJavaOop(l.bankTestJavaOopID)"
               >Create to exam</button>
             </td>
           </tr>
@@ -166,6 +171,7 @@ export default {
   </body>
   <modal-create-test-java-oop  :list-name-test-java-oop="listNameTestJavaOop"/>
   <modal-delete-test-java-oop ref="modalDeleteTestJavaOop"/>
+  <modal-create-exam-java-class ref="modalCreateExamJavaClass"/>
 </template>
 
 <style scoped lang="scss">

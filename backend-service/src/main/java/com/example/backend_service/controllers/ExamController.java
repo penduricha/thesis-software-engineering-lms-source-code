@@ -184,6 +184,59 @@ public class ExamController {
                 examService.createExam_JavaCore_With_ChooseQuestion(exam, courseID, questionJavaCoreExams));
     }
 
+    @PostMapping("/post_exam_java_class_with_choose_test/{courseID}")
+    public ResponseEntity<Exam> createExam_JavaClass_With_ChooseTest(@RequestBody Map<String,Object> mapExamPost,@PathVariable Long courseID) {
+        String titleExam = (String) mapExamPost.get("titleExam");
+        String typeExam = (String) mapExamPost.get("typeExam");
+        String topicExam = (String) mapExamPost.get("topicExam");
+        String retakeExamValue = (String) mapExamPost.get("retakeExam");
+        boolean retakeExam = "Yes".equalsIgnoreCase(retakeExamValue);
+        String scoringMethod = (String) mapExamPost.get("scoringMethod");
+        int duration = (Integer) mapExamPost.get("duration");
+        boolean viewTable = (Boolean) mapExamPost.get("viewTable");
+        Integer bankTestJavaOopIDInt = (Integer) mapExamPost.get("bankTestJavaOopID");
+        Long bankTestJavaOopID = bankTestJavaOopIDInt != null ? bankTestJavaOopIDInt.longValue() : null;
+
+        LocalDateTime startDate = LocalDateTime.of(
+                (Integer) mapExamPost.get("startDateYear"),
+                (Integer) mapExamPost.get("startDateMonth"),
+                (Integer) mapExamPost.get("startDateDay"),
+                (Integer) mapExamPost.get("startDateHour"),
+                (Integer) mapExamPost.get("startDateMinute"),
+                0
+        );
+
+        // Extracting end date and time
+        LocalDateTime endDate = LocalDateTime.of(
+                (Integer) mapExamPost.get("endDateYear"),
+                (Integer) mapExamPost.get("endDateMonth"),
+                (Integer) mapExamPost.get("endDateDay"),
+                (Integer) mapExamPost.get("endDateHour"),
+                (Integer) mapExamPost.get("endDateMinute"),
+                0
+        );
+
+        String linkExamPaper = (String) mapExamPost.get("linkExamPaper");
+        String passwordExam = (String) mapExamPost.get("passwordExam");
+//        List<Map<String, Object>> questionJavaCoreExams =
+//                (List<Map<String, Object>> ) mapExamPost.get("questionJavaCoreExams");
+
+        Exam exam = new Exam();
+        exam.setTitleExam(titleExam);
+        exam.setTypeExam(typeExam); // Assuming there is a setType method
+        exam.setTopicExam(topicExam); // Assuming there is a setTopic method
+        exam.setRetakeExam(retakeExam);
+        exam.setScoringMethod(scoringMethod); // Assuming there is a setScoringMethod method
+        exam.setDuration(duration);
+        exam.setStartDate(startDate); // Assuming there is a setStartDate method
+        exam.setEndDate(endDate); // Assuming there is a setEndDate method
+        exam.setLinkExamPaper(linkExamPaper); // Assuming there is a setLinkExamPaper method
+        exam.setPasswordExam(passwordExam); // Assuming there is a setPasswordExam method
+        exam.setViewTable(viewTable);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                examService.createExam_JavaClass_With_ChooseTest(exam, courseID, bankTestJavaOopID));
+    }
+
     @GetMapping("/get_exam_by_course_id/{courseID}")
     public ResponseEntity<List<Map<String, Object>>> getExamsByCourseID(@PathVariable Long courseID) throws HttpClientErrorException {
         return ResponseEntity.ok(examService.getExamsByCourseID(courseID));
@@ -299,5 +352,11 @@ public class ExamController {
     public ResponseEntity<Boolean> getViewTable_From_ExamID(@PathVariable Long examID)
             throws HttpClientErrorException {
         return ResponseEntity.ok(examService.getViewTable_From_ExamID(examID));
+    }
+
+    @GetMapping("/exam/get-list-title-exam")
+    //sửa thành by gv id lectureID
+    public ResponseEntity<List<String>> getListTitleExam() throws HttpClientErrorException {
+        return ResponseEntity.ok(examService.getListTitleExam());
     }
 }

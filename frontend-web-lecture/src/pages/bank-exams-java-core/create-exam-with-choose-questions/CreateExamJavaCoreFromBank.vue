@@ -97,6 +97,7 @@ export default {
 
       //set list duration
       listMinuteDuration: [],
+      exams: [],
     }
   },
 
@@ -291,6 +292,7 @@ export default {
         return false;
       } else {
         this.scoringMethod = null;
+        this.validateScoringMethod = null;
         return true;
       }
     },
@@ -383,6 +385,7 @@ export default {
         this.validateStartDate,
         this.validateEndDate,
         this.validateExamPaper,
+        this.validateCourseIDChoose,
         this.validateSelectQuestion,
       ];
       const allValidateEmpty = validations.every(val => val === null);
@@ -450,6 +453,7 @@ export default {
             } else {
               alert("Create exam failed.");
             }
+
           }
         }
 

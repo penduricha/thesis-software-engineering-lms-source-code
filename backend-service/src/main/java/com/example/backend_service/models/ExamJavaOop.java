@@ -33,7 +33,7 @@ public class ExamJavaOop implements Serializable {
     @JsonIgnore
     private Exam exam;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "bank_test_java_oop_id")
     @JsonIgnore
     private BankTestJavaOop bankTestJavaOop;

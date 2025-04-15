@@ -8,6 +8,8 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -20,13 +22,21 @@ public class BankTestJavaOop implements Serializable {
     @Column(name = "bank_test_java_oop_id", nullable = false)
     private Long bankTestJavaOopID;
 
+//    @Override
+//    public String toString() {
+//        return "BankTestJavaOop{" +
+//                "imageDiagram='" + imageDiagram + '\'' +
+//                ", descriptionTest='" + descriptionTest + '\'' +
+//                ", nameTest='" + nameTest + '\'' +
+//                ", bankTestJavaOopID=" + bankTestJavaOopID +
+//                '}';
+//    }
+
     @Column(nullable = false, columnDefinition = "nvarchar(30)", unique = true)
     private String nameTest;
 
     @Column(nullable = false, columnDefinition = "longtext")
     private String descriptionTest;
-
-
 
     @Column(columnDefinition = "nvarchar(100)")
     private String imageDiagram;
@@ -47,14 +57,6 @@ public class BankTestJavaOop implements Serializable {
         this.updateAt = updateAt;
     }
 
-    public ExamJavaOop getExamJavaOop() {
-        return examJavaOop;
-    }
-
-    public void setExamJavaOop(ExamJavaOop examJavaOop) {
-        this.examJavaOop = examJavaOop;
-    }
-
     @Column(columnDefinition = "datetime")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
@@ -62,6 +64,14 @@ public class BankTestJavaOop implements Serializable {
     @Column(columnDefinition = "datetime")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updateAt;
+
+    public List<ExamJavaOop> getListExamJavaOop() {
+        return listExamJavaOop;
+    }
+
+    public void setListExamJavaOop(List<ExamJavaOop> listExamJavaOop) {
+        this.listExamJavaOop = listExamJavaOop;
+    }
 
     @PrePersist
     protected void onCreated(){
@@ -74,9 +84,9 @@ public class BankTestJavaOop implements Serializable {
     }
 
     //map class
-    @OneToOne(mappedBy = "bankTestJavaOop", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "bankTestJavaOop", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonIgnore
-    private ExamJavaOop examJavaOop;
+    private List<ExamJavaOop> listExamJavaOop = new ArrayList<>();
 
 //    public BankTestJavaOop(String nameTest, String descriptionTest, String imageDiagram) {
 //        this.nameTest = nameTest;

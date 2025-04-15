@@ -24,6 +24,13 @@
             data-bs-target="#modal-update-questions-exam"
             @click="handleOpenEditQuestionsModal(e.examID, e.topicExam)"
         >Edit questions</button>
+        <button
+            v-if="e.topicExam === 'Java class'"
+            class="text-exam color-status-view"
+            data-bs-toggle="modal"
+            data-bs-target="#modal-update-test-java-class"
+            @click="handleOpenEditTestJavaClassModal(e.examID, e.topicExam)"
+        >Change test</button>
       </div>
       <div class="view-button-view-delete">
         <button
@@ -47,7 +54,7 @@ import '../../main/list-courses.scss';
 // import '../../components/aside/aside-menu-style.scss';
 import '../course-manage.scss';
 import '../../../components/span/span-style.scss';
-import ModalUpdateQuestionExam from "@/pages/detail-course/component-menu-course/ModalEditQuestionExam.vue";
+import ModalUpdateQuestionExam from "@/pages/detail-course/component-manage-course/ModalEditQuestionExam.vue";
 
 export default {
   name: "ListExam",
@@ -67,6 +74,9 @@ export default {
     },
     handleOpenEditQuestionsModal(examID, topicExam) {
       this.$emit('edit-questions-exam', examID, topicExam);
+    },
+    handleOpenEditTestJavaClassModal(examID, topicExam) {
+      this.$emit('edit-test-java-class-exam', examID, topicExam);
     }
   }
 }

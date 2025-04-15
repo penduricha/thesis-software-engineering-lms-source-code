@@ -55,6 +55,17 @@
   border-radius: 4px;
 }
 
+.button-create-test-java-class {
+  &.not-loading {
+    opacity: 1;
+  }
+
+  &.loading {
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
+}
+
 .style-btn-create-test:hover {
   opacity: 0.8;
 }

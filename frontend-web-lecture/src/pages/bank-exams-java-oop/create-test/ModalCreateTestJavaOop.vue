@@ -32,6 +32,9 @@ export default {
       validateNameTest: null,
       validateHtmlContentDescription: null,
       validateImageClassDiagramUrl: null,
+
+      //loading button
+      loadingButtonCreate: false,
     }
   },
 
@@ -153,11 +156,11 @@ export default {
       ];
       const allValidateFormAreEmpty = validations.every(val => val === null);
       if(allValidateFormAreEmpty) {
+        this.loadingButtonCreate = true;
         //b1: upload anh
         //b2: call method post
         //b3: reload page
         //upload anh
-        let deleteUrl = null;
         const formData = new FormData();
         formData.append('image', this.selectFileImage);
         try {
@@ -173,7 +176,8 @@ export default {
           console.error("Error uploading image: ", error);
           alert(error);
         }
-        if(this.imageDiagram && deleteUrl) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        if(this.imageDiagram) {
           let testToPost = {
             "nameTest": this.nameTest.trim(),
             "descriptionTest": this.htmlContentDescription,
@@ -182,11 +186,20 @@ export default {
           let status = await BankTestJavaOopDao.create_Java_Test_Oop(testToPost);
           if(status) {
             //post thanh cong
+            this.loadingButtonCreate = false;
             alert("Create test java oop successfully.");
             window.location.reload();
           }
         }
       }
+    }
+  },
+
+  computed: {
+    setStatusButtonCreateTest() {
+      return (this.loadingButtonCreate)
+          ? 'loading'
+          : 'not-loading';
     }
   }
 }
@@ -252,7 +265,16 @@ export default {
                   {{ validateImageClassDiagramUrl }}</span>
             </div>
             <div class="text-center mt-3">
-              <button type="submit" class="button-purple style-btn-create-test" @click="handleCreateTest">Create test</button>
+              <button type="submit" class="button-purple style-btn-create-test"
+                      @click="handleCreateTest"
+                      style="height: 3rem"
+                      :class="['button-create-test-java-class',setStatusButtonCreateTest]"
+              >
+                <span v-if="!loadingButtonCreate">Create test</span>
+                <div class="spinner-border" role="status" v-if="loadingButtonCreate">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </button>
             </div>
           </div>
         </div>

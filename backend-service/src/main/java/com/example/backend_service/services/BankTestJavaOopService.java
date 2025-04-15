@@ -1,8 +1,9 @@
 package com.example.backend_service.services;
 
 import com.example.backend_service.models.BankTestJavaOop;
-import com.example.backend_service.models.ExamJavaOop;
+import com.example.backend_service.models.*;
 import com.example.backend_service.repositories.BankTestJavaOopRepository;
+import com.example.backend_service.repositories.ExamRepository;
 import com.example.backend_service.services.i_service.I_BankTestJavaOopService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -22,9 +23,12 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
 
     private final ExamJavaOopService examJavaOopService;
 
-    public BankTestJavaOopService(BankTestJavaOopRepository bankTestJavaOopRepository, ExamJavaOopService examJavaOopService) {
+    private final ExamRepository examRepository;
+
+    public BankTestJavaOopService(BankTestJavaOopRepository bankTestJavaOopRepository, ExamJavaOopService examJavaOopService, ExamRepository examRepository) {
         this.bankTestJavaOopRepository = bankTestJavaOopRepository;
         this.examJavaOopService = examJavaOopService;
+        this.examRepository = examRepository;
     }
 
     @Override
@@ -70,6 +74,15 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
             bankTestJavaOopFound.setDescriptionTest(bankTestJavaOop.getDescriptionTest());
             bankTestJavaOopFound.setImageDiagram(bankTestJavaOop.getImageDiagram());
             return bankTestJavaOopRepository.save(bankTestJavaOopFound);
+        }
+        return null;
+    }
+
+    @Override
+    public Long getBankTestJavOopID_By_ExamID(Long examID) {
+        Exam examFound = examRepository.findExamByExamID(examID);
+        if(examFound != null) {
+
         }
         return null;
     }

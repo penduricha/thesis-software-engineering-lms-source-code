@@ -6,6 +6,8 @@ select * from bank_test_java_oop;
 
 select * from exam;
 
+select exam.title_exam from exam;
+
 update exam set start_date = '2025-04-08 13:00:00'
 where exam_id = 14;
 
@@ -15,6 +17,15 @@ show columns from bank_test_java_oop;
 
 select * from exam_java_oop;
 
-alter table bank_test_java_oop
-drop column delete_url;
+select * from course;
 
+select * from exam;
+
+update exam set start_date = '2025-04-14 12:00:00';
+
+select btjo.bank_test_java_oop_id from exam e
+left join exam_java_oop ejo
+on e.exam_id = ejo.exam_id
+right join bank_test_java_oop btjo
+on ejo.bank_test_java_oop_id = btjo.bank_test_java_oop_id
+where e.exam_id = 5;

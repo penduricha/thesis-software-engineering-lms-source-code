@@ -82,7 +82,28 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
     public Long getBankTestJavOopID_By_ExamID(Long examID) {
         Exam examFound = examRepository.findExamByExamID(examID);
         if(examFound != null) {
+            Long bankTestJavaOopID = bankTestJavaOopRepository
+                    .getBankTestJavaOopBy_ExamID(examID);
+            BankTestJavaOop bankTestJavaOopFound = findBankTestJavaOop_By_BankTestJavaOopID(bankTestJavaOopID);
+            if(bankTestJavaOopFound != null) {
+                return bankTestJavaOopFound.getBankTestJavaOopID();
+            }
+        }
+        return null;
+    }
 
+    @Override
+    @Transactional
+    public Exam updateBankTestJavaOop_To_Exam_By_ExamID(Long examID, Long bankTestJavaOopID) {
+        Exam examFound = examRepository.findExamByExamID(examID);
+        BankTestJavaOop bankTestJavaOopFound = findBankTestJavaOop_By_BankTestJavaOopID(bankTestJavaOopID);
+        if(examFound != null && bankTestJavaOopFound != null) {
+            String sqlUpdate = "update exam_java_oop set bank_test_java_oop_id = ? where exam_id = ?";
+            entityManager.createNativeQuery(sqlUpdate)
+                    .setParameter(1, bankTestJavaOopFound.getBankTestJavaOopID())
+                    .setParameter(2, examFound.getExamID())
+                    .executeUpdate();
+            return examFound;
         }
         return null;
     }

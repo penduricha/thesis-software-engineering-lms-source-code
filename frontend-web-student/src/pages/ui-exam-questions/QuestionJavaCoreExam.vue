@@ -98,8 +98,6 @@ export default {
   mounted() {
     this.checkTimeLeft();
     this.setDuration();
-    //this.clickButtonSubmit();
-    //this.setNameButtonMarkFlag();
   },
 
   beforeDestroy() {

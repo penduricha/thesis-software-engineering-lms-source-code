@@ -42,4 +42,10 @@ export default class ExamService {
             .getAPIClient()
             .get(`/exam/get-is-view-table-by-exam-id/${examID}`);
     }
+
+    static fetch_TopicExam_By_ExamID(examID) {
+        return axiosConfig
+            .getAPIClient()
+            .get(`/exam/get-topic-exam-by-exam-id/${examID}`);
+    }
 }

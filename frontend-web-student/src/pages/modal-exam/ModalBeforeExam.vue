@@ -117,14 +117,47 @@ export default {
       }
     },
 
+    async navigateTo_JavaClassExam() {
+      const studentLocalStorage  = new StudentLocalStorage();
+      let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
+      let status = await ExamDao.create_Access_Exam(studentID, this.examID);
+      if(!status) {
+        alert("Can't access to exam.");
+      } else {
+        let statusSetDateExam = await StudentDao.set_Date_Time_Start_Exam(studentID);
+        if(statusSetDateExam) {
+          const path = '/main-page/list-exams-page/exam-open/java-class-exam';
+          sessionStorage.setItem('indexQuestion', 0);
+          window.location.reload();
+          this.$router.replace({
+            path: path,
+            query: {
+              examID: this.examID,
+              duration: this.duration
+            }
+          }).catch((error) => {
+            console.error('Error navigating :', error);
+            alert(error);
+          });
+        } else {
+          alert("Failed to access to exam.")
+        }
+      }
+    },
+
+    async prepareNavigate() {
+      if (this.topicExam === "Java core") {
+        await this.navigateTo_JavaCoreExam();
+      } else if (this.topicExam === "Java class") {
+        await this.navigateTo_JavaClassExam();
+      }
+    },
+
     async handleGoToExam() {
       if (!this.passwordExamHashed) {
         //ktra ko cos mk thi vao
-        if (this.topicExam === "Java core") {
-          await this.navigateTo_JavaCoreExam();
-        }
+        await this.prepareNavigate();
         //ktra java oop
-
       } else {
         if (!this.passwordExamInput) {
           this.validatePasswordExam = "Please enter password.";
@@ -134,9 +167,7 @@ export default {
           if (this.passwordExamHashed !== passwordExamInputHashed) {
             this.validatePasswordExam = "Incorrect password";
           } else {
-            if (this.topicExam === "Java core") {
-              await this.navigateTo_JavaCoreExam();
-            }
+            await this.prepareNavigate();
           }
         }
       }
@@ -180,7 +211,7 @@ export default {
           <label><span>Created by: {{ nameLecture }}</span></label>
           <label><span>Retake: {{ retake }}</span></label>
           <label v-if="scoringMethod"><span>Scoring method: {{ scoringMethod }}</span></label>
-          <label><span>Questions: {{ numberQuestions }}</span></label>
+          <label v-if="this.topicExam === 'Java core'"><span>Questions: {{ numberQuestions }}</span></label>
           <label><span>Time: {{ duration }} minutes</span> </label>
           <label><span class="text-danger">Deadline: {{ endDate }}</span></label>
           <label v-if="linkPaperExam"><span>Link paper exam: {{ linkPaperExam }}</span></label>

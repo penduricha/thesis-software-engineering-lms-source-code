@@ -12,7 +12,12 @@ public interface BankTestJavaOopRepository extends JpaRepository<BankTestJavaOop
     BankTestJavaOop findBankTestJavaOopByBankTestJavaOopID(Long bankTestJavaOopID);
 
     @Query(value = """
-            
+            select btjo.bank_test_java_oop_id from exam e
+            left join exam_java_oop ejo
+            on e.exam_id = ejo.exam_id
+            right join bank_test_java_oop btjo
+            on ejo.bank_test_java_oop_id = btjo.bank_test_java_oop_id
+            where e.exam_id = :examID;
             """,
             nativeQuery = true)
     Long getBankTestJavaOopBy_ExamID(@Param("examID") Long examID);

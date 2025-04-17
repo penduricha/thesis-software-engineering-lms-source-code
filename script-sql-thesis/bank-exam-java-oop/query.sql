@@ -28,4 +28,7 @@ left join exam_java_oop ejo
 on e.exam_id = ejo.exam_id
 right join bank_test_java_oop btjo
 on ejo.bank_test_java_oop_id = btjo.bank_test_java_oop_id
-where e.exam_id = 5;
+where e.exam_id = 6;
+
+select * from exam_java_oop;
+

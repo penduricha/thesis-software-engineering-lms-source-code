@@ -100,32 +100,66 @@ export default {
       let informationDoExam = await StudentDao.get_Information_Student_Access_Exam_And_RemainMinutes(studentID);
 
       if(informationDoExam.examID !== undefined) {
-        const path = '/main-page/list-exams-page/exam-open/java-core-exam';
-        sessionStorage.setItem('indexQuestion', 0);
-        window.location.reload();
-        if(Number(informationDoExam.remainMinutes) <=0) {
-          this.$router.replace({
-            path: path,
-            query: {
-              examID: informationDoExam.examID,
-              duration: 0,
-            }
-          }).catch((error) => {
-            console.error('Error navigating :', error);
-            alert(error);
-          });
-        } else {
-          this.$router.replace({
-            path: path,
-            query: {
-              examID: informationDoExam.examID,
-              duration: Number(informationDoExam.remainMinutes)
-            }
-          }).catch((error) => {
-            console.error('Error navigating :', error);
-            alert(error);
-          });
+        //get them topic exam
+        //navigate
+        let topicExam = await ExamDao.get_TopicExam_By_ExamID(Number(informationDoExam.examID));
+
+        if(topicExam === "Java core") {
+          const pathJavaCoreExam = '/main-page/list-exams-page/exam-open/java-core-exam';
+          sessionStorage.setItem('indexQuestion', 0);
+          window.location.reload();
+          if(Number(informationDoExam.remainMinutes) <=0) {
+            this.$router.replace({
+              path: pathJavaCoreExam,
+              query: {
+                examID: informationDoExam.examID,
+                duration: 0,
+              }
+            }).catch((error) => {
+              console.error('Error navigating :', error);
+              alert(error);
+            });
+          } else {
+            this.$router.replace({
+              path: pathJavaCoreExam,
+              query: {
+                examID: informationDoExam.examID,
+                duration: Number(informationDoExam.remainMinutes)
+              }
+            }).catch((error) => {
+              console.error('Error navigating :', error);
+              alert(error);
+            });
+          }
+        } else if(topicExam === "Java class") {
+          const pathJavaClassExam = '/main-page/list-exams-page/exam-open/java-class-exam';
+          sessionStorage.setItem('indexQuestion', 0);
+          window.location.reload();
+          if(Number(informationDoExam.remainMinutes) <=0) {
+            this.$router.replace({
+              path: pathJavaClassExam,
+              query: {
+                examID: informationDoExam.examID,
+                duration: 0,
+              }
+            }).catch((error) => {
+              console.error('Error navigating :', error);
+              alert(error);
+            });
+          } else {
+            this.$router.replace({
+              path: pathJavaClassExam,
+              query: {
+                examID: informationDoExam.examID,
+                duration: Number(informationDoExam.remainMinutes)
+              }
+            }).catch((error) => {
+              console.error('Error navigating :', error);
+              alert(error);
+            });
+          }
         }
+
       }
     },
 

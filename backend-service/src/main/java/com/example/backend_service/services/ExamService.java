@@ -203,7 +203,6 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
             ExamJavaOop examJavaOop = new ExamJavaOop();
             examJavaOop.setBankTestJavaOop(bankTestJavaOopFound);
             examJavaOop.setExam(exam);
-            examJavaOop.setDateTimeSubmit(null);
 
             //map relationship
             bankTestJavaOopFound.getListExamJavaOop().add(examJavaOop);
@@ -424,6 +423,15 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
             titleExamList = examList.stream().map(Exam::getTitleExam).collect(Collectors.toUnmodifiableList());
         }
         return titleExamList;
+    }
+
+    @Override
+    public String getTopicExam_By_ExamID(Long examID) {
+        Exam examFound = findExam_By_ExamID(examID);
+        if(examFound != null) {
+            return examFound.getTopicExam();
+        }
+        return null;
     }
 
     @Override

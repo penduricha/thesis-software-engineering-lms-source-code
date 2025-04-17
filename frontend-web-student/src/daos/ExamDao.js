@@ -107,4 +107,14 @@ export default class ExamDao {
         })
         return result;
     }
+
+    static async get_TopicExam_By_ExamID(examID){
+        let result = null;
+        await ExamService.fetch_TopicExam_By_ExamID(examID).then(response => {
+            result = response.data;
+        }).catch(error => {
+            console.error(error);
+        })
+        return result;
+    }
 }

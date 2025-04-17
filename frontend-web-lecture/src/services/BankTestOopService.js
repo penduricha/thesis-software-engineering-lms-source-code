@@ -32,4 +32,22 @@ export default class BankTestOopService {
             .getAPIClient()
             .delete(`/test-java-oop/delete-test-java-oop-by-id/${bankTestJavaOopID}`);
     }
+
+    static fetchBankTestJavaOopID_By_ExamID(examID) {
+        return axiosConfig
+            .getAPIClient()
+            .get(`/test-java-oop/get-bank-test-java-oop-id-by-exam-id/${examID}`);
+    }
+
+    static fetchBankTestJavaOopID_By_BankTestJavaOopID(bankTestJavaOopID) {
+        return axiosConfig
+            .getAPIClient()
+            .get(`/test-java-oop/get-test-java-oop-by-id/${bankTestJavaOopID}`);
+    }
+
+    static patchBankTestJavaOop_By_ExamID(examID,newBankTestJavaOopID) {
+        return axiosConfig
+            .getAPIClient()
+            .patch(`/test-java-oop/update-bank-test-java-oop-id-by-exam-id/${examID}/${newBankTestJavaOopID}`);
+    }
 }

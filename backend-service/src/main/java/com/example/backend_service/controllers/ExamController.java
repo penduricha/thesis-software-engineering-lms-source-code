@@ -274,10 +274,7 @@ public class ExamController {
     }
 
     public String covertLectureID(String lectureID) {
-        if(lectureID.charAt(0) == '0'){
-            return lectureID.substring(1);
-        }
-        return null;
+        return LectureIDFunc.covertLectureID(lectureID);
     }
 
     @DeleteMapping("/delete_exam/{examID}")
@@ -358,5 +355,10 @@ public class ExamController {
     //sửa thành by gv id lectureID
     public ResponseEntity<List<String>> getListTitleExam() throws HttpClientErrorException {
         return ResponseEntity.ok(examService.getListTitleExam());
+    }
+
+    @GetMapping("/exam/get-topic-exam-by-exam-id/{examID}")
+    public ResponseEntity<String> getTopicExam_By_ExamID(@PathVariable Long examID) throws HttpClientErrorException {
+        return ResponseEntity.ok(examService.getTopicExam_By_ExamID(examID));
     }
 }

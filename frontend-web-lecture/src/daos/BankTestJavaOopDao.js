@@ -75,4 +75,42 @@ export default class BankTestJavaOopDao {
         }
         return status;
     }
+
+    static async getBankTestJavaOopID_By_ExamID(examID){
+        let responseReturn = null;
+        await BankTestOopService.fetchBankTestJavaOopID_By_ExamID(examID)
+            .then(response => {
+                responseReturn = response.data;
+            }).catch(error => {
+                console.error(error);
+            })
+        return responseReturn;
+    }
+
+    static async getBankTestJavaOopID_By_BankTestJavaOopID(bankTestJavaOopID) {
+        let responseReturn = {};
+        await BankTestOopService.fetchBankTestJavaOopID_By_BankTestJavaOopID(bankTestJavaOopID)
+            .then(response => {
+                responseReturn = response.data;
+            }).catch(error => {
+                console.error(error);
+            })
+        return responseReturn;
+    }
+
+    static async updateBankTestJavaOopByExamID(examID, bankTestJavaOopID){
+        let status = false;
+        let responseReturn = null;
+        await BankTestOopService.patchBankTestJavaOop_By_ExamID(examID, bankTestJavaOopID)
+            .then(response => {
+                responseReturn = response.data;
+            }).catch(error => {
+                console.error(error);
+                return status;
+            })
+        if(responseReturn) {
+            status = true;
+        }
+        return status;
+    }
 }

@@ -24,9 +24,9 @@ public class ExamJavaOop implements Serializable {
     private Long examJavaOopID;
 
     //thời gian tính từ lúc
-    @Column(columnDefinition = "datetime")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime dateTimeSubmit;
+//    @Column(columnDefinition = "datetime")
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+//    private LocalDateTime dateTimeSubmit;
 
     @OneToOne
     @JoinColumn(name = "exam_id")
@@ -48,14 +48,6 @@ public class ExamJavaOop implements Serializable {
 
     public void setExamJavaOopID(Long examJavaOopID) {
         this.examJavaOopID = examJavaOopID;
-    }
-
-    public LocalDateTime getDateTimeSubmit() {
-        return dateTimeSubmit;
-    }
-
-    public void setDateTimeSubmit(LocalDateTime dateTimeSubmit) {
-        this.dateTimeSubmit = dateTimeSubmit;
     }
 
     public Exam getExam() {

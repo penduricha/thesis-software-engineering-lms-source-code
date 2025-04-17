@@ -44,4 +44,6 @@ public interface I_ExamService {
     public Boolean getViewTable_From_ExamID(Long examID);
 
     public List<String> getListTitleExam();
+
+    public String getTopicExam_By_ExamID(Long examID);
 }

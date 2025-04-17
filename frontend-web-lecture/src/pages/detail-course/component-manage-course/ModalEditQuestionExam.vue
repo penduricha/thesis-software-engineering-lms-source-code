@@ -259,10 +259,11 @@ export default {
                 <th>Index</th>
                 <th>Content Question</th>
                 <th>Add</th>
+
               </tr>
               </thead>
               <tbody>
-              <tr v-if="filteredQuestions.length === 0">
+              <tr v-if="tableQuestions.length === 0">
                 <td colspan="5" class="text-center">
                   <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Loading...</span>

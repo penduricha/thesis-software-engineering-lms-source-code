@@ -31,6 +31,10 @@
             data-bs-target="#modal-update-test-java-class"
             @click="handleOpenEditTestJavaClassModal(e.examID, e.topicExam)"
         >Change test</button>
+        <button
+            class="text-exam color-status-view"
+            @click="handleNavigateToListStudentByExam(e.examID, e.topicExam)"
+        >View list students</button>
       </div>
       <div class="view-button-view-delete">
         <button
@@ -77,7 +81,11 @@ export default {
     },
     handleOpenEditTestJavaClassModal(examID, topicExam) {
       this.$emit('edit-test-java-class-exam', examID, topicExam);
-    }
+    },
+
+    handleNavigateToListStudentByExam(examID) {
+
+    },
   }
 }
 </script>

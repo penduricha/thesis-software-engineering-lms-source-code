@@ -1,0 +1,24 @@
+.description-exam-java-class {
+  font-size: 17px;
+}
+
+.section-exam-java-class {
+  display: flex;
+}
+
+.view-image-class-diagrams {
+  flex: 1;
+  height: 100%;
+}
+
+.view-upload-project {
+  flex: 1;
+  height: 100%;
+}
+
+.style-image-diagram-exam {
+  object-fit: contain;
+  width: 35rem;
+  height: auto;
+  border: solid 1px black;
+}

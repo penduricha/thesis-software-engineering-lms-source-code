@@ -1,10 +1,10 @@
-import BankTestOopService from "@/services/BankTestOopService.js";
+import BankTestJavaOopService from "@/services/BankTestJavaOopService.js";
 
 
 export default class BankTestJavaOopDao {
     static async get_List_Java_Test_Oop() {
         let listTest = [];
-        await BankTestOopService.fetch_List_Java_Test_Oop()
+        await BankTestJavaOopService.fetch_List_Java_Test_Oop()
             .then(response => {
                 listTest = response.data;
             }).catch(error => {
@@ -17,7 +17,7 @@ export default class BankTestJavaOopDao {
     static async create_Java_Test_Oop(testToPost) {
         let status = false;
         let responseReturn = null;
-        await BankTestOopService.post_Java_Test_Oop(testToPost)
+        await BankTestJavaOopService.post_Java_Test_Oop(testToPost)
             .then(response => {
                 responseReturn = response.data;
             }).catch(error => {
@@ -33,7 +33,7 @@ export default class BankTestJavaOopDao {
 
     static async get_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID){
         let bankTestJavaOop = {}
-        await BankTestOopService.fetch_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID)
+        await BankTestJavaOopService.fetch_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID)
             .then(response => {
                 bankTestJavaOop = response.data;
             }).catch(error => {
@@ -46,7 +46,7 @@ export default class BankTestJavaOopDao {
     static async update_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID, testToPut){
         let status = false;
         let responseReturn = null;
-        await BankTestOopService.put_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID, testToPut)
+        await BankTestJavaOopService.put_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID, testToPut)
             .then(response => {
                 responseReturn = response.data;
             }).catch(error => {
@@ -63,7 +63,7 @@ export default class BankTestJavaOopDao {
     static async delete_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID){
         let status = false;
         let responseReturn = null;
-        await BankTestOopService.delete_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID)
+        await BankTestJavaOopService.delete_Java_Test_Oop_By_BankTestJavaOopID(bankTestJavaOopID)
             .then(response => {
                 responseReturn = response.data;
             }).catch(error => {
@@ -78,7 +78,7 @@ export default class BankTestJavaOopDao {
 
     static async getBankTestJavaOopID_By_ExamID(examID){
         let responseReturn = null;
-        await BankTestOopService.fetchBankTestJavaOopID_By_ExamID(examID)
+        await BankTestJavaOopService.fetchBankTestJavaOopID_By_ExamID(examID)
             .then(response => {
                 responseReturn = response.data;
             }).catch(error => {
@@ -89,7 +89,7 @@ export default class BankTestJavaOopDao {
 
     static async getBankTestJavaOopID_By_BankTestJavaOopID(bankTestJavaOopID) {
         let responseReturn = {};
-        await BankTestOopService.fetchBankTestJavaOopID_By_BankTestJavaOopID(bankTestJavaOopID)
+        await BankTestJavaOopService.fetchBankTestJavaOopID_By_BankTestJavaOopID(bankTestJavaOopID)
             .then(response => {
                 responseReturn = response.data;
             }).catch(error => {
@@ -101,7 +101,7 @@ export default class BankTestJavaOopDao {
     static async updateBankTestJavaOopByExamID(examID, bankTestJavaOopID){
         let status = false;
         let responseReturn = null;
-        await BankTestOopService.patchBankTestJavaOop_By_ExamID(examID, bankTestJavaOopID)
+        await BankTestJavaOopService.patchBankTestJavaOop_By_ExamID(examID, bankTestJavaOopID)
             .then(response => {
                 responseReturn = response.data;
             }).catch(error => {

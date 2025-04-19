@@ -70,5 +70,9 @@ public class BankTestJavaOopController {
         return ResponseEntity.ok(bankTestJavaOopService.updateBankTestJavaOop_To_Exam_By_ExamID(examID, newBankTestJavaOopID));
     }
 
-
+    @GetMapping("/test-java-oop/get-bank-test-java-oop-by-exam-id/{examID}")
+    public ResponseEntity<BankTestJavaOop> getBankTestJavaOop_By_ExamID(@PathVariable Long examID)
+            throws HttpClientErrorException {
+        return ResponseEntity.ok(bankTestJavaOopService.getBankTestJavaOop_By_ExamID(examID));
+    }
 }

@@ -1,7 +1,7 @@
 import AxiosConfig from "@/services/AxiosConfig.js";
 
 const axiosConfig = new AxiosConfig();
-export default class BankTestOopService {
+export default class BankTestJavaOopService {
     static fetch_List_Java_Test_Oop() {
         return axiosConfig
             .getAPIClient()

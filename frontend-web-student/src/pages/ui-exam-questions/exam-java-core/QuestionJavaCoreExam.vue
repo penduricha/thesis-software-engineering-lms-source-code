@@ -15,9 +15,9 @@ import StudentLocalStorage from "@/pages/login/StudentLocalStorage.js";
 import StudentDao from "@/daos/StudentDao.js";
 import javaKeyWords from "@/components/data-key-word/javaKeyWords.js";
 import QuestionJavaCoreExamDao from "@/daos/QuestionJavaCoreExamDao.js";
-import ModalNotificationAfterSubmit from "@/pages/ui-exam-questions/ModalNotificationAfterSubmit.vue";
+import ModalNotificationAfterSubmit from "@/pages/ui-exam-questions/modal-notification-after-submitted/ModalNotificationAfterSubmit.vue";
 import CodeStorageDao from "@/daos/CodeStorageDao.js";
-import ModalFormTestDebugJava from "@/pages/ui-exam-questions/ModalFormTestDebugJava.vue";
+import ModalFormTestDebugJava from "@/pages/ui-exam-questions/test-debug-java/ModalFormTestDebugJava.vue";
 import ExamDao from "@/daos/ExamDao.js";
 import listMenu from "@/components/aside/list-menu.js";
 
@@ -128,22 +128,22 @@ export default {
       // }
     },
 
-    async navigateTo_MainPage() {
-      clearInterval(this.timer);
-      // Xóa thời gian khi đã hết
-      sessionStorage.removeItem('timeLeft');
-      const itemsMenu = listMenu;
-      const path = itemsMenu.find(item => item.index === 1)?.path;
-      this.savePath_Init_To_LocalStorage(path);
-      this.$router.replace({
-          path: path,
-          // query: {
-          // }
-      }).catch((error) => {
-          console.error('Error navigating :', error);
-          alert(error);
-      });
-    },
+    // async navigateTo_MainPage() {
+    //   clearInterval(this.timer);
+    //   // Xóa thời gian khi đã hết
+    //   sessionStorage.removeItem('timeLeft');
+    //   const itemsMenu = listMenu;
+    //   const path = itemsMenu.find(item => item.index === 1)?.path;
+    //   this.savePath_Init_To_LocalStorage(path);
+    //   this.$router.replace({
+    //       path: path,
+    //       // query: {
+    //       // }
+    //   }).catch((error) => {
+    //       console.error('Error navigating :', error);
+    //       alert(error);
+    //   });
+    // },
 
     async setQuestion_By_ExamID() {
         this.questions = await QuestionJavaCoreExamDao.getQuestions_By_ExamID(this.examID);
@@ -550,7 +550,6 @@ export default {
                 class="view-flag-and-btn-questions"
             >
               <i v-if="q.isMarkedFlag" class="bi bi-flag style-flag"></i>
-<!--              <i class="bi bi-flag style-flag"></i>-->
               <button class="button-number-question"   :class="[
                         'border-color-button-choose', setBorderColorChoose(index),
                         'button-color-saved', setButtonColorSavedCode(index),]">
@@ -570,7 +569,7 @@ export default {
       </div>
       <div class="aside-account-in-exam">
         <h1 class="style-name-student-exam">
-          <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo-in-exam">
+          <img src="../../../assets/image/account-logo.png" alt="account logo" class="style-account-logo-in-exam">
           <span v-if="studentID" class="style-span-information">{{lastName}} {{firstName}} - {{studentID}}</span>
         </h1>
       </div>
@@ -607,12 +606,6 @@ export default {
               @click="handleSave()"
           >Save
           </button>
-
-          <!--            <button-->
-          <!--                class="button-text-editor"-->
-          <!--                @click="handleReset()"-->
-          <!--            >Reset-->
-          <!--            </button>-->
           <button
               data-bs-toggle="modal"
               data-bs-target="#modal-form-debug-java"
@@ -654,6 +647,5 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@use '@/scss/main';
 
 </style>

@@ -1,5 +1,6 @@
 <script>
 import BankTestJavaOopDao from "@/daos/BankTestJavaOopDao.js";
+import ExamDao from "@/daos/ExamDao.js";
 
 export default {
   name: "ModalEditJavaClassExam",
@@ -62,13 +63,21 @@ export default {
 
     async handleSetToExam(bankTestJavaOopID) {
       if(this.examID) {
-        let status = await BankTestJavaOopDao.updateBankTestJavaOopByExamID(this.examID, bankTestJavaOopID);
-        if(status) {
-          alert("Set test java class successfully.");
-          window.location.reload();
+        //ktra co sv dang lam bai hay ko
+        let statusStudentAccess = await ExamDao
+            .getStatus_Access_Student_To_Exam_By_ExamID(this.examID);
+        if(!statusStudentAccess) {
+          let status = await BankTestJavaOopDao.updateBankTestJavaOopByExamID(this.examID, bankTestJavaOopID);
+          if(status) {
+            alert("Set test java class successfully.");
+            window.location.reload();
+          } else {
+            alert("Set failed");
+          }
         } else {
-          alert("Set failed");
+          alert("There is student is currently accessing the test. Please wait until finish.");
         }
+
       }
     },
 

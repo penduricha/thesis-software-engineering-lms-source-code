@@ -19,4 +19,6 @@ public interface I_BankTestJavaOopService {
     public Long getBankTestJavOopID_By_ExamID(Long examID);
 
     public Exam updateBankTestJavaOop_To_Exam_By_ExamID(Long examID, Long bankTestJavaOopID);
+
+    public BankTestJavaOop getBankTestJavaOop_By_ExamID(Long examID);
 }

@@ -61,7 +61,6 @@ export default {
       // Xóa thời gian khi đã hết
       sessionStorage.removeItem('timeLeft');
       const studentLocalStorage  = new StudentLocalStorage();
-
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
       let status = await ExamDao.delete_Access_Exam(studentID, this.examID);
       let statusResetDate = await StudentDao.reset_Date_Time_Start_Exam(studentID);
@@ -133,5 +132,5 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@use '@/scss/main';
+
 </style>

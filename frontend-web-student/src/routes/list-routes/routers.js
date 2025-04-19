@@ -1,8 +1,8 @@
 import LoginPage from "@/pages/login/LoginPage.vue";
 import ListExamsComponent from "@/pages/list-exams/ListExamsComponent.vue";
 import ListResultExams from "@/pages/list-exams/ListResultExams.vue";
-import QuestionJavaCoreExam from "@/pages/ui-exam-questions/QuestionJavaCoreExam.vue";
-import QuestionJavaClassExam from "@/pages/ui-exam-questions/QuestionJavaClassExam.vue";
+import QuestionJavaCoreExam from "@/pages/ui-exam-questions/exam-java-core/QuestionJavaCoreExam.vue";
+import QuestionJavaClassExam from "@/pages/ui-exam-questions/exam-java-class/QuestionJavaClassExam.vue";
 
 
 

@@ -107,4 +107,15 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
         }
         return null;
     }
+
+    @Override
+    public BankTestJavaOop getBankTestJavaOop_By_ExamID(Long examID) {
+        Exam examFound = examRepository.findExamByExamID(examID);
+        if(examFound != null) {
+            Long bankTestJavaOopID = bankTestJavaOopRepository
+                    .getBankTestJavaOopBy_ExamID(examID);
+            return findBankTestJavaOop_By_BankTestJavaOopID(bankTestJavaOopID);
+        }
+        return null;
+    }
 }

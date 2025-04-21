@@ -33,7 +33,7 @@
         >Change test</button>
         <button
             class="text-exam color-status-view"
-            @click="handleNavigateToListStudentByExam(e.examID, e.topicExam)"
+            @click="handleNavigateToListStudentsByExam(e.examID, e.topicExam)"
         >View list students</button>
       </div>
       <div class="view-button-view-delete">
@@ -67,7 +67,12 @@ export default {
     exams: {
       type: Array,
       required: true
-    }
+    },
+
+    courseID: {
+      type: Number,
+      required: true
+    },
   },
   methods: {
     handleViewModal(examID) {
@@ -83,8 +88,19 @@ export default {
       this.$emit('edit-test-java-class-exam', examID, topicExam);
     },
 
-    handleNavigateToListStudentByExam(examID) {
-
+    handleNavigateToListStudentsByExam(examID, topicExam) {
+      if(topicExam === 'Java core') {
+        this.$router.push({
+          path: '/main-page/list-courses/course-manage/list-students-by-exam-java-core',
+          query: {
+            examID: examID,
+            courseID: this.courseID
+          }
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      }
     },
   }
 }

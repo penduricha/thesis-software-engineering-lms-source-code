@@ -52,7 +52,7 @@ export default {
     },
 
     navigateTo_Course(courseID) {
-      this.$router.replace({
+      this.$router.push({
         path: '/main-page/list-courses/course-manage',
         query: {
           courseID: courseID,

@@ -39,4 +39,6 @@ public interface I_MarkStudentService {
     public List<Map<String, Object>> getListResultExam_By_StudentID (String studentID);
 
     public List<Map<String, Object>> getListDetailMarkStudent_By_MarkStudentID(Long markStudentID);
+
+    public List<Map<String, Object>> getListStudentMark_By_ExamID(Long examID);
 }

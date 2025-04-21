@@ -9,6 +9,8 @@ import CreateExamJavaCoreRandomQuestions
     from "@/pages/bank-exams-java-core/create-exam-with-random-questions/CreateExamJavaCoreRandomQuestions.vue";
 import BankExamsJavaOop from "@/pages/bank-exams-java-oop/BankExamsJavaOop.vue";
 import PageUpdateTestJavaOop from "@/pages/bank-exams-java-oop/update-test/PageUpdateTestJavaOop.vue";
+import ListStudentsByExamJavaCore
+    from "@/pages/detail-course/component-manage-course/list-student-by-exam/ListStudentsByExamJavaCore.vue";
 
 const routers = [
     // '/' khi init trang
@@ -33,6 +35,13 @@ const routers = [
     { path: '/main-page/bank-exams/java-oop/page-update',
         component: PageUpdateTestJavaOop,
         props: (route) => ({ bankTestJavaOopID: route.query.bankTestJavaOopID })
+    },
+    { path: '/main-page/list-courses/course-manage/list-students-by-exam-java-core',
+        component: ListStudentsByExamJavaCore,
+        props: (route) => ({
+            examID: route.query.examID,
+            courseID: route.query.courseID
+        })
     },
 ];
 export default routers;

@@ -80,5 +80,19 @@ public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> 
             nativeQuery = true)
     List<Map<String, Object>> getListResultExam_By_StudentID (@Param("studentID") String studentID);
 
-
+    @Query(value = """
+            select s.last_name,
+                   s.first_name,
+                   s.gender,
+                   s.date_of_birth,
+                   m.mark_exam
+            from mark_student m
+            right join student s
+            on m.student_id = s.student_id
+            right join exam e
+            on m.exam_id = e.exam_id
+            where e.exam_id = :examID;
+            """,
+            nativeQuery = true)
+    public List<Map<String, Object>> getListStudentMark_By_ExamID(@Param("examID") Long examID);
 }

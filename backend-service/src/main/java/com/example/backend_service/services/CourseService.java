@@ -1,8 +1,11 @@
 package com.example.backend_service.services;
 
 import com.example.backend_service.models.Course;
+import com.example.backend_service.models.Exam;
 import com.example.backend_service.repositories.CourseRepository;
+import com.example.backend_service.repositories.ExamRepository;
 import com.example.backend_service.services.i_service.I_CourseService;
+import jakarta.persistence.EntityManager;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +18,13 @@ import java.util.Map;
 public class CourseService implements I_CourseService {
     private final CourseRepository courseRepository;
 
-    public CourseService(CourseRepository courseRepository) {
+    private EntityManager entityManager;
+
+    private final ExamRepository examRepository;
+
+    public CourseService(CourseRepository courseRepository, ExamRepository examRepository) {
         this.courseRepository = courseRepository;
+        this.examRepository = examRepository;
     }
 
     @Override
@@ -48,5 +56,14 @@ public class CourseService implements I_CourseService {
         } else {
             return new HashMap<>();
         }
+    }
+
+    @Override
+    public Long getCourseID_By_ExamID(Long examID) {
+        Exam examFound = examRepository.findExamByExamID(examID);
+        if(examFound != null) {
+            return courseRepository.findCourseIDByExamID(examID);
+        }
+        return null;
     }
 }

@@ -8,4 +8,6 @@ public interface I_CourseService {
     public List<Course> getListCoursesByLectureId(String lectureId);
 
     public Map<String, Object> getCourse_By_LectureID_CourseID(String lectureID, Long courseID);
+
+    public Long getCourseID_By_ExamID(Long examID);
 }

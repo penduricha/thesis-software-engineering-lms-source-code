@@ -3,7 +3,7 @@ package com.example.backend_service.controllers;
 import com.example.backend_service.models.*;
 import com.example.backend_service.services.BankTestJavaOopService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.orm.jpa.JpaSystemException;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 

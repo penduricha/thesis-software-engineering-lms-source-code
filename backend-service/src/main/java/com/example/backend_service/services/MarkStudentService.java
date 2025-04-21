@@ -432,6 +432,11 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
         return new ArrayList<>();
     }
 
+    @Override
+    public List<Map<String, Object>> getListStudentMark_By_ExamID(Long examID) {
+        return List.of();
+    }
+
     //Get tập danh sách test case đã có sẵn
     @Override
     public List<String> getTestCasesByResultQuestionJavaCoreID(Long resultQuestionJavaCoreID)

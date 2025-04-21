@@ -52,14 +52,16 @@ public class CourseController {
     }
 
     public String covertLectureID(String lectureID) {
-        if(lectureID.charAt(0) == '0'){
-            return lectureID.substring(1);
-        }
-        return null;
+        return LectureIDFunc.covertLectureID(lectureID);
     }
 
     @GetMapping("/course/get_course_by_lectureID_courseID/{lectureID}/{courseID}")
     public ResponseEntity<Map<String, Object>> getCourse_By_LectureID_CourseID(@PathVariable String lectureID,@PathVariable Long courseID) throws HttpClientErrorException {
         return ResponseEntity.ok(courseService.getCourse_By_LectureID_CourseID(covertLectureID(lectureID),courseID));
+    }
+
+    @GetMapping("/course/get_course_by_examID/{examID}")
+    public ResponseEntity<Long> getCourseIDByExamID(@PathVariable Long examID) throws HttpClientErrorException {
+        return ResponseEntity.ok(courseService.getCourseID_By_ExamID(examID));
     }
 }

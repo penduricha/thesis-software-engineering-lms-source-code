@@ -486,7 +486,7 @@ export default {
                  @delete-exam="handleOpenDeleteModal"
                  @edit-questions-exam="handleOpenEditQuestionsModal"
                  @edit-test-java-class-exam=" handleOpenEditTestJavaClassModal"
-      />
+                  :course-i-d="courseID"/>
     </section>
   </main>
   <AsideAccount/>

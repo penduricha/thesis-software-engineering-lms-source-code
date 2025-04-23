@@ -21,4 +21,11 @@ public interface BankTestJavaOopRepository extends JpaRepository<BankTestJavaOop
             """,
             nativeQuery = true)
     Long getBankTestJavaOopBy_ExamID(@Param("examID") Long examID);
+
+    @Query(value = """
+            select b.bank_test_java_oop_id
+            from bank_test_java_oop b order by rand() limit 1;
+            """,
+            nativeQuery = true)
+    Long getRandomBankTestJavaOopID();
 }

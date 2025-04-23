@@ -22,3 +22,44 @@
   height: auto;
   border: solid 1px black;
 }
+
+.drop-zone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin: 20px 0;
+}
+.preview {
+  margin-top: 10px;
+  max-width: 100%;
+  height: auto;
+}
+
+.style-btn-choose-image-class {
+  width: 8rem;
+  height: 2.5rem;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.style-btn-choose-image-class:hover {
+  opacity: 0.8;
+}
+
+.style-trash {
+  color: white;
+}
+
+.style-view-image-uploaded {
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+  align-items: center;
+}
+
+.button-purple {
+  background-color: var(--purple-iuh);
+  color: white;
+}

@@ -88,8 +88,25 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
                 return examRepository.save(exam);
             }
             return null;
-        } else if (exam.getTopicExam().equalsIgnoreCase(javaClass)) {
+        } else if (course != null && exam.getTopicExam().equalsIgnoreCase(javaClass)) {
+            Long randomBankTestJavaOopID = bankTestJavaOopRepository.getRandomBankTestJavaOopID();
+            BankTestJavaOop bankTestJavaOop = bankTestJavaOopRepository.
+                    findBankTestJavaOopByBankTestJavaOopID(randomBankTestJavaOopID);
+            if(bankTestJavaOop != null) {
+                course.getExams().add(exam);
+                exam.setCourse(course);
 
+                ExamJavaOop examJavaOop = new ExamJavaOop();
+                examJavaOop.setBankTestJavaOop(bankTestJavaOop);
+                examJavaOop.setExam(exam);
+
+                //map relationship
+                bankTestJavaOop.getListExamJavaOop().add(examJavaOop);
+                exam.setExamJavaOop(examJavaOop);
+                examJavaOop.setExam(exam);
+                //examJavaOopRepository.save(examJavaOop);
+                return examRepository.save(exam);
+            }
         }
         // Return null if course or questions are not found
         return null;

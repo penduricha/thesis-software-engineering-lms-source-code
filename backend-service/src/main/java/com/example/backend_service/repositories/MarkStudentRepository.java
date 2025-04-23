@@ -81,7 +81,8 @@ public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> 
     List<Map<String, Object>> getListResultExam_By_StudentID (@Param("studentID") String studentID);
 
     @Query(value = """
-            select s.last_name,
+            select s.student_id,
+                   s.last_name,
                    s.first_name,
                    s.gender,
                    s.date_of_birth,

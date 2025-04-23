@@ -434,7 +434,33 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
 
     @Override
     public List<Map<String, Object>> getListStudentMark_By_ExamID(Long examID) {
-        return List.of();
+        Exam examFound = examRepository.findExamByExamID(examID);
+        if(examFound != null) {
+            List<Map<String, Object>> queryList = markStudentRepository
+                    .getListStudentMark_By_ExamID(examFound.getExamID());
+            if(!queryList.isEmpty()) {
+                /*
+                select s.last_name,
+                   s.first_name,
+                   s.gender,
+                   s.date_of_birth,
+                   m.mark_exam
+                 */
+                return queryList.stream()
+                        .map(originalMap -> {
+                            Map<String, Object> newMap = new HashMap<>();
+                            newMap.put("studentID", originalMap.get("student_id"));
+                            newMap.put("lastName", originalMap.get("last_name"));
+                            newMap.put("firstName", originalMap.get("first_name"));
+                            newMap.put("gender", originalMap.get("gender"));
+                            newMap.put("dateOfBirth", originalMap.get("date_of_birth"));
+                            newMap.put("markExam", originalMap.get("mark_exam"));
+                            return newMap;
+                        }).toList();
+            }
+        }
+
+        return new ArrayList<>();
     }
 
     //Get tập danh sách test case đã có sẵn

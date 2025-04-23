@@ -30,4 +30,4 @@ npm run dev => run local 5143 or 5174
 
 npm i @fortawesome/fontawesome-free
 
-
+api key zip: G4U3jtN5gopu

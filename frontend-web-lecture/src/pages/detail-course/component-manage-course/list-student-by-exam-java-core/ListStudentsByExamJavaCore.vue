@@ -4,6 +4,7 @@ import RouterDao from "@/routes/RoutersDao.js";
 import AsideMenu from "@/components/aside/AsideMenu.vue";
 import AsideAccount from "@/components/aside/AsideAccount.vue";
 import NavBarBankExam from "@/pages/bank-exams-nav-bar/NavBarBankExam.vue";
+import MarkStudentDao from "@/daos/MarkStudentDao.js";
 export default {
   name: "ListStudentsByExamByJavaCore",
   components: {NavBarBankExam, AsideAccount, AsideMenu},
@@ -21,10 +22,20 @@ export default {
 
   },
 
+  data() {
+    return {
+      listStudentsByExamID: [],
+      isLoadingTable: true,
+    }
+  },
+
   create() {
+
+  },
+
+  beforeMount() {
     this.saveRouter_Path(this.getRoute());
     this.setListStudents_By_ExamID();
-
   },
 
   mounted() {
@@ -33,15 +44,28 @@ export default {
 
   methods : {
     async setListStudents_By_ExamID () {
+      if(this.examID) {
+        this.listStudentsByExamID = await MarkStudentDao.
+          get_List_Mark_Student_By_ExamID(this.examID);
+        console.log('list student by exam id: ', this.listStudentsByExamID);
+      }
+      this.isLoadingTable = false;
+    },
 
+    formatDateOfBirth(dateOfBirth) {
+      let date = new Date(dateOfBirth);
+      let day = date.getDate();
+      let month = date.getMonth() + 1;
+      let year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    },
+
+    getGenderString(gender) {
+      return gender ? 'Male' : 'Female';
     },
 
     getRoute() {
       //ở đây có props thì phải thêm path của props
-      console.log(this.$route.path);
-      console.log(this.$route.path
-          + "?" + "examID=" + this.examID
-          + "&" + "courseID=" + this.courseID);
       return this.$route.path
           + "?" + "examID=" + this.examID
           + "&" + "courseID=" + this.courseID;
@@ -93,7 +117,52 @@ export default {
         </button>
       </div>
       <h5>List students: </h5>
-
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Index</th>
+          <th>Student ID</th>
+          <th>Name</th>
+          <th>Gender</th>
+          <th>Date of birth</th>
+          <th>Mark</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-if="listStudentsByExamID.length === 0 && isLoadingTable">
+          <td colspan="5" class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </td>
+        </tr>
+        <tr v-if="listStudentsByExamID.length === 0 && !isLoadingTable">
+          <td colspan="5" class="text-center">
+            <h4>No student</h4>
+          </td>
+        </tr>
+        <tr v-if="listStudentsByExamID.length > 0" v-for="(l, index) in listStudentsByExamID">
+          <td>
+            {{index + 1}}
+          </td>
+          <td>
+            {{l.studentID}}
+          </td>
+          <td>
+            {{l.lastName}} {{l.firstName}}
+          </td>
+          <td>
+            {{getGenderString(l.gender)}}
+          </td>
+          <td>
+            {{formatDateOfBirth(l.dateOfBirth)}}
+          </td>
+          <td>
+            {{l.markExam}}
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </section>
   </main>
   <AsideAccount/>

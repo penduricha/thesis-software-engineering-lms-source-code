@@ -10,7 +10,9 @@ import CreateExamJavaCoreRandomQuestions
 import BankExamsJavaOop from "@/pages/bank-exams-java-oop/BankExamsJavaOop.vue";
 import PageUpdateTestJavaOop from "@/pages/bank-exams-java-oop/update-test/PageUpdateTestJavaOop.vue";
 import ListStudentsByExamJavaCore
-    from "@/pages/detail-course/component-manage-course/list-student-by-exam/ListStudentsByExamJavaCore.vue";
+    from "@/pages/detail-course/component-manage-course/list-student-by-exam-java-core/ListStudentsByExamJavaCore.vue";
+import ListStudentsByExamJavaClass
+    from "@/pages/detail-course/component-manage-course/list-student-by-exam-java-class/ListStudentsByExamJavaClass.vue";
 
 const routers = [
     // '/' khi init trang
@@ -38,6 +40,13 @@ const routers = [
     },
     { path: '/main-page/list-courses/course-manage/list-students-by-exam-java-core',
         component: ListStudentsByExamJavaCore,
+        props: (route) => ({
+            examID: route.query.examID,
+            courseID: route.query.courseID
+        })
+    },
+    { path: '/main-page/list-courses/course-manage/list-students-by-exam-java-class',
+        component: ListStudentsByExamJavaClass,
         props: (route) => ({
             examID: route.query.examID,
             courseID: route.query.courseID

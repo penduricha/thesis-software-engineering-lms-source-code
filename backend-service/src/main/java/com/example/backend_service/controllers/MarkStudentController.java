@@ -96,4 +96,9 @@ public class MarkStudentController {
             throws HttpClientErrorException{
         return ResponseEntity.ok(markStudentService.getListDetailMarkStudent_By_MarkStudentID(markStudentID));
     }
+
+    @GetMapping("/mark_student/get-list-mark-student-by-exam-id/{examID}")
+    public ResponseEntity<List<Map<String, Object>>> getListStudentMark_By_ExamID(@PathVariable Long examID) {
+        return ResponseEntity.ok(markStudentService.getListStudentMark_By_ExamID(examID));
+    }
 }

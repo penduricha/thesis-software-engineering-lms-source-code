@@ -64,7 +64,7 @@ export default {
     <div class="modal-dialog modal-lg">
       <div class="modal-content custom-modal">
         <div class="modal-title-wrapper">
-          <h5 class="custom-title">Result Java Core 1</h5>
+          <h5 class="custom-title">Result exam</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

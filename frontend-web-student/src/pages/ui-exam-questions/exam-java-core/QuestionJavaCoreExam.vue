@@ -332,11 +332,40 @@ export default {
       // link.click();
       // document.body.removeChild(link);
 
-
-       await this.$refs.modalNotificationAfterSubmit
+      // thong bao qua modal
+      await this.$refs.modalNotificationAfterSubmit
             .submit_Transaction_And_Get_Mark(dataToSubmit);
 
+       //await this.navigateTo_MainPage();
     },
+
+    // async navigateTo_MainPage() {
+    //   clearInterval(this.timer);
+    //   // Xóa thời gian khi đã hết
+    //   sessionStorage.removeItem('timeLeft');
+    //   const studentLocalStorage  = new StudentLocalStorage();
+    //   let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
+    //   let status = await ExamDao.delete_Access_Exam(studentID, this.examID);
+    //   let statusResetDate = await StudentDao.reset_Date_Time_Start_Exam(studentID);
+    //   let statusDeleteCodeStorage = await CodeStorageDao.delete_Code_Storage_By_StudentID(studentID);
+    //   let statusSetMarkedFlag = await QuestionJavaCoreExamDao.setMarkedFlag_False_By_ExamID(this.examID);
+    //   if(!status || !statusResetDate || !statusDeleteCodeStorage || !statusSetMarkedFlag) {
+    //     alert("Can't return page because error system.");
+    //   } else {
+    //     window.location.reload();
+    //     const itemsMenu = listMenu;
+    //     const path = itemsMenu.find(item => item.index === 1)?.path;
+    //     this.savePath_Init_To_LocalStorage(path);
+    //     this.$router.replace({
+    //       path: path,
+    //       // query: {
+    //       // }
+    //     }).catch((error) => {
+    //       console.error('Error navigating :', error);
+    //       alert(error);
+    //     });
+    //   }
+    // },
 
     async handleSave() {
       //save to database

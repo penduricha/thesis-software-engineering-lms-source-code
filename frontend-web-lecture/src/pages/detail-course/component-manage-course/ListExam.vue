@@ -93,8 +93,19 @@ export default {
         this.$router.push({
           path: '/main-page/list-courses/course-manage/list-students-by-exam-java-core',
           query: {
-            examID: examID,
-            courseID: this.courseID
+            examID: Number(examID),
+            courseID: Number(this.courseID)
+          }
+        }).catch((error) => {
+          console.error('Error navigating :', error);
+          alert(error);
+        });
+      } else if (topicExam === 'Java class') {
+        this.$router.push({
+          path: '/main-page/list-courses/course-manage/list-students-by-exam-java-class',
+          query: {
+            examID: Number(examID),
+            courseID: Number(this.courseID)
           }
         }).catch((error) => {
           console.error('Error navigating :', error);

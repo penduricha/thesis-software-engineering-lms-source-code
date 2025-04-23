@@ -46,9 +46,7 @@ export default {
     },
 
     async submit_Transaction_And_Get_Mark(dataToSubmit) {
-
       this.mark = await DetailMarkStudentDao.getMarkExam_After_Submitted_JavaCore(dataToSubmit);
-
       if(this.mark ===  -1) {
         await MarkStudentDao.delete_Mark_Student_By_ExamID(this.examID);
         await this.navigateTo_MainPage();

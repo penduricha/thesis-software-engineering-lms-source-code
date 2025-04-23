@@ -62,6 +62,11 @@ export default {
       viewTable: true,
 
       testJavaOop: {},
+
+      zipUrl: null,
+      selectFileZip: null,
+
+      validateUpdateZipFile: null,
     }
   },
 
@@ -198,6 +203,51 @@ export default {
 
     async submitProject_And_NavigateToMainPage () {
       await this.navigateToMainPage();
+    },
+
+    //upload zip
+    handleDrop(event) {
+      const files = event.dataTransfer.files;
+      if (files.length) {
+        this.handleFile(files[0]);
+      }
+    },
+
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      if (file && file.name.endsWith('.zip')) {
+        this.selectFileZip = file.name; // Store the uploaded file name
+        this.zipUrl = URL.createObjectURL(file); // Create a URL for the uploaded zip file
+        this.validateUpdateZipFile = null; // Reset any validation messages
+      } else {
+        this.validateUpdateZipFile = 'Please upload a valid zip file.'; // Show an error message
+        this.zipUrl = null; // Reset the zip URL if the file is invalid
+        this.selectFileZip = null; // Reset the selected file name
+      }
+    },
+
+    handleFile(file) {
+      if (file && file.name.endsWith('.zip')) {
+        this.selectFileZip = file.name; // Store the uploaded file name
+        this.zipUrl = URL.createObjectURL(file); // Create a URL for the uploaded zip file
+        this.validateUpdateZipFile = null; // Reset any validation messages
+      } else {
+        this.validateUpdateZipFile = 'Please upload a valid zip file.'; // Show an error message
+      }
+    },
+
+    selectFile() {
+      this.$refs.fileInput.click(); // Trigger the file input click
+    },
+
+    removeZip() {
+      this.zipUrl = null; // Clear the URL
+      this.selectFileZip = null; // Clear the file name
+      this.validateUpdateZipFile = null; // Reset validation message
+      // Reset the file input
+      if (this.$refs.fileInput) {
+        this.$refs.fileInput.value = null; // Clear the input value
+      }
     }
   },
 
@@ -255,7 +305,36 @@ export default {
           <img v-if="testJavaOop" :src="testJavaOop.imageDiagram" class="style-image-diagram-exam" alt="diagram exam">
         </div>
         <div class="view-upload-project">
+          <div class="mb-3">
+            <h5>Upload zip file:</h5>
+            <div
+                @dragover.prevent
+                @drop.prevent="handleDrop"
+                class="drop-zone"
+            >
+              <h5>Drag and drop or choose zip file</h5>
+              <input type="file" @change="handleFileChange" accept=".zip" hidden ref="fileInput"
+                     class="form-control" :class="[{ 'is-invalid': validateUpdateZipFile !== null }]"/>
+              <button @click="selectFile" class="button-purple style-btn-choose-image-class">Choose</button>
 
+              <div v-if="zipUrl" class="style-view-image-uploaded">
+                <h5>Zip file uploaded:</h5>
+                <p>{{ selectFileZip  }}</p>
+                <button class="btn btn-danger" style="width: 4rem" @click="removeZip()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                       class="bi bi-trash style-trash" viewBox="0 0 16 16">
+                    <path
+                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                    <path
+                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <span v-if="validateUpdateZipFile" class="span-validate-modal-form">
+        {{ validateUpdateZipFile }}
+    </span>
+          </div>
         </div>
       </section>
     </div>

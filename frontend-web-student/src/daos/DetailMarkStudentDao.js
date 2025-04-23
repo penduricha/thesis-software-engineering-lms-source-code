@@ -1,6 +1,6 @@
 
 import DetailMarkStudentService from "@/services/DetailMarkStudentService.js";
-import ExamService from "@/services/ExamService.js";
+
 
 export default class DetailMarkStudentDao {
     static async getMarkExam_After_Submitted_JavaCore(dataPost) {

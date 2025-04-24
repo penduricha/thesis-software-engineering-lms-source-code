@@ -1,10 +1,15 @@
 <script>
+import * as XLSX from 'xlsx';
 import './list-students-by-exam-java-core.scss'
 import RouterDao from "@/routes/RoutersDao.js";
 import AsideMenu from "@/components/aside/AsideMenu.vue";
 import AsideAccount from "@/components/aside/AsideAccount.vue";
 import NavBarBankExam from "@/pages/bank-exams-nav-bar/NavBarBankExam.vue";
 import MarkStudentDao from "@/daos/MarkStudentDao.js";
+import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
+import LectureDao from "@/daos/LectureDao.js";
+import ExamDao from "@/daos/ExamDao.js";
+
 export default {
   name: "ListStudentsByExamByJavaCore",
   components: {NavBarBankExam, AsideAccount, AsideMenu},
@@ -27,6 +32,9 @@ export default {
       listStudentsByExamID: [],
       isLoadingTable: true,
       typeDownloadSheet: 'csv',
+
+      titleExam: null,
+      nameLecture: null,
     }
   },
 
@@ -37,6 +45,7 @@ export default {
   beforeMount() {
     this.saveRouter_Path(this.getRoute());
     this.setListStudents_By_ExamID();
+    this.setTitleExam_And_NameLecture();
   },
 
   mounted() {
@@ -44,6 +53,21 @@ export default {
   },
 
   methods : {
+    async setTitleExam_And_NameLecture () {
+      const lectureLocalStorage = new LectureLocalStorage();
+      let lectureID = lectureLocalStorage.getLectureID_From_LocalStorage();
+      let lecture = await LectureDao.getLectureName_And_LectureID(lectureID);
+      console.log(lecture);
+      this.lectureID = '0' + lecture.lectureID;
+      this.nameLecture = lecture.name;
+      if(this.examID) {
+        let exam = await ExamDao.getExam_By_CourseID_ExamID(this.examID, this.courseID);
+        if(exam) {
+          this.titleExam = exam.titleExam;
+        }
+      }
+    },
+
     async setListStudents_By_ExamID () {
       if(this.examID) {
         this.listStudentsByExamID = await MarkStudentDao.
@@ -89,12 +113,45 @@ export default {
       });
     },
 
+    convertToCSV(data) {
+      const header = ['Index', 'Student ID', 'Name', 'Gender', 'Date of Birth', 'Mark'];
+      const rows = data.map((l, index) => [
+        index + 1,
+        l.studentID,
+        `${l.lastName} ${l.firstName}`,
+        this.getGenderString(l.gender),
+        this.formatDateOfBirth(l.dateOfBirth),
+        l.markExam,
+      ]);
+
+      return [header].concat(rows).map(row => row.join(',')).join('\n');
+    },
+
     handleDownload() {
       if(this.listStudentsByExamID.length > 0) {
         if(this.typeDownloadSheet === 'csv') {
-
+          const csvContent = this.convertToCSV(this.listStudentsByExamID);
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.setAttribute('download', `exam_${this.titleExam}_${this.nameLecture}.csv`);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
         } else if (this.typeDownloadSheet === 'xlsx') {
-
+          if(this.nameLecture && this.titleExam) {
+            const ws = XLSX.utils.json_to_sheet(this.listStudentsByExamID.map((l, index) => ({
+              'Index': index + 1,
+              'Student ID': l.studentID,
+              'Name student': `${l.lastName} ${l.firstName}`,
+              'Gender': this.getGenderString(l.gender),
+              'Date of Birth': this.formatDateOfBirth(l.dateOfBirth),
+              'Mark': l.markExam,
+            })));
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Students');
+            XLSX.writeFile(wb, `exam_${this.titleExam}_${this.nameLecture}.xlsx`);
+          }
         }
       }
     }
@@ -123,7 +180,7 @@ export default {
             span-button-return-list-course
             span-button-return-list-course-hover"
           >
-            Course manage
+            List exam
           </span>
         </button>
       </div>
@@ -151,6 +208,7 @@ export default {
           <th>Gender</th>
           <th>Date of birth</th>
           <th>Mark</th>
+          <th>View detail</th>
         </tr>
         </thead>
         <tbody>
@@ -184,6 +242,11 @@ export default {
           </td>
           <td>
             {{l.markExam}}
+          </td>
+          <td>
+            <button class="btn btn-primary">
+              View detail
+            </button>
           </td>
         </tr>
         </tbody>

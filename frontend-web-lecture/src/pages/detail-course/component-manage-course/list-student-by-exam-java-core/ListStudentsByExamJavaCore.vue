@@ -26,6 +26,7 @@ export default {
     return {
       listStudentsByExamID: [],
       isLoadingTable: true,
+      typeDownloadSheet: 'csv',
     }
   },
 
@@ -87,6 +88,16 @@ export default {
         alert(error);
       });
     },
+
+    handleDownload() {
+      if(this.listStudentsByExamID.length > 0) {
+        if(this.typeDownloadSheet === 'csv') {
+
+        } else if (this.typeDownloadSheet === 'xlsx') {
+
+        }
+      }
+    }
   },
 
   computed: {
@@ -117,6 +128,20 @@ export default {
         </button>
       </div>
       <h5>List students: </h5>
+      <div class="style-view-btn-download">
+        <button class="btn button-purple"
+                @click="handleDownload()"
+        >Download</button>
+        <select class="form-select"
+            v-model="typeDownloadSheet"
+        >
+<!--          @change="setSelectExamType()"-->
+<!--          v-model="typeExam"-->
+<!--          :class="[{'is-invalid': validateTypeExam !== null}]"-->
+          <option value = "csv">csv file</option>
+          <option value = "xlsx">xlsx file</option>
+        </select>
+      </div>
       <table class="table table-striped">
         <thead>
         <tr>

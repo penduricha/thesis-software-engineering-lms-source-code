@@ -6,6 +6,8 @@ import ExamDao from "@/daos/ExamDao.js";
 import listMenu from "@/components/aside/list-menu.js";
 import BankTestJavaOopDao from "@/daos/BankTestJavaOopDao.js";
 import './question-java-class.scss';
+import JSZip from 'jszip';
+
 export default {
   name: "QuestionJavaClassExam",
 
@@ -27,9 +29,7 @@ export default {
     clearInterval(this.pollingInterval);
   },
 
-  components: {
-
-  },
+  components: {},
 
   props: {
     examID: {
@@ -65,6 +65,7 @@ export default {
 
       zipUrl: null,
       selectFileZip: null,
+      targetFileZip: null,
 
       validateUpdateZipFile: null,
     }
@@ -72,7 +73,7 @@ export default {
 
   methods: {
     getRoute() {
-      console.log(this.$route.path );
+      console.log(this.$route.path);
       return this.$route.path
           + "?" + "examID=" + Number(this.examID)
           + "&" + "duration=" + Number(this.duration);
@@ -84,23 +85,23 @@ export default {
     },
 
     async setStudent() {
-      const studentLocalStorage  = new StudentLocalStorage();
+      const studentLocalStorage = new StudentLocalStorage();
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
-      if(studentID) {
+      if (studentID) {
         let student = await StudentDao.getStudentName_And_StudentID(studentID);
         //console.log(student);
         this.studentID = student.studentID;
         this.lastName = student.lastName;
         this.firstName = student.firstName;
         let courseID = await StudentDao.getCourseID_By_StudentID(studentID);
-        if(courseID) {
+        if (courseID) {
           this.courseID = courseID;
         }
       }
     },
 
     async setTestExam() {
-      if(this.examID) {
+      if (this.examID) {
         this.testJavaOop = await BankTestJavaOopDao
             .getBankTestJavaOop_By_ExamID(Number(this.examID));
         console.log('Test exam: ', this.testJavaOop);
@@ -128,7 +129,7 @@ export default {
 
     clickButtonSubmit() {
       //thoi gian ket thuc
-      if(this.timeLeft === 0 || this.duration <= 0) {
+      if (this.timeLeft === 0 || this.duration <= 0) {
         this.$refs.submitButton.click();
       }
     },
@@ -144,29 +145,31 @@ export default {
           // Xóa thời gian khi đã hết
           sessionStorage.removeItem('timeLeft');
         }
-        this.clickButtonSubmit();
+        //this.clickButtonSubmit();
+        //this.submitProject_And_NavigateToMainPage();
+        this.submitProjectEndTime();
       }, 1000);
     },
 
     async setViewTable() {
-      if(this.examID) {
+      if (this.examID) {
         //ở đây có thể là diagram class
         this.viewTable = await ExamDao.get_View_Table_By_ExamID(this.examID);
       }
     },
 
-    async navigateToMainPage () {
+    async navigateToMainPage() {
       clearInterval(this.timer);
       // Xóa thời gian khi đã hết
       sessionStorage.removeItem('timeLeft');
-      const studentLocalStorage  = new StudentLocalStorage();
+      const studentLocalStorage = new StudentLocalStorage();
       let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
       let status = await ExamDao.delete_Access_Exam(studentID, this.examID);
       let statusResetDate = await StudentDao.reset_Date_Time_Start_Exam(studentID);
       //mac du ko co
       //let statusDeleteCodeStorage = await CodeStorageDao.delete_Code_Storage_By_StudentID(studentID);
 
-      if(!status || !statusResetDate ) {
+      if (!status || !statusResetDate) {
         alert("Can't return page because error system.");
       } else {
         window.location.reload();
@@ -201,21 +204,76 @@ export default {
       routerDao.savePath_To_LocalStorage(path);
     },
 
-    async submitProject_And_NavigateToMainPage () {
+    async checkZipFile() {
+      const zip = new JSZip();
+      try {
+        const content = await zip.loadAsync(this.targetFileZip);
+        const files = Object.keys(content.files);
+        // Kiểm tra xem tất cả các file có phải là .java hay không
+        const allJavaFiles = files.every(file => file.endsWith('.java'));
+        // Kiểm tra xem có file nào không phải là .java không
+        if (!allJavaFiles || files.length === 0) {
+          this.validateUpdateZipFile = 'The zip file must contain only .java files.';
+          return;
+        }
+        // Thực hiện upload file zip ở đây
+        console.log('File is valid and ready to upload.');
+      } catch (error) {
+        this.validateUpdateZipFile = 'Error reading zip file: '+ error;
+      }
+    },
+
+    async submitProjectEndTime() {
+      if (this.timeLeft === 0 || this.duration <= 0) {
+        if(!this.zipUrl ||
+            !this.selectFileZip ||
+            !this.targetFileZip) {
+          //set diem bai ktra do la 0
+          let dataPut = {
+            "studentID": this.studentID,
+            "examID": this.examID
+          }
+          // const jsonString = JSON.stringify(dataPut, null, 2);
+          // const blob = new Blob([jsonString], { type: 'application/json' });
+          // const link = document.createElement('a');
+          // link.href = URL.createObjectURL(blob);
+          // link.download = 'data.json';
+          // document.body.appendChild(link);
+          // link.click();
+          // document.body.removeChild(link);
+
+        } else {
+          //upload va cham
+          //submit project
+        }
+      }
       await this.navigateToMainPage();
+    },
+
+    async submitProject() {
+
+    },
+
+    async submitProject_And_NavigateToMainPage() {
+      await this.checkZipFile();
+      if(!this.validateUpdateZipFile) {
+        //submit project
+        await this.navigateToMainPage();
+      }
     },
 
     //upload zip
     handleDrop(event) {
       const files = event.dataTransfer.files;
       if (files.length) {
-        this.handleFile(files[0]);
+        this.handleFileChange(files[0]);
       }
     },
 
     handleFileChange(event) {
       const file = event.target.files[0];
       if (file && file.name.endsWith('.zip')) {
+        this.targetFileZip = file;
         this.selectFileZip = file.name; // Store the uploaded file name
         this.zipUrl = URL.createObjectURL(file); // Create a URL for the uploaded zip file
         this.validateUpdateZipFile = null; // Reset any validation messages
@@ -223,27 +281,33 @@ export default {
         this.validateUpdateZipFile = 'Please upload a valid zip file.'; // Show an error message
         this.zipUrl = null; // Reset the zip URL if the file is invalid
         this.selectFileZip = null; // Reset the selected file name
+        this.targetFileZip = null;
       }
     },
 
-    handleFile(file) {
-      if (file && file.name.endsWith('.zip')) {
-        this.selectFileZip = file.name; // Store the uploaded file name
-        this.zipUrl = URL.createObjectURL(file); // Create a URL for the uploaded zip file
-        this.validateUpdateZipFile = null; // Reset any validation messages
-      } else {
-        this.validateUpdateZipFile = 'Please upload a valid zip file.'; // Show an error message
-      }
-    },
+    // selectFile (){
+    //
+    // },
+
+    // handleFile(file) {
+    //   if (file && file.name.endsWith('.zip')) {
+    //     this.selectFileZip = file.name; // Store the uploaded file name
+    //     this.zipUrl = URL.createObjectURL(file); // Create a URL for the uploaded zip file
+    //     this.validateUpdateZipFile = null; // Reset any validation messages
+    //   } else {
+    //     this.validateUpdateZipFile = 'Please upload a valid zip file.'; // Show an error message
+    //   }
+    // },
 
     selectFile() {
-      this.$refs.fileInput.click(); // Trigger the file input click
+      this.$refs.fileInput.click();
     },
 
     removeZip() {
       this.zipUrl = null; // Clear the URL
       this.selectFileZip = null; // Clear the file name
       this.validateUpdateZipFile = null; // Reset validation message
+      this.targetFileZip = null;
       // Reset the file input
       if (this.$refs.fileInput) {
         this.$refs.fileInput.value = null; // Clear the input value
@@ -274,7 +338,7 @@ export default {
 </script>
 
 <template>
-  <div :style="containerStyle" >
+  <div :style="containerStyle">
     <header class="page-header">
       <div class="aside-questions">
         <div class="style-view-questions">
@@ -282,15 +346,16 @@ export default {
             <button class="button-number-question button-submit"
                     ref="submitButton"
                     @click="submitProject_And_NavigateToMainPage()"
-            >Submit</button>
+            >Submit
+            </button>
           </div>
         </div>
-        <span class="style-time">Time: {{formattedTime}}</span>
+        <span class="style-time">Time: {{ formattedTime }}</span>
       </div>
       <div class="aside-account-in-exam">
         <h1 class="style-name-student-exam">
           <img src="../../../assets/image/account-logo.png" alt="account logo" class="style-account-logo-in-exam">
-          <span v-if="studentID" class="style-span-information">{{lastName}} {{firstName}} - {{studentID}}</span>
+          <span v-if="studentID" class="style-span-information">{{ lastName }} {{ firstName }} - {{ studentID }}</span>
         </h1>
       </div>
     </header>
@@ -319,7 +384,7 @@ export default {
 
               <div v-if="zipUrl" class="style-view-image-uploaded">
                 <h5>Zip file uploaded:</h5>
-                <p>{{ selectFileZip  }}</p>
+                <p>{{ selectFileZip }}</p>
                 <button class="btn btn-danger" style="width: 4rem" @click="removeZip()">
                   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                        class="bi bi-trash style-trash" viewBox="0 0 16 16">
@@ -332,8 +397,8 @@ export default {
               </div>
             </div>
             <span v-if="validateUpdateZipFile" class="span-validate-modal-form">
-        {{ validateUpdateZipFile }}
-    </span>
+              {{ validateUpdateZipFile }}
+            </span>
           </div>
         </div>
       </section>

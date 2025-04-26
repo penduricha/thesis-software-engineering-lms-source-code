@@ -103,6 +103,7 @@ export default {
         this.handleFile(files[0]);
       }
     },
+
     handleFileChange(event) {
       const file = event.target.files[0];
       this.selectFileImage = file;
@@ -111,6 +112,7 @@ export default {
       }
       this.validateImageClassDiagramUrl = null;
     },
+
     handleFile(file) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -118,6 +120,7 @@ export default {
       };
       reader.readAsDataURL(file);
     },
+
     selectFile() {
       this.$refs.fileInput.click();
     },

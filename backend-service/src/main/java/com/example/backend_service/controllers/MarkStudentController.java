@@ -6,6 +6,7 @@ import com.example.backend_service.models.Student;
 import com.example.backend_service.repositories.MarkStudentRepository;
 import com.example.backend_service.services.ExamService;
 import com.example.backend_service.services.MarkStudentService;
+import com.example.backend_service.services.MarkStudentServiceJavaClass;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.jpa.JpaSystemException;
@@ -24,11 +25,14 @@ public class MarkStudentController {
 
     private final MarkStudentRepository markStudentRepository;
 
+    private final MarkStudentServiceJavaClass markStudentServiceJavaClass;
+
     private final ExamService examService;
 
-    public MarkStudentController(MarkStudentService markStudentService, MarkStudentRepository markStudentRepository, ExamService examService) {
+    public MarkStudentController(MarkStudentService markStudentService, MarkStudentRepository markStudentRepository, MarkStudentServiceJavaClass markStudentServiceJavaClass, ExamService examService) {
         this.markStudentService = markStudentService;
         this.markStudentRepository = markStudentRepository;
+        this.markStudentServiceJavaClass = markStudentServiceJavaClass;
         this.examService = examService;
     }
 
@@ -65,6 +69,47 @@ public class MarkStudentController {
                     DetailMarkStudent detailMarkStudent;
                     detailMarkStudent = markStudentService
                             .setMarkExam_After_SetDetailMarkExam_RetakeExam(dataSubmitPost, markStudentFound, scoringMethod);
+                    return ResponseEntity.ok(detailMarkStudent);
+                }
+
+            }
+        } catch (HttpClientErrorException e) {
+            // Handle specific HTTP client errors
+            return ResponseEntity.status(e.getStatusCode()).body(e.getStatusText());
+        } catch (Exception e) {
+            // Handle general exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/mark_student/put-mark-student-zero-java-class-if-no-submit")
+    public ResponseEntity<?> putMarkStudent_Zero_JavaClass_If_No_Submitted(@RequestBody Map<String, Object> dataPut)
+            throws HttpClientErrorException{
+        try {
+            String studentID = (String) dataPut.get("studentID");
+            Integer examIDInt = (Integer) dataPut.get("examID");
+            Long examID = examIDInt != null ? examIDInt.longValue() : null;
+            String scoringMethod = markStudentRepository
+                    .getScoringMethod_If_Student_Had_MarkExam_And_Exam_Retake(studentID, examID);
+            if (scoringMethod == null || scoringMethod.isEmpty()) {
+                //Trường hợp nếu làm ktra lan dau tien và ko làm lại
+                MarkStudent markStudent = markStudentServiceJavaClass.
+                        updateMarkStudent_Zero_If_Student_No_Submit_First(dataPut);
+                return ResponseEntity.ok(markStudent);
+            } else {
+                //trich record mark student
+                MarkStudent markStudentFound = markStudentRepository.findMarkStudentByExam_ExamID(examID);
+                if(markStudentFound == null) {
+                    MarkStudent markStudent;
+                    //van tao transaction giong nhu bai ktra 1 lan
+                    markStudent = markStudentServiceJavaClass.
+                            updateMarkStudent_Zero_If_Student_No_Submit_First(dataPut);
+                    return ResponseEntity.ok(markStudent);
+                } else {
+                    //transaction retake exam
+                    DetailMarkStudent detailMarkStudent;
+                    detailMarkStudent = markStudentServiceJavaClass
+                            .updateMarkStudent_Zero_If_Student_No_Submit_Retake(dataPut, scoringMethod, markStudentFound);
                     return ResponseEntity.ok(detailMarkStudent);
                 }
 

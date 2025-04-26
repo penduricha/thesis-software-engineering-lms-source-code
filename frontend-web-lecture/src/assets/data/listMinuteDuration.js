@@ -1,5 +1,9 @@
 const listMinuteDuration = [
     {
+        duration: 1,
+        durationText: '1 minute',
+    },
+    {
         duration: 30,
         durationText: '30 minutes',
     },

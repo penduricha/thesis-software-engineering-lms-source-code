@@ -8,10 +8,10 @@ export default class GenTestCase {
                 "parameters": {
                     "input": this.content
                 },
-                "workflow_id": "7483910122122657799"
+                "workflow_id": "7496876093182754834"
             }, {
                 headers: {
-                    'Authorization': 'Bearer pat_808iJDthzF5JN5t51ea6CyzEoaN8KjkIfQMi7BhUKC0nxcFQPArpIQwuc8BKuIRm',
+                    'Authorization': 'Bearer pat_OCcuh0BZVEGRPFPQMscgA45KzBxVe8noXhF64WIXpxRIQTC6iLNDeexIlx3InpNv',
                     'Content-Type': 'application/json'
                 }
             });

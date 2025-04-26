@@ -27,6 +27,7 @@
     "axios": "^1.7.9",
     "bootstrap-vue": "^2.23.1",
     "jquery": "^3.7.1",
+    "jszip": "^3.10.1",
     "sass-embedded": "^1.83.4",
     "vite": "^6.0.5",
     "vite-plugin-vue-devtools": "^7.6.8",

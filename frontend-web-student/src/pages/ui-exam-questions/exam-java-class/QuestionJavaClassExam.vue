@@ -7,6 +7,7 @@ import listMenu from "@/components/aside/list-menu.js";
 import BankTestJavaOopDao from "@/daos/BankTestJavaOopDao.js";
 import './question-java-class.scss';
 import JSZip from 'jszip';
+import MarkStudentDao from "@/daos/MarkStudentDao.js";
 
 export default {
   name: "QuestionJavaClassExam",
@@ -231,23 +232,19 @@ export default {
           //set diem bai ktra do la 0
           let dataPut = {
             "studentID": this.studentID,
-            "examID": this.examID
+            "examID": Number(this.examID)
           }
-          // const jsonString = JSON.stringify(dataPut, null, 2);
-          // const blob = new Blob([jsonString], { type: 'application/json' });
-          // const link = document.createElement('a');
-          // link.href = URL.createObjectURL(blob);
-          // link.download = 'data.json';
-          // document.body.appendChild(link);
-          // link.click();
-          // document.body.removeChild(link);
-
+          let status = await MarkStudentDao.updateMark_Zero_If_No_Submitted(dataPut);
+          if(status) {
+            await this.navigateToMainPage();
+          } else {
+            alert('Error system.');
+          }
         } else {
           //upload va cham
           //submit project
         }
       }
-      await this.navigateToMainPage();
     },
 
     async submitProject() {

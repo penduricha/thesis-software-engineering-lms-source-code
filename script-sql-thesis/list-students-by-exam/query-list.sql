@@ -35,7 +35,7 @@ select * from exam;
 
 select * from exam_java_oop;
 
-update exam set start_date = '2025-04-23 9:40:00' where exam_id = 11;
+update exam set start_date = '2025-04-26 20:40:00' where exam_id = 14;
 
 select * from mark_student;
 

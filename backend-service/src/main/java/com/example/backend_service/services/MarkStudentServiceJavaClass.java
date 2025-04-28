@@ -1,9 +1,7 @@
 package com.example.backend_service.services;
 
-import com.example.backend_service.models.DetailMarkStudent;
-import com.example.backend_service.models.Exam;
-import com.example.backend_service.models.MarkStudent;
-import com.example.backend_service.models.Student;
+import com.example.backend_service.models.*;
+import com.example.backend_service.repositories.DetailMarkStudentRepository;
 import com.example.backend_service.repositories.ExamRepository;
 import com.example.backend_service.repositories.MarkStudentRepository;
 import com.example.backend_service.repositories.StudentRepository;
@@ -12,19 +10,22 @@ import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClass {
 
     private final MarkStudentRepository markStudentRepository;
 
+    private final DetailMarkStudentRepository detailMarkStudentRepository;
+
     private final StudentRepository studentRepository;
 
     private final ExamRepository examRepository;
 
-    public MarkStudentServiceJavaClass(MarkStudentRepository markStudentRepository, StudentRepository studentRepository, ExamRepository examRepository) {
+    public MarkStudentServiceJavaClass(MarkStudentRepository markStudentRepository, DetailMarkStudentRepository detailMarkStudentRepository, StudentRepository studentRepository, ExamRepository examRepository) {
         this.markStudentRepository = markStudentRepository;
+        this.detailMarkStudentRepository = detailMarkStudentRepository;
         this.studentRepository = studentRepository;
         this.examRepository = examRepository;
     }
@@ -110,8 +111,109 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
         markStudentFound.getDetailMarkStudents().add(detailMarkStudent);
         detailMarkStudent.setMarkStudent(markStudentFound);
 
-        markStudentRepository.save(markStudentFound);
+        if(scoringMethod.equalsIgnoreCase("Max")) {
+            //detailMarkStudent.getMarkStudent().setMarkExam(detailMarkStudent.getDetailMarkExam());
+            double mark = detailMarkStudentRepository
+                    .getMaxDetailMarkExam_By_MarkStudentID(markStudentFound.getMarkStudentID());
+
+            detailMarkStudentRepository.save(detailMarkStudent);
+            detailMarkStudent.getMarkStudent().setMarkExam(mark);
+            markStudentRepository.save(detailMarkStudent.getMarkStudent());
+        } else if(scoringMethod.equalsIgnoreCase("Average")) {
+            double mark = detailMarkStudentRepository
+                    .getAvgDetailMarkExam_By_MarkStudentID(markStudentFound.getMarkStudentID());
+            //System.out.println("Mark average: " + mark);
+            detailMarkStudentRepository.save(detailMarkStudent);
+            detailMarkStudent.getMarkStudent().setMarkExam(Math.round(mark * 10.0) / 10.0);
+            markStudentRepository.save(detailMarkStudent.getMarkStudent());
+        } else if (scoringMethod.equalsIgnoreCase("Last exam")) {
+            double mark = detailMarkStudentRepository
+                    .getLastSubmittedDetailMarkExam_By_MarkStudentID(markStudentFound.getMarkStudentID());
+
+            detailMarkStudentRepository.save(detailMarkStudent);
+            detailMarkStudent.getMarkStudent().setMarkExam(mark);
+            markStudentRepository.save(detailMarkStudent.getMarkStudent());
+        }
         return detailMarkStudent;
+    }
+
+    @Override
+    public MarkStudent saveResultJavaClassFirst(Map<String, Object> dataPost)
+            throws JpaSystemException {
+        DetailMarkStudent detailMarkStudent = createMarkStudent_And_DetailMarkStudent(dataPost);
+        if(detailMarkStudent != null) {
+            List<Map<String, Object>> detailAnswers = (List<Map<String, Object>>) dataPost.get("detailAnswers");
+            if(!detailAnswers.isEmpty()) {
+                for(Map<String, Object> deMap: detailAnswers) {
+                    DetailAnswerJavaClass detailAnswerJavaClass = new DetailAnswerJavaClass();
+                    detailAnswerJavaClass.setSentence((String) deMap.get("sentence"));
+                    detailAnswerJavaClass.setScoreAchievement(Double.parseDouble((String) deMap.get("scoreAchievement")));
+                    detailAnswerJavaClass.setMaxScore(Double.parseDouble((String) deMap.get("maxScore")));
+                    detailMarkStudent.getDetailAnswerJavaClassList().add(detailAnswerJavaClass);
+                    detailAnswerJavaClass.setDetailMarkStudent(detailMarkStudent);
+                    //set cho detailMarkStudent
+                    detailAnswerJavaClass.getDetailMarkStudent()
+                            .setDetailMarkExam(Double.parseDouble((String) dataPost.get("totalScore")));
+                }
+                //set cho mark student
+                detailMarkStudent.getMarkStudent().setMarkExam(Double.parseDouble((String) dataPost.get("totalScore")));
+                return detailMarkStudent.getMarkStudent();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public DetailMarkStudent saveResultJavaClassRetake(Map<String, Object> dataPost,
+                                                       MarkStudent markStudentFound,
+                                                       String scoringMethod)
+            throws JpaSystemException {
+        DetailMarkStudent detailMarkStudent = new DetailMarkStudent();
+        detailMarkStudent.setDetailMarkExam(Double.parseDouble((String) dataPost.get("totalScore")));
+        //date time submit
+        detailMarkStudent.setDateSubmitted(LocalDateTime.now());
+        //set relationship
+        markStudentFound.getDetailMarkStudents().add(detailMarkStudent);
+        detailMarkStudent.setMarkStudent(markStudentFound);
+        List<Map<String, Object>> detailAnswers = (List<Map<String, Object>>) dataPost.get("detailAnswers");
+        if(!detailAnswers.isEmpty()) {
+            for(Map<String, Object> deMap: detailAnswers) {
+                DetailAnswerJavaClass detailAnswerJavaClass = new DetailAnswerJavaClass();
+                detailAnswerJavaClass.setSentence((String) deMap.get("sentence"));
+                detailAnswerJavaClass.setScoreAchievement(Double.parseDouble((String) deMap.get("scoreAchievement")));
+                detailAnswerJavaClass.setMaxScore(Double.parseDouble((String) deMap.get("maxScore")));
+                detailMarkStudent.getDetailAnswerJavaClassList().add(detailAnswerJavaClass);
+                detailAnswerJavaClass.setDetailMarkStudent(detailMarkStudent);
+                //set cho detailMarkStudent
+//                detailAnswerJavaClass.getDetailMarkStudent()
+//                        .setDetailMarkExam(Double.parseDouble((String) dataPost.get("totalScore")));
+            }
+            //set cho mark student
+            if(scoringMethod.equalsIgnoreCase("Max")) {
+                //detailMarkStudent.getMarkStudent().setMarkExam(detailMarkStudent.getDetailMarkExam());
+                double mark = detailMarkStudentRepository
+                        .getMaxDetailMarkExam_By_MarkStudentID(markStudentFound.getMarkStudentID());
+                detailMarkStudentRepository.save(detailMarkStudent);
+                detailMarkStudent.getMarkStudent().setMarkExam(mark);
+                markStudentRepository.save(detailMarkStudent.getMarkStudent());
+            } else if(scoringMethod.equalsIgnoreCase("Average")) {
+                double mark = detailMarkStudentRepository
+                        .getAvgDetailMarkExam_By_MarkStudentID(markStudentFound.getMarkStudentID());
+                //System.out.println("Mark average: " + mark);
+                detailMarkStudentRepository.save(detailMarkStudent);
+                detailMarkStudent.getMarkStudent().setMarkExam(Math.round(mark * 10.0) / 10.0);
+                markStudentRepository.save(detailMarkStudent.getMarkStudent());
+            } else if (scoringMethod.equalsIgnoreCase("Last exam")) {
+                double mark = detailMarkStudentRepository
+                        .getLastSubmittedDetailMarkExam_By_MarkStudentID(markStudentFound.getMarkStudentID());
+
+                detailMarkStudentRepository.save(detailMarkStudent);
+                detailMarkStudent.getMarkStudent().setMarkExam(mark);
+                markStudentRepository.save(detailMarkStudent.getMarkStudent());
+            }
+            return detailMarkStudent;
+        }
+        return null;
     }
 
 }

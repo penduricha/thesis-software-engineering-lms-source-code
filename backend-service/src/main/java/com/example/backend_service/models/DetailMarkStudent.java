@@ -92,4 +92,15 @@ public class DetailMarkStudent implements Serializable {
     @JsonIgnore
     private List<ResultQuestionJavaCore> resultQuestionJavaCoreList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "detailMarkStudent", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonIgnore
+    private List<DetailAnswerJavaClass> detailAnswerJavaClassList = new ArrayList<>();
+
+    public List<DetailAnswerJavaClass> getDetailAnswerJavaClassList() {
+        return detailAnswerJavaClassList;
+    }
+
+    public void setDetailAnswerJavaClassList(List<DetailAnswerJavaClass> detailAnswerJavaClassList) {
+        this.detailAnswerJavaClassList = detailAnswerJavaClassList;
+    }
 }

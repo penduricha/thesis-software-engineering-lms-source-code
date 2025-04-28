@@ -49,4 +49,18 @@ export default class MarkStudentDao{
             }
         }, 4000);
     }
+
+    static async updateMark_Zero_If_No_Submitted(dataPut) {
+        let responseReturn = null;
+        let status = false;
+        await MarkStudentService.put_MarkStudent_Zero_If_No_Submit(dataPut).then(response => {
+            responseReturn = response.data;
+        }).catch(error => {
+            console.error(error);
+        })
+        if(responseReturn) {
+            status = true;
+        }
+        return status;
+    }
 }

@@ -12,4 +12,8 @@ public interface I_MarkStudentServiceJavaClass {
 
     public DetailMarkStudent updateMarkStudent_Zero_If_Student_No_Submit_Retake
             (Map<String, Object> dataPut, String scoringMethod, MarkStudent markStudentFound);
+
+    public MarkStudent saveResultJavaClassFirst(Map<String, Object> dataPost);
+
+    public DetailMarkStudent saveResultJavaClassRetake(Map<String, Object> dataPost, MarkStudent markStudentFound, String scoringMethod);
 }

@@ -62,10 +62,11 @@ public class DetailAnswerJavaClass implements Serializable {
     }
 
     public void setScoreAchievement(double scoreAchievement) {
-        if(scoreAchievement > maxScore)
-            this.scoreAchievement = maxScore;
-        else
-            this.scoreAchievement = scoreAchievement;
+//        if(scoreAchievement > maxScore)
+//            this.scoreAchievement = maxScore;
+//        else
+//            this.scoreAchievement = scoreAchievement;
+        this.scoreAchievement = scoreAchievement;
     }
 
     public double getMaxScore() {

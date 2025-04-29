@@ -45,7 +45,7 @@ export default {
     },
 
     async handleGoToModalExamBefore() {
-      if(this.examID && this.courseID && this.topicExam === "Java core") {
+      if(this.examID && this.courseID) {
         await this.$refs.modalExamBefore.setExam_Information(this.examID, this.courseID);
       }
     },
@@ -58,9 +58,10 @@ export default {
     },
 
     getIDModal_By_TopicExam() {
-      if(this.topicExam === "Java core") {
-        return "#modal-java-core-before-exam"
-      }
+      // if(this.topicExam === "Java core") {
+      //   return "#modal-java-core-before-exam"
+      // }
+      return "#modal-java-core-before-exam"
     },
 
     getIDModal_Result_By_TopicExam() {

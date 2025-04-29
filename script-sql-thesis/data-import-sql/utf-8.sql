@@ -12,3 +12,4 @@ alter table bank_test_java_oop convert to character set utf8mb4 collate utf8mb4_
 alter table code_storage_save
 modify code_save longtext character set utf8mb4 collate utf8mb4_unicode_ci;
 
+alter table detail_answer_java_class convert to character set utf8mb4 collate utf8mb4_unicode_ci;

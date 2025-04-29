@@ -1,6 +1,7 @@
 package com.example.backend_service.services;
 
 import com.example.backend_service.models.*;
+import com.example.backend_service.others.DoubleGetMap;
 import com.example.backend_service.repositories.DetailMarkStudentRepository;
 import com.example.backend_service.repositories.ExamRepository;
 import com.example.backend_service.repositories.MarkStudentRepository;
@@ -147,16 +148,19 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
                 for(Map<String, Object> deMap: detailAnswers) {
                     DetailAnswerJavaClass detailAnswerJavaClass = new DetailAnswerJavaClass();
                     detailAnswerJavaClass.setSentence((String) deMap.get("sentence"));
-                    detailAnswerJavaClass.setScoreAchievement(Double.parseDouble((String) deMap.get("scoreAchievement")));
-                    detailAnswerJavaClass.setMaxScore(Double.parseDouble((String) deMap.get("maxScore")));
+                    detailAnswerJavaClass.setReviews((String) deMap.get("reviews"));
+                    //scoreAchievement
+                    detailAnswerJavaClass.setScoreAchievement(DoubleGetMap.getDoubleValue(deMap, "scoreAchievement"));
+                    detailAnswerJavaClass.setMaxScore(DoubleGetMap.getDoubleValue(deMap, "maxScore"));
                     detailMarkStudent.getDetailAnswerJavaClassList().add(detailAnswerJavaClass);
                     detailAnswerJavaClass.setDetailMarkStudent(detailMarkStudent);
                     //set cho detailMarkStudent
                     detailAnswerJavaClass.getDetailMarkStudent()
-                            .setDetailMarkExam(Double.parseDouble((String) dataPost.get("totalScore")));
+                            .setDetailMarkExam((Double) dataPost.get("totalScore"));
                 }
                 //set cho mark student
-                detailMarkStudent.getMarkStudent().setMarkExam(Double.parseDouble((String) dataPost.get("totalScore")));
+                detailMarkStudent.getMarkStudent().setMarkExam(DoubleGetMap.getDoubleValue(dataPost, "totalScore"));
+                detailMarkStudentRepository.save(detailMarkStudent);
                 return detailMarkStudent.getMarkStudent();
             }
         }
@@ -169,7 +173,7 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
                                                        String scoringMethod)
             throws JpaSystemException {
         DetailMarkStudent detailMarkStudent = new DetailMarkStudent();
-        detailMarkStudent.setDetailMarkExam(Double.parseDouble((String) dataPost.get("totalScore")));
+        detailMarkStudent.setDetailMarkExam(DoubleGetMap.getDoubleValue(dataPost, "totalScore"));
         //date time submit
         detailMarkStudent.setDateSubmitted(LocalDateTime.now());
         //set relationship
@@ -180,8 +184,10 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
             for(Map<String, Object> deMap: detailAnswers) {
                 DetailAnswerJavaClass detailAnswerJavaClass = new DetailAnswerJavaClass();
                 detailAnswerJavaClass.setSentence((String) deMap.get("sentence"));
-                detailAnswerJavaClass.setScoreAchievement(Double.parseDouble((String) deMap.get("scoreAchievement")));
-                detailAnswerJavaClass.setMaxScore(Double.parseDouble((String) deMap.get("maxScore")));
+                detailAnswerJavaClass.setReviews((String) deMap.get("reviews"));
+                System.out.println("score achievement: "+DoubleGetMap.getDoubleValue(deMap, "scoreAchievement"));
+                detailAnswerJavaClass.setScoreAchievement(DoubleGetMap.getDoubleValue(deMap, "scoreAchievement"));
+                detailAnswerJavaClass.setMaxScore(DoubleGetMap.getDoubleValue(deMap, "maxScore"));
                 detailMarkStudent.getDetailAnswerJavaClassList().add(detailAnswerJavaClass);
                 detailAnswerJavaClass.setDetailMarkStudent(detailMarkStudent);
                 //set cho detailMarkStudent

@@ -28,7 +28,7 @@ export default {
     <div class="modal-dialog modal-sm">
       <div class="modal-content custom-modal">
         <div class="modal-body text-center">
-          <span class="exam-overdue-text">Exam is overdue, your mark is 0.</span>
+          <span class="exam-overdue-text">Exam is overdue.</span>
         </div>
         <div class="modal-footer d-flex justify-content-center border-0">
           <button type="button" class="btn-confirm-ok" data-bs-dismiss="modal">OK</button>

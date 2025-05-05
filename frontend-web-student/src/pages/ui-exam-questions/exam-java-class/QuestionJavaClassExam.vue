@@ -69,6 +69,9 @@ export default {
       targetFileZip: null,
 
       validateUpdateZipFile: null,
+
+      //code java submit cozeAI
+      codeJavaSubmitted: '',
     }
   },
 
@@ -210,17 +213,34 @@ export default {
       try {
         const content = await zip.loadAsync(this.targetFileZip);
         const files = Object.keys(content.files);
+
         // Kiểm tra xem tất cả các file có phải là .java hay không
-        const allJavaFiles = files.every(file => file.endsWith('.java'));
+        //const allJavaFiles = files.every(file => file.endsWith('.java'));
+
         // Kiểm tra xem có file nào không phải là .java không
-        if (!allJavaFiles || files.length === 0) {
-          this.validateUpdateZipFile = 'The zip file must contain only .java files.';
-          return;
-        }
-        // Thực hiện upload file zip ở đây
+        // if (!allJavaFiles || files.length === 0) {
+        //   this.validateUpdateZipFile = 'The zip file must contain only .java files.';
+        //   return;
+        // }
+
+        // // Kiểm tra xem có ít nhất một thư mục con trong zip không
+        // const hasSubfolder = files.some(file => file.split('/').length > 1);
+        //
+        // if (!hasSubfolder) {
+        //   this.validateUpdateZipFile = 'The zip file must contain at least one subfolder.';
+        //   return;
+        // }
+        // if(!this.zipUrl ||
+        //     !this.selectFileZip ||
+        //     !this.targetFileZip) {
+        //   this.validateUpdateZipFile = 'Please upload zip file.';
+        // }
+
+            // Thực hiện upload file zip ở đây
         console.log('File is valid and ready to upload.');
       } catch (error) {
-        this.validateUpdateZipFile = 'Error reading zip file: '+ error;
+        console.error('Error reading zip file: ' + error);
+        this.validateUpdateZipFile = 'Please upload a zip file.'
       }
     },
 
@@ -238,11 +258,28 @@ export default {
           if(status) {
             await this.navigateToMainPage();
           } else {
-            alert('Error system.');
+            alert('Error system. ');
+            await this.navigateToMainPage();
           }
         } else {
           //upload va cham
           //submit project
+          if(this.targetFileZip) {
+            const zip = new JSZip();
+            const content = await zip.loadAsync(this.targetFileZip);
+            let combinedString = '';
+            const files = Object.keys(content.files);
+            //duyet file zip
+            for (const fileName of files) {
+              if (fileName.endsWith('.java')) {
+                const fileData = await content.files[fileName].async('string');
+                // Thêm xuống dòng
+                combinedString += fileData + '\n';
+              }
+            }
+            this.codeJavaSubmitted = combinedString;
+            console.log(this.codeJavaSubmitted);
+          }
         }
       }
     },
@@ -255,7 +292,23 @@ export default {
       await this.checkZipFile();
       if(!this.validateUpdateZipFile) {
         //submit project
-        await this.navigateToMainPage();
+        if(this.targetFileZip) {
+          const zip = new JSZip();
+          const content = await zip.loadAsync(this.targetFileZip);
+          let combinedString = '';
+          const files = Object.keys(content.files);
+          //duyet file zip
+          for (const fileName of files) {
+            if (fileName.endsWith('.java')) {
+              const fileData = await content.files[fileName].async('string');
+              // Thêm xuống dòng
+              combinedString += fileData + '\n';
+            }
+          }
+          this.codeJavaSubmitted = combinedString;
+          console.log(this.codeJavaSubmitted);
+        }
+        //await this.navigateToMainPage();
       }
     },
 

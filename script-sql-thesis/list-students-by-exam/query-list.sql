@@ -44,3 +44,7 @@ select * from student_access_exam;
 select * from detail_mark_student;
 
 select * from detail_answer_java_class;
+
+select * from exam;
+
+update exam set start_date = '2025-05-05 09:20:00' where exam_id = 19;

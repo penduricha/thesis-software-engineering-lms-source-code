@@ -22,6 +22,7 @@ export default {
     },
 
     async handleDeleteTest() {
+      //check them sv có làm
       if(this.bankTestJavaOopIDToDelete) {
         let status = BankTestJavaOopDao
             .delete_Java_Test_Oop_By_BankTestJavaOopID(this.bankTestJavaOopIDToDelete)

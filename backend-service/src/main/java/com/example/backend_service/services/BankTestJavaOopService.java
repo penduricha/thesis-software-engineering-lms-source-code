@@ -47,9 +47,10 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
         //xet them record lien quan nua;
         BankTestJavaOop bankTestJavaOop = findBankTestJavaOop_By_BankTestJavaOopID(bankTestJavaOopID);
         if(bankTestJavaOop != null) {
-            ExamJavaOop examJavaOopFound = examJavaOopService
+            List<ExamJavaOop> examJavaOopFounds = examJavaOopService
                     .getExamJavaOopBy_BankTestJavaOopID(bankTestJavaOopID);
-            if(examJavaOopFound == null) {
+            if(!examJavaOopFounds.isEmpty()) {
+                //ktra delete them exam java class
                 String sqlDeleteBankTestOop = "delete from bank_test_java_oop where bank_test_java_oop_id = ?";
                 entityManager.createNativeQuery(sqlDeleteBankTestOop)
                         .setParameter(1, bankTestJavaOop.getBankTestJavaOopID())

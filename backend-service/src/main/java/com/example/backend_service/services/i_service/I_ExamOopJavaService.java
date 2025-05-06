@@ -7,5 +7,7 @@ import java.util.List;
 public interface I_ExamOopJavaService {
     public List<ExamJavaOop> getAllExamJavaOop();
 
-    public ExamJavaOop getExamJavaOopBy_BankTestJavaOopID(Long bankTestJavaOopID);
+    public List<ExamJavaOop> getExamJavaOopBy_BankTestJavaOopID(Long bankTestJavaOopID);
+
+    public Boolean isExistExam(Long bankTestJavaOopID);
 }

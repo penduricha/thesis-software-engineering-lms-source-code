@@ -5,3 +5,5 @@ Step 4: import student.sql
 Step 5: run file utf-8.sql để set utf-8 cho các bảng cần thiết.
 Step 6: import bank_question_java_core.sql
 Step 7: import bank_test_case_java_core.sql
+Step 8: import file bank_test_java_oop.sql
+

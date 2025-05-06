@@ -8,6 +8,7 @@ import BankTestJavaOopDao from "@/daos/BankTestJavaOopDao.js";
 import './question-java-class.scss';
 import JSZip from 'jszip';
 import MarkStudentDao from "@/daos/MarkStudentDao.js";
+import ReplaceString from "@/components/data-key-word/ReplaceString.js";
 
 export default {
   name: "QuestionJavaClassExam",
@@ -51,6 +52,8 @@ export default {
 
       lastName: null,
       firstName: null,
+
+      descriptionTest: null,
 
       //timer
       // Khởi tạo thời gian còn lại
@@ -109,6 +112,9 @@ export default {
         this.testJavaOop = await BankTestJavaOopDao
             .getBankTestJavaOop_By_ExamID(Number(this.examID));
         console.log('Test exam: ', this.testJavaOop);
+        if(this.testJavaOop) {
+          this.descriptionTest = this.testJavaOop.descriptionTest;
+        }
       }
     },
 
@@ -278,14 +284,33 @@ export default {
               }
             }
             this.codeJavaSubmitted = combinedString;
+            this.codeJavaSubmitted = ReplaceString.escapeString(String(this.codeJavaSubmitted));
             console.log(this.codeJavaSubmitted);
           }
+
         }
       }
     },
 
     async submitProject() {
-
+      if(this.examID && this.studentID && this.codeJavaSubmitted && this.descriptionTest) {
+        let parameters = {
+          "examID": this.examID,
+          "studentID": this.studentID,
+          "input": this.codeJavaSubmitted,
+          //chỗ này chị sửa field cozeAI càng tốt thành descriptionTest,
+          // còn ko cũng ko sao tại vì cái jetbrains nó warn cái format tên =(((
+          "debai": this.descriptionTest
+        }
+        let jsonParametersString = JSON.stringify(parameters);
+        let curlCommand = `curl --location 'https://api.coze.com/v1/workflow/run \n' \
+          --header 'Authorization: Bearer pat_OCcuh0BZVEGRPFPQMscgA45KzBxVe8noXhF64WIXpxRIQTC6iLNDeexIlx3InpNv \n' \
+          --header 'Content-Type: application/json \n' \
+          --data-raw '${jsonParametersString}, "workflow_id": "7496875298778054664"
+          }' \n`;
+        console.log(curlCommand);
+        //chỗ này chị submit cozeAI nha
+      }
     },
 
     async submitProject_And_NavigateToMainPage() {
@@ -306,8 +331,11 @@ export default {
             }
           }
           this.codeJavaSubmitted = combinedString;
+          this.codeJavaSubmitted = ReplaceString.escapeString(String(this.codeJavaSubmitted));
           console.log(this.codeJavaSubmitted);
+          await this.submitProject();
         }
+        //sau khi submit xong thi quay ve trang main page
         //await this.navigateToMainPage();
       }
     },
@@ -385,6 +413,10 @@ export default {
     // },
   },
 }
+
+// const escapeString = (str) => {
+//   return str.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+// };
 </script>
 
 <template>

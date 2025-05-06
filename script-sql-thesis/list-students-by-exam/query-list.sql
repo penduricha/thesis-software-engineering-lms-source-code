@@ -48,3 +48,27 @@ select * from detail_answer_java_class;
 select * from exam;
 
 update exam set start_date = '2025-05-05 09:20:00' where exam_id = 19;
+
+select * from mark_student where exam_id = 17;
+
+select * from exam where exam_id = 17;
+
+select * from detail_mark_student where mark_student_id = 12;
+
+select * from detail_answer_java_class where detail_mark_student_id = 17;
+
+select dajc.detail_answer_java_classid from mark_student ms
+right join detail_mark_student dms
+on ms.mark_student_id = dms.mark_student_id
+right join detail_answer_java_class dajc
+on dms.detail_mark_student_id = dajc.detail_mark_student_id
+where ms.mark_student_id = 12;
+
+select * from detail_answer_java_class;
+
+select detail_answer_java_classid from detail_answer_java_class;
+
+select * from exam;
+
+update exam set start_date = '2025-05-06 13:40:00'
+where exam_id = 21;

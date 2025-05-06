@@ -8,6 +8,7 @@ import BankTestJavaOopDao from "@/daos/BankTestJavaOopDao.js";
 import Validation from "@/validation/Validation.js";
 import Quill from "quill";
 import ImageBBManage from "@/pages/imagebb/ImageBBManage.js";
+import ExamDao from "@/daos/ExamDao.js";
 
 
 export default {
@@ -230,16 +231,23 @@ export default {
             "descriptionTest": this.htmlContentDescription,
             "imageDiagram": this.imageDiagram,
           }
+          let statusStudentAccess = await ExamDao
+              .getStatus_Access_Student_To_Exam_By_ExamID(this.examID);
+          if(!statusStudentAccess) {
+            let statusPut = await BankTestJavaOopDao
+                .update_Java_Test_Oop_By_BankTestJavaOopID(
+                    this.bankTestJavaOopID, testToPut);
+            if (statusPut) {
+              alert("Update successfully.");
+              this.handleBackToListJavaOopTest();
+            } else {
+              alert("Update failed.");
+            }
+          } else {
+            alert("There is student is currently accessing the test. Please wait until finish.");
+          }
         }
-        let statusPut = await BankTestJavaOopDao
-            .update_Java_Test_Oop_By_BankTestJavaOopID(
-                this.bankTestJavaOopID, testToPut);
-        if (statusPut) {
-          alert("Update successfully.");
-          this.handleBackToListJavaOopTest();
-        } else {
-          alert("Update failed.");
-        }
+
       }
     }
   },

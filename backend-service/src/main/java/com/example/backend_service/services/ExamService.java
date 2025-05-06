@@ -38,7 +38,9 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
 
     private final ExamJavaOopRepository examJavaOopRepository;
 
-    public ExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ExamRepository examRepository, CourseRepository courseRepository, BankQuestionJavaCoreService bankQuestionJavaCoreService, BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository, MarkStudentRepository markStudentRepository, BankTestJavaOopRepository bankTestJavaOopRepository, ExamJavaOopRepository examJavaOopRepository) {
+    private final DetailAnswerJavaClassRepository detailAnswerJavaClassRepository;
+
+    public ExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ExamRepository examRepository, CourseRepository courseRepository, BankQuestionJavaCoreService bankQuestionJavaCoreService, BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository, MarkStudentRepository markStudentRepository, BankTestJavaOopRepository bankTestJavaOopRepository, ExamJavaOopRepository examJavaOopRepository, DetailAnswerJavaClassRepository detailAnswerJavaClassRepository) {
         this.questionJavaCoreExamRepository = questionJavaCoreExamRepository;
         this.examRepository = examRepository;
         this.courseRepository = courseRepository;
@@ -47,6 +49,7 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
         this.markStudentRepository = markStudentRepository;
         this.bankTestJavaOopRepository = bankTestJavaOopRepository;
         this.examJavaOopRepository = examJavaOopRepository;
+        this.detailAnswerJavaClassRepository = detailAnswerJavaClassRepository;
     }
 
     @Override
@@ -312,11 +315,17 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
         if(exam != null) {
             MarkStudent markStudentFound_By_ExamID = markStudentRepository.
                     findMarkStudentByExam_ExamID(exam.getExamID());
-            if(markStudentFound_By_ExamID != null) {
+            if(markStudentFound_By_ExamID != null && exam.getTopicExam().equalsIgnoreCase("Java core")) {
                 //xoá phan diem thi nếu sv làm xong
-                deleteMarkStudentID_By_MarkStudentID(markStudentFound_By_ExamID.getMarkStudentID());
+                deleteMarkStudentID_By_MarkStudentID_JavaCore(markStudentFound_By_ExamID.getMarkStudentID());
+            } else if(markStudentFound_By_ExamID != null && exam.getTopicExam().equalsIgnoreCase("Java class")) {
+                //xoa record noi 2 bang
+                entityManager.createNativeQuery("delete from exam_java_oop where exam_id = :examID")
+                        .setParameter("examID", exam.getExamID())
+                        .executeUpdate();
+                deleteMarkStudentID_By_MarkStudentID_JavaClass(markStudentFound_By_ExamID.getMarkStudentID());
             }
-            //Xoa bai ktra neu la java core
+            //Xoa bai ktra neu la java core vaf java class
             if(exam.getTopicExam().equalsIgnoreCase("Java core")) {
                 entityManager.createNativeQuery("delete from question_java_core_exam where exam_id = :examID")
                         .setParameter("examID", exam.getExamID())
@@ -471,7 +480,7 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
 
     @Override
     @Transactional
-    public Void deleteMarkStudentID_By_MarkStudentID(Long markStudentID)
+    public Void deleteMarkStudentID_By_MarkStudentID_JavaCore(Long markStudentID)
             throws JpaSystemException{
         //get ds tu query sql
         List<Long> queryListOutputID = getListOutputDebugResultJavaCoreID_By_MarkStudentID(markStudentID);
@@ -494,6 +503,48 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
             for(Long id: queryListResultQuestionJavaCoreID) {
                 String sqlDeleteID_Result = "delete from result_question_java_core where result_question_java_core_id = ?";
                 entityManager.createNativeQuery(sqlDeleteID_Result)
+                        .setParameter(1, id)
+                        .executeUpdate();
+            }
+        }
+
+        if(!queryListDetailMarkStudentID.isEmpty()) {
+            for(Long id: queryListDetailMarkStudentID) {
+                String sqlDeleteID_DetailMarkStudent
+                        = "delete from detail_mark_student where detail_mark_student_id = ?";
+                entityManager.createNativeQuery(sqlDeleteID_DetailMarkStudent)
+                        .setParameter(1, id)
+                        .executeUpdate();
+            }
+        }
+
+        //find mark student
+        MarkStudent markStudentFound = markStudentRepository.findMarkStudentByMarkStudentID(markStudentID);
+        if(markStudentFound != null) {
+            //delete mark student
+            String sqlDeleteMarkStudent = "delete from mark_student where mark_student_id = ?";
+            entityManager.createNativeQuery(sqlDeleteMarkStudent)
+                    .setParameter(1, markStudentID)
+                    .executeUpdate();
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public Void deleteMarkStudentID_By_MarkStudentID_JavaClass(Long markStudentID) throws JpaSystemException {
+
+        List<Long> queryListDetailMarkStudentID = getListDetailMarkStudentID_By_MarkStudentID(markStudentID);
+
+        List<Long> queryListDetailAnswerJavaClassID = detailAnswerJavaClassRepository
+                .getListDetailAnswerJavaClassID_By_MarkStudentID(markStudentID);
+
+        //xoa chi tiet
+        if(!queryListDetailAnswerJavaClassID.isEmpty()) {
+            for(Long id: queryListDetailAnswerJavaClassID) {
+                String sqlDeleteID_DetailAnswerJavaClass
+                        = "delete from detail_answer_java_class where detail_answer_java_classid = ?";
+                entityManager.createNativeQuery(sqlDeleteID_DetailAnswerJavaClass)
                         .setParameter(1, id)
                         .executeUpdate();
             }

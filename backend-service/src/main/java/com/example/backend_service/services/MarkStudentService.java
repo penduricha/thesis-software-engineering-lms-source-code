@@ -380,10 +380,19 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
     public Void deleteMarkStudent_By_ExamID(Long examID) throws JpaSystemException{
         Exam examFound = examRepository.findExamByExamID(examID);
         if(examFound != null) {
-            Long markStudentID = markStudentRepository.getMarkStudentID_By_Exam_ExamID(examID);
-            if(markStudentID != null) {
-                examService.deleteMarkStudentID_By_MarkStudentID(markStudentID);
+            if(examFound.getTopicExam().equalsIgnoreCase("Java core")) {
+                Long markStudentID = markStudentRepository.getMarkStudentID_By_Exam_ExamID(examID);
+                if(markStudentID != null) {
+                    examService.deleteMarkStudentID_By_MarkStudentID_JavaCore(markStudentID);
+                }
             }
+            else if(examFound.getTopicExam().equalsIgnoreCase("Java class")) {
+                Long markStudentID = markStudentRepository.getMarkStudentID_By_Exam_ExamID(examID);
+                if(markStudentID != null) {
+                    examService.deleteMarkStudentID_By_MarkStudentID_JavaClass(markStudentID);
+                }
+            }
+
         }
         return null;
     }

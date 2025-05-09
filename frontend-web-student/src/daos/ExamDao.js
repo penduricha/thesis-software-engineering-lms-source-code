@@ -62,7 +62,7 @@ export default class ExamDao {
                 callback(currentExams);
                 // Gọi lại callback để cập nhật dữ liệu
             }
-        }, 5000);
+        }, 4000);
     }
 
     static async getExam_Information_Before_Exam(examID, courseID){

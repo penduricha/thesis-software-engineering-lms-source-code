@@ -7,6 +7,7 @@ import com.example.backend_service.repositories.ExamRepository;
 import com.example.backend_service.repositories.MarkStudentRepository;
 import com.example.backend_service.repositories.StudentRepository;
 import com.example.backend_service.services.i_service.I_MarkStudentServiceJavaClass;
+import jakarta.transaction.Transactional;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
@@ -139,11 +140,13 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
     }
 
     @Override
+    @Transactional
     public MarkStudent saveResultJavaClassFirst(Map<String, Object> dataPost)
             throws JpaSystemException {
         DetailMarkStudent detailMarkStudent = createMarkStudent_And_DetailMarkStudent(dataPost);
         if(detailMarkStudent != null) {
             List<Map<String, Object>> detailAnswers = (List<Map<String, Object>>) dataPost.get("detailAnswers");
+            System.out.println(detailAnswers);
             if(!detailAnswers.isEmpty()) {
                 for(Map<String, Object> deMap: detailAnswers) {
                     DetailAnswerJavaClass detailAnswerJavaClass = new DetailAnswerJavaClass();
@@ -159,8 +162,10 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
                             .setDetailMarkExam((Double) dataPost.get("totalScore"));
                 }
                 //set cho mark student
-                detailMarkStudent.getMarkStudent().setMarkExam(DoubleGetMap.getDoubleValue(dataPost, "totalScore"));
+                //luu y persist detailMarkStudent -> set cho mark student -> persist markStudent
                 detailMarkStudentRepository.save(detailMarkStudent);
+                detailMarkStudent.getMarkStudent().setMarkExam(DoubleGetMap.getDoubleValue(dataPost, "totalScore"));
+                markStudentRepository.save(detailMarkStudent.getMarkStudent());
                 return detailMarkStudent.getMarkStudent();
             }
         }

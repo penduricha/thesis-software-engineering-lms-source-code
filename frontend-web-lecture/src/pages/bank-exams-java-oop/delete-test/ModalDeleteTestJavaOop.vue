@@ -26,23 +26,19 @@ export default {
     async handleDeleteTest() {
       //check them sv có làm, ktra them bai kiem tra co duoc tao hay ko
       if(this.bankTestJavaOopIDToDelete) {
-        let statusStudentAccess = await ExamDao
-            .getStatus_Access_Student_To_Exam_By_ExamID(this.examID);
+        // let statusStudentAccess = await ExamDao
+        //     .getStatus_Access_Student_To_Exam_By_ExamID(this.examID);
 
         let existExam = await ExamJavaOopDao.get_Exist_Exam_By_BankTestJavaOopID(Number(this.bankTestJavaOopIDToDelete));
         console.log('Exist exam: ', existExam);
         if(existExam) {
           alert("Can't delete test java class because it is created to exam.");
         } else {
-          if(!statusStudentAccess) {
-            let status = BankTestJavaOopDao
-                .delete_Java_Test_Oop_By_BankTestJavaOopID(this.bankTestJavaOopIDToDelete)
-            if(status) {
-              alert("Delete test java class successfully.");
-              window.location.reload();
-            }
-          } else {
-            alert("There is student is currently accessing the test. Please wait until finish.");
+          let status = BankTestJavaOopDao
+              .delete_Java_Test_Oop_By_BankTestJavaOopID(this.bankTestJavaOopIDToDelete)
+          if(status) {
+            alert("Delete test java class successfully.");
+            window.location.reload();
           }
         }
       }

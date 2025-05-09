@@ -28,4 +28,10 @@ public interface BankTestJavaOopRepository extends JpaRepository<BankTestJavaOop
             """,
             nativeQuery = true)
     Long getRandomBankTestJavaOopID();
+
+  @Query(value = """
+            select exam_id from exam_java_oop where bank_test_java_oop_id = :bankTestJavaOopID;
+            """,
+         nativeQuery = true)
+    List<Long> getListExamIDByBankTestJavaOopID(@Param("bankTestJavaOopID") Long bankTestJavaOopID);
 }

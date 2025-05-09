@@ -4,10 +4,12 @@ import DetailMarkStudentDao from "@/daos/DetailMarkStudentDao.js";
 import ModalBeforeExam from "@/pages/modal-exam/ModalBeforeExam.vue";
 import ModalViewResultExamJavaCore
   from "@/pages/list-exams/modal-view-result-exam-java-core/ModalViewResultExamJavaCore.vue";
+import ModalViewDetailAnswersJavaClass
+  from "@/pages/list-exams/modal-view-detail-answers-java-class/ModalViewDetailAnswersJavaClass.vue";
 
 export default {
   name: "ModalViewDetailMark",
-  components: {ModalViewResultExamJavaCore, ModalBeforeExam},
+  components: {ModalViewDetailAnswersJavaClass, ModalViewResultExamJavaCore, ModalBeforeExam, },
 
   props: {
     courseID :{
@@ -53,7 +55,12 @@ export default {
     async handleViewDetailResult(detailMarkStudentID) {
       if(this.topicExam === "Java core") {
         //set modal
-        await this.$refs.modalViewResultExamJavaCore.setResultExamJavaCoreToModal(detailMarkStudentID);
+        await this.$refs.modalViewResultExamJavaCore
+            .setResultExamJavaCoreToModal(detailMarkStudentID);
+      } else if (this.topicExam === "Java class") {
+        //set data cho java class, set detail answers java class
+        await this.$refs.modalViewDetailAnswersJavaClass
+            .setDetailAnswersJavaClass_To_Table(detailMarkStudentID);
       }
     },
 
@@ -64,9 +71,20 @@ export default {
       return "#modal-java-core-before-exam"
     },
 
-    getIDModal_Result_By_TopicExam() {
+    getIDModal_Result_By_TopicExam(detailMarkExam) {
+      // if(!detailMarkExam) {
+      //   return null;
+      // } else {
+      //   if(this.topicExam === "Java core") {
+      //     return "#modal-detail-result-exam-java-core"
+      //   } else if (this.topicExam === "Java class") {
+      //     return "#modal-detail-result-exam-java-class"
+      //   }
+      // }
       if(this.topicExam === "Java core") {
         return "#modal-detail-result-exam-java-core"
+      } else if (this.topicExam === "Java class") {
+        return "#modal-detail-result-exam-java-class"
       }
     }
   },
@@ -107,7 +125,7 @@ export default {
                   <button class="button-view-exam"
                           @click="handleViewDetailResult(d.detailMarkStudentID)"
                           data-bs-toggle="modal"
-                          :data-bs-target="getIDModal_Result_By_TopicExam()"
+                          :data-bs-target="getIDModal_Result_By_TopicExam(d.detailMarkExam)"
                   >View</button>
                 </td>
               </tr>
@@ -133,6 +151,7 @@ export default {
   </div>
   <modal-before-exam ref="modalExamBefore"/>
   <modal-view-result-exam-java-core ref="modalViewResultExamJavaCore" />
+  <modal-view-detail-answers-java-class ref="modalViewDetailAnswersJavaClass" />
 </template>
 
 <style scoped lang="scss">

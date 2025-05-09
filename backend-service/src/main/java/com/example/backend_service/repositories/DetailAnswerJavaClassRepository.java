@@ -14,8 +14,12 @@ public interface DetailAnswerJavaClassRepository extends JpaRepository<DetailAns
                 on ms.mark_student_id = dms.mark_student_id
                 right join detail_answer_java_class dajc
                 on dms.detail_mark_student_id = dajc.detail_mark_student_id
-                where ms.mark_student_id = 12;
+                where ms.mark_student_id = :markStudentID;
             """,
             nativeQuery = true)
         List<Long> getListDetailAnswerJavaClassID_By_MarkStudentID(@Param("markStudentID") Long markStudentID);
+
+        //Hiển thị danh sách detail answer java class by detailMarkStudentID
+        List<DetailAnswerJavaClass>
+                findDetailAnswerJavaClassesByDetailMarkStudent_DetailMarkStudentID(Long detailMarkStudentID);
 }

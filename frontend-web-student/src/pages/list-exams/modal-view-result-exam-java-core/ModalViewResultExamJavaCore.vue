@@ -99,7 +99,7 @@ export default {
                   </tbody>
                 </table>
               </div>
-              <p class="point">Point: {{ q.markAchieve }}/{{ q.score }}</p>
+              <p class="point">Score: {{ q.markAchieve }}/{{ q.score }}</p>
             </div>
           </div>
         </div>

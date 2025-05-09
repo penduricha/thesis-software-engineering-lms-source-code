@@ -50,4 +50,10 @@ export default class BankTestJavaOopService {
             .getAPIClient()
             .patch(`/test-java-oop/update-bank-test-java-oop-id-by-exam-id/${examID}/${newBankTestJavaOopID}`);
     }
+
+    static fetchStatus_Student_DoExam_By_BankTestJavaOopID(bankTestJavaOopID) {
+        return axiosConfig
+            .getAPIClient()
+            .get(`/test-java-oop/get-status-student-do-exam-by-id/${bankTestJavaOopID}`);
+    }
 }

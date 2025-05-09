@@ -231,9 +231,8 @@ export default {
             "descriptionTest": this.htmlContentDescription,
             "imageDiagram": this.imageDiagram,
           }
-          let statusStudentAccess = await ExamDao
-              .getStatus_Access_Student_To_Exam_By_ExamID(this.examID);
-          if(!statusStudentAccess) {
+          let statusStudentDoExam = await BankTestJavaOopDao.getStatus_Student_DoExam_By_BankTestJavaOopID(this.bankTestJavaOopID);
+          if(!statusStudentDoExam) {
             let statusPut = await BankTestJavaOopDao
                 .update_Java_Test_Oop_By_BankTestJavaOopID(
                     this.bankTestJavaOopID, testToPut);
@@ -244,8 +243,9 @@ export default {
               alert("Update failed.");
             }
           } else {
-            alert("There is student is currently accessing the test. Please wait until finish.");
+            alert("There are students taking the test, please wait until the students finish.");
           }
+
         }
 
       }

@@ -283,9 +283,10 @@ export default {
                 combinedString += fileData + '\n';
               }
             }
+            // xóa hết các dòng rỗng.
             this.codeJavaSubmitted = combinedString;
             this.codeJavaSubmitted = ReplaceString.escapeString(String(this.codeJavaSubmitted));
-            console.log(this.codeJavaSubmitted);
+            console.log('code java submitted: ',this.codeJavaSubmitted);
           }
 
         }
@@ -303,9 +304,9 @@ export default {
           "debai": this.descriptionTest
         }
         let jsonParametersString = JSON.stringify(parameters);
-        let curlCommand = `curl --location 'https://api.coze.com/v1/workflow/run \n' \
-          --header 'Authorization: Bearer pat_OCcuh0BZVEGRPFPQMscgA45KzBxVe8noXhF64WIXpxRIQTC6iLNDeexIlx3InpNv \n' \
-          --header 'Content-Type: application/json \n' \
+        let curlCommand = `curl --location 'https://api.coze.com/v1/workflow/run' \n \
+          --header 'Authorization: Bearer pat_OCcuh0BZVEGRPFPQMscgA45KzBxVe8noXhF64WIXpxRIQTC6iLNDeexIlx3InpNv' \n \
+          --header 'Content-Type: application/json' \n \
           --data-raw '${jsonParametersString}, "workflow_id": "7496875298778054664"
           }' \n`;
         console.log(curlCommand);
@@ -332,7 +333,8 @@ export default {
           }
           this.codeJavaSubmitted = combinedString;
           this.codeJavaSubmitted = ReplaceString.escapeString(String(this.codeJavaSubmitted));
-          console.log(this.codeJavaSubmitted);
+          //this.codeJavaSubmitted = this.codeJavaSubmitted.replace(/^\s*[\r\n]/gm, '');
+          console.log('code java submitted: ',this.codeJavaSubmitted);
           await this.submitProject();
         }
         //sau khi submit xong thi quay ve trang main page

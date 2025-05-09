@@ -538,7 +538,7 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
 
         List<Long> queryListDetailAnswerJavaClassID = detailAnswerJavaClassRepository
                 .getListDetailAnswerJavaClassID_By_MarkStudentID(markStudentID);
-
+        //System.out.println(queryListDetailAnswerJavaClassID);
         //xoa chi tiet
         if(!queryListDetailAnswerJavaClassID.isEmpty()) {
             for(Long id: queryListDetailAnswerJavaClassID) {

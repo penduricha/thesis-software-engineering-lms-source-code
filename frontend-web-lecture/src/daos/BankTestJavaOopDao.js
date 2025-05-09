@@ -113,4 +113,16 @@ export default class BankTestJavaOopDao {
         }
         return status;
     }
+
+    static async getStatus_Student_DoExam_By_BankTestJavaOopID(bankTestJavaOopID){
+        let status = true;
+        await BankTestJavaOopService.fetchStatus_Student_DoExam_By_BankTestJavaOopID(bankTestJavaOopID)
+            .then(response => {
+                status = response.data;
+            }).catch(error => {
+                console.error(error);
+                return status;
+            })
+        return status;
+    }
 }

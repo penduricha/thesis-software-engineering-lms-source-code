@@ -75,4 +75,12 @@ public class BankTestJavaOopController {
             throws HttpClientErrorException {
         return ResponseEntity.ok(bankTestJavaOopService.getBankTestJavaOop_By_ExamID(examID));
     }
+
+    @GetMapping("/test-java-oop/get-status-student-do-exam-by-id/{bankTestJavaOopID}")
+    public ResponseEntity<Boolean>
+        getStatus_Student_DoExam_By_BankTestJavaOopID(@PathVariable Long bankTestJavaOopID)
+            throws HttpClientErrorException {
+        return ResponseEntity.ok(bankTestJavaOopService
+                .getStatus_Student_DoExam_By_BankTestJavaOopID(bankTestJavaOopID));
+    }
 }

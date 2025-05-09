@@ -12,7 +12,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BankTestJavaOopService implements I_BankTestJavaOopService {
@@ -25,10 +28,13 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
 
     private final ExamRepository examRepository;
 
-    public BankTestJavaOopService(BankTestJavaOopRepository bankTestJavaOopRepository, ExamJavaOopService examJavaOopService, ExamRepository examRepository) {
+    private final StudentService studentService;
+
+    public BankTestJavaOopService(BankTestJavaOopRepository bankTestJavaOopRepository, ExamJavaOopService examJavaOopService, ExamRepository examRepository, StudentService studentService) {
         this.bankTestJavaOopRepository = bankTestJavaOopRepository;
         this.examJavaOopService = examJavaOopService;
         this.examRepository = examRepository;
+        this.studentService = studentService;
     }
 
     @Override
@@ -80,7 +86,7 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
     }
 
     @Override
-    public Long getBankTestJavOopID_By_ExamID(Long examID) {
+    public Long getBankTestJavOopID_By_ExamID(Long examID) throws JpaSystemException{
         Exam examFound = examRepository.findExamByExamID(examID);
         if(examFound != null) {
             Long bankTestJavaOopID = bankTestJavaOopRepository
@@ -95,7 +101,7 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
 
     @Override
     @Transactional
-    public Exam updateBankTestJavaOop_To_Exam_By_ExamID(Long examID, Long bankTestJavaOopID) {
+    public Exam updateBankTestJavaOop_To_Exam_By_ExamID(Long examID, Long bankTestJavaOopID) throws JpaSystemException{
         Exam examFound = examRepository.findExamByExamID(examID);
         BankTestJavaOop bankTestJavaOopFound = findBankTestJavaOop_By_BankTestJavaOopID(bankTestJavaOopID);
         if(examFound != null && bankTestJavaOopFound != null) {
@@ -110,7 +116,7 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
     }
 
     @Override
-    public BankTestJavaOop getBankTestJavaOop_By_ExamID(Long examID) {
+    public BankTestJavaOop getBankTestJavaOop_By_ExamID(Long examID) throws JpaSystemException{
         Exam examFound = examRepository.findExamByExamID(examID);
         if(examFound != null) {
             Long bankTestJavaOopID = bankTestJavaOopRepository
@@ -119,4 +125,33 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
         }
         return null;
     }
+
+    @Override
+    public List<Long> getListExamIDByBankTestJavaOopID(Long bankTestJavaOopID) throws JpaSystemException{
+        BankTestJavaOop bankTestJavaOopFound = findBankTestJavaOop_By_BankTestJavaOopID(bankTestJavaOopID);
+        if(bankTestJavaOopFound != null) {
+            return bankTestJavaOopRepository.getListExamIDByBankTestJavaOopID(bankTestJavaOopID);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public Boolean getStatus_Student_DoExam_By_BankTestJavaOopID(Long bankTestJavaOopID) throws JpaSystemException{
+        List<Long> listExamIDByBankTestJavaOopID = getListExamIDByBankTestJavaOopID(bankTestJavaOopID);
+        if(!listExamIDByBankTestJavaOopID.isEmpty()) {
+            for(Long examID: listExamIDByBankTestJavaOopID) {
+                boolean studentAccessExam =
+                        !Objects.equals(studentService.findStudent_Access_Exam_By_ExamID(examID), new HashMap<>());
+                if(studentAccessExam) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /*
+    Boolean studentAccessExam =
+                !Objects.equals(studentService.findStudent_Access_Exam_By_ExamID(examID), new HashMap<>())
+     */
 }

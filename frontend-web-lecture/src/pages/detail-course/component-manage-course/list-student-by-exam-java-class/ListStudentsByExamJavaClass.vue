@@ -5,6 +5,9 @@ import AsideMenu from "@/components/aside/AsideMenu.vue";
 import AsideAccount from "@/components/aside/AsideAccount.vue";
 import NavBarBankExam from "@/pages/bank-exams-nav-bar/NavBarBankExam.vue";
 import MarkStudentDao from "@/daos/MarkStudentDao.js";
+import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
+import LectureDao from "@/daos/LectureDao.js";
+import ExamDao from "@/daos/ExamDao.js";
 export default {
   name: "ListStudentsByExamByClass",
   components: {NavBarBankExam, AsideAccount, AsideMenu},
@@ -35,6 +38,7 @@ export default {
 
   beforeMount() {
     this.saveRouter_Path(this.getRoute());
+    this.setTitleExam_And_NameLecture();
     this.setListStudents_By_ExamID();
   },
 
@@ -43,12 +47,27 @@ export default {
   },
 
   methods : {
+    async setTitleExam_And_NameLecture () {
+      const lectureLocalStorage = new LectureLocalStorage();
+      let lectureID = lectureLocalStorage.getLectureID_From_LocalStorage();
+      let lecture = await LectureDao.getLectureName_And_LectureID(lectureID);
+      console.log(lecture);
+      this.lectureID = '0' + lecture.lectureID;
+      this.nameLecture = lecture.name;
+      if(this.examID) {
+        let exam = await ExamDao.getExam_By_CourseID_ExamID(this.examID, this.courseID);
+        if(exam) {
+          this.titleExam = exam.titleExam;
+        }
+      }
+    },
+
     async setListStudents_By_ExamID () {
-      // if(this.examID) {
-      //   this.listStudentsByExamID = await MarkStudentDao.
-      //     get_List_Mark_Student_By_ExamID(this.examID);
-      //   console.log('list student by exam id: ', this.listStudentsByExamID);
-      // }
+      if(this.examID) {
+        this.listStudentsByExamID = await MarkStudentDao.
+          get_List_Mark_Student_By_ExamID(this.examID);
+        console.log('list student by exam id: ', this.listStudentsByExamID);
+      }
       this.isLoadingTable = false;
     },
 
@@ -126,6 +145,7 @@ export default {
           <th>Gender</th>
           <th>Date of birth</th>
           <th>Mark</th>
+          <th>View source code</th>
         </tr>
         </thead>
         <tbody>
@@ -136,31 +156,43 @@ export default {
             </div>
           </td>
         </tr>
-        <tr v-if="listStudentsByExamID.length === 0 && !isLoadingTable">
-          <td colspan="6" class="text-center">
-            <h5>No student</h5>
+        <tr v-if="listStudentsByExamID.length === 0 && isLoadingTable">
+          <td colspan="5" class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
           </td>
         </tr>
-<!--        <tr v-if="listStudentsByExamID.length > 0" v-for="(l, index) in listStudentsByExamID">-->
-<!--          <td>-->
-<!--            {{index + 1}}-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            {{l.studentID}}-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            {{l.lastName}} {{l.firstName}}-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            {{getGenderString(l.gender)}}-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            {{formatDateOfBirth(l.dateOfBirth)}}-->
-<!--          </td>-->
-<!--          <td>\-->
-<!--            {{l.markExam}}-->
-<!--          </td>-->
-<!--        </tr>-->
+        <tr v-if="listStudentsByExamID.length === 0 && !isLoadingTable">
+          <td colspan="5" class="text-center">
+            <h4>No student</h4>
+          </td>
+        </tr>
+        <tr v-if="listStudentsByExamID.length > 0" v-for="(l, index) in listStudentsByExamID">
+          <td>
+            {{index + 1}}
+          </td>
+          <td>
+            {{l.studentID}}
+          </td>
+          <td>
+            {{l.lastName}} {{l.firstName}}
+          </td>
+          <td>
+            {{getGenderString(l.gender)}}
+          </td>
+          <td>
+            {{formatDateOfBirth(l.dateOfBirth)}}
+          </td>
+          <td>
+            {{l.markExam}}
+          </td>
+          <td>
+            <button class="btn btn-primary">
+              View source code
+            </button>
+          </td>
+        </tr>
         </tbody>
       </table>
     </section>

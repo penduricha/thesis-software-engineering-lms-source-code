@@ -96,6 +96,18 @@ public class DetailMarkStudent implements Serializable {
     @JsonIgnore
     private List<DetailAnswerJavaClass> detailAnswerJavaClassList = new ArrayList<>();
 
+    @OneToOne(mappedBy = "detailMarkStudent", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonIgnore
+    private CodeSubmitJavaClass codeSubmitJavaClass;
+
+    public CodeSubmitJavaClass getCodeSubmitJavaClass() {
+        return codeSubmitJavaClass;
+    }
+
+    public void setCodeSubmitJavaClass(CodeSubmitJavaClass codeSubmitJavaClass) {
+        this.codeSubmitJavaClass = codeSubmitJavaClass;
+    }
+
     public List<DetailAnswerJavaClass> getDetailAnswerJavaClassList() {
         return detailAnswerJavaClassList;
     }

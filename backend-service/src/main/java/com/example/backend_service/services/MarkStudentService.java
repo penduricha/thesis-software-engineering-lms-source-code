@@ -464,6 +464,8 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
                             newMap.put("gender", originalMap.get("gender"));
                             newMap.put("dateOfBirth", originalMap.get("date_of_birth"));
                             newMap.put("markExam", originalMap.get("mark_exam"));
+                            newMap.put("markStudentID", originalMap.get("mark_student_id"));
+                            newMap.put("retakeExam", originalMap.get("retake_exam"));
                             return newMap;
                         }).toList();
             }

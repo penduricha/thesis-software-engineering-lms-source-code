@@ -287,8 +287,8 @@ export default {
             this.codeJavaSubmitted = combinedString;
             this.codeJavaSubmitted = ReplaceString.escapeString(String(this.codeJavaSubmitted));
             console.log('code java submitted: ',this.codeJavaSubmitted);
+            await this.submitProject();
           }
-
         }
       }
     },
@@ -312,6 +312,7 @@ export default {
         console.log(curlCommand);
         //chỗ này chị submit cozeAI nha
       }
+      await this.navigateToMainPage();
     },
 
     async submitProject_And_NavigateToMainPage() {

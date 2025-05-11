@@ -86,7 +86,9 @@ public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> 
                    s.first_name,
                    s.gender,
                    s.date_of_birth,
-                   m.mark_exam
+                   m.mark_exam,
+                   m.mark_student_id,
+                   e.retake_exam
             from mark_student m
             right join student s
             on m.student_id = s.student_id

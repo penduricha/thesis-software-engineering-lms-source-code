@@ -87,9 +87,7 @@ export default {
       this.isModalVisible = true;
     },
 
-    closeModal() {
-      this.isModalVisible = false;
-    },
+
     getRoute() {
       console.log(this.$route.path);
       return this.$route.path
@@ -358,7 +356,7 @@ export default {
 
         }
       }
-        this.isLoading = false;
+      this.isLoading = false;
 
     },
 
@@ -388,10 +386,13 @@ export default {
           await this.submitProject();
         }
         //sau khi submit xong thi quay ve trang main page
-        //await this.navigateToMainPage();
       }
     },
+    async closeModal() {
+      this.isModalVisible = false;
+      await this.navigateToMainPage();
 
+    },
     //upload zip
     handleDrop(event) {
       const files = event.dataTransfer.files;
@@ -530,24 +531,24 @@ export default {
           </div>
         </div>
       </section>
-     
+
     </div>
- <div v-if="isModalVisible" class="modal-overlay">
-        <div class="modal-content">
-          <h2 class="chug">Chúc mừng! Bạn đã làm bài xong</h2>
-          <h3 class="chug"><strong>Tổng điểm đạt được:</strong> {{ modalData.output.totalScore }}</h3>
+    <div v-if="isModalVisible" class="modal-overlay">
+      <div class="modal-content">
+        <h2 class="chug">Chúc mừng! Bạn đã làm bài xong</h2>
+        <h3 class="chug"><strong>Tổng điểm đạt được:</strong> {{ modalData.output.totalScore }}</h3>
 
-          <div v-for="(item, index) in modalData.output.detail" :key="index">
-            <h4>{{ item.sentence }}</h4>
-            <p><strong>Điểm đạt được:</strong> {{ item.scoreAchieve }} / {{ item.maxScore }}</p>
-            <p><strong>Nhận xét:</strong> {{ item.reviews }}</p>
-          </div>
-
-          <p><strong>Nhận xét chung:</strong> {{ modalData.output.suggest }}</p>
-
-          <button @click="closeModal" class="button-close">Đóng</button>
+        <div v-for="(item, index) in modalData.output.detail" :key="index">
+          <h4>{{ item.sentence }}</h4>
+          <p><strong>Điểm đạt được:</strong> {{ item.scoreAchieve }} / {{ item.maxScore }}</p>
+          <p><strong>Nhận xét:</strong> {{ item.reviews }}</p>
         </div>
+
+        <p><strong>Nhận xét chung:</strong> {{ modalData.output.suggest }}</p>
+
+        <button @click="closeModal" class="button-close">Đóng</button>
       </div>
+    </div>
     <div v-if="isLoading" class="loading-overlay">
       <div class="loading-spinner"></div>
       <span class="loading-text">Grading, please wait...</span>

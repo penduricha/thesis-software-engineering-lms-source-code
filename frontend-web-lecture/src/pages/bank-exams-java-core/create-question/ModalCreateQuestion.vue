@@ -449,27 +449,26 @@ export default {
     async handleGenerateTestCase() {
       this.loaddingGenTestCase = true
       try {
-        // const res = await axios.post("https://api.coze.com/v1/workflow/run", {
-        //   "parameters": {
-        //     "input": this.content
-        //   },
-        //   "workflow_id": "7483910122122657799"
-        // }, {
-        //   headers: {
-        //     'Authorization': 'Bearer pat_808iJDthzF5JN5t51ea6CyzEoaN8KjkIfQMi7BhUKC0nxcFQPArpIQwuc8BKuIRm',
-        //     'Content-Type': 'application/json'
-        //   }
-        // });
-        // // Lấy dữ liệu từ API
-        // let data = res.data.data;
-        // console.log("data", data);
-        //
-        // let cleanedData = data.slice(10, -1);
-        // console.log("cleanedData", cleanedData);
-        // cleanedData = cleanedData.replace(/\\/g, '');
-        //
-        // console.log("cleanedData", cleanedData); // In ra mảng kết quả
-        // this.listTestCases = JSON.parse(cleanedData)
+        //  const res = await axios.post("https://api.coze.com/v1/workflow/run", {
+        //    "parameters": {
+        //      "input": this.content
+        //    },
+        //    "workflow_id": "7496876093182754834"
+        //  }, {
+        //    headers: {
+        //      'Authorization': 'Bearer pat_OCcuh0BZVEGRPFPQMscgA45KzBxVe8noXhF64WIXpxRIQTC6iLNDeexIlx3InpNv',
+        //      'Content-Type': 'application/json'
+        //    }
+        //  });
+        //  let data = res.data.data;
+        //  console.log("data", data);
+        
+        //  let cleanedData = data.slice(10, -1);
+        //  console.log("cleanedData", cleanedData);
+        //  cleanedData = cleanedData.replace(/\\/g, '');
+        
+        //  console.log("cleanedData", cleanedData); 
+        //  this.listTestCases = JSON.parse(cleanedData)
         if(this.content) {
           this.listTestCases = await GenTestCase.getTestCaseGenerate(this.content);
         } else {

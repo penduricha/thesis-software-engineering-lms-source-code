@@ -17,4 +17,6 @@ where exam_id = 45;
 
 select * from question_java_core_exam;
 
+create database project_thesis_final_2;
 
+drop database project_thesis_final_2;

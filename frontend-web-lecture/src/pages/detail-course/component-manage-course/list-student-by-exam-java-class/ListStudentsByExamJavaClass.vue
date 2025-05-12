@@ -8,6 +8,7 @@ import MarkStudentDao from "@/daos/MarkStudentDao.js";
 import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
 import LectureDao from "@/daos/LectureDao.js";
 import ExamDao from "@/daos/ExamDao.js";
+import * as XLSX from "xlsx";
 export default {
   name: "ListStudentsByExamByClass",
   components: {NavBarBankExam, AsideAccount, AsideMenu},
@@ -29,6 +30,7 @@ export default {
     return {
       listStudentsByExamID: [],
       isLoadingTable: true,
+      typeDownloadSheet: 'csv',
     }
   },
 
@@ -66,7 +68,7 @@ export default {
       if(this.examID) {
         this.listStudentsByExamID = await MarkStudentDao.
           get_List_Mark_Student_By_ExamID(this.examID);
-        console.log('list student by exam id: ', this.listStudentsByExamID);
+        console.log('list student mark by exam id: ', this.listStudentsByExamID);
       }
       this.isLoadingTable = false;
     },
@@ -106,6 +108,49 @@ export default {
         alert(error);
       });
     },
+
+    convertToCSV(data) {
+      const header = ['Index', 'Student ID', 'Name', 'Gender', 'Date of Birth', 'Mark'];
+      const rows = data.map((l, index) => [
+        index + 1,
+        l.studentID,
+        `${l.lastName} ${l.firstName}`,
+        this.getGenderString(l.gender),
+        this.formatDateOfBirth(l.dateOfBirth),
+        l.markExam,
+      ]);
+
+      return [header].concat(rows).map(row => row.join(',')).join('\n');
+    },
+
+    handleDownload() {
+      if(this.listStudentsByExamID.length > 0) {
+        if(this.typeDownloadSheet === 'csv') {
+          const csvContent = this.convertToCSV(this.listStudentsByExamID);
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.setAttribute('download', `exam_${this.titleExam}_${this.nameLecture}.csv`);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } else if (this.typeDownloadSheet === 'xlsx') {
+          if(this.nameLecture && this.titleExam) {
+            const ws = XLSX.utils.json_to_sheet(this.listStudentsByExamID.map((l, index) => ({
+              'Index': index + 1,
+              'Student ID': l.studentID,
+              'Name student': `${l.lastName} ${l.firstName}`,
+              'Gender': this.getGenderString(l.gender),
+              'Date of Birth': this.formatDateOfBirth(l.dateOfBirth),
+              'Mark': l.markExam,
+            })));
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Students');
+            XLSX.writeFile(wb, `exam_${this.titleExam}_${this.nameLecture}.xlsx`);
+          }
+        }
+      }
+    }
   },
 
   computed: {
@@ -136,6 +181,21 @@ export default {
         </button>
       </div>
       <h5>List students: </h5>
+      <div class="style-view-btn-download">
+        <button class="btn button-purple"
+                @click="handleDownload()"
+        >Download</button>
+        <select class="form-select"
+                v-model="typeDownloadSheet"
+        >
+          <!--          @change="setSelectExamType()"-->
+          <!--          v-model="typeExam"-->
+          <!--          :class="[{'is-invalid': validateTypeExam !== null}]"-->
+          <option value = "csv">csv file</option>
+          <option value = "xlsx">xlsx file</option>
+        </select>
+      </div>
+
       <table class="table table-striped">
         <thead>
         <tr>
@@ -146,6 +206,7 @@ export default {
           <th>Date of birth</th>
           <th>Mark</th>
           <th>View source code</th>
+          <th>Choose retake (if retake)</th>
         </tr>
         </thead>
         <tbody>
@@ -192,6 +253,7 @@ export default {
               View source code
             </button>
           </td>
+          <td></td>
         </tr>
         </tbody>
       </table>

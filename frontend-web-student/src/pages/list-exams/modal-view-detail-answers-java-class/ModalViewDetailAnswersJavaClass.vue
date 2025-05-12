@@ -61,6 +61,7 @@ export default {
                 <td>{{ l.scoreAchievement }}</td>
                 <td>{{ l.maxScore }}</td>
                 <td>{{ l.reviews }}</td>
+
               </tr>
               </tbody>
             </table>

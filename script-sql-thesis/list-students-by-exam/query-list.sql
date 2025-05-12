@@ -70,8 +70,8 @@ select detail_answer_java_classid from detail_answer_java_class;
 
 select * from exam;
 
-update exam set start_date = '2025-05-09 10:00:00'
-where exam_id = 33;
+update exam set start_date = '2025-05-10 10:00:00'
+where exam_id = 34;
 
 select exam_id from exam_java_oop where bank_test_java_oop_id = 9;
 
@@ -80,3 +80,5 @@ select * from detail_mark_student;
 select * from detail_answer_java_class;
 
 select * from exam;
+
+select * from code_submit_java_class;

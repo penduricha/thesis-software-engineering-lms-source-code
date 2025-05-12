@@ -56,6 +56,7 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
             detailMarkStudent.setDetailMarkExam(0);
             //date time submit
             detailMarkStudent.setDateSubmitted(LocalDateTime.now());
+            //save detailMarkStudent submit coding
 
             //set relationship
             markStudent.getDetailMarkStudents().add(detailMarkStudent);
@@ -181,6 +182,8 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
         detailMarkStudent.setDetailMarkExam(DoubleGetMap.getDoubleValue(dataPost, "totalScore"));
         //date time submit
         detailMarkStudent.setDateSubmitted(LocalDateTime.now());
+        //save detailMarkStudent submit coding
+        
         //set relationship
         markStudentFound.getDetailMarkStudents().add(detailMarkStudent);
         detailMarkStudent.setMarkStudent(markStudentFound);

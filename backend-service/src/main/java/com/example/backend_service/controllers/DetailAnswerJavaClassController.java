@@ -24,4 +24,6 @@ public class DetailAnswerJavaClassController {
         return ResponseEntity.ok(detailAnswerJavaClassService.
                 getListDetailAnswerJavaClass_By_DetailMarkStudentID(detailMarkStudentID));
     }
+
+
 }

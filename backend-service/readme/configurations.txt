@@ -11,7 +11,13 @@ Step 2: Create database that name is project_thesis_final;
 
 Step 3: Import all dataset in folder data insert that following step.
 
-
+Note:
+Ở đây em set up khi record chưa có data sẽ tự nạp dataset vao khi service được run
+Tránh gây bất tiện khi phải insert chay
+Ở đây chị chỉ cần insert de bai vao thoi
+Step 6: import bank_question_java_core.sql
+Step 7: import bank_test_case_java_core.sql
+Step 8: import file bank_test_java_oop.sql
 
 
 

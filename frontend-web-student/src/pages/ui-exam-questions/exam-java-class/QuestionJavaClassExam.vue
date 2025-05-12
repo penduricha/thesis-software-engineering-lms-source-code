@@ -10,6 +10,7 @@ import JSZip from 'jszip';
 import MarkStudentDao from "@/daos/MarkStudentDao.js";
 import ReplaceString from "@/components/data-key-word/ReplaceString.js";
 import axios from 'axios';
+
 export default {
   name: "QuestionJavaClassExam",
 
@@ -78,6 +79,7 @@ export default {
 
       //code java submit cozeAI
       codeJavaSubmitted: '',
+      codeJavaSubmittedSave: '',
     }
   },
 
@@ -93,8 +95,8 @@ export default {
     getRoute() {
       console.log(this.$route.path);
       return this.$route.path
-        + "?" + "examID=" + Number(this.examID)
-        + "&" + "duration=" + Number(this.duration);
+          + "?" + "examID=" + Number(this.examID)
+          + "&" + "duration=" + Number(this.duration);
     },
 
     saveRouter_Path(route) {
@@ -121,7 +123,7 @@ export default {
     async setTestExam() {
       if (this.examID) {
         this.testJavaOop = await BankTestJavaOopDao
-          .getBankTestJavaOop_By_ExamID(Number(this.examID));
+            .getBankTestJavaOop_By_ExamID(Number(this.examID));
         console.log('Test exam: ', this.testJavaOop);
         if (this.testJavaOop) {
           this.descriptionTest = this.testJavaOop.descriptionTest;
@@ -264,8 +266,8 @@ export default {
     async submitProjectEndTime() {
       if (this.timeLeft === 0 || this.duration <= 0) {
         if (!this.zipUrl ||
-          !this.selectFileZip ||
-          !this.targetFileZip) {
+            !this.selectFileZip ||
+            !this.targetFileZip) {
           //set diem bai ktra do la 0
           let dataPut = {
             "studentID": this.studentID,
@@ -296,8 +298,10 @@ export default {
             }
             // xóa hết các dòng rỗng.
             this.codeJavaSubmitted = combinedString;
+            this.codeJavaSubmittedSave = this.codeJavaSubmitted;
             this.codeJavaSubmitted = ReplaceString.escapeString(String(this.codeJavaSubmitted));
             console.log('code java submitted: ', this.codeJavaSubmitted);
+            await this.submitProject();
           }
 
         }
@@ -331,20 +335,33 @@ export default {
             let rawData = response.data.data;
 
             let cleanedData = rawData
-              .replace(/"```json/g, '')      // Loại bỏ ```json
-              .replace(/\n/g, '')           // Loại bỏ \n
-              .replace(/\\n/g, '')          // Loại bỏ \n dư thừa từ chuỗi JSON
-              .replace(/\\/g, '')          // Loại bỏ \/
-              .replace(/\\/g, '')           // Loại bỏ dấu \ không cần thiết
-              .replace(/\"/g, '"')
-              .replace(/```"/g, '')          // Đảm bảo chuỗi sử dụng dấu " đúng cách
-              .replace(/(\r\n|\n|\r)/gm, '');
+                .replace(/"```json/g, '')      // Loại bỏ ```json
+                .replace(/\n/g, '')           // Loại bỏ \n
+                .replace(/\\n/g, '')          // Loại bỏ \n dư thừa từ chuỗi JSON
+                .replace(/\\/g, '')          // Loại bỏ \/
+                .replace(/\\/g, '')           // Loại bỏ dấu \ không cần thiết
+                .replace(/\"/g, '"')
+                .replace(/```"/g, '')          // Đảm bảo chuỗi sử dụng dấu " đúng cách
+                .replace(/(\r\n|\n|\r)/gm, '');
 
 
             console.log('Cleaned Data:', cleanedData);
             console.log('Json', JSON.parse(cleanedData));
-            const parsedData = JSON.parse(cleanedData);
+            let parsedData = JSON.parse(cleanedData);
+            parsedData.codeSubmitString = this.codeJavaSubmittedSave;
+
+            console.log(parsedData);
             const totalScore = parsedData.output.detail.reduce((sum, item) => sum + item.scoreAchieve, 0);
+
+            const jsonString = JSON.stringify(parsedData, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'data.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
             console.log("total score", totalScore);
             // Cập nhật lại totalScore
             parsedData.output.totalScore = totalScore;
@@ -355,13 +372,11 @@ export default {
         } catch (error) {
           console.error('Error submitting project:', error);
           this.isLoading = false;
-
         }
       }
-        this.isLoading = false;
+      this.isLoading = false;
 
     },
-
 
 
     async submitProject_And_NavigateToMainPage() {
@@ -382,6 +397,7 @@ export default {
             }
           }
           this.codeJavaSubmitted = combinedString;
+          this.codeJavaSubmittedSave = this.codeJavaSubmitted;
           this.codeJavaSubmitted = ReplaceString.escapeString(String(this.codeJavaSubmitted));
           //this.codeJavaSubmitted = this.codeJavaSubmitted.replace(/^\s*[\r\n]/gm, '');
           console.log('code java submitted: ', this.codeJavaSubmitted);
@@ -478,7 +494,7 @@ export default {
         <div class="style-view-questions">
           <div class="view-list-questions">
             <button class="button-number-question button-submit" ref="submitButton"
-              @click="submitProject_And_NavigateToMainPage()">Submit
+                    @click="submitProject_And_NavigateToMainPage()">Submit
             </button>
           </div>
         </div>
@@ -494,7 +510,7 @@ export default {
     <div class="style-main">
       <!--      Hien thi de thi -->
       <section class="section-exam description-exam-java-class">
-        <p v-if="testJavaOop" v-html="testJavaOop.descriptionTest" />
+        <p v-if="testJavaOop" v-html="testJavaOop.descriptionTest"/>
       </section>
       <section class="section-code-editor section-exam-java-class">
         <!--      Hien thi phan upload -->
@@ -507,7 +523,7 @@ export default {
             <div @dragover.prevent @drop.prevent="handleDrop" class="drop-zone">
               <h5>Drag and drop or choose zip file</h5>
               <input type="file" @change="handleFileChange" accept=".zip" hidden ref="fileInput" class="form-control"
-                :class="[{ 'is-invalid': validateUpdateZipFile !== null }]" />
+                     :class="[{ 'is-invalid': validateUpdateZipFile !== null }]"/>
               <button @click="selectFile" class="button-purple style-btn-choose-image-class">Choose</button>
 
               <div v-if="zipUrl" class="style-view-image-uploaded">
@@ -515,11 +531,11 @@ export default {
                 <p>{{ selectFileZip }}</p>
                 <button class="btn btn-danger" style="width: 4rem" @click="removeZip()">
                   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                    class="bi bi-trash style-trash" viewBox="0 0 16 16">
+                       class="bi bi-trash style-trash" viewBox="0 0 16 16">
                     <path
-                      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                     <path
-                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
                   </svg>
                 </button>
               </div>
@@ -530,24 +546,24 @@ export default {
           </div>
         </div>
       </section>
-     
+
     </div>
- <div v-if="isModalVisible" class="modal-overlay">
-        <div class="modal-content">
-          <h2 class="chug">Chúc mừng! Bạn đã làm bài xong</h2>
-          <h3 class="chug"><strong>Tổng điểm đạt được:</strong> {{ modalData.output.totalScore }}</h3>
+    <div v-if="isModalVisible" class="modal-overlay">
+      <div class="modal-content">
+        <h2 class="chug">Chúc mừng! Bạn đã làm bài xong</h2>
+        <h3 class="chug"><strong>Tổng điểm đạt được:</strong> {{ modalData.output.totalScore }}</h3>
 
-          <div v-for="(item, index) in modalData.output.detail" :key="index">
-            <h4>{{ item.sentence }}</h4>
-            <p><strong>Điểm đạt được:</strong> {{ item.scoreAchieve }} / {{ item.maxScore }}</p>
-            <p><strong>Nhận xét:</strong> {{ item.reviews }}</p>
-          </div>
-
-          <p><strong>Nhận xét chung:</strong> {{ modalData.output.suggest }}</p>
-
-          <button @click="closeModal" class="button-close">Đóng</button>
+        <div v-for="(item, index) in modalData.output.detail" :key="index">
+          <h4>{{ item.sentence }}</h4>
+          <p><strong>Điểm đạt được:</strong> {{ item.scoreAchieve }} / {{ item.maxScore }}</p>
+          <p><strong>Nhận xét:</strong> {{ item.reviews }}</p>
         </div>
+
+        <p><strong>Nhận xét chung:</strong> {{ modalData.output.suggest }}</p>
+        <!-- Cho nay sẽ save vao database-->
+        <button @click="closeModal" class="button-close">Quay về trang chủ</button>
       </div>
+    </div>
     <div v-if="isLoading" class="loading-overlay">
       <div class="loading-spinner"></div>
       <span class="loading-text">Grading, please wait...</span>

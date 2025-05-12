@@ -21,6 +21,9 @@ public class CodeSubmitJavaClass implements Serializable {
     @Column(columnDefinition = "longtext")
     private String codeSubmitString;
 
+    @Column(columnDefinition = "longtext")
+    private String suggest;
+
     //map 1 - 1 voi detail mark student
     @OneToOne
     @JoinColumn(name = "detail_mark_student_id")

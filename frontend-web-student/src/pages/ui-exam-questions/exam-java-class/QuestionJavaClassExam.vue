@@ -89,9 +89,7 @@ export default {
       this.isModalVisible = true;
     },
 
-    closeModal() {
-      this.isModalVisible = false;
-    },
+
     getRoute() {
       console.log(this.$route.path);
       return this.$route.path
@@ -404,10 +402,13 @@ export default {
           await this.submitProject();
         }
         //sau khi submit xong thi quay ve trang main page
-        //await this.navigateToMainPage();
       }
     },
+    async closeModal() {
+      this.isModalVisible = false;
+      await this.navigateToMainPage();
 
+    },
     //upload zip
     handleDrop(event) {
       const files = event.dataTransfer.files;

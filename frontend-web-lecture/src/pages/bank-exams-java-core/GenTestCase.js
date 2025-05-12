@@ -6,7 +6,7 @@ export default class GenTestCase {
         try {
             const res = await axios.post("https://api.coze.com/v1/workflow/run", {
                 "parameters": {
-                    "input": this.content
+                    "input": content
                 },
                 "workflow_id": "7496876093182754834"
             }, {

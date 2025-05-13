@@ -30,7 +30,7 @@ public class CourseController {
     }
 
     @GetMapping("/courses/lectureID/{lectureID}")
-    public List<Map<String, Object>> getCourses_By_LectureID(@PathVariable String lectureID) throws HttpClientErrorException {
+    public ResponseEntity<List<Map<String, Object>>> getCourses_By_LectureID(@PathVariable String lectureID) throws HttpClientErrorException {
         List<Map<String, Object>> list = new ArrayList<>();
         if(lectureID.charAt(0) == '0'){
             String lectureIDFind = lectureID.substring(1);
@@ -48,7 +48,7 @@ public class CourseController {
                 }
             }
         }
-        return list;
+        return ResponseEntity.ok(list);
     }
 
     public String covertLectureID(String lectureID) {

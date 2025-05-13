@@ -244,6 +244,7 @@ export default {
         <h4 class="h2-all-exams-style">All exams</h4>
         <div class="button-div-exam">
           <span class="text-button-exam flex-title">Title exam</span>
+          <span class="text-button-exam flex-title">Topic exam</span>
           <div class="div-type-exam flex-type-exam">
             <span class="text-button-exam">Type exam</span>
           </div>
@@ -260,6 +261,7 @@ export default {
                 @click="handButtonClick(e.status, e)"
         >
           <span class="text-button-exam flex-title">{{e.titleExam}}</span>
+          <span class="text-button-exam flex-title">{{e.topicExam}}</span>
           <div class="div-type-exam flex-type-exam">
             <span class="text-button-exam">{{e.typeExam}}</span>
           </div>

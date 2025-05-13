@@ -2,8 +2,10 @@ package com.example.backend_service.services;
 
 import com.example.backend_service.models.DetailAnswerJavaClass;
 import com.example.backend_service.models.DetailMarkStudent;
+import com.example.backend_service.models.MarkStudent;
 import com.example.backend_service.repositories.DetailAnswerJavaClassRepository;
 import com.example.backend_service.repositories.DetailMarkStudentRepository;
+import com.example.backend_service.repositories.MarkStudentRepository;
 import com.example.backend_service.services.i_service.I_DetailAnswerJavaClassService;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,13 @@ public class DetailAnswerJavaClassService implements I_DetailAnswerJavaClassServ
 
     private final DetailMarkStudentRepository detailMarkStudentRepository;
 
-    public DetailAnswerJavaClassService(DetailAnswerJavaClassRepository detailAnswerJavaClassRepository, DetailMarkStudentRepository detailMarkStudentRepository) {
+
+    private final MarkStudentRepository markStudentRepository;
+
+    public DetailAnswerJavaClassService(DetailAnswerJavaClassRepository detailAnswerJavaClassRepository, DetailMarkStudentRepository detailMarkStudentRepository, MarkStudentRepository markStudentRepository) {
         this.detailAnswerJavaClassRepository = detailAnswerJavaClassRepository;
         this.detailMarkStudentRepository = detailMarkStudentRepository;
+        this.markStudentRepository = markStudentRepository;
     }
 
     @Override
@@ -39,4 +45,5 @@ public class DetailAnswerJavaClassService implements I_DetailAnswerJavaClassServ
         }
         return new ArrayList<>();
     }
+
 }

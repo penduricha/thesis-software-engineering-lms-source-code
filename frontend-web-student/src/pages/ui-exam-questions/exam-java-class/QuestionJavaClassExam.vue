@@ -89,9 +89,15 @@ export default {
       this.isModalVisible = true;
     },
 
-    closeModal() {
+    async closeModal() {
       this.isModalVisible = false;
+      await this.navigateToMainPage();
     },
+
+    async saveSubmissionAndNavigateToMainPage() {
+
+    },
+
     getRoute() {
       console.log(this.$route.path);
       return this.$route.path
@@ -208,18 +214,6 @@ export default {
           alert(error);
         });
       }
-      //window.location.reload();
-      // const itemsMenu = listMenu;
-      // const path = itemsMenu.find(item => item.index === 1)?.path;
-      // this.savePath_Init_To_LocalStorage(path);
-      // this.$router.replace({
-      //   path: path,
-      //   // query: {
-      //   // }
-      // }).catch((error) => {
-      //   console.error('Error navigating :', error);
-      //   alert(error);
-      // });
     },
 
     savePath_Init_To_LocalStorage(path) {
@@ -302,6 +296,7 @@ export default {
             this.codeJavaSubmitted = ReplaceString.escapeString(String(this.codeJavaSubmitted));
             console.log('code java submitted: ', this.codeJavaSubmitted);
             await this.submitProject();
+            await this.navigateToMainPage();
           }
 
         }
@@ -348,26 +343,22 @@ export default {
             console.log('Cleaned Data:', cleanedData);
             console.log('Json', JSON.parse(cleanedData));
             let parsedData = JSON.parse(cleanedData);
-            parsedData.codeSubmitString = this.codeJavaSubmittedSave;
+            parsedData.output.codeSubmitString = this.codeJavaSubmittedSave;
+            parsedData.output.examID = Number(this.examID);
 
             console.log(parsedData);
             const totalScore = parsedData.output.detail.reduce((sum, item) => sum + item.scoreAchieve, 0);
-
-            const jsonString = JSON.stringify(parsedData, null, 2);
-            const blob = new Blob([jsonString], { type: 'application/json' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'data.json';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
 
             console.log("total score", totalScore);
             // Cập nhật lại totalScore
             parsedData.output.totalScore = totalScore;
             // Gọi phương thức showModal để hiển thị thông tin modal
             this.showModal(parsedData);
-
+            //save thong tin vao database
+            let status = await MarkStudentDao.postFormSubmissionJavaClass(parsedData.output);
+            if(!status) {
+              alert("Can't save to system.");
+            }
           }
         } catch (error) {
           console.error('Error submitting project:', error);
@@ -375,6 +366,7 @@ export default {
         }
       }
       this.isLoading = false;
+      //persist vao database
 
     },
 
@@ -550,18 +542,18 @@ export default {
     </div>
     <div v-if="isModalVisible" class="modal-overlay">
       <div class="modal-content">
-        <h2 class="chug">Chúc mừng! Bạn đã làm bài xong</h2>
-        <h3 class="chug"><strong>Tổng điểm đạt được:</strong> {{ modalData.output.totalScore }}</h3>
+        <h2 class="chug">You finished this exam</h2>
+        <h3 class="chug"><strong>Total score:</strong> {{ modalData.output.totalScore }}</h3>
 
         <div v-for="(item, index) in modalData.output.detail" :key="index">
           <h4>{{ item.sentence }}</h4>
-          <p><strong>Điểm đạt được:</strong> {{ item.scoreAchieve }} / {{ item.maxScore }}</p>
-          <p><strong>Nhận xét:</strong> {{ item.reviews }}</p>
+          <p><strong>Score achievement:</strong> {{ item.scoreAchieve }} / {{ item.maxScore }}</p>
+          <p><strong>Reviews:</strong> {{ item.reviews }}</p>
         </div>
 
-        <p><strong>Nhận xét chung:</strong> {{ modalData.output.suggest }}</p>
+        <p><strong>Conclusion:</strong> {{ modalData.output.suggest }}</p>
         <!-- Cho nay sẽ save vao database-->
-        <button @click="closeModal" class="button-close">Quay về trang chủ</button>
+        <button @click="closeModal" class="button-close">Go to main page</button>
       </div>
     </div>
     <div v-if="isLoading" class="loading-overlay">

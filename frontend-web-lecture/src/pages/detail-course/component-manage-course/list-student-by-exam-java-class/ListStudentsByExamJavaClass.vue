@@ -9,9 +9,12 @@ import LectureLocalStorage from "@/pages/login/LectureLocalStorage.js";
 import LectureDao from "@/daos/LectureDao.js";
 import ExamDao from "@/daos/ExamDao.js";
 import * as XLSX from "xlsx";
+import DetailMarkStudentDao from "@/daos/DetailMarkStudentDao.js";
+import ModalViewSourceCodeJavaClass
+  from "@/pages/detail-course/component-manage-course/list-student-by-exam-java-class/modal-view-src-code/ModalViewSourceCodeJavaClass.vue";
 export default {
   name: "ListStudentsByExamByClass",
-  components: {NavBarBankExam, AsideAccount, AsideMenu},
+  components: {ModalViewSourceCodeJavaClass, NavBarBankExam, AsideAccount, AsideMenu},
 
   props: {
     examID: {
@@ -31,6 +34,8 @@ export default {
       listStudentsByExamID: [],
       isLoadingTable: true,
       typeDownloadSheet: 'csv',
+
+      //detailMarkStudentIDSelect: null;
     }
   },
 
@@ -68,7 +73,25 @@ export default {
       if(this.examID) {
         this.listStudentsByExamID = await MarkStudentDao.
           get_List_Mark_Student_By_ExamID(this.examID);
-        console.log('list student mark by exam id: ', this.listStudentsByExamID);
+        //set them field con
+        if(this.listStudentsByExamID.length > 0) {
+          //console.log("Mark student id: ", Number(this.listStudentsByExamID.markStudentID));
+          for (const student of this.listStudentsByExamID) {
+            const detailMarks = await DetailMarkStudentDao
+                .getDetailMarkStudentsByMarkStudent_MarkStudentID(Number(student.markStudentID));
+            // Kiểm tra nếu detailMarks không phải là mảng
+            student.listDetailMarkStudent = Array.isArray(detailMarks) ? detailMarks : [];
+          }
+          //set cho component
+          this.listStudentsByExamID.forEach(student => {
+            if (student.listDetailMarkStudent.length > 0) {
+              student.selectedDetailMarkID = student.listDetailMarkStudent[0].detailMarkStudentID;
+            } else {
+              student.selectedDetailMarkID = null;
+            }
+          });
+          //console.log('list student mark by exam id: ', this.listStudentsByExamID);
+        }
       }
       this.isLoadingTable = false;
     },
@@ -150,7 +173,22 @@ export default {
           }
         }
       }
-    }
+    },
+
+    async handleSetViewSrcCode(detailMarkStudentID) {
+      console.log(detailMarkStudentID);
+      // Xử lý chi tiết khác
+      await this.$refs.modalViewSrcCodeJavaClass
+          .setModalViewSourceCodeJavaClass_By_DetailMarkStudentID(detailMarkStudentID);
+    },
+
+    // async getDetailMarkStudentsByMarkStudent_MarkStudentID( markStudentID) {
+    //   let list = [];
+    //   list = await DetailMarkStudentDao.
+    //   getDetailMarkStudentsByMarkStudent_MarkStudentID(markStudentID);
+    //   //this.detailMarkStudentIDSelect = list[0];
+    //   return list;
+    // }
   },
 
   computed: {
@@ -206,26 +244,26 @@ export default {
           <th>Date of birth</th>
           <th>Mark</th>
           <th>View source code</th>
-          <th>Choose retake (if retake)</th>
+          <th>Choose time submitted</th>
         </tr>
         </thead>
         <tbody>
         <tr v-if="listStudentsByExamID.length === 0 && isLoadingTable">
-          <td colspan="5" class="text-center">
+          <td colspan="8" class="text-center">
             <div class="spinner-border text-primary" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
           </td>
         </tr>
-        <tr v-if="listStudentsByExamID.length === 0 && isLoadingTable">
-          <td colspan="5" class="text-center">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </td>
-        </tr>
+<!--        <tr v-if="listStudentsByExamID.length === 0 && isLoadingTable">-->
+<!--          <td colspan="5" class="text-center">-->
+<!--            <div class="spinner-border text-primary" role="status">-->
+<!--              <span class="visually-hidden">Loading...</span>-->
+<!--            </div>-->
+<!--          </td>-->
+<!--        </tr>-->
         <tr v-if="listStudentsByExamID.length === 0 && !isLoadingTable">
-          <td colspan="5" class="text-center">
+          <td colspan="8" class="text-center">
             <h4>No student</h4>
           </td>
         </tr>
@@ -249,11 +287,22 @@ export default {
             {{l.markExam}}
           </td>
           <td>
-            <button class="btn btn-primary">
+            <button class="btn btn-primary" @click="handleSetViewSrcCode(l.selectedDetailMarkID)"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modal-view-src-code-java-class"
+            >
               View source code
             </button>
           </td>
-          <td></td>
+          <td>
+            <select class="form-select form-control"
+                    v-model="l.selectedDetailMarkID"
+            >
+              <option v-for="d in l.listDetailMarkStudent" :key="d.detailMarkStudentID" :value="d.detailMarkStudentID">
+                {{ formatDateOfBirth(d.dateSubmitted) }}
+              </option>
+            </select>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -261,6 +310,7 @@ export default {
   </main>
   <AsideAccount/>
   </body>
+  <modal-view-source-code-java-class ref="modalViewSrcCodeJavaClass" />
 </template>
 
 <style scoped lang="scss">

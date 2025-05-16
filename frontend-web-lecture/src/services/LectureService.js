@@ -24,4 +24,8 @@ export default class LectureService {
     static postCompiler_Code_Run_To_Output ( dataPost ) {
         return axiosConfig.getAPIClient().post(`/lecture/compiler_main_code_in_create_update_question`, dataPost, {});
     }
+
+    static fetchDetailInformationLecture_By_LectureID(lectureID) {
+        return axiosConfig.getAPIClient().get(`/lecture/find-detail-information-lecture/${lectureID}`);
+    }
 }

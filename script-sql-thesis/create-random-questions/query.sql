@@ -23,8 +23,8 @@ select * from question_java_core_exam;
 
 select * from exam;
 
-update exam set start_date = '2025-05-13 18:00:00'
-where exam_id = 37;
+update exam set start_date = '2025-05-14 17:50:00'
+where exam_id = 39;
 
 select * from code_submit_java_class;
 
@@ -42,3 +42,11 @@ on dms.mark_student_id = ms.mark_student_id
 where ms.mark_student_id = 60;
 
 select * from lecture;
+
+/*
+ view các thông tin
+ id, name, email, phoneNumber
+ */
+
+select l.lecture_id, email, name, phone_number from lecture l
+where lecture_id = 1120050;

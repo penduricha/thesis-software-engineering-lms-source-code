@@ -163,6 +163,10 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
             List<Map<String, Object>> detailAnswers = (List<Map<String, Object>>) dataPost.get("detail");
             //System.out.println("Detail: " + detailAnswers);
             //System.out.println(detailAnswers);
+            double totalScore = ((Number) dataPost.get("totalScore")).doubleValue();
+            if(totalScore > 10) {
+                totalScore = 10;
+            }
             if(!detailAnswers.isEmpty()) {
                 for(Map<String, Object> deMap: detailAnswers) {
                     DetailAnswerJavaClass detailAnswerJavaClass = new DetailAnswerJavaClass();
@@ -177,12 +181,12 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
                     detailAnswerJavaClass.setDetailMarkStudent(detailMarkStudent);
                     //set cho detailMarkStudent
                     detailAnswerJavaClass.getDetailMarkStudent()
-                            .setDetailMarkExam(((Number) dataPost.get("totalScore")).doubleValue());
+                            .setDetailMarkExam(totalScore);
                 }
                 //set cho mark student
                 //luu y persist detailMarkStudent -> set cho mark student -> persist markStudent
                 detailMarkStudentRepository.save(detailMarkStudent);
-                detailMarkStudent.getMarkStudent().setMarkExam(((Number) dataPost.get("totalScore")).doubleValue());
+                detailMarkStudent.getMarkStudent().setMarkExam(totalScore);
                 markStudentRepository.save(detailMarkStudent.getMarkStudent());
                 return detailMarkStudent.getMarkStudent();
             }
@@ -196,7 +200,11 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
                                                        String scoringMethod)
             throws JpaSystemException {
         DetailMarkStudent detailMarkStudent = new DetailMarkStudent();
-        detailMarkStudent.setDetailMarkExam(((Number) dataPost.get("totalScore")).doubleValue());
+        double totalScore = ((Number) dataPost.get("totalScore")).doubleValue();
+        if(totalScore > 10) {
+            totalScore = 10;
+        }
+        detailMarkStudent.setDetailMarkExam(totalScore);
         //date time submit
         detailMarkStudent.setDateSubmitted(LocalDateTime.now());
         //save detailMarkStudent submit coding
@@ -238,6 +246,7 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
                 //detailMarkStudent.getMarkStudent().setMarkExam(detailMarkStudent.getDetailMarkExam());
                 double mark = detailMarkStudentRepository
                         .getMaxDetailMarkExam_By_MarkStudentID(markStudentFound.getMarkStudentID());
+                System.out.println("Max mark: "+ mark);
                 detailMarkStudentRepository.save(detailMarkStudent);
                 detailMarkStudent.getMarkStudent().setMarkExam(mark);
                 markStudentRepository.save(detailMarkStudent.getMarkStudent());

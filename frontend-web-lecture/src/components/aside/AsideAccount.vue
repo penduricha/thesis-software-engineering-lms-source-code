@@ -10,6 +10,7 @@ import Password from "@/models/Password.js";
 import ExamDao from "@/daos/ExamDao.js";
 import ModalUpdateExam from "@/pages/detail-course/update-exam/ModalUpdateExam.vue";
 import '../skeleton/loading-skeleton.scss';
+import ModalViewInformation from "@/components/aside/modal-view-information/ModalViewInformation.vue";
 
 export default {
   name: 'AsideAccount',
@@ -19,6 +20,7 @@ export default {
   },
 
   components: {
+    ModalViewInformation,
     ModalUpdateExam,
   },
 
@@ -277,7 +279,11 @@ export default {
       this.validationCurrentPassword = null;
       this.validationNewPassword = null;
       this.validationConfirmNewPassword = null;
-    }
+    },
+
+    async setModalViewInformation() {
+      await this.$refs.modalViewInformation.setModalViewInformation();
+    },
 
   },
 
@@ -310,7 +316,10 @@ export default {
            data-bs-toggle="dropdown" aria-expanded="true"
       >
       <ul class="dropdown-menu dropdown-menu-lg-start view-menu-dropdown">
-        <li class="dropdown-item button-item-dropdown">
+        <li class="dropdown-item button-item-dropdown"
+            data-bs-toggle="modal" data-bs-target="#modal-view-information"
+            @click="setModalViewInformation"
+        >
           View Profile
         </li>
         <li class="dropdown-item button-item-dropdown"
@@ -445,6 +454,7 @@ export default {
       </div>
     </div>
   </div>
+  <modal-view-information ref="modalViewInformation"/>
 </template>
 
 <style scoped lang="scss">

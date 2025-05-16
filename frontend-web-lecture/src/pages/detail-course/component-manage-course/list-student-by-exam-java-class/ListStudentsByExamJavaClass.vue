@@ -104,6 +104,17 @@ export default {
       return `${day}/${month}/${year}`;
     },
 
+    formatDateSubmitted(dateSubmitted) {
+      let date = new Date(dateSubmitted);
+      let day = date.getDate();
+      let month = date.getMonth() + 1;
+      let year = date.getFullYear();
+      let hour = date.getHours();
+      let minute = date.getMinutes();
+      let second = date.getSeconds()
+      return `${day}/${month}/${year} ${hour}:${minute}:${second}`;
+    },
+
     getGenderString(gender) {
       return gender ? 'Male' : 'Female';
     },
@@ -299,7 +310,7 @@ export default {
                     v-model="l.selectedDetailMarkID"
             >
               <option v-for="d in l.listDetailMarkStudent" :key="d.detailMarkStudentID" :value="d.detailMarkStudentID">
-                {{ formatDateOfBirth(d.dateSubmitted) }}
+                {{ formatDateSubmitted(d.dateSubmitted) }}
               </option>
             </select>
           </td>

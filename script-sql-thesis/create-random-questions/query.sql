@@ -50,3 +50,7 @@ select * from lecture;
 
 select l.lecture_id, email, name, phone_number from lecture l
 where lecture_id = 1120050;
+
+select * from exam;
+
+update exam set start_date = '2025-05-16 15:00:00'

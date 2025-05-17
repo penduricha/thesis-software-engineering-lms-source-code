@@ -289,12 +289,116 @@ class OutputDebugResultJavaCore {
     + void onCreate()
 }
 
+class QuestionJavaCoreExam {
+    - Long questionJavaCoreExamID
+    - String contentQuestion
+    - String codeSample
+    - double score
+    - boolean isMarkedFlag
+    - Exam exam
+    - BankQuestionJavaCore bankQuestionJavaCore
+
+    + QuestionJavaCoreExam()
+    + Long getQuestionJavaCoreExamID()
+    + void setQuestionJavaCoreExamID(Long questionJavaCoreExamID)
+    + String getContentQuestion()
+    + void setContentQuestion(String contentQuestion)
+    + String getCodeSample()
+    + void setCodeSample(String codeSample)
+    + double getScore()
+    + void setScore(double score)
+    + boolean isMarkedFlag()
+    + void setMarkedFlag(boolean markedFlag)a
+    + Exam getExam()
+    + void setExam(Exam exam)
+    + BankQuestionJavaCore getBankQuestionJavaCore()
+    + void setBankQuestionJavaCore(BankQuestionJavaCore bankQuestionJavaCore)
+    + void onCreated()
+}
+
+class BankQuestionJavaCore {
+    - Long questionJavaCoreID
+    - String contentQuestion
+    - String codeSample
+    - String codeRunToOutput
+    - List<BankTestCaseJavaCore> bankTestCaseJavaCores
+    - List<QuestionJavaCoreExam> questionJavaCoreExams
+
+    + BankQuestionJavaCore()
+    + Long getQuestionJavaCoreID()
+    + void setQuestionJavaCoreID(Long questionJavaCoreID)
+    + String getContentQuestion()
+    + void setContentQuestion(String contentQuestion)
+    + String getCodeSample()
+    + void setCodeSample(String codeSample)
+    + String getCodeRunToOutput()
+    + void setCodeRunToOutput(String codeRunToOutput)
+    + List<BankTestCaseJavaCore> getBankTestCaseJavaCores()
+    + void setBankTestCaseJavaCores(List<BankTestCaseJavaCore> bankTestCaseJavaCores)
+    + List<QuestionJavaCoreExam> getQuestionJavaCoreExams()
+    + void setQuestionJavaCoreExams(List<QuestionJavaCoreExam> questionJavaCoreExams)
+}
+
+class BankTestCaseJavaCore {
+    - Long bankTestCaseID
+    - String inputTest
+    - String outputExpect
+    - String note
+    - BankQuestionJavaCore bankQuestionJavaCore
+
+    + BankTestCaseJavaCore()
+    + Long getBankTestCaseID()
+    + void setBankTestCaseID(Long bankTestCaseID)
+    + String getInputTest()
+    + void setInputTest(String inputTest)
+    + String getOutputExpect()
+    + void setOutputExpect(String outputExpect)
+    + String getNote()
+    + void setNote(String note)
+    + BankQuestionJavaCore getBankQuestionJavaCore()
+    + void setBankQuestionJavaCore(BankQuestionJavaCore bankQuestionJavaCore)
+    + String toString()
+}
+
+class BankTestJavaOop {
+    - Long bankTestJavaOopID
+    - String nameTest
+    - String descriptionTest
+    - String imageDiagram
+    - LocalDateTime createdAt
+    - LocalDateTime updateAt
+    - List<ExamJavaOop> listExamJavaOop
+
+    + BankTestJavaOop()
+    + Long getBankTestJavaOopID()
+    + void setBankTestJavaOopID(Long bankTestJavaOopID)
+    + String getNameTest()
+    + void setNameTest(String nameTest)
+    + String getDescriptionTest()
+    + void setDescriptionTest(String descriptionTest)
+    + String getImageDiagram()
+    + void setImageDiagram(String imageDiagram)
+    + LocalDateTime getCreatedAt()
+    + void setCreatedAt(LocalDateTime createdAt)
+    + LocalDateTime getUpdateAt()
+    + void setUpdateAt(LocalDateTime updateAt)
+    + List<ExamJavaOop> getListExamJavaOop()
+    + void setListExamJavaOop(List<ExamJavaOop> listExamJavaOop)
+    + void onCreated()
+    + void onUpdated()
+}
+
+
 Course "0..1" <-- "1" Student
 Student "1" <-- "0..1" CodeStorageSave
 Course "*" <-- "*" Lecture
 Course "1" <-- "0..*" Exam
 Exam "1" <-- "0..1" ExamJavaOop
+BankTestJavaOop "1" <-- "0..1" ExamJavaOop
 Exam "1" <-- "0..1" MarkStudent
+Exam "1" <-- "1..*" QuestionJavaCoreExam
+BankQuestionJavaCore "1" <-- "1..*" QuestionJavaCoreExam
+BankQuestionJavaCore "1" <-- "1..*" BankTestCaseJavaCore
 MarkStudent "1" <-- "0..1" DetailMarkStudent
 DetailMarkStudent "1" <-- "0..1" CodeSubmitJavaClass
 DetailMarkStudent "1" <-- "1..*" ResultQuestionJavaCore

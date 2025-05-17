@@ -293,12 +293,116 @@ public class StringUML {
                 "    + void onCreate()\n" +
                 "}\n" +
                 "\n" +
+                "class QuestionJavaCoreExam {\n" +
+                "    - Long questionJavaCoreExamID\n" +
+                "    - String contentQuestion\n" +
+                "    - String codeSample\n" +
+                "    - double score\n" +
+                "    - boolean isMarkedFlag\n" +
+                "    - Exam exam\n" +
+                "    - BankQuestionJavaCore bankQuestionJavaCore\n" +
+                "\n" +
+                "    + QuestionJavaCoreExam()\n" +
+                "    + Long getQuestionJavaCoreExamID()\n" +
+                "    + void setQuestionJavaCoreExamID(Long questionJavaCoreExamID)\n" +
+                "    + String getContentQuestion()\n" +
+                "    + void setContentQuestion(String contentQuestion)\n" +
+                "    + String getCodeSample()\n" +
+                "    + void setCodeSample(String codeSample)\n" +
+                "    + double getScore()\n" +
+                "    + void setScore(double score)\n" +
+                "    + boolean isMarkedFlag()\n" +
+                "    + void setMarkedFlag(boolean markedFlag)a\n" +
+                "    + Exam getExam()\n" +
+                "    + void setExam(Exam exam)\n" +
+                "    + BankQuestionJavaCore getBankQuestionJavaCore()\n" +
+                "    + void setBankQuestionJavaCore(BankQuestionJavaCore bankQuestionJavaCore)\n" +
+                "    + void onCreated()\n" +
+                "}\n" +
+                "\n" +
+                "class BankQuestionJavaCore {\n" +
+                "    - Long questionJavaCoreID\n" +
+                "    - String contentQuestion\n" +
+                "    - String codeSample\n" +
+                "    - String codeRunToOutput\n" +
+                "    - List<BankTestCaseJavaCore> bankTestCaseJavaCores\n" +
+                "    - List<QuestionJavaCoreExam> questionJavaCoreExams\n" +
+                "\n" +
+                "    + BankQuestionJavaCore()\n" +
+                "    + Long getQuestionJavaCoreID()\n" +
+                "    + void setQuestionJavaCoreID(Long questionJavaCoreID)\n" +
+                "    + String getContentQuestion()\n" +
+                "    + void setContentQuestion(String contentQuestion)\n" +
+                "    + String getCodeSample()\n" +
+                "    + void setCodeSample(String codeSample)\n" +
+                "    + String getCodeRunToOutput()\n" +
+                "    + void setCodeRunToOutput(String codeRunToOutput)\n" +
+                "    + List<BankTestCaseJavaCore> getBankTestCaseJavaCores()\n" +
+                "    + void setBankTestCaseJavaCores(List<BankTestCaseJavaCore> bankTestCaseJavaCores)\n" +
+                "    + List<QuestionJavaCoreExam> getQuestionJavaCoreExams()\n" +
+                "    + void setQuestionJavaCoreExams(List<QuestionJavaCoreExam> questionJavaCoreExams)\n" +
+                "}\n" +
+                "\n" +
+                "class BankTestCaseJavaCore {\n" +
+                "    - Long bankTestCaseID\n" +
+                "    - String inputTest\n" +
+                "    - String outputExpect\n" +
+                "    - String note\n" +
+                "    - BankQuestionJavaCore bankQuestionJavaCore\n" +
+                "\n" +
+                "    + BankTestCaseJavaCore()\n" +
+                "    + Long getBankTestCaseID()\n" +
+                "    + void setBankTestCaseID(Long bankTestCaseID)\n" +
+                "    + String getInputTest()\n" +
+                "    + void setInputTest(String inputTest)\n" +
+                "    + String getOutputExpect()\n" +
+                "    + void setOutputExpect(String outputExpect)\n" +
+                "    + String getNote()\n" +
+                "    + void setNote(String note)\n" +
+                "    + BankQuestionJavaCore getBankQuestionJavaCore()\n" +
+                "    + void setBankQuestionJavaCore(BankQuestionJavaCore bankQuestionJavaCore)\n" +
+                "    + String toString()\n" +
+                "}\n" +
+                "\n" +
+                "class BankTestJavaOop {\n" +
+                "    - Long bankTestJavaOopID\n" +
+                "    - String nameTest\n" +
+                "    - String descriptionTest\n" +
+                "    - String imageDiagram\n" +
+                "    - LocalDateTime createdAt\n" +
+                "    - LocalDateTime updateAt\n" +
+                "    - List<ExamJavaOop> listExamJavaOop\n" +
+                "\n" +
+                "    + BankTestJavaOop()\n" +
+                "    + Long getBankTestJavaOopID()\n" +
+                "    + void setBankTestJavaOopID(Long bankTestJavaOopID)\n" +
+                "    + String getNameTest()\n" +
+                "    + void setNameTest(String nameTest)\n" +
+                "    + String getDescriptionTest()\n" +
+                "    + void setDescriptionTest(String descriptionTest)\n" +
+                "    + String getImageDiagram()\n" +
+                "    + void setImageDiagram(String imageDiagram)\n" +
+                "    + LocalDateTime getCreatedAt()\n" +
+                "    + void setCreatedAt(LocalDateTime createdAt)\n" +
+                "    + LocalDateTime getUpdateAt()\n" +
+                "    + void setUpdateAt(LocalDateTime updateAt)\n" +
+                "    + List<ExamJavaOop> getListExamJavaOop()\n" +
+                "    + void setListExamJavaOop(List<ExamJavaOop> listExamJavaOop)\n" +
+                "    + void onCreated()\n" +
+                "    + void onUpdated()\n" +
+                "}\n" +
+                "\n" +
+                "\n" +
                 "Course \"0..1\" <-- \"1\" Student\n" +
                 "Student \"1\" <-- \"0..1\" CodeStorageSave\n" +
                 "Course \"*\" <-- \"*\" Lecture\n" +
                 "Course \"1\" <-- \"0..*\" Exam\n" +
                 "Exam \"1\" <-- \"0..1\" ExamJavaOop\n" +
+                "BankTestJavaOop \"1\" <-- \"0..1\" ExamJavaOop\n" +
                 "Exam \"1\" <-- \"0..1\" MarkStudent\n" +
+                "Exam \"1\" <-- \"1..*\" QuestionJavaCoreExam\n" +
+                "BankQuestionJavaCore \"1\" <-- \"1..*\" QuestionJavaCoreExam\n" +
+                "BankQuestionJavaCore \"1\" <-- \"1..*\" BankTestCaseJavaCore\n" +
                 "MarkStudent \"1\" <-- \"0..1\" DetailMarkStudent\n" +
                 "DetailMarkStudent \"1\" <-- \"0..1\" CodeSubmitJavaClass\n" +
                 "DetailMarkStudent \"1\" <-- \"1..*\" ResultQuestionJavaCore\n" +

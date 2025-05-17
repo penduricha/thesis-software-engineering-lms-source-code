@@ -53,4 +53,10 @@ where lecture_id = 1120050;
 
 select * from exam;
 
-update exam set start_date = '2025-05-16 15:00:00'
+update exam set start_date = '2025-05-16 15:00:00';
+
+select * from student where first_name = 'Biên';
+
+select * from lecture;
+
+select * from mark_student;

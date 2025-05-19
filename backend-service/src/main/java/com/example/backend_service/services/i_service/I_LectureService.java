@@ -13,4 +13,6 @@ public interface I_LectureService {
     public Lecture updatePasswordLecture(String lectureID, String newPassword);
 
     public Map<String,Object> findLectureInformation_By_LectureID(String lectureID);
+
+    public Map<String, Object> findDetailInformation_By_LectureID(String lectureID);
 }

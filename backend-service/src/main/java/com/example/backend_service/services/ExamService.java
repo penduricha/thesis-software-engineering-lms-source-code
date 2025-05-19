@@ -40,7 +40,9 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
 
     private final DetailAnswerJavaClassRepository detailAnswerJavaClassRepository;
 
-    public ExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ExamRepository examRepository, CourseRepository courseRepository, BankQuestionJavaCoreService bankQuestionJavaCoreService, BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository, MarkStudentRepository markStudentRepository, BankTestJavaOopRepository bankTestJavaOopRepository, ExamJavaOopRepository examJavaOopRepository, DetailAnswerJavaClassRepository detailAnswerJavaClassRepository) {
+    private final CodeSubmitJavaClassRepository codeSubmitJavaClassRepository;
+
+    public ExamService(QuestionJavaCoreExamRepository questionJavaCoreExamRepository, ExamRepository examRepository, CourseRepository courseRepository, BankQuestionJavaCoreService bankQuestionJavaCoreService, BankQuestionJavaCoreRepository bankQuestionJavaCoreRepository, MarkStudentRepository markStudentRepository, BankTestJavaOopRepository bankTestJavaOopRepository, ExamJavaOopRepository examJavaOopRepository, DetailAnswerJavaClassRepository detailAnswerJavaClassRepository, CodeSubmitJavaClassRepository codeSubmitJavaClassRepository) {
         this.questionJavaCoreExamRepository = questionJavaCoreExamRepository;
         this.examRepository = examRepository;
         this.courseRepository = courseRepository;
@@ -50,6 +52,7 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
         this.bankTestJavaOopRepository = bankTestJavaOopRepository;
         this.examJavaOopRepository = examJavaOopRepository;
         this.detailAnswerJavaClassRepository = detailAnswerJavaClassRepository;
+        this.codeSubmitJavaClassRepository = codeSubmitJavaClassRepository;
     }
 
     @Override
@@ -534,10 +537,23 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
     @Transactional
     public Void deleteMarkStudentID_By_MarkStudentID_JavaClass(Long markStudentID) throws JpaSystemException {
 
+        List<Long> queryListCodeSubmitJavaClassID = codeSubmitJavaClassRepository
+                .getListCodeSubmitJavaClassID_By_MarkStudentID(markStudentID);
+
         List<Long> queryListDetailMarkStudentID = getListDetailMarkStudentID_By_MarkStudentID(markStudentID);
 
         List<Long> queryListDetailAnswerJavaClassID = detailAnswerJavaClassRepository
                 .getListDetailAnswerJavaClassID_By_MarkStudentID(markStudentID);
+
+        //xoa them phan code submit
+        if(!queryListCodeSubmitJavaClassID.isEmpty()) {
+            for(Long id: queryListCodeSubmitJavaClassID) {
+                String sqlDeletID_CodeSubmitJavaClass = "delete from code_submit_java_class where code_submit_java_class_id = ?";
+                entityManager.createNativeQuery(sqlDeletID_CodeSubmitJavaClass)
+                        .setParameter(1, id)
+                        .executeUpdate();
+            }
+        }
         //System.out.println(queryListDetailAnswerJavaClassID);
         //xoa chi tiet
         if(!queryListDetailAnswerJavaClassID.isEmpty()) {

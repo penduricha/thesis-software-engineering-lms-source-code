@@ -62,8 +62,11 @@ public class MarkStudentJavaClassController {
          */
         try {
             String studentID = (String) dataPost.get("studentID");
-            Integer examIDInt = (Integer) dataPost.get("examID");
+            //String examIDString = (String) dataPost.get("examID");
+            //Integer examIDInt = examIDString == null ? null : Integer.parseInt(examIDString);
+            Integer examIDInt =  (Integer) dataPost.get("examID");
             Long examID = examIDInt != null ? examIDInt.longValue() : null;
+            System.out.println(examID);
             String scoringMethod = markStudentRepository
                     .getScoringMethod_If_Student_Had_MarkExam_And_Exam_Retake(studentID, examID);
             if (scoringMethod == null || scoringMethod.isEmpty()) {

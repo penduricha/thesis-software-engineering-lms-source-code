@@ -21,4 +21,8 @@ export default class MarkStudentService {
             `/mark_student/put-mark-student-zero-java-class-if-no-submit`,
             dataPut,{});
     }
+
+    static post_Data_Result_Java_Class_From_FormSubmission(dataPost) {
+        return axiosConfig.getAPIClient().post(`/mark_student/post-mark-student-after-submit-exam-java-class`, dataPost, {});
+    }
 }

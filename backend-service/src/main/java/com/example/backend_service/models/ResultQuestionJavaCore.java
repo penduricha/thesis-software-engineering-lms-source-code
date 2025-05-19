@@ -20,23 +20,11 @@ public class ResultQuestionJavaCore implements Serializable {
     @Column(name = "result_question_java_core_id", nullable = false)
     private Long resultQuestionJavaCoreID;
 
-//    @Column(nullable = false)
-//    private Long questionJavaCoreID;
-
     @Column(nullable = false, columnDefinition = "longtext")
     private String codeStudentSubmitted;
 
     private double markAchieve;
 
-//    public String getNoteCompiler() {
-//        return noteCompiler;
-//    }
-//
-//    public void setNoteCompiler(String noteCompiler) {
-//        this.noteCompiler = noteCompiler;
-//    }
-//
-//    private String noteCompiler;
 
     public double getMarkAchieve() {
         return markAchieve;
@@ -45,8 +33,6 @@ public class ResultQuestionJavaCore implements Serializable {
     public void setMarkAchieve(double markAchieve) {
         this.markAchieve = markAchieve;
     }
-//    @Column(columnDefinition = "longtext")
-//    private String outputCodeStudent;
 
     @OneToMany(mappedBy = "resultQuestionJavaCore", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonIgnore
@@ -57,15 +43,6 @@ public class ResultQuestionJavaCore implements Serializable {
     @JsonIgnore
     private DetailMarkStudent detailMarkStudent;
 
-//    @ManyToOne
-//    @JoinColumn(name = "question_java_core_exam_id")
-//    @JsonIgnore
-//    private QuestionJavaCoreExam questionJavaCoreExam;
-
-//    @OneToMany(mappedBy = "resultQuestionJavaCore", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JsonIgnore
-//    private List<QuestionJavaCoreExam> questionJavaCoreExams = new ArrayList<>();
-    //Ko map với questionJavaCoreExam
     @Column(name = "question_java_core_exam_id", nullable = false)
     private Long questionJavaCoreExamID;
 

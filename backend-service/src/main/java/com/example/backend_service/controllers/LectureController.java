@@ -60,8 +60,14 @@ public class LectureController {
         return ResponseEntity.ok(lectureNameMap);
     }
 
+    @GetMapping("/lecture/find-detail-information-lecture/{lectureID}")
+    public ResponseEntity<Map<String, Object>> findDetailInformation_By_LectureID(@PathVariable String lectureID)
+            throws HttpClientErrorException{
+        return ResponseEntity.ok(lectureService.findDetailInformation_By_LectureID(covertLectureID(lectureID)));
+    }
+
     @GetMapping("/lecture/getPassword_By_LectureID/{lectureID}")
-    public ResponseEntity<String> updatePasswordStudent(@PathVariable String lectureID) throws HttpClientErrorException {
+    public ResponseEntity<String> getLecturePassword(@PathVariable String lectureID) throws HttpClientErrorException {
         if(lectureID.charAt(0) == '0'){
             String lectureIDFind = lectureID.substring(1);
             Lecture lecture = lectureService.findLectureByLectureID(lectureIDFind);
@@ -71,7 +77,7 @@ public class LectureController {
     }
 
     @PatchMapping("/lecture/updatePasswordLecture/{lectureID}/{newPassword}")
-    public ResponseEntity<String> updatePasswordStudent(@PathVariable String lectureID, @PathVariable String newPassword) throws HttpClientErrorException {
+    public ResponseEntity<String> updatePasswordLecture(@PathVariable String lectureID, @PathVariable String newPassword) throws HttpClientErrorException {
         if(lectureID.charAt(0) == '0'){
             String lectureIDFind = lectureID.substring(1);
             Lecture updatedLecture = lectureService.updatePasswordLecture(lectureIDFind, newPassword);

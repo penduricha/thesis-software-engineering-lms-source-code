@@ -60,4 +60,6 @@ public interface DetailMarkStudentRepository extends JpaRepository<DetailMarkStu
                 """,
             nativeQuery = true)
     Double getLastSubmittedDetailMarkExam_By_MarkStudentID(@Param("markStudentID") Long markStudentID);
+
+    List<DetailMarkStudent> getDetailMarkStudentsByMarkStudent_MarkStudentID(Long markStudentID);
 }

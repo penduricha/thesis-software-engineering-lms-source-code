@@ -62,4 +62,15 @@ export default class LectureDao {
         });
         return status;
     }
+
+    static async getDetailInformationLecture_By_LectureID (lectureID) {
+        let detailInfo = {};
+        await LectureService.fetchDetailInformationLecture_By_LectureID(lectureID).then(response => {
+            detailInfo = response.data;
+        }).catch(error => {
+            console.error(error);
+            // alert(error)
+        });
+        return detailInfo;
+    }
 }

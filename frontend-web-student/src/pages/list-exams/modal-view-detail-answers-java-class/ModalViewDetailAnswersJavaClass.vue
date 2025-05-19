@@ -55,13 +55,13 @@ export default {
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(l, lIndex) in listDetailAnswersJavaClass || []" :key="lIndex" v-if="listDetailAnswersJavaClass.length > 0">
+              <tr v-for="(l, lIndex) in listDetailAnswersJavaClass || []" :key="lIndex"
+                  v-if="listDetailAnswersJavaClass.length > 0">
                 <td>{{ lIndex + 1 }}</td>
                 <td>{{ l.sentence }}</td>
                 <td>{{ l.scoreAchievement }}</td>
                 <td>{{ l.maxScore }}</td>
                 <td>{{ l.reviews }}</td>
-
               </tr>
               </tbody>
             </table>

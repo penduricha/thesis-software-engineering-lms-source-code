@@ -53,4 +53,17 @@ public class LectureService implements I_LectureService {
         }
         return null;
     }
+
+    @Override
+    public Map<String, Object> findDetailInformation_By_LectureID(String lectureID) throws JpaSystemException {
+        Lecture lectureFound = findLectureByLectureID(lectureID);
+        if(lectureFound != null) {
+            Map<String, Object> newMap = new HashMap<>();
+            newMap.put("email", lectureFound.getEmail());
+            newMap.put("name", lectureFound.getName());
+            newMap.put("phoneNumber", lectureFound.getPhoneNumber());
+            return newMap;
+        }
+        return new HashMap<>();
+    }
 }

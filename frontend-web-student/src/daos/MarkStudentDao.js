@@ -63,4 +63,18 @@ export default class MarkStudentDao{
         }
         return status;
     }
+
+    static async postFormSubmissionJavaClass(dataPost) {
+        let status = false;
+        let responseReturn = null;
+        await MarkStudentService.post_Data_Result_Java_Class_From_FormSubmission(dataPost).then(response => {
+            responseReturn = response.data;
+        }).catch(error => {
+            console.error(error);
+        })
+        if(responseReturn) {
+            status = true;
+        }
+        return status;
+    }
 }

@@ -18,6 +18,38 @@ public class CodeSubmitJavaClass implements Serializable {
     @Column(name = "code_submit_java_class_id", nullable = false)
     private Long codeSubmitJavaClassID;
 
+    public Long getCodeSubmitJavaClassID() {
+        return codeSubmitJavaClassID;
+    }
+
+    public void setCodeSubmitJavaClassID(Long codeSubmitJavaClassID) {
+        this.codeSubmitJavaClassID = codeSubmitJavaClassID;
+    }
+
+    public String getCodeSubmitString() {
+        return codeSubmitString;
+    }
+
+    public void setCodeSubmitString(String codeSubmitString) {
+        this.codeSubmitString = codeSubmitString;
+    }
+
+    public String getSuggest() {
+        return suggest;
+    }
+
+    public void setSuggest(String suggest) {
+        this.suggest = suggest;
+    }
+
+    public DetailMarkStudent getDetailMarkStudent() {
+        return detailMarkStudent;
+    }
+
+    public void setDetailMarkStudent(DetailMarkStudent detailMarkStudent) {
+        this.detailMarkStudent = detailMarkStudent;
+    }
+
     @Column(columnDefinition = "longtext")
     private String codeSubmitString;
 

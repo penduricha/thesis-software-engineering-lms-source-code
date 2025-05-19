@@ -146,26 +146,47 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
             throws JpaSystemException {
         DetailMarkStudent detailMarkStudent = createMarkStudent_And_DetailMarkStudent(dataPost);
         if(detailMarkStudent != null) {
-            List<Map<String, Object>> detailAnswers = (List<Map<String, Object>>) dataPost.get("detailAnswers");
-            System.out.println(detailAnswers);
+            //save code java class submit
+            //get fields
+            String suggest = (String) dataPost.get("suggest");
+            String codeSubmitString = (String) dataPost.get("codeSubmitString");
+
+            CodeSubmitJavaClass codeSubmitJavaClass = new CodeSubmitJavaClass();
+
+            codeSubmitJavaClass.setSuggest(suggest);
+            codeSubmitJavaClass.setCodeSubmitString(codeSubmitString);
+
+            //set relationship
+            detailMarkStudent.setCodeSubmitJavaClass(codeSubmitJavaClass);
+            codeSubmitJavaClass.setDetailMarkStudent(detailMarkStudent);
+
+            List<Map<String, Object>> detailAnswers = (List<Map<String, Object>>) dataPost.get("detail");
+            //System.out.println("Detail: " + detailAnswers);
+            //System.out.println(detailAnswers);
+            double totalScore = ((Number) dataPost.get("totalScore")).doubleValue();
+            if(totalScore > 10) {
+                totalScore = 10;
+            }
             if(!detailAnswers.isEmpty()) {
                 for(Map<String, Object> deMap: detailAnswers) {
                     DetailAnswerJavaClass detailAnswerJavaClass = new DetailAnswerJavaClass();
                     detailAnswerJavaClass.setSentence((String) deMap.get("sentence"));
                     detailAnswerJavaClass.setReviews((String) deMap.get("reviews"));
                     //scoreAchievement
-                    detailAnswerJavaClass.setScoreAchievement(DoubleGetMap.getDoubleValue(deMap, "scoreAchievement"));
-                    detailAnswerJavaClass.setMaxScore(DoubleGetMap.getDoubleValue(deMap, "maxScore"));
+                    //double doubleScoreAchieve = (Double) dataPost.get("scoreAchieve");
+                    //System.out.println("double score achieve: "+DoubleGetMap.getDoubleValue(dataPost, "scoreAchieve"));
+                    detailAnswerJavaClass.setScoreAchievement(((Number) deMap.get("scoreAchieve")).doubleValue());
+                    detailAnswerJavaClass.setMaxScore(((Number) deMap.get("maxScore")).doubleValue());
                     detailMarkStudent.getDetailAnswerJavaClassList().add(detailAnswerJavaClass);
                     detailAnswerJavaClass.setDetailMarkStudent(detailMarkStudent);
                     //set cho detailMarkStudent
                     detailAnswerJavaClass.getDetailMarkStudent()
-                            .setDetailMarkExam((Double) dataPost.get("totalScore"));
+                            .setDetailMarkExam(totalScore);
                 }
                 //set cho mark student
                 //luu y persist detailMarkStudent -> set cho mark student -> persist markStudent
                 detailMarkStudentRepository.save(detailMarkStudent);
-                detailMarkStudent.getMarkStudent().setMarkExam(DoubleGetMap.getDoubleValue(dataPost, "totalScore"));
+                detailMarkStudent.getMarkStudent().setMarkExam(totalScore);
                 markStudentRepository.save(detailMarkStudent.getMarkStudent());
                 return detailMarkStudent.getMarkStudent();
             }
@@ -179,7 +200,11 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
                                                        String scoringMethod)
             throws JpaSystemException {
         DetailMarkStudent detailMarkStudent = new DetailMarkStudent();
-        detailMarkStudent.setDetailMarkExam(DoubleGetMap.getDoubleValue(dataPost, "totalScore"));
+        double totalScore = ((Number) dataPost.get("totalScore")).doubleValue();
+        if(totalScore > 10) {
+            totalScore = 10;
+        }
+        detailMarkStudent.setDetailMarkExam(totalScore);
         //date time submit
         detailMarkStudent.setDateSubmitted(LocalDateTime.now());
         //save detailMarkStudent submit coding
@@ -187,15 +212,29 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
         //set relationship
         markStudentFound.getDetailMarkStudents().add(detailMarkStudent);
         detailMarkStudent.setMarkStudent(markStudentFound);
-        List<Map<String, Object>> detailAnswers = (List<Map<String, Object>>) dataPost.get("detailAnswers");
+        //save codeSubmitString
+
+        String suggest = (String) dataPost.get("suggest");
+        String codeSubmitString = (String) dataPost.get("codeSubmitString");
+
+        CodeSubmitJavaClass codeSubmitJavaClass = new CodeSubmitJavaClass();
+
+        codeSubmitJavaClass.setSuggest(suggest);
+        codeSubmitJavaClass.setCodeSubmitString(codeSubmitString);
+
+        //set relationship
+        detailMarkStudent.setCodeSubmitJavaClass(codeSubmitJavaClass);
+        codeSubmitJavaClass.setDetailMarkStudent(detailMarkStudent);
+
+        List<Map<String, Object>> detailAnswers = (List<Map<String, Object>>) dataPost.get("detail");
         if(!detailAnswers.isEmpty()) {
             for(Map<String, Object> deMap: detailAnswers) {
                 DetailAnswerJavaClass detailAnswerJavaClass = new DetailAnswerJavaClass();
                 detailAnswerJavaClass.setSentence((String) deMap.get("sentence"));
                 detailAnswerJavaClass.setReviews((String) deMap.get("reviews"));
-                System.out.println("score achievement: "+DoubleGetMap.getDoubleValue(deMap, "scoreAchievement"));
-                detailAnswerJavaClass.setScoreAchievement(DoubleGetMap.getDoubleValue(deMap, "scoreAchievement"));
-                detailAnswerJavaClass.setMaxScore(DoubleGetMap.getDoubleValue(deMap, "maxScore"));
+                //System.out.println("score achievement: "+DoubleGetMap.getDoubleValue(deMap, "scoreAchieve"));
+                detailAnswerJavaClass.setScoreAchievement(((Number) deMap.get("scoreAchieve")).doubleValue());
+                detailAnswerJavaClass.setMaxScore(((Number) deMap.get("maxScore")).doubleValue());
                 detailMarkStudent.getDetailAnswerJavaClassList().add(detailAnswerJavaClass);
                 detailAnswerJavaClass.setDetailMarkStudent(detailMarkStudent);
                 //set cho detailMarkStudent
@@ -207,6 +246,7 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
                 //detailMarkStudent.getMarkStudent().setMarkExam(detailMarkStudent.getDetailMarkExam());
                 double mark = detailMarkStudentRepository
                         .getMaxDetailMarkExam_By_MarkStudentID(markStudentFound.getMarkStudentID());
+                System.out.println("Max mark: "+ mark);
                 detailMarkStudentRepository.save(detailMarkStudent);
                 detailMarkStudent.getMarkStudent().setMarkExam(mark);
                 markStudentRepository.save(detailMarkStudent.getMarkStudent());

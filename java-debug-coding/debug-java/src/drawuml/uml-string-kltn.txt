@@ -1,0 +1,303 @@
+@startuml
+
+class Course {
+    - Long courseID
+    - String className
+    - String courseName
+    - int semester
+    - int startYear
+    - int endYear
+
+    - List<Lecture> lectures
+    - List<Student> students
+    - List<Exam> exams
+
+    + Course()
+    + Course(String className, String courseName, int semester, int startYear, int endYear)
+    + Long getCourseID()
+    + void setCourseID(Long courseID)
+    + String getClassName()
+    + void setClassName(String className)
+    + String getCourseName()
+    + void setCourseName(String courseName)
+    + int getSemester()
+    + void setSemester(int semester)
+    + int getStartYear()
+    + void setStartYear(int startYear)
+    + int getEndYear()
+    + void setEndYear(int endYear)
+    + String toString()
+    + List<Exam> getExams()
+}
+
+class Student {
+    - String studentID
+    - String lastName
+    - String firstName
+    - boolean gender
+    - String password
+    - LocalDate dateOfBirth
+    - LocalDateTime dateTimeStartExam
+
+    - Course course
+    - List<MarkStudent> markStudentList
+    - List<CodeStorageSave> codeStorageSaves
+    - List<Exam> exams
+
+    + Student()
+    + String getStudentID()
+    + void setStudentID(String studentID)
+    + String getLastName()
+    + void setLastName(String lastName)
+    + String getFirstName()
+    + void setFirstName(String firstName)
+    + boolean isGender()
+    + void setGender(boolean gender)
+    + String getPassword()
+    + void setPassword(String password)
+    + LocalDate getDateOfBirth()
+    + void setDateOfBirth(LocalDate dateOfBirth)
+    + LocalDateTime getDateTimeStartExam()
+    + void setDateTimeStartExam(LocalDateTime dateTimeStartExam)
+    + Course getCourse()
+    + void setCourse(Course course)
+    + List<MarkStudent> getMarkStudentList()
+    + void setMarkStudentList(List<MarkStudent> markStudentList)
+    + List<CodeStorageSave> getCodeStorageSaves()
+    + void setCodeStorageSaves(List<CodeStorageSave> codeStorageSaves)
+}
+
+class Lecture {
+    - String lectureID
+    - String name
+    - String email
+    - String phoneNumber
+    - String password
+
+    - List<Course> courses
+
+    + Lecture()
+    + String getLectureID()
+    + void setLectureID(String lectureID)
+    + String getName()
+    + void setName(String name)
+    + String getEmail()
+    + void setEmail(String email)
+    + String getPhoneNumber()
+    + void setPhoneNumber(String phoneNumber)
+    + String getPassword()
+    + void setPassword(String password)
+}
+
+class Exam {
+    - Long examID
+    - String titleExam
+    - String typeExam
+    - String topicExam
+    - boolean viewTable
+    - boolean retakeExam
+    - String scoringMethod
+    - int duration
+    - LocalDateTime startDate
+    - LocalDateTime endDate
+    - String linkExamPaper
+    - String passwordExam
+    - LocalDateTime createdAt
+    - LocalDateTime updateAt
+
+    - Course course
+    - List<QuestionJavaCoreExam> questionJavaCoreExams
+    - MarkStudent markStudent
+    - ExamJavaOop examJavaOop
+    - List<Student> students
+
+    + Exam()
+    + Long getExamID()
+    + void setExamID(Long examID)
+    + String getTitleExam()
+    + void setTitleExam(String titleExam)
+    + String getTypeExam()
+    + void setTypeExam(String typeExam)
+    + String getTopicExam()
+    + void setTopicExam(String topicExam)
+    + boolean isViewTable()
+    + void setViewTable(boolean viewTable)
+    + boolean isRetakeExam()
+    + void setRetakeExam(boolean retakeExam)
+    + String getScoringMethod()
+    + void setScoringMethod(String scoringMethod)
+    + int getDuration()
+    + void setDuration(int duration)
+    + LocalDateTime getStartDate()
+    + void setStartDate(LocalDateTime startDate)
+    + LocalDateTime getEndDate()
+    + void setEndDate(LocalDateTime endDate)
+    + String getLinkExamPaper()
+    + void setLinkExamPaper(String linkExamPaper)
+    + String getPasswordExam()
+    + void setPasswordExam(String passwordExam)
+    + LocalDateTime getCreatedAt()
+    + void setCreatedAt(LocalDateTime createdAt)
+    + LocalDateTime getUpdateAt()
+    + void setUpdateAt(LocalDateTime updateAt)
+    + List<QuestionJavaCoreExam> getQuestionJavaCoreExams()
+    + void setQuestionJavaCoreExams(List<QuestionJavaCoreExam> questionJavaCoreExams)
+    + Course getCourse()
+    + void setCourse(Course course)
+    + List<Student> getStudents()
+    + void setStudents(List<Student> students)
+    + void onCreated()
+    + void onUpdated()
+}
+
+class ExamJavaOop {
+    - Long examJavaOopID
+    - Exam exam
+    - BankTestJavaOop bankTestJavaOop
+
+    + ExamJavaOop()
+    + Long getExamJavaOopID()
+    + void setExamJavaOopID(Long examJavaOopID)
+    + Exam getExam()
+    + void setExam(Exam exam)
+    + BankTestJavaOop getBankTestJavaOop()
+    + void setBankTestJavaOop(BankTestJavaOop bankTestJavaOop)
+}
+
+class CodeStorageSave {
+    - Long codeStorageSaveID
+    - String codeSave
+    - int indexQuestionSave
+    - Student student
+
+    + CodeStorageSave()
+    + Long getCodeStorageSaveID()
+    + void setCodeStorageSaveID(Long codeStorageSaveID)
+    + String getCodeSave()
+    + void setCodeSave(String codeSave)
+    + int getIndexQuestionSave()
+    + void setIndexQuestionSave(int indexQuestionSave)
+    + Student getStudent()
+    + void setStudent(Student student)
+}
+
+class MarkStudent {
+    - Long markStudentID
+    - double markExam
+    - Student student
+    - Exam exam
+    - List<DetailMarkStudent> detailMarkStudents
+
+    + MarkStudent()
+    + Long getMarkStudentID()
+    + void setMarkStudentID(Long markStudentID)
+    + double getMarkExam()
+    + void setMarkExam(double markExam)
+    + Student getStudent()
+    + void setStudent(Student student)
+    + Exam getExam()
+    + void setExam(Exam exam)
+    + List<DetailMarkStudent> getDetailMarkStudents()
+    + void setDetailMarkStudents(List<DetailMarkStudent> detailMarkStudents)
+}
+
+class DetailMarkStudent {
+    - Long detailMarkStudentID
+    - double detailMarkExam
+    - LocalDateTime dateSubmitted
+    - MarkStudent markStudent
+    - List<ResultQuestionJavaCore> resultQuestionJavaCoreList
+    - List<DetailAnswerJavaClass> detailAnswerJavaClassList
+    - CodeSubmitJavaClass codeSubmitJavaClass
+
+    + DetailMarkStudent()
+    + Long getDetailMarkStudentID()
+    + void setDetailMarkStudentID(Long detailMarkStudentID)
+    + double getDetailMarkExam()
+    + void setDetailMarkExam(double detailMarkExam)
+    + MarkStudent getMarkStudent()
+    + void setMarkStudent(MarkStudent markStudent)
+    + LocalDateTime getDateSubmitted()
+    + void setDateSubmitted(LocalDateTime dateSubmitted)
+    + List<ResultQuestionJavaCore> getResultQuestionJavaCoreList()
+    + void setResultQuestionJavaCoreList(List<ResultQuestionJavaCore> resultQuestionJavaCoreList)
+    + CodeSubmitJavaClass getCodeSubmitJavaClass()
+    + void setCodeSubmitJavaClass(CodeSubmitJavaClass codeSubmitJavaClass)
+    + List<DetailAnswerJavaClass> getDetailAnswerJavaClassList()
+    + void setDetailAnswerJavaClassList(List<DetailAnswerJavaClass> detailAnswerJavaClassList)
+    + String toString()
+}
+
+class CodeSubmitJavaClass {
+    - Long codeSubmitJavaClassID
+    - String codeSubmitString
+    - String suggest
+    - DetailMarkStudent detailMarkStudent
+
+    + CodeSubmitJavaClass()
+    + Long getCodeSubmitJavaClassID()
+    + void setCodeSubmitJavaClassID(Long codeSubmitJavaClassID)
+    + String getCodeSubmitString()
+    + void setCodeSubmitString(String codeSubmitString)
+    + String getSuggest()
+    + void setSuggest(String suggest)
+    + DetailMarkStudent getDetailMarkStudent()
+    + void setDetailMarkStudent(DetailMarkStudent detailMarkStudent)
+}
+
+class ResultQuestionJavaCore {
+    - Long resultQuestionJavaCoreID
+    - String codeStudentSubmitted
+    - double markAchieve
+    - List<OutputDebugResultJavaCore> outputDebugResultJavaCores
+    - DetailMarkStudent detailMarkStudent
+    - Long questionJavaCoreExamID
+
+    + ResultQuestionJavaCore()
+    + Long getResultQuestionJavaCoreID()
+    + void setResultQuestionJavaCoreID(Long resultQuestionJavaCoreID)
+    + String getCodeStudentSubmitted()
+    + void setCodeStudentSubmitted(String codeStudentSubmitted)
+    + double getMarkAchieve()
+    + void setMarkAchieve(double markAchieve)
+    + DetailMarkStudent getDetailMarkStudent()
+    + void setDetailMarkStudent(DetailMarkStudent detailMarkStudent)
+    + Long getQuestionJavaCoreExamID()
+    + void setQuestionJavaCoreExamID(Long questionJavaCoreExamID)
+    + List<OutputDebugResultJavaCore> getOutputDebugResultJavaCores()
+    + void setOutputDebugResultJavaCores(List<OutputDebugResultJavaCore> outputDebugResultJavaCores)
+}
+
+class OutputDebugResultJavaCore {
+    - Long outputDebugJavaCoreID
+    - String outputCodeStudent
+    - boolean fail
+    - boolean syntaxError
+    - ResultQuestionJavaCore resultQuestionJavaCore
+
+    + OutputDebugResultJavaCore()
+    + Long getOutputDebugJavaCoreID()
+    + void setOutputDebugJavaCoreID(Long outputDebugJavaCoreID)
+    + String getOutputCodeStudent()
+    + void setOutputCodeStudent(String outputCodeStudent)
+    + boolean isFail()
+    + void setFail(boolean fail)
+    + boolean isSyntaxError()
+    + void setSyntaxError(boolean syntaxError)
+    + ResultQuestionJavaCore getResultQuestionJavaCore()
+    + void setResultQuestionJavaCore(ResultQuestionJavaCore resultQuestionJavaCore)
+    + void onCreate()
+}
+
+Course "0..1" <-- "1" Student
+Student "1" <-- "0..1" CodeStorageSave
+Course "*" <-- "*" Lecture
+Course "1" <-- "0..*" Exam
+Exam "1" <-- "0..1" ExamJavaOop
+Exam "1" <-- "0..1" MarkStudent
+MarkStudent "1" <-- "0..1" DetailMarkStudent
+DetailMarkStudent "1" <-- "0..1" CodeSubmitJavaClass
+DetailMarkStudent "1" <-- "1..*" ResultQuestionJavaCore
+ResultQuestionJavaCore "1" <-- "1..*" OutputDebugResultJavaCore
+
+@enduml

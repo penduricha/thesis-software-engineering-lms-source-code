@@ -72,11 +72,6 @@ INSERT INTO project_thesis_final.bank_question_java_core (question_java_core_id,
         System.out.println(validateEmail("abcd@gmail.com@.com"));
 }', 'public static int validateEmail(String email) {
 }', 'Sử dụng hàm kiểm tra biểu thức chính quy kiểm tra chuỗi đó tuân thủ theo cú pháp email hay không. Cho cú pháp biểu thức chính quy: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"');
-INSERT INTO project_thesis_final.bank_question_java_core (question_java_core_id, code_run_to_output, code_sample, content_question) VALUES (12, 'public static void main(String[] args) {
-	System.out.println(getCovertedDoubleFromInt(1));
-	System.out.println(getCovertedDoubleFromInt(2));
-}', 'public static double getCovertedDoubleFromInt(int n) {
-}', 'Sử dụng hàm chuyển đổi kiểu dữ liệu từ int thành double.');
 INSERT INTO project_thesis_final.bank_question_java_core (question_java_core_id, code_run_to_output, code_sample, content_question) VALUES (13, 'public static void main(String[] args) {
     System.out.println(getMedian(new double[]{1, 2, 3, 4, 5}));
     System.out.println(getMedian(new double[]{1, 2, 2, 4}));
@@ -120,3 +115,8 @@ INSERT INTO project_thesis_final.bank_question_java_core (question_java_core_id,
     System.out.println(tich(1,2));
 }', 'public static int tich(int a, int b) {
 }', 'tinh tích');
+INSERT INTO project_thesis_final.bank_question_java_core (question_java_core_id, code_run_to_output, code_sample, content_question) VALUES (28, 'public static void main(String[] args) {
+	System.out.println(thuongHaiSo(4,4));
+	System.out.println(thuongHaiSo(10,2));
+}', 'public static double thuongHaiSo(double a, double b) {
+}', 'Tính thương 2 số, yêu cầu là số thực.');

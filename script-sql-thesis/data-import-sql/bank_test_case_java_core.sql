@@ -50,8 +50,6 @@ INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, in
 INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (460, '-7', '', '0', 17);
 INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (463, 'Hello, hello', '', '1', 15);
 INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (464, 'Hello helllo', '', '0', 15);
-INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (465, '1', '', '1.0', 12);
-INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (466, '2', '', '2.0', 12);
 INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (467, '64 34 25 12 22 11 90', 'Pass', '[11, 12, 22, 25, 34, 64, 90]', 5);
 INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (471, '1 2', null, '2', 27);
 INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (472, '3 4', '', '12', 27);
@@ -59,3 +57,5 @@ INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, in
 INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (474, 'abcd@*()&.com', '', '0', 11);
 INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (475, 'abcd@gmail.com.vn', '', '1', 11);
 INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (476, 'abcd@gmail.com@.com', '', '0', 11);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (479, '4 4', '4 chia 4 = 1', '1', 28);
+INSERT INTO project_thesis_final.bank_test_case_java_core (bank_test_case_id, input_test, note, output_expect, question_java_core_id) VALUES (480, '10 2', null, '5', 28);

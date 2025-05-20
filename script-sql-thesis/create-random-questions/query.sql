@@ -53,10 +53,14 @@ where lecture_id = 1120050;
 
 select * from exam;
 
-update exam set start_date = '2025-05-16 15:00:00';
+update exam set start_date = '2025-05-19 10:00:00' where exam_id = 44;
 
 select * from student where first_name = 'Biên';
 
 select * from lecture;
 
 select * from mark_student;
+
+select * from bank_test_java_oop;
+
+select * from exam_java_oop;

@@ -52,16 +52,17 @@ public class BankTestJavaOopService implements I_BankTestJavaOopService {
     public Long deleteBankTestJavaOop(Long bankTestJavaOopID) throws JpaSystemException {
         //xet them record lien quan nua;
         BankTestJavaOop bankTestJavaOop = findBankTestJavaOop_By_BankTestJavaOopID(bankTestJavaOopID);
+        System.out.println(bankTestJavaOopID);
         if(bankTestJavaOop != null) {
             List<ExamJavaOop> examJavaOopFounds = examJavaOopService
                     .getExamJavaOopBy_BankTestJavaOopID(bankTestJavaOopID);
-            if(!examJavaOopFounds.isEmpty()) {
+            if(examJavaOopFounds.isEmpty()) {
                 //ktra delete them exam java class
                 String sqlDeleteBankTestOop = "delete from bank_test_java_oop where bank_test_java_oop_id = ?";
                 entityManager.createNativeQuery(sqlDeleteBankTestOop)
-                        .setParameter(1, bankTestJavaOop.getBankTestJavaOopID())
+                        .setParameter(1, bankTestJavaOopID)
                         .executeUpdate();
-                return bankTestJavaOop.getBankTestJavaOopID();
+                return bankTestJavaOopID;
             }
         }
         return null;

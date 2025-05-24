@@ -2,6 +2,7 @@ package com.example.backend_service.controllers;
 
 import com.example.backend_service.models.DetailMarkStudent;
 import com.example.backend_service.models.MarkStudent;
+import com.example.backend_service.repositories.ExamRepository;
 import com.example.backend_service.repositories.MarkStudentRepository;
 import org.springframework.http.ResponseEntity;
 import com.example.backend_service.services.MarkStudentServiceJavaClass;
@@ -23,9 +24,12 @@ public class MarkStudentJavaClassController {
 
     private final MarkStudentServiceJavaClass markStudentServiceJavaClass;
 
-    public MarkStudentJavaClassController(MarkStudentRepository markStudentRepository, MarkStudentServiceJavaClass markStudentServiceJavaClass) {
+    private final ExamRepository examRepository;
+
+    public MarkStudentJavaClassController(MarkStudentRepository markStudentRepository, MarkStudentServiceJavaClass markStudentServiceJavaClass, ExamRepository examRepository) {
         this.markStudentRepository = markStudentRepository;
         this.markStudentServiceJavaClass = markStudentServiceJavaClass;
+        this.examRepository = examRepository;
     }
 
     @PostMapping("/mark_student/post-mark-student-after-submit-exam-java-class")
@@ -75,7 +79,7 @@ public class MarkStudentJavaClassController {
                 return ResponseEntity.ok(markStudent);
             } else {
                 //trich record mark student
-                MarkStudent markStudentFound = markStudentRepository.findMarkStudentByExam_ExamID(examID);
+                MarkStudent markStudentFound = examRepository.findMarkStudent_By_StudentID_ExamID(studentID, examID);
                 if(markStudentFound == null) {
                     //MarkStudent markStudent;
                     //van tao transaction giong nhu bai ktra 1 lan

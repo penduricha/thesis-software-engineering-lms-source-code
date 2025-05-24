@@ -166,6 +166,20 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
     }
 
     @Override
+    public List<Exam> getExamsByCourseID(Long courseID) {
+        Course course = courseRepository.findCourseByCourseID(courseID);
+        if(course != null) {
+            return examRepository.getExamsByCourse_CourseID(courseID);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public Exam getExamByID(Long examID) {
+        return examRepository.findExamByExamID(examID);
+    }
+
+    @Override
     public Exam createExam_JavaCore_With_RandomQuestion(Exam exam, Long courseID, int numberOfQuestions)
             throws JpaSystemException {
         // Retrieve the course using the provided courseID
@@ -238,7 +252,7 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
     }
 
     @Override
-    public List<Map<String, Object>> getExamsByCourseID(Long courseID) throws JpaSystemException {
+    public List<Map<String, Object>> getExamsByCourseID_And_StudentID(Long courseID, String studentID) throws JpaSystemException {
         List<Map<String, Object>> queryList = examRepository.getExamsByCourseID(courseID);
         List<Map<String, Object>> convertedList = new ArrayList<>();
         // Khởi tạo LocalDateTime now
@@ -268,7 +282,7 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
                 //xem them ktra
                 //Integer examIDInt = (Integer) queryMap.get("exam_id");
                 Long examID =  (Long) queryMap.get("exam_id");
-                MarkStudent markStudent_DoneExam = examRepository.findMarkStudent_By_ExamID(examID);
+                MarkStudent markStudent_DoneExam = examRepository.findMarkStudent_By_StudentID_ExamID(studentID, examID);
 
                 // Kiểm tra trạng thái
                 // xét thêm bảng mark cho ra trạng thái complete
@@ -289,8 +303,8 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
     }
 
     @Override
-    public Map<String, Object> viewExam_By_ExamID(Long examID, Long courseID) throws JpaSystemException {
-        List<Map<String, Object>> queryList = getExamsByCourseID(courseID);
+    public Map<String, Object> viewExam_By_ExamID(Long examID, Long courseID, String studentID) throws JpaSystemException {
+        List<Map<String, Object>> queryList = getExamsByCourseID_And_StudentID(courseID, studentID);
         Optional<Map<String, Object>> exam = queryList.stream()
                 .filter(queryMap -> examID.equals(queryMap.get("examID")))
                 .findFirst();
@@ -298,8 +312,8 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
     }
 
     @Override
-    public Map<String, Object> view_Information_Exam_Before_Student(Long examID, Long courseID) throws JpaSystemException {
-        Map<String, Object> viewExamMap = viewExam_By_ExamID(examID, courseID);
+    public Map<String, Object> view_Information_Exam_Before_Student(Long examID, Long courseID, String studentID) throws JpaSystemException {
+        Map<String, Object> viewExamMap = viewExam_By_ExamID(examID, courseID, studentID);
         if (viewExamMap != null) {
             String topicExam = (String) viewExamMap.get("topicExam");
             if (topicExam.equalsIgnoreCase("Java core")) {
@@ -316,17 +330,22 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
     public Long deleteExam_By_ExamID(Long examID) throws JpaSystemException {
         Exam exam = examRepository.findExamByExamID(examID);
         if(exam != null) {
-            MarkStudent markStudentFound_By_ExamID = markStudentRepository.
+            List<Map<String, Object>> markStudentFound_By_ExamID = markStudentRepository.
                     findMarkStudentByExam_ExamID(exam.getExamID());
-            if(markStudentFound_By_ExamID != null && exam.getTopicExam().equalsIgnoreCase("Java core")) {
+            if(!markStudentFound_By_ExamID.isEmpty() && exam.getTopicExam().equalsIgnoreCase("Java core")) {
                 //xoá phan diem thi nếu sv làm xong
-                deleteMarkStudentID_By_MarkStudentID_JavaCore(markStudentFound_By_ExamID.getMarkStudentID());
+                //deleteMarkStudentID_By_MarkStudentID_JavaCore((Long) markStudentFound_By_ExamID.get("mark_student_id"));
+                for(Map<String, Object> map: markStudentFound_By_ExamID) {
+                    deleteMarkStudentID_By_MarkStudentID_JavaCore((Long) map.get("mark_student_id"));
+                }
             } else if(markStudentFound_By_ExamID != null && exam.getTopicExam().equalsIgnoreCase("Java class")) {
                 //xoa record noi 2 bang
                 entityManager.createNativeQuery("delete from exam_java_oop where exam_id = :examID")
                         .setParameter("examID", exam.getExamID())
                         .executeUpdate();
-                deleteMarkStudentID_By_MarkStudentID_JavaClass(markStudentFound_By_ExamID.getMarkStudentID());
+                for(Map<String, Object> map: markStudentFound_By_ExamID) {
+                    deleteMarkStudentID_By_MarkStudentID_JavaClass((Long) map.get("mark_student_id"));
+                }
             }
             //Xoa bai ktra neu la java core vaf java class
             if(exam.getTopicExam().equalsIgnoreCase("Java core")) {
@@ -393,7 +412,7 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
     }
 
     @Override
-    public List<Map<String, Object>> getExams_Calendar_Lecture_By_StartDate(String lectureID,
+    public List<Map<String, Object>> getExams_Calendar_Lecturer_By_StartDate(String lecturerID,
                                                                             int yearStartDate,
                                                                             int monthStartDate,
                                                                             int dateStartDate) throws JpaSystemException {
@@ -401,7 +420,7 @@ public class ExamService implements I_ExamService, I_Transaction_MarkExam {
         String monthStartDateString = Integer.toString(monthStartDate);
         String dateStartDateString = Integer.toString(dateStartDate);
         String dateFormat = yearStartDateString + "-" + monthStartDateString + "-" + dateStartDateString;
-        return examRepository.getExams_Calendar_Lecture_By_StartDate(lectureID,dateFormat).stream()
+        return examRepository.getExams_Calendar_Lecturer_By_StartDate(lecturerID,dateFormat).stream()
                 .map(originalMap -> {
                     Map<String, Object> newMap = new HashMap<>();
                     newMap.put("examID", originalMap.get("exam_id"));

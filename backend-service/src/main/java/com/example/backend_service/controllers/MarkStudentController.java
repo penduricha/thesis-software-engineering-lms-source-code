@@ -3,6 +3,7 @@ package com.example.backend_service.controllers;
 import com.example.backend_service.models.DetailMarkStudent;
 import com.example.backend_service.models.MarkStudent;
 import com.example.backend_service.models.Student;
+import com.example.backend_service.repositories.ExamRepository;
 import com.example.backend_service.repositories.MarkStudentRepository;
 import com.example.backend_service.services.ExamService;
 import com.example.backend_service.services.MarkStudentService;
@@ -27,12 +28,15 @@ public class MarkStudentController {
 
     private final MarkStudentServiceJavaClass markStudentServiceJavaClass;
 
+    private final ExamRepository examRepository;
+
     private final ExamService examService;
 
-    public MarkStudentController(MarkStudentService markStudentService, MarkStudentRepository markStudentRepository, MarkStudentServiceJavaClass markStudentServiceJavaClass, ExamService examService) {
+    public MarkStudentController(MarkStudentService markStudentService, MarkStudentRepository markStudentRepository, MarkStudentServiceJavaClass markStudentServiceJavaClass, ExamRepository examRepository, ExamService examService) {
         this.markStudentService = markStudentService;
         this.markStudentRepository = markStudentRepository;
         this.markStudentServiceJavaClass = markStudentServiceJavaClass;
+        this.examRepository = examRepository;
         this.examService = examService;
     }
 
@@ -57,8 +61,7 @@ public class MarkStudentController {
                 return ResponseEntity.ok(markStudent);
             } else {
                 //trich record mark student
-                MarkStudent markStudentFound = markStudentRepository.findMarkStudentByExam_ExamID(examID);
-
+                MarkStudent markStudentFound = examRepository.findMarkStudent_By_StudentID_ExamID(studentID, examID);
                 if(markStudentFound == null) {
                     MarkStudent markStudent;
                     //van tao transaction giong nhu bai ktra 1 lan
@@ -98,7 +101,7 @@ public class MarkStudentController {
                 return ResponseEntity.ok(markStudent);
             } else {
                 //trich record mark student
-                MarkStudent markStudentFound = markStudentRepository.findMarkStudentByExam_ExamID(examID);
+                MarkStudent markStudentFound = examRepository.findMarkStudent_By_StudentID_ExamID(studentID,examID);
                 if(markStudentFound == null) {
                     MarkStudent markStudent;
                     //van tao transaction giong nhu bai ktra 1 lan
@@ -146,4 +149,29 @@ public class MarkStudentController {
     public ResponseEntity<List<Map<String, Object>>> getListStudentMark_By_ExamID(@PathVariable Long examID) {
         return ResponseEntity.ok(markStudentService.getListStudentMark_By_ExamID(examID));
     }
+
+    @GetMapping("/mark_student/get-average-mark-exam-by-exam-id/{examID}")
+    public ResponseEntity<Double> getAverageMarkExam_By_ExamID(@PathVariable Long examID)
+            throws HttpClientErrorException{
+        return ResponseEntity.ok(markStudentService.getAverageMarkExam_By_ExamID(examID));
+    }
+
+    @GetMapping("/mark_student/get-group-by-mark-exam-by-exam-id/{examID}")
+    public ResponseEntity<List<Map<String, Object>>> getGroupByMarkExam_By_ExamID(@PathVariable Long examID)
+            throws HttpClientErrorException {
+        return ResponseEntity.ok(markStudentService.getGroupByMarkExam_By_ExamID(examID));
+    }
+
+    /*
+    @Override
+    public Double getAverageMarkExam_By_ExamID(Long examID) throws JpaSystemException{
+        List<Map<String, Object>> listMarkStudentByExamID = getListStudentMark_By_ExamID(examID);
+        if(!listMarkStudentByExamID.isEmpty()) {
+            return markStudentRepository.getAverageMarkExam_By_ExamID(examID);
+        }
+        return 0.0;
+    }
+
+
+     */
 }

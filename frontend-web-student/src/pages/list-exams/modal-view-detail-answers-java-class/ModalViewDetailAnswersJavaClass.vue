@@ -61,7 +61,7 @@ export default {
                 <td>{{ l.sentence }}</td>
                 <td>{{ l.scoreAchievement }}</td>
                 <td>{{ l.maxScore }}</td>
-                <td>{{ l.reviews }}</td>
+                <td ><p class="style-reviews">{{ l.reviews }}</p></td>
               </tr>
               </tbody>
             </table>

@@ -26,13 +26,7 @@ public class Exam implements Serializable {
         this.questionJavaCoreExams = questionJavaCoreExams;
     }
 
-    public MarkStudent getMarkStudent() {
-        return markStudent;
-    }
 
-    public void setMarkStudent(MarkStudent markStudent) {
-        this.markStudent = markStudent;
-    }
 
     public List<Student> getStudents() {
         return students;
@@ -141,9 +135,17 @@ public class Exam implements Serializable {
     @JsonIgnore
     private List<QuestionJavaCoreExam> questionJavaCoreExams = new ArrayList<>();
 
-    @OneToOne(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    @JsonIgnore
-    private MarkStudent markStudent;
+//    public List<MarkStudent> getMarkStudents() {
+//        return markStudents;
+//    }
+//
+//    public void setMarkStudents(List<MarkStudent> markStudents) {
+//        this.markStudents = markStudents;
+//    }
+//
+//    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+//    @JsonIgnore
+//    private List<MarkStudent> markStudents = new ArrayList<>();
 
     @OneToOne(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonIgnore

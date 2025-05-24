@@ -13,11 +13,11 @@ public interface CourseRepository extends JpaRepository<Course,Long> {
 
     @Query(value = "select c.course_id, c.class_name, c.course_name, c.semester, c.start_year, c.end_year " +
             "from Course c " +
-            "left join Map_lecture_course mlc on c.course_id = mlc.course_id " +
-            "left join Lecture l on mlc.lecture_id = l.lecture_id " +
-            "where l.lecture_id = :lecture_id",
+            "left join map_lecturer_course mlc on c.course_id = mlc.course_id " +
+            "left join lecturer l on mlc.lecturer_id = l.lecturer_id " +
+            "where l.lecturer_id = :lecturer_id",
             nativeQuery = true)
-    List<Map<String, Object>> getCoursesByLectureID(@Param("lecture_id") String lectureID);
+    List<Map<String, Object>> getCoursesByLecturerID(@Param("lecturer_id") String lecturerID);
 
     Course findCourseByCourseID(Long courseID);
 

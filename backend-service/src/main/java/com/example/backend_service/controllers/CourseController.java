@@ -1,6 +1,5 @@
 package com.example.backend_service.controllers;
 
-import com.example.backend_service.models.Lecture;
 import com.example.backend_service.repositories.CourseRepository;
 import com.example.backend_service.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +28,12 @@ public class CourseController {
         this.courseRepository = courseRepository;
     }
 
-    @GetMapping("/courses/lectureID/{lectureID}")
-    public ResponseEntity<List<Map<String, Object>>> getCourses_By_LectureID(@PathVariable String lectureID) throws HttpClientErrorException {
+    @GetMapping("/courses/lecturerID/{lecturerID}")
+    public ResponseEntity<List<Map<String, Object>>> getCourses_By_LecturerID(@PathVariable String lecturerID) throws HttpClientErrorException {
         List<Map<String, Object>> list = new ArrayList<>();
-        if(lectureID.charAt(0) == '0'){
-            String lectureIDFind = lectureID.substring(1);
-            List<Map<String, Object>> queryMap = courseRepository.getCoursesByLectureID(lectureIDFind);
+        if(lecturerID.charAt(0) == '0'){
+            String lecturerIDFind = lecturerID.substring(1);
+            List<Map<String, Object>> queryMap = courseRepository.getCoursesByLecturerID(lecturerIDFind);
             if (queryMap != null) {
                 for(Map<String, Object> map: queryMap) {
                     Map<String, Object> courseMap = new HashMap<>();
@@ -51,13 +50,13 @@ public class CourseController {
         return ResponseEntity.ok(list);
     }
 
-    public String covertLectureID(String lectureID) {
-        return LectureIDFunc.covertLectureID(lectureID);
+    public String covertLecturerID(String lecturerID) {
+        return LecturerIDFunc.covertLectureID(lecturerID);
     }
 
-    @GetMapping("/course/get_course_by_lectureID_courseID/{lectureID}/{courseID}")
-    public ResponseEntity<Map<String, Object>> getCourse_By_LectureID_CourseID(@PathVariable String lectureID,@PathVariable Long courseID) throws HttpClientErrorException {
-        return ResponseEntity.ok(courseService.getCourse_By_LectureID_CourseID(covertLectureID(lectureID),courseID));
+    @GetMapping("/course/get_course_by_lecturerID_courseID/{lecturerID}/{courseID}")
+    public ResponseEntity<Map<String, Object>> getCourse_By_LecturerID_CourseID(@PathVariable String lecturerID,@PathVariable Long courseID) throws HttpClientErrorException {
+        return ResponseEntity.ok(courseService.getCourse_By_LecturerID_CourseID(covertLecturerID(lecturerID),courseID));
     }
 
     @GetMapping("/course/get_course_by_examID/{examID}")

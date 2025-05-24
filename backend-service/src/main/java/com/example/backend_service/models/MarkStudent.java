@@ -29,10 +29,20 @@ public class MarkStudent implements Serializable {
     @JsonIgnore
     private Student student;
 
-    @OneToOne
-    @JoinColumn(name = "exam_id")
-    @JsonIgnore
-    private Exam exam;
+//    @ManyToOne
+//    @JoinColumn(name = "exam_id")
+//    @JsonIgnore
+//    private Exam exam;
+    @Column(name = "exam_id")
+    private Long examID;
+
+    public Long getExamID() {
+        return examID;
+    }
+
+    public void setExamID(Long examID) {
+        this.examID = examID;
+    }
 
     //orphanRemoval = true Điều này đảm bảo rằng nếu một không còn liên kết với
     @OneToMany(mappedBy = "markStudent", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
@@ -66,13 +76,13 @@ public class MarkStudent implements Serializable {
         this.student = student;
     }
 
-    public Exam getExam() {
-        return exam;
-    }
-
-    public void setExam(Exam exam) {
-        this.exam = exam;
-    }
+//    public Exam getExam() {
+//        return exam;
+//    }
+//
+//    public void setExam(Exam exam) {
+//        this.exam = exam;
+//    }
 
     public List<DetailMarkStudent> getDetailMarkStudents() {
         return detailMarkStudents;

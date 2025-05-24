@@ -74,15 +74,15 @@ public class DataInitializer {
             }
         }
 
-        Integer countLecture = jdbcTemplate.queryForObject("select count(*) from lecture", Integer.class);
-        if(countLecture == null || countLecture == 0) {
-            List<String> insertStatementLecture = Arrays.asList(
-                    "INSERT INTO lecture (lecture_id, email, name, password, phone_number) VALUES ('1120009', 'tonlongphuoc@iuh.edu.vn', 'Tôn Long Phước', 'd4eb69ce03cbd7a023223f45137b09ddf570b0c5512988cb935b9e0f97f8cfc82c016e2372f683eacd44ebe7d803d06b148e177f9371d56daa6de63cd94f6e9f', '0933227272')",
-                    "INSERT INTO lecture (lecture_id, email, name, password, phone_number) VALUES ('1120013', 'ngthihoangkhanh@gmail.com', 'Nguyễn Thị Hoàng Khánh', '524d9487ce2045a3501438b7952ec409d683b2e13713a269a0349bbc00f131b7f97435c6fa5d0a162d56b3c62c051081b52c08740fc098e226e93e09d1e5357a', '0903444795')",
-                    "INSERT INTO lecture (lecture_id, email, name, password, phone_number) VALUES ('1120050', 'thangvannguyen@gmail.com', 'Nguyễn Văn Thắng', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db', '0918153584')"
+        Integer countLecturer = jdbcTemplate.queryForObject("select count(*) from lecturer", Integer.class);
+        if(countLecturer == null || countLecturer == 0) {
+            List<String> insertStatementLecturer = Arrays.asList(
+                    "INSERT INTO lecturer (lecturer_id, email, name, password, phone_number) VALUES ('1120009', 'tonlongphuoc@iuh.edu.vn', 'Tôn Long Phước', 'd4eb69ce03cbd7a023223f45137b09ddf570b0c5512988cb935b9e0f97f8cfc82c016e2372f683eacd44ebe7d803d06b148e177f9371d56daa6de63cd94f6e9f', '0933227272')",
+                    "INSERT INTO lecturer (lecturer_id, email, name, password, phone_number) VALUES ('1120013', 'ngthihoangkhanh@gmail.com', 'Nguyễn Thị Hoàng Khánh', '524d9487ce2045a3501438b7952ec409d683b2e13713a269a0349bbc00f131b7f97435c6fa5d0a162d56b3c62c051081b52c08740fc098e226e93e09d1e5357a', '0903444795')",
+                    "INSERT INTO lecturer (lecturer_id, email, name, password, phone_number) VALUES ('1120050', 'thangvannguyen@gmail.com', 'Nguyễn Văn Thắng', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db', '0918153584')"
             );
 
-            for (String insertStatement : insertStatementLecture) {
+            for (String insertStatement : insertStatementLecturer) {
                 try {
                     jdbcTemplate.execute(insertStatement);
                     //System.out.println("Executed: " + insertStatement); // Log success
@@ -92,17 +92,17 @@ public class DataInitializer {
             }
         }
 
-        Integer countMapLectureCourse = jdbcTemplate.queryForObject("select count(*) from map_lecture_course", Integer.class);
-        if(countMapLectureCourse == null || countMapLectureCourse == 0) {
-            List<String> insertStatementMapLectureCourse = Arrays.asList(
-                    "INSERT INTO map_lecture_course (lecture_id, course_id) VALUES ('1120009', 1)",
-                    "INSERT INTO map_lecture_course (lecture_id, course_id) VALUES ('1120013', 3)",
-                    "INSERT INTO map_lecture_course (lecture_id, course_id) VALUES ('1120013', 4)",
-                    "INSERT INTO map_lecture_course (lecture_id, course_id) VALUES ('1120050', 2)",
-                    "INSERT INTO map_lecture_course (lecture_id, course_id) VALUES ('1120050', 5)",
-                    "INSERT INTO map_lecture_course (lecture_id, course_id) VALUES ('1120050', 6)"
+        Integer countMapLecturerCourse = jdbcTemplate.queryForObject("select count(*) from map_lecturer_course", Integer.class);
+        if(countMapLecturerCourse == null || countMapLecturerCourse == 0) {
+            List<String> insertStatementMapLecturerCourse = Arrays.asList(
+                    "INSERT INTO map_lecturer_course (lecturer_id, course_id) VALUES ('1120009', 1)",
+                    "INSERT INTO map_lecturer_course (lecturer_id, course_id) VALUES ('1120013', 3)",
+                    "INSERT INTO map_lecturer_course (lecturer_id, course_id) VALUES ('1120013', 4)",
+                    "INSERT INTO map_lecturer_course (lecturer_id, course_id) VALUES ('1120050', 2)",
+                    "INSERT INTO map_lecturer_course (lecturer_id, course_id) VALUES ('1120050', 5)",
+                    "INSERT INTO map_lecturer_course (lecturer_id, course_id) VALUES ('1120050', 6)"
             );
-            for (String insertStatement : insertStatementMapLectureCourse) {
+            for (String insertStatement : insertStatementMapLecturerCourse) {
                 try {
                     jdbcTemplate.execute(insertStatement);
                     //System.out.println("Executed: " + insertStatement); // Log success

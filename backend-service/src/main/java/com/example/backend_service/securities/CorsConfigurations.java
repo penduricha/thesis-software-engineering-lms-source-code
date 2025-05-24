@@ -23,7 +23,8 @@ public class CorsConfigurations implements WebMvcConfigurer {
                         "http://127.0.0.1:5173/",//
                         "http://127.0.0.1:5174/",
                         "https://thesis-software-engineering-lms-source-code-6a7u.vercel.app/",
-                        "https://thesis-software-engineering-lms-source-code-q7q8.vercel.app"
+                        "https://thesis-software-engineering-lms-source-code-q7q8.vercel.app",
+                        "https://thesis-software-engineering-lms-git-04148c-pendurichas-projects.vercel.app/"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE","PATCH","OPTIONS")
                 .allowedHeaders("*")

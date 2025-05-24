@@ -74,8 +74,8 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
             studentFound.getMarkStudentList().add(markStudent);
             markStudent.setStudent(studentFound);
 
-            examFound.setMarkStudent(markStudent);
-            markStudent.setExam(examFound);
+            //examFound.getMarkStudents().add(markStudent);
+            markStudent.setExamID(examFound.getExamID());
 
             DetailMarkStudent detailMarkStudent = new DetailMarkStudent();
             detailMarkStudent.setDetailMarkExam(0);
@@ -314,7 +314,7 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
     public MarkStudent setMarkIs_Zero_If_Exam_Overdue(String studentID, Long examID) throws JpaSystemException {
         Student studentFound = studentRepository.findStudentByStudentID(studentID);
         Exam examFound = examRepository.findExamByExamID(examID);
-        MarkStudent markStudentFound = markStudentRepository.findMarkStudentByExam_ExamID(examID);
+        MarkStudent markStudentFound = examRepository.findMarkStudent_By_StudentID_ExamID(studentID, examID);
         if(studentFound != null && examFound !=null && markStudentFound == null) {
             MarkStudent markStudent = new MarkStudent();
             //set attribute
@@ -323,8 +323,8 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
             //set relationship
             studentFound.getMarkStudentList().add(markStudent);
             markStudent.setStudent(studentFound);
-            examFound.setMarkStudent(markStudent);
-            markStudent.setExam(examFound);
+            //examFound.getMarkStudents().add(markStudent);
+            markStudent.setExamID(examFound.getExamID());
             return markStudentRepository.save(markStudent);
         }
         return null;
@@ -333,10 +333,10 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
     @Override
     public List<CodeSubmitAndCodeMain> get_Code_Submitted_And_Code_Run_To_Output(Long detailMarkStudentID)
             throws JpaSystemException {
-        System.out.println("Detail mark student id: "+detailMarkStudentID);
+        //System.out.println("Detail mark student id: "+detailMarkStudentID);
         DetailMarkStudent detailMarkStudentFound = detailMarkStudentRepository.
                 findDetailMarkStudentByDetailMarkStudentID(detailMarkStudentID);
-        System.out.println("Detail mark student found: "+detailMarkStudentFound);
+        //System.out.println("Detail mark student found: "+detailMarkStudentFound);
         if(detailMarkStudentFound != null) {
             List<Map<String, Object>> queryList =
                     resultQuestionJavaCoreRepository
@@ -472,6 +472,33 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
         }
 
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<Map<String, Object>> getGroupByMarkExam_By_ExamID(Long examID)
+            throws JpaSystemException {
+        Exam examFound = examRepository.findExamByExamID(examID);
+        if(examFound != null) {
+            List<Map<String, Object>> queryListGroupBy = markStudentRepository
+                    .getGroupByMarkExam_By_ExamID(examFound.getExamID());
+            return queryListGroupBy.stream()
+                    .map(originalMap -> {
+                        Map<String, Object> newMap = new HashMap<>();
+                        newMap.put("markRange", originalMap.get("mark_range"));
+                        newMap.put("count", originalMap.get("count"));
+                        return newMap;
+                    }).toList();
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public Double getAverageMarkExam_By_ExamID(Long examID) throws JpaSystemException{
+        List<Map<String, Object>> listMarkStudentByExamID = getListStudentMark_By_ExamID(examID);
+        if(!listMarkStudentByExamID.isEmpty()) {
+            return markStudentRepository.getAverageMarkExam_By_ExamID(examID);
+        }
+        return 0.0;
     }
 
     //Get tập danh sách test case đã có sẵn

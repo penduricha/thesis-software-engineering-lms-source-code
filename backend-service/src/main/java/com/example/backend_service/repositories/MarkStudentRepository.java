@@ -9,7 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> {
-    MarkStudent findMarkStudentByExam_ExamID(Long examID);
+    @Query(value = """
+            select * from mark_student where exam_id = :examID;
+            """,
+            nativeQuery = true)
+    List<Map<String, Object>> findMarkStudentByExam_ExamID(@Param("examID") Long examID);
 
     //MarkStudent findMarkStudentByMarkStudentID(Long markStudentID);
 
@@ -99,5 +103,25 @@ public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> 
             nativeQuery = true)
     List<Map<String, Object>> getListStudentMark_By_ExamID(@Param("examID") Long examID);
 
+    @Query(value = """
+            select
+                case
+                    when mark_exam >= 0 and mark_exam < 4 then '0 to 4'
+                    when mark_exam >= 4 and mark_exam < 6 then '4 to 6'
+                    when mark_exam >= 6 and mark_exam < 8 then '6 to 8'
+                    when mark_exam >= 8 AND mark_exam <= 10 then '8 to 10'
+                    end as mark_range,
+                count(*) AS count
+            from mark_student where exam_id = :examID
+            group by mark_range;
+            """,
+            nativeQuery = true)
+    List<Map<String, Object>> getGroupByMarkExam_By_ExamID(@Param("examID") Long examID);
 
+    @Query(value = """
+            select round(avg(mark_exam),2) as average_mark_exam
+            from mark_student where exam_id = :examID;
+            """,
+            nativeQuery = true)
+    Double getAverageMarkExam_By_ExamID(@Param("examID") Long examID);
 }

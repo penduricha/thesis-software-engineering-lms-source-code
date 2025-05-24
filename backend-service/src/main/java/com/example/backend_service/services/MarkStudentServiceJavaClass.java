@@ -49,8 +49,8 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
             studentFound.getMarkStudentList().add(markStudent);
             markStudent.setStudent(studentFound);
 
-            examFound.setMarkStudent(markStudent);
-            markStudent.setExam(examFound);
+            //examFound.getMarkStudents().add(markStudent);
+            markStudent.setExamID(examFound.getExamID());
 
             DetailMarkStudent detailMarkStudent = new DetailMarkStudent();
             detailMarkStudent.setDetailMarkExam(0);
@@ -85,8 +85,8 @@ public class MarkStudentServiceJavaClass implements I_MarkStudentServiceJavaClas
             studentFound.getMarkStudentList().add(markStudent);
             markStudent.setStudent(studentFound);
 
-            examFound.setMarkStudent(markStudent);
-            markStudent.setExam(examFound);
+            //examFound.getMarkStudents().add(markStudent);
+            markStudent.setExamID(examFound.getExamID());
 
             DetailMarkStudent detailMarkStudent = new DetailMarkStudent();
             detailMarkStudent.setDetailMarkExam(0);

@@ -76,7 +76,7 @@ public class Course implements Serializable {
                     CascadeType.REFRESH}
     )
     @JsonIgnore
-    private List<Lecture> lectures = new ArrayList<>();
+    private List<Lecturer> lectures = new ArrayList<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore

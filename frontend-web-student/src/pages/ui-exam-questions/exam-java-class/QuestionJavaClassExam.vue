@@ -80,6 +80,8 @@ export default {
       //code java submit cozeAI
       codeJavaSubmitted: '',
       codeJavaSubmittedSave: '',
+
+      totalScore: 0,
     }
   },
 
@@ -450,6 +452,15 @@ export default {
       if (this.$refs.fileInput) {
         this.$refs.fileInput.value = null; // Clear the input value
       }
+    },
+
+    checkTotalScore(totalScore) {
+      if(totalScore < 10)
+        return 10;
+      else if(totalScore < 0)
+        return 0;
+      else
+        return totalScore;
     }
   },
 
@@ -543,7 +554,7 @@ export default {
     <div v-if="isModalVisible" class="modal-overlay">
       <div class="modal-content">
         <h2 class="chug">You finished this exam</h2>
-        <h3 class="chug"><strong>Total score:</strong> {{ modalData.output.totalScore }}</h3>
+        <h3 class="chug"><strong>Total score:</strong> {{checkTotalScore(Number(modalData.output.totalScore)) }}</h3>
 
         <div v-for="(item, index) in modalData.output.detail" :key="index">
           <h4>{{ item.sentence }}</h4>

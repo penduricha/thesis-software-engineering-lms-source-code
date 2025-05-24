@@ -33,13 +33,13 @@ public class CourseService implements I_CourseService {
     }
 
     @Override
-    public List<Course> getListCoursesByLectureId(String lectureId) {
+    public List<Course> getListCoursesByLecturerId(String lecturerId) {
         return List.of();
     }
 
     @Override
-    public Map<String, Object> getCourse_By_LectureID_CourseID(String lectureID, Long courseID) throws JpaSystemException  {
-        List<Map<String, Object>> queryMapCourse = courseRepository.getCoursesByLectureID(lectureID);
+    public Map<String, Object> getCourse_By_LecturerID_CourseID(String lecturerID, Long courseID) throws JpaSystemException  {
+        List<Map<String, Object>> queryMapCourse = courseRepository.getCoursesByLecturerID(lecturerID);
         List<Map<String, Object>> filteredMapByCourseID = queryMapCourse.stream()
                 .filter(map -> map.get("course_id").equals(courseID))
                 .toList();

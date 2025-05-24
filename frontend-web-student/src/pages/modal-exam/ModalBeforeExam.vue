@@ -58,9 +58,15 @@ export default {
 
   methods: {
     async setExam_Information(examID, courseID) {
+      const studentLocalStorage  = new StudentLocalStorage();
+      let studentID = studentLocalStorage.getStudentID_From_LocalStorage();
+      if(studentID) {
+        this.studentID = studentID;
+      }
+
       console.log("Exam ID: ", examID);
       console.log("Course ID: ", courseID);
-      let exam = await ExamDao.getExam_Information_Before_Exam(examID, courseID);
+      let exam = await ExamDao.getExam_Information_Before_Exam(examID, courseID, this.studentID);
       console.log("Information exam: ", exam);
       this.examID = exam.examID;
       this.titleExam = exam.titleExam;
@@ -172,6 +178,13 @@ export default {
         }
       }
     },
+
+    getStringMinutesByNumber(minute) {
+      if(minute === 1) {
+        return 'minute';
+      }
+      return 'minutes';
+    },
   },
 
   computed: {}
@@ -212,7 +225,7 @@ export default {
           <label><span>Retake: {{ retake }}</span></label>
           <label v-if="scoringMethod"><span>Scoring method: {{ scoringMethod }}</span></label>
           <label v-if="this.topicExam === 'Java core'"><span>Questions: {{ numberQuestions }}</span></label>
-          <label><span>Time: {{ duration }} minutes</span> </label>
+          <label><span>Time: {{ duration }} {{getStringMinutesByNumber(duration)}}</span> </label>
           <label><span class="text-danger">Deadline: {{ endDate }}</span></label>
           <label v-if="linkPaperExam"><span>Link paper exam: {{ linkPaperExam }}</span></label>
           <div v-if="passwordExamHashed" class="mt-2">

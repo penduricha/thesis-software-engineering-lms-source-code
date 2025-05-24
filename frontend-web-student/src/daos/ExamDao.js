@@ -1,9 +1,9 @@
 import ExamService from "@/services/ExamService.js";
 
 export default class ExamDao {
-    static async getExams_By_CourseID(courseID) {
+    static async getExams_By_CourseID(courseID, studentID) {
         let exams = [];
-        await ExamService.fetchExams_By_CourseID(courseID).then(response => {
+        await ExamService.fetchExams_By_CourseID(courseID, studentID).then(response => {
             exams = response.data;
         }).catch(error => {
             console.error(error);
@@ -11,30 +11,30 @@ export default class ExamDao {
         return exams;
     }
 
-    static async startPolling_GetExams_By_CourseID(courseID, callback) {
-        let lastFetchedExams = await this.getExams_By_CourseID(courseID);
+    static async startPolling_GetExams_By_CourseID(courseID, studentID, callback) {
+        let lastFetchedExams = await this.getExams_By_CourseID(courseID, studentID);
          // Kiểm tra mỗi 5 giây
         // Trả về interval để có thể dọn dẹp sau này
         return setInterval(async () => {
-            const currentExams = await this.getExams_By_CourseID(courseID);
+            const currentExams = await this.getExams_By_CourseID(courseID, studentID);
 
             if (JSON.stringify(currentExams) !== JSON.stringify(lastFetchedExams)) {
                 lastFetchedExams = currentExams;
                 callback(currentExams);
                 // Gọi lại callback để cập nhật dữ liệu
             }
-        }, 5000);
+        }, 3000);
     }
 
-    static async getExam_By_CourseID_ExamID(examID, courseID) {
-        let exam = null;
-        await ExamService.fetchExam_By_CourseID_ExamID(examID, courseID).then(response => {
-            exam = response.data;
-        }).catch(error => {
-            console.error(error);
-        })
-        return exam;
-    }
+    // static async getExam_By_CourseID_ExamID(examID, courseID, studentID) {
+    //     let exam = null;
+    //     await ExamService.fetchExam_By_CourseID_ExamID(examID, courseID, studentID).then(response => {
+    //         exam = response.data;
+    //     }).catch(error => {
+    //         console.error(error);
+    //     })
+    //     return exam;
+    // }
 
     static async getExams_By_StudentID_Student_Calendar(studentID, yearStartDate, monthStartDate, dateStartDate) {
         let exams = [];
@@ -62,13 +62,13 @@ export default class ExamDao {
                 callback(currentExams);
                 // Gọi lại callback để cập nhật dữ liệu
             }
-        }, 4000);
+        }, 3000);
     }
 
-    static async getExam_Information_Before_Exam(examID, courseID){
+    static async getExam_Information_Before_Exam(examID, courseID, studentID){
         let exam = null;
         await ExamService
-            .fetchExam_Information_Before_Exam(examID, courseID)
+            .fetchExam_Information_Before_Exam(examID, courseID, studentID)
             .then(response => {
                 exam = response.data;
             }).catch(error => {

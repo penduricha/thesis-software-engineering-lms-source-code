@@ -16,15 +16,19 @@ public interface I_ExamService {
                                                         List<Map<String, Object>> questionJavaCoreExams
     );
 
+    public List<Exam> getExamsByCourseID(Long courseID);
+
+    public Exam getExamByID(Long examID);
+
     public Exam createExam_JavaCore_With_RandomQuestion(Exam exam, Long courseID, int numberOfQuestions);
 
     public Exam createExam_JavaClass_With_ChooseTest(Exam exam, Long courseID, Long bankTestJavaOopID);
 
-    public List<Map<String, Object>> getExamsByCourseID(Long courseID);
+    public List<Map<String, Object>> getExamsByCourseID_And_StudentID(Long courseID, String studentID);
 
-    public Map<String, Object> viewExam_By_ExamID(Long examID, Long courseID);
+    public Map<String, Object> viewExam_By_ExamID(Long examID, Long courseID, String studentID);
 
-    public Map<String, Object> view_Information_Exam_Before_Student(Long examID, Long courseID);
+    public Map<String, Object> view_Information_Exam_Before_Student(Long examID, Long courseID, String studentID);
 
     public Long deleteExam_By_ExamID(Long examID);
 
@@ -33,7 +37,7 @@ public interface I_ExamService {
     public Exam updateExam_By_ExamID(Exam exam, Long examID);
 
     public List<Map<String, Object>>
-    getExams_Calendar_Lecture_By_StartDate(String lectureID,int yearStartDate, int monthStartDate, int dateStartDate);
+    getExams_Calendar_Lecturer_By_StartDate(String lecturerID,int yearStartDate, int monthStartDate, int dateStartDate);
 
     //public Map<String, Object> get_Student_StartDate_Exam_By_StudentID (String studentID);
 

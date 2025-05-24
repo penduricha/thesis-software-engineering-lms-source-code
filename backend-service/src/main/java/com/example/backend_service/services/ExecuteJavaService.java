@@ -1,9 +1,11 @@
 package com.example.backend_service.services;
 
+import com.example.backend_service.controllers.LecturerIDFunc;
 import com.example.backend_service.debugs.CompileJavaCodeByLectureID;
 import com.example.backend_service.debugs.ExecuteJavaCoreByStudentID;
-import com.example.backend_service.models.Lecture;
-import com.example.backend_service.repositories.LectureRepository;
+
+import com.example.backend_service.models.Lecturer;
+import com.example.backend_service.repositories.LecturerRepository;
 import com.example.backend_service.services.i_service.I_ExecuteJavaService;
 import org.apache.groovy.util.JavaShellCompilationException;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,10 @@ import java.util.Map;
 @Service
 public class ExecuteJavaService implements I_ExecuteJavaService {
 
-    private final LectureRepository lectureRepository;
+    private final LecturerRepository lecturerRepository;
 
-    public ExecuteJavaService(LectureRepository lectureRepository) {
-        this.lectureRepository = lectureRepository;
+    public ExecuteJavaService(LecturerRepository lecturerRepository) {
+        this.lecturerRepository = lecturerRepository;
     }
 
     @Override
@@ -27,21 +29,18 @@ public class ExecuteJavaService implements I_ExecuteJavaService {
         return executeJavaCoreByStudentID.executeJava(code);
     }
 
-    public String covertLectureID(String lectureID) {
-        if(lectureID.charAt(0) == '0'){
-            return lectureID.substring(1);
-        }
-        return null;
+    public String covertLectureID(String lecturerID) {
+        return LecturerIDFunc.covertLectureID(lecturerID);
     }
 
     @Override
-    public Boolean testCompiler_MainCode_By_LectureID(Map<String, Object> mapCodeMainLecture) {
-        String lectureID = (String) mapCodeMainLecture.get("lectureID");
-        String code = (String) mapCodeMainLecture.get("code");
-        Lecture lectureFound = lectureRepository.findLectureByLectureID(covertLectureID(lectureID));
-        if(lectureFound != null) {
+    public Boolean testCompiler_MainCode_By_LecturerID(Map<String, Object> mapCodeMainLecturer) {
+        String lecturerID = (String) mapCodeMainLecturer.get("lecturerID");
+        String code = (String) mapCodeMainLecturer.get("code");
+        Lecturer lecturerFound = lecturerRepository.findLecturerByLecturerID(covertLectureID(lecturerID));
+        if(lecturerFound != null) {
             CompileJavaCodeByLectureID compileJavaCodeByLectureID = new
-                    CompileJavaCodeByLectureID(covertLectureID(lectureID));
+                    CompileJavaCodeByLectureID(covertLectureID(lecturerID));
             return compileJavaCodeByLectureID.compileJavaCodeByLectureID(code);
         }
         return false;

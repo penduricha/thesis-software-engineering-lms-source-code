@@ -25,8 +25,8 @@ public interface ExamRepository extends JpaRepository<Exam,Long> {
                    e.password_exam,
                    l.name
             from course c
-                     left join map_lecture_course mlc on c.course_id = mlc.course_id
-                     left join lecture l on mlc.lecture_id = l.lecture_id
+                     left join map_lecturer_course mlc on c.course_id = mlc.course_id
+                     left join lecturer l on mlc.lecturer_id = l.lecturer_id
                      left join project_thesis_final.exam e on c.course_id = e.course_id
             where e.course_id = :course_id order by e.title_exam;""",
             nativeQuery = true)
@@ -41,14 +41,14 @@ public interface ExamRepository extends JpaRepository<Exam,Long> {
                 e.type_exam,
                 c.class_name
             from course c
-                     left join map_lecture_course mlc on c.course_id = mlc.course_id
-                     left join lecture l on mlc.lecture_id = l.lecture_id
+                     left join map_lecturer_course mlc on c.course_id = mlc.course_id
+                     left join lecturer l on mlc.lecturer_id = l.lecturer_id
                      right join exam e on c.course_id = e.course_id
-            where l.lecture_id = :lectureID and date(start_date) = :startDate
+            where l.lecturer_id = :lecturerID and date(start_date) = :startDate
             """,
             nativeQuery = true)
-    List<Map<String, Object>> getExams_Calendar_Lecture_By_StartDate(
-            @Param("lectureID") String lectureId,
+    List<Map<String, Object>> getExams_Calendar_Lecturer_By_StartDate(
+            @Param("lecturerID") String lecturerId,
             @Param("startDate") String startDate);
 
     @Query(value = """
@@ -67,8 +67,11 @@ public interface ExamRepository extends JpaRepository<Exam,Long> {
 
     //select * from mark_student where exam_id = 47;
     @Query(value = """
-            select * from mark_student where exam_id = :examID;
+            select * from mark_student where student_id = :studentID and exam_id = :examID;
             """,
             nativeQuery = true)
-    MarkStudent findMarkStudent_By_ExamID(@Param("examID") Long examID);
+    MarkStudent findMarkStudent_By_StudentID_ExamID
+    (@Param("studentID") String studentID, @Param("examID") Long examID);
+
+    List<Exam> getExamsByCourse_CourseID(Long courseID);
 }

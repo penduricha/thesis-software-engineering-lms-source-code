@@ -1,9 +1,6 @@
 package com.example.backend_service.controllers;
 
-import com.example.backend_service.models.BankQuestionJavaCore;
-import com.example.backend_service.models.BankTestCaseJavaCore;
 import com.example.backend_service.models.Exam;
-import com.example.backend_service.models.QuestionJavaCoreExam;
 import com.example.backend_service.services.ExamService;
 import com.example.backend_service.services.StudentService;
 import org.springframework.http.HttpStatus;
@@ -12,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -237,30 +233,45 @@ public class ExamController {
                 examService.createExam_JavaClass_With_ChooseTest(exam, courseID, bankTestJavaOopID));
     }
 
+    @GetMapping("/get_exam_by_course_id_student_id/{courseID}/{studentID}")
+    public ResponseEntity<List<Map<String, Object>>> getExamsByCourseID_StudentID(@PathVariable Long courseID, @PathVariable String studentID)
+            throws HttpClientErrorException {
+        return ResponseEntity.ok(examService.getExamsByCourseID_And_StudentID(courseID,studentID));
+    }
+
+    @GetMapping("/get_exam_by_exam_id/{examID}")
+    public ResponseEntity<Exam> getExamByID(@PathVariable Long examID)
+            throws HttpClientErrorException {
+        return ResponseEntity.ok(examService.getExamByID(examID));
+    }
+
     @GetMapping("/get_exam_by_course_id/{courseID}")
-    public ResponseEntity<List<Map<String, Object>>> getExamsByCourseID(@PathVariable Long courseID) throws HttpClientErrorException {
+    public ResponseEntity<List<Exam>> getExamsByCourseID(@PathVariable Long courseID)
+            throws HttpClientErrorException {
         return ResponseEntity.ok(examService.getExamsByCourseID(courseID));
     }
 
-    @GetMapping("/view_exam_by_course_id_exam_id/{examID}/{courseID}")
-    public ResponseEntity<Map<String, Object>> viewExam_By_ExamID(@PathVariable Long examID,@PathVariable Long courseID) throws HttpClientErrorException {
-        return ResponseEntity.ok(examService.viewExam_By_ExamID(examID, courseID));
-    }
+//    @GetMapping("/view_exam_by_course_id_exam_id/{examID}/{courseID}/{studentID}")
+//    public ResponseEntity<Map<String, Object>> viewExam_By_ExamID(@PathVariable Long examID,@PathVariable Long courseID, @PathVariable String studentID)
+//            throws HttpClientErrorException {
+//        return ResponseEntity.ok(examService.viewExam_By_ExamID(examID, courseID, studentID));
+//    }
 
-    @GetMapping("/view_exam_by_course_id_exam_id_student_exam_before/{examID}/{courseID}")
+    @GetMapping("/view_exam_by_course_id_exam_id_student_exam_before/{examID}/{courseID}/{studentID}")
     public ResponseEntity<Map<String, Object>>
-        view_Information_Exam_Before_Student(@PathVariable Long examID,@PathVariable Long courseID) throws HttpClientErrorException {
-        return ResponseEntity.ok(examService.view_Information_Exam_Before_Student(examID, courseID));
+        view_Information_Exam_Before_Student(@PathVariable Long examID,@PathVariable Long courseID, @PathVariable String studentID)
+            throws HttpClientErrorException {
+        return ResponseEntity.ok(examService.view_Information_Exam_Before_Student(examID, courseID, studentID));
     }
 
-    @GetMapping("/view_exam_by_calendar_lecture/{lectureID}/{yearStartDate}/{monthStartDate}/{dateStartDate}")
+    @GetMapping("/view_exam_by_calendar_lecturer/{lecturerID}/{yearStartDate}/{monthStartDate}/{dateStartDate}")
     public ResponseEntity<List<Map<String, Object>>>
-        getExams_Calendar_Lecture_By_StartDate(@PathVariable String lectureID,
+        getExams_Calendar_Lecturer_By_StartDate(@PathVariable String lecturerID,
                                            @PathVariable int yearStartDate,
                                            @PathVariable int monthStartDate,
                                            @PathVariable int dateStartDate) throws HttpClientErrorException {
         return ResponseEntity.ok(examService.
-                getExams_Calendar_Lecture_By_StartDate(covertLectureID(lectureID), yearStartDate, monthStartDate, dateStartDate));
+                getExams_Calendar_Lecturer_By_StartDate(covertLecturerID(lecturerID), yearStartDate, monthStartDate, dateStartDate));
     }
 
     @GetMapping("/view_exam_by_calendar_student/{studentID}/{yearStartDate}/{monthStartDate}/{dateStartDate}")
@@ -273,8 +284,8 @@ public class ExamController {
                 .getExams_Calendar_Student_By_StartDate(studentID, yearStartDate, monthStartDate, dateStartDate));
     }
 
-    public String covertLectureID(String lectureID) {
-        return LectureIDFunc.covertLectureID(lectureID);
+    public String covertLecturerID(String lecturerID) {
+        return LecturerIDFunc.covertLectureID(lecturerID);
     }
 
     @DeleteMapping("/delete_exam/{examID}")
@@ -352,7 +363,7 @@ public class ExamController {
     }
 
     @GetMapping("/exam/get-list-title-exam")
-    //sửa thành by gv id lectureID
+    //sửa thành by gv id lecturerID
     public ResponseEntity<List<String>> getListTitleExam() throws HttpClientErrorException {
         return ResponseEntity.ok(examService.getListTitleExam());
     }

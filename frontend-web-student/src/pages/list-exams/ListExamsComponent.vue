@@ -63,8 +63,8 @@ export default {
         let courseID = await StudentDao.getCourseID_By_StudentID(studentID);
         if(courseID) {
           this.courseID = courseID;
-          this.exams = await ExamDao.getExams_By_CourseID(courseID);
-          this.pollingInterval = await ExamDao.startPolling_GetExams_By_CourseID(courseID, (updatedExams) => {
+          this.exams = await ExamDao.getExams_By_CourseID(courseID, this.studentID);
+          this.pollingInterval = await ExamDao.startPolling_GetExams_By_CourseID(courseID, studentID,(updatedExams) => {
             this.exams = updatedExams;
             // Cập nhật danh sách bài kiểm tra
           });

@@ -24,7 +24,11 @@ import routers from "@/routes/list-routes/routers.js";
 import RouterDao from "@/routes/RoutersDao.js";
 import LecturerLocalStorage from "@/pages/login/LecturerLocalStorage.js";
 
+//import pie chart
+import CanvasJSChart from '@canvasjs/vue-charts';
+
 const app = createApp(App);
+app.use(CanvasJSChart);
 app.use(vuetify);
 
 function initPage(routers, routerPath) {

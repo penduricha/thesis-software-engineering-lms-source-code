@@ -184,6 +184,11 @@ export default {
     //   //this.detailMarkStudentIDSelect = list[0];
     //   return list;
     // }
+    async setModalViewPieChart() {
+      if(this.examID) {
+        await this.$refs.modalViewPieChart.setDataToChart(this.examID);
+      }
+    }
   },
 
   computed: {
@@ -228,7 +233,9 @@ export default {
           <option value = "xlsx">xlsx file</option>
         </select>
         <button class="btn button-purple"
-
+                data-bs-toggle="modal"
+                data-bs-target="#modal-view-pie-chart"
+                @click="setModalViewPieChart()"
         >View chart</button>
       </div>
 

@@ -1,0 +1,10 @@
+INSERT INTO project_thesis_final.detail_mark_student (detail_mark_student_id, date_submitted, detail_mark_exam, mark_student_id) VALUES (81, '2025-05-23 13:45:55', 5, 78);
+INSERT INTO project_thesis_final.detail_mark_student (detail_mark_student_id, date_submitted, detail_mark_exam, mark_student_id) VALUES (82, '2025-05-23 13:49:04', 6.3, 79);
+INSERT INTO project_thesis_final.detail_mark_student (detail_mark_student_id, date_submitted, detail_mark_exam, mark_student_id) VALUES (83, '2025-05-23 13:56:21', 10, 80);
+INSERT INTO project_thesis_final.detail_mark_student (detail_mark_student_id, date_submitted, detail_mark_exam, mark_student_id) VALUES (84, '2025-05-23 13:59:34', 5, 81);
+INSERT INTO project_thesis_final.detail_mark_student (detail_mark_student_id, date_submitted, detail_mark_exam, mark_student_id) VALUES (85, '2025-05-23 14:01:59', 0, 82);
+INSERT INTO project_thesis_final.detail_mark_student (detail_mark_student_id, date_submitted, detail_mark_exam, mark_student_id) VALUES (86, '2025-05-23 14:06:15', 2.5, 83);
+INSERT INTO project_thesis_final.detail_mark_student (detail_mark_student_id, date_submitted, detail_mark_exam, mark_student_id) VALUES (87, '2025-05-23 17:02:57', 5, 84);
+INSERT INTO project_thesis_final.detail_mark_student (detail_mark_student_id, date_submitted, detail_mark_exam, mark_student_id) VALUES (88, '2025-05-23 17:18:31', 6.3, 85);
+INSERT INTO project_thesis_final.detail_mark_student (detail_mark_student_id, date_submitted, detail_mark_exam, mark_student_id) VALUES (89, '2025-05-23 17:23:47', 0, 86);
+INSERT INTO project_thesis_final.detail_mark_student (detail_mark_student_id, date_submitted, detail_mark_exam, mark_student_id) VALUES (90, '2025-05-23 17:36:10', 8.8, 87);

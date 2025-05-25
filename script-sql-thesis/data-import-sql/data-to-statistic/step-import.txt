@@ -1,0 +1,12 @@
+You must have full record and system service to run data to statistic.
+Use exam java core to statistic.
+
+Step 1:
+- run exam.sql => check exam_id in records exam.
+
+Step 2:
+- run question_java_core_exam.sql (update exam_id get from step 1).
+
+Step 3, 4, 5:
+
+

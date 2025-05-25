@@ -21,7 +21,7 @@ select * from course;
 
 select * from exam;
 
-update exam set start_date = '2025-04-19 12:00:00' where exam_id =7;
+update exam set start_date = '2025-05-25 9:00:00' where exam_id = 57;
 
 select btjo.bank_test_java_oop_id from exam e
 left join exam_java_oop ejo
@@ -38,3 +38,4 @@ select * from student_access_exam;
 
 select * from result_question_java_core;
 
+select * from lecturer;

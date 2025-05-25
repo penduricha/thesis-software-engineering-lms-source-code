@@ -51,7 +51,7 @@ export default class MarkStudentDao {
         }, 2000);
     }
 
-    static async get_GroupBy_MarkStudent_MarkExam_By_ExamID(examID, callback) {
+    static async get_GroupBy_MarkStudent_MarkExam_By_ExamID(examID) {
         let groupByMarkStudent = [];
         await MarkStudentService.fetch_GroupBy_MarkStudent_MarkExam_By_ExamID(examID)
             .then(response => {

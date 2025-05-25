@@ -1,0 +1,10 @@
+INSERT INTO project_thesis_final.mark_student (mark_student_id, mark_exam, student_id, exam_id) VALUES (78, 5, '22662361', 56);
+INSERT INTO project_thesis_final.mark_student (mark_student_id, mark_exam, student_id, exam_id) VALUES (79, 6.3, '21130831', 56);
+INSERT INTO project_thesis_final.mark_student (mark_student_id, mark_exam, student_id, exam_id) VALUES (80, 10, '23633591', 56);
+INSERT INTO project_thesis_final.mark_student (mark_student_id, mark_exam, student_id, exam_id) VALUES (81, 5, '23634131', 56);
+INSERT INTO project_thesis_final.mark_student (mark_student_id, mark_exam, student_id, exam_id) VALUES (82, 0, '23645291', 56);
+INSERT INTO project_thesis_final.mark_student (mark_student_id, mark_exam, student_id, exam_id) VALUES (83, 2.5, '23648721', 56);
+INSERT INTO project_thesis_final.mark_student (mark_student_id, mark_exam, student_id, exam_id) VALUES (84, 5, '23662351', 56);
+INSERT INTO project_thesis_final.mark_student (mark_student_id, mark_exam, student_id, exam_id) VALUES (85, 6.3, '23663301', 56);
+INSERT INTO project_thesis_final.mark_student (mark_student_id, mark_exam, student_id, exam_id) VALUES (86, 0, '23683741', 56);
+INSERT INTO project_thesis_final.mark_student (mark_student_id, mark_exam, student_id, exam_id) VALUES (87, 8.8, '23693221', 56);

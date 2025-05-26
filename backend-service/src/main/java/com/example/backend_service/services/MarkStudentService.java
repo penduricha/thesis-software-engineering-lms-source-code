@@ -493,6 +493,24 @@ public class MarkStudentService implements I_MarkStudentService, I_ResultQuestio
     }
 
     @Override
+    public List<Map<String, Object>> getGroupBy_ZeroToTen_MarkExam_By_ExamID(Long examID)
+            throws JpaSystemException {
+        Exam examFound = examRepository.findExamByExamID(examID);
+        if(examFound != null) {
+            List<Map<String, Object>> queryListGroupBy = markStudentRepository
+                    .getGroupBy_ZeroToTen_MarkExam_By_ExamID(examFound.getExamID());
+            return queryListGroupBy.stream()
+                    .map(originalMap -> {
+                        Map<String, Object> newMap = new HashMap<>();
+                        newMap.put("markRange", originalMap.get("mark_range"));
+                        newMap.put("count", originalMap.get("count"));
+                        return newMap;
+                    }).toList();
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
     public Double getAverageMarkExam_By_ExamID(Long examID) throws JpaSystemException{
         List<Map<String, Object>> listMarkStudentByExamID = getListStudentMark_By_ExamID(examID);
         if(!listMarkStudentByExamID.isEmpty()) {

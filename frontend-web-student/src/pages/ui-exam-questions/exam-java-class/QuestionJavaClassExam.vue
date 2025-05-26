@@ -364,7 +364,9 @@ export default {
           }
         } catch (error) {
           console.error('Error submitting project:', error);
+          alert(error.message);
           this.isLoading = false;
+          await this.navigateToMainPage();
         }
       }
       this.isLoading = false;

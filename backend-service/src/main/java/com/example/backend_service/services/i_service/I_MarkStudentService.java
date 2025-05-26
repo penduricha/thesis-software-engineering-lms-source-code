@@ -44,5 +44,7 @@ public interface I_MarkStudentService {
 
     public List<Map<String, Object>> getGroupByMarkExam_By_ExamID(Long examID);
 
+    public List<Map<String, Object>> getGroupBy_ZeroToTen_MarkExam_By_ExamID(Long examID);
+
     public Double getAverageMarkExam_By_ExamID(Long examID);
 }

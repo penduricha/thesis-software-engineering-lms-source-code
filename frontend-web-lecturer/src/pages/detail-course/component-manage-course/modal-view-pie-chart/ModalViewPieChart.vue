@@ -1,7 +1,7 @@
 <script>
 import './modal-view-pie-chart.scss';
 import MarkStudentDao from "@/daos/MarkStudentDao.js";
-import PieChart from "@/pages/detail-course/component-manage-course/modal-view-chart/PieChart.vue";
+import PieChart from "@/pages/detail-course/component-manage-course/modal-view-pie-chart/PieChart.vue";
 export default {
   name: "ModalViewPieChart",
   components: {PieChart},
@@ -39,15 +39,6 @@ export default {
               (updateGroupByMarkStudent) => {
                 this.groupByMarkStudentsMarkExam = updateGroupByMarkStudent;
               });
-      //transform array
-      // if(this.groupByMarkStudentsMarkExam.length > 0) {
-      //   this.groupByMarkStudentsMarkExam = this.groupByMarkStudentsMarkExam.map(item => ({
-      //     label: item.markRange,
-      //     y: item.count
-      //   }));
-      //   console.log("List group by mark student: ", this.groupByMarkStudentsMarkExam);
-      // }
-
     }
   }
 }
@@ -66,7 +57,7 @@ export default {
           <p class="style-average-mark">
             <span>Average: {{averageMark}}</span>
           </p>
-          <div class="view-pie-chart">
+          <div class="view-chart">
             <PieChart v-if="groupByMarkStudentsMarkExam.length > 0"
                       :chartProps="groupByMarkStudentsMarkExam"
             />

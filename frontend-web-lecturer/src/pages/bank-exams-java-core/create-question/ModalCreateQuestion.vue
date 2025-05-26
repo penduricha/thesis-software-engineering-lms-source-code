@@ -53,7 +53,7 @@ export default {
 
   data() {
     return {
-      loaddingGenTestCase: false,
+      loadingGenTestCase: false,
       content: null,
       //codeSample: "public static int function() {\n\n}\n",
       codeSample: null,
@@ -80,7 +80,7 @@ export default {
 
       dataType: null,
       validateDataType: null,
-      listDataType: ['int', 'String', 'boolean', 'double', 'Long'],
+      listDataType: ['int', 'String', 'boolean', 'double', 'Long', 'int[]', 'double[] '],
 
       //para
       parameterSession: [],
@@ -447,7 +447,7 @@ export default {
 
     async handleGenerateTestCase() {
       this.listTestCases = [];
-      this.loaddingGenTestCase = true
+      this.loadingGenTestCase = true
       try {
          const res = await axios.post("https://api.coze.com/v1/workflow/run", {
            "parameters": {
@@ -482,7 +482,7 @@ export default {
       } catch (err) {
         console.log("err Gen Testcase", err);
       } finally {
-        this.loaddingGenTestCase = false
+        this.loadingGenTestCase = false
       }
     }
 
@@ -681,7 +681,7 @@ export default {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-if="loaddingGenTestCase">
+                  <tr v-if="loadingGenTestCase">
                     <td colspan="5" class="text-center">
                       <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">Loading...</span>

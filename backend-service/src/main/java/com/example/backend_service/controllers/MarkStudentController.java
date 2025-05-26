@@ -162,6 +162,12 @@ public class MarkStudentController {
         return ResponseEntity.ok(markStudentService.getGroupByMarkExam_By_ExamID(examID));
     }
 
+    @GetMapping("/mark_student/get-group-by-zero-to-ten-mark-exam-by-exam-id/{examID}")
+    public ResponseEntity<List<Map<String, Object>>> getGroupBy_ZeroToTen_MarkExam_By_ExamID(@PathVariable Long examID)
+            throws HttpClientErrorException {
+        return ResponseEntity.ok(markStudentService.getGroupBy_ZeroToTen_MarkExam_By_ExamID(examID));
+    }
+
     /*
     @Override
     public Double getAverageMarkExam_By_ExamID(Long examID) throws JpaSystemException{

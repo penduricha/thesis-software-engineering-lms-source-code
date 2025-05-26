@@ -11,6 +11,10 @@ export default class MarkStudentService {
         return axiosConfig.getAPIClient().get(`/mark_student/get-average-mark-exam-by-exam-id/${examID}`);
     }
 
+    static fetch_GroupBy_ZeroToTen__MarkExam_By_ExamID(examID) {
+        return axiosConfig.getAPIClient().get(`/mark_student/get-group-by-zero-to-ten-mark-exam-by-exam-id/${examID}`);
+    }
+
     static fetch_GroupBy_MarkStudent_MarkExam_By_ExamID(examID) {
         return axiosConfig.getAPIClient().get(`/mark_student/get-group-by-mark-exam-by-exam-id/${examID}`);
     }

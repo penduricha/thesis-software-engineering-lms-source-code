@@ -6,12 +6,14 @@ import AsideMenu from "@/components/aside/AsideMenu.vue";
 import AsideAccount from "@/components/aside/AsideAccount.vue";
 import NavBarBankExam from "@/pages/bank-exams-nav-bar/NavBarBankExam.vue";
 import MarkStudentDao from "@/daos/MarkStudentDao.js";
-import ModalViewPieChart from "@/pages/detail-course/component-manage-course/modal-view-chart/ModalViewPieChart.vue";
+import ModalViewPieChart from "@/pages/detail-course/component-manage-course/modal-view-pie-chart/ModalViewPieChart.vue";
+import ModalViewBarChart
+  from "@/pages/detail-course/component-manage-course/modal-view-bar-chart/ModalViewBarChart.vue";
 
 
 export default {
   name: "ListStudentsByExamByJavaCore",
-  components: {ModalViewPieChart, NavBarBankExam, AsideAccount, AsideMenu},
+  components: {ModalViewPieChart, NavBarBankExam, AsideAccount, AsideMenu, ModalViewBarChart},
 
   props: {
     examID: {
@@ -166,6 +168,12 @@ export default {
       if(this.examID) {
         await this.$refs.modalViewPieChart.setDataToChart(this.examID);
       }
+    },
+
+    async setModalViewBarChart() {
+      if(this.examID) {
+        await this.$refs.modalViewBarChart.setDataToChart(this.examID);
+      }
     }
   },
 
@@ -215,6 +223,11 @@ export default {
                 data-bs-target="#modal-view-pie-chart"
           @click="setModalViewPieChart()"
         >View pie chart</button>
+        <button class="btn button-purple"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-view-bar-chart"
+                @click="setModalViewBarChart()"
+        >View bar chart</button>
       </div>
       <table class="table table-striped">
         <thead>
@@ -273,6 +286,7 @@ export default {
   <AsideAccount/>
   </body>
   <modal-view-pie-chart ref="modalViewPieChart" />
+  <modal-view-bar-chart ref="modalViewBarChart" />
 </template>
 
 <style scoped lang="scss">

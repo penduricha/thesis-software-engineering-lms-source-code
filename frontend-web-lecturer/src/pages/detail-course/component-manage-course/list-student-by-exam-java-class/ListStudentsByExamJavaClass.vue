@@ -188,6 +188,12 @@ export default {
       if(this.examID) {
         await this.$refs.modalViewPieChart.setDataToChart(this.examID);
       }
+    },
+
+    async setModalViewBarChart() {
+      if(this.examID) {
+        await this.$refs.modalViewBarChart.setDataToChart(this.examID);
+      }
     }
   },
 
@@ -236,7 +242,12 @@ export default {
                 data-bs-toggle="modal"
                 data-bs-target="#modal-view-pie-chart"
                 @click="setModalViewPieChart()"
-        >View chart</button>
+        >View pie chart</button>
+        <button class="btn button-purple"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-view-bar-chart"
+                @click="setModalViewBarChart()"
+        >View bar chart</button>
       </div>
 
       <table class="table table-striped">

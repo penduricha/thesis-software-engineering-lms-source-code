@@ -73,4 +73,27 @@ export default class MarkStudentDao {
             }
         }, 2000);
     }
+
+    static async get_GroupBy_ZeroToTen_MarkStudent_MarkExam_By_ExamID(examID){
+        let groupByMarkStudent = [];
+        await MarkStudentService.fetch_GroupBy_ZeroToTen__MarkExam_By_ExamID(examID)
+            .then(response => {
+                groupByMarkStudent = response.data;
+            }).catch(error => {
+                console.error(error);
+            })
+        return groupByMarkStudent;
+    }
+
+    static async startPolling_Get_GroupBy_ZeroToTen_MarkStudent_MarkExam_By_ExamID(examID, callback){
+        let lastFetchedGroupByMarkStudent = await this.get_GroupBy_ZeroToTen_MarkStudent_MarkExam_By_ExamID(examID);
+        return setInterval(async () => {
+            const newGroupByMarkStudent = await
+                this.get_GroupBy_ZeroToTen_MarkStudent_MarkExam_By_ExamID(examID);
+            if (newGroupByMarkStudent !== lastFetchedGroupByMarkStudent) {
+                lastFetchedGroupByMarkStudent = newGroupByMarkStudent;
+                callback(newGroupByMarkStudent);
+            }
+        }, 2000);
+    }
 }

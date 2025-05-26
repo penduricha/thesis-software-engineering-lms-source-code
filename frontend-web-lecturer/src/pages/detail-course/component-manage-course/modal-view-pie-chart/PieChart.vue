@@ -17,7 +17,7 @@ onMounted(() => {
 });
 
 const setChartData = () => {
-  console.log("Props data: ", props.chartProps);
+  //console.log("Props data: ", props.chartProps);
   return {
     labels: props.chartProps.map(item => item.markRange),
     datasets: [

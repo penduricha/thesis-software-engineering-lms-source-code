@@ -109,9 +109,9 @@ public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> 
                     when mark_exam >= 0 and mark_exam < 4 then '0 to 4'
                     when mark_exam >= 4 and mark_exam < 6 then '4 to 6'
                     when mark_exam >= 6 and mark_exam < 8 then '6 to 8'
-                    when mark_exam >= 8 AND mark_exam <= 10 then '8 to 10'
+                    when mark_exam >= 8 and mark_exam <= 10 then '8 to 10'
                     end as mark_range,
-                count(*) AS count
+                count(*) as count
             from mark_student where exam_id = :examID
             group by mark_range;
             """,
@@ -124,4 +124,34 @@ public interface MarkStudentRepository extends JpaRepository<MarkStudent, Long> 
             """,
             nativeQuery = true)
     Double getAverageMarkExam_By_ExamID(@Param("examID") Long examID);
+
+    @Query(value = """
+            with mark_ranges as (
+                select '0 to 1' as mark_range, 0 as range_start, 1 as range_end union all
+                select '1 to 2', 1, 2 union all
+                select '2 to 3', 2, 3 union all
+                select '3 to 4', 3, 4 union all
+                select '4 to 5', 4, 5 union all
+                select '5 to 6', 5, 6 union all
+                select '6 to 7', 6, 7 union all
+                select '7 to 8', 7, 8 union all
+                select '8 to 9', 8, 9 union all
+                select '9 to 10', 9, 11
+            )
+            select
+                m.mark_range,
+                coalesce(count(s.mark_exam), 0) AS count
+            from
+                mark_ranges m
+                    left join
+                mark_student s on
+                    s.mark_exam >= m.range_start and
+                    s.mark_exam < m.range_end and s.exam_id = :examID
+            group by
+                m.mark_range
+            order by
+                m.range_start;
+           """,
+            nativeQuery = true)
+    List<Map<String, Object>> getGroupBy_ZeroToTen_MarkExam_By_ExamID(@Param("examID") Long examID);
 }

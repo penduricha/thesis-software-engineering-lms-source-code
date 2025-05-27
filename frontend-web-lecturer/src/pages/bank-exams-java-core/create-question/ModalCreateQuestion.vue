@@ -92,6 +92,10 @@ export default {
       dataParameter: null,
       validateDataInputParameter: null,
       dataInputParameters: [],
+
+      //csv
+      targetFileCsv: null,
+      selectedFileCsv: null,
     }
   },
 
@@ -424,14 +428,12 @@ export default {
     },
 
     handleCsvChange(event) {
+      //reset file variable;
+      this.handleResetFileCsv();
       const file = event.target.files[0];
       if (file) {
-        // Kiểm tra đuôi tệp
-        const fileExtension = file.name.split('.').pop().toLowerCase();
-        if (fileExtension !== 'csv') {
-          //alert('Vui lòng chọn tệp có đuôi .csv');
-          return;
-        }
+        this.targetFileCsv = file;
+        this.selectedFileCsv = file.name;
         const reader = new FileReader();
         reader.onload = (e) => {
           const text = e.target.result;
@@ -441,6 +443,14 @@ export default {
           sessionStorage.setItem("testCases", JSON.stringify(this.listTestCases));
         };
         reader.readAsText(file);
+      }
+    },
+
+    handleResetFileCsv() {
+      this.targetFileCsv = null;
+      this.selectedFileCsv = null;
+      if (this.$refs.fileInput) {
+        this.$refs.fileInput.value = null;
       }
     },
 
@@ -465,14 +475,7 @@ export default {
          let cleanedData = data.slice(10, -1);
          //console.log("cleanedData", cleanedData);
          cleanedData = cleanedData.replace(/\\/g, '');
-
-         // console.log("cleanedData", cleanedData);
-         // this.listTestCases = JSON.parse(cleanedData)
-        //
-        // console.log("cleanedData", cleanedData); // In ra mảng kết quả
-        // this.listTestCases = JSON.parse(cleanedData)
         if(this.content) {
-          //this.listTestCases = await GenTestCase.getTestCaseGenerate(this.content);
           this.listTestCases = JSON.parse(cleanedData);
           const testCaseManager = new SessionStorageTestCase();
           this.listTestCases.forEach(testCase => {

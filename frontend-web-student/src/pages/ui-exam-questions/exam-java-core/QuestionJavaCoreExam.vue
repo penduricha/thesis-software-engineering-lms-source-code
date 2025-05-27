@@ -220,7 +220,7 @@ export default {
     },
 
     startTimer() {
-      this.timer = setInterval(() => {
+      this.timer = setInterval(async () => {
         if (this.timeLeft > 0) {
           this.timeLeft--;
           // Cập nhật thời gian trong localStorage
@@ -230,7 +230,7 @@ export default {
           // Xóa thời gian khi đã hết
           sessionStorage.removeItem('timeLeft');
         }
-        this.clickButtonSubmit();
+        await this.submitTimeOut();
       }, 1000);
     },
 
@@ -270,13 +270,6 @@ export default {
           this.indexQuestionSaved = this.codeSaved.map(c => c.indexQuestion);
           console.log("Index question saved: ", this.indexQuestionSaved);
         }
-
-        //check button mark flag
-        // if(this.questionInit.isMarkedFlag === true){
-        //   this.nameButtonMarkFlag = "Remove flag";
-        // } else {
-        //   this.nameButtonMarkFlag = "Mark flag";
-        // }
       }
     },
 
@@ -295,11 +288,15 @@ export default {
       // Prevent paste action
     },
 
-    clickButtonSubmit() {
+    async submitTimeOut() {
       //thoi gian ket thuc
       if(this.timeLeft === 0 || this.duration <= 0) {
-        this.$refs.submitButton.click();
+        //await this.handleSubmit_And_Notification_Mark();
+        //await this.$refs.modalNotificationAfterSubmit.navigateTo_MainPage();
+        await this.handleSubmit_And_Notification_Mark();
+        await this.$refs.modalNotificationAfterSubmit.navigateTo_MainPage();
       }
+
     },
 
     async handleSubmit_And_Notification_Mark() {
@@ -588,7 +585,7 @@ export default {
             <!--              Nếu dùng nhiều hàm scss-->
             <button class="button-number-question button-submit"
                     ref="submitButton"
-                    @click = "handleSubmit_And_Notification_Mark()"
+                    @click.prevent = "handleSubmit_And_Notification_Mark()"
                     data-bs-toggle="modal"
                     data-bs-target="#modal-notification-mark"
             >Submit</button>

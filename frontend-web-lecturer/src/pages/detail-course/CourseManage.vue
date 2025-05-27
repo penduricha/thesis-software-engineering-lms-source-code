@@ -106,12 +106,8 @@ export default {
   },
 
   mounted() {
-    //call method set input
     this.setInputExamTitle();
     this.setListDuration();
-    // this.setSelectExamType();
-    // this.setSelectTopicExam();
-    // this.setSelectRetake();
     this.isLockSelectScoringMethod();
     this.setInputStartDate();
     this.setInputEndDate();
@@ -480,8 +476,8 @@ export default {
         <button class="button-nav-in-course"
                 :class="['active-button', setActiveButtonNavListExam]"
         >List exams</button>
-        <button class="button-nav-in-course">List student</button>
-        <button class="button-nav-in-course">Statistic</button>
+<!--        <button class="button-nav-in-course">List student</button>-->
+<!--        <button class="button-nav-in-course">Statistic</button>-->
       </div>
       <list-exam :exams="exams"
                  @view-exam="handleViewModal"

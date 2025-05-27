@@ -25,7 +25,7 @@ public class BankTestCaseJavaCore implements Serializable {
     @Column(nullable = false, columnDefinition = "nvarchar(50)")
     private String outputExpect;
 
-    @Column(columnDefinition = "nvarchar(50)")
+    @Column(columnDefinition = "nvarchar(255)")
     private String note;
 
     //map with Bank question java core

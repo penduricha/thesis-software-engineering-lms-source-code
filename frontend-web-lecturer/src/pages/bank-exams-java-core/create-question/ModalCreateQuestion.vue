@@ -106,7 +106,6 @@ export default {
     saveTestCase() {
       const testCaseManager = new SessionStorageTestCase();
 
-
       if (!this.input) {
         this.validationInput = "Please enter input test case.";
       }
@@ -430,7 +429,7 @@ export default {
         // Kiểm tra đuôi tệp
         const fileExtension = file.name.split('.').pop().toLowerCase();
         if (fileExtension !== 'csv') {
-          alert('Vui lòng chọn tệp có đuôi .csv');
+          //alert('Vui lòng chọn tệp có đuôi .csv');
           return;
         }
         const reader = new FileReader();
@@ -464,7 +463,7 @@ export default {
          console.log("data", data);
 
          let cleanedData = data.slice(10, -1);
-         console.log("cleanedData", cleanedData);
+         //console.log("cleanedData", cleanedData);
          cleanedData = cleanedData.replace(/\\/g, '');
 
          // console.log("cleanedData", cleanedData);
@@ -474,8 +473,17 @@ export default {
         // this.listTestCases = JSON.parse(cleanedData)
         if(this.content) {
           //this.listTestCases = await GenTestCase.getTestCaseGenerate(this.content);
-
           this.listTestCases = JSON.parse(cleanedData);
+          const testCaseManager = new SessionStorageTestCase();
+          this.listTestCases.forEach(testCase => {
+            const trimmedInput = testCase.inputTest.trim();
+            const trimmedOutput = testCase.outputExpect.trim();
+            const note = testCase.note;
+            testCaseManager.addTestCase(trimmedInput,trimmedOutput, note);
+          });
+          this.listTestCases = testCaseManager.loadFromSessionStorage();
+          this.resetFieldInputTestCase();
+          console.log('List test cases generated: ',this.listTestCases);
         } else {
           this.validationContent = "Please enter content question.";
         }
@@ -665,7 +673,7 @@ export default {
                   <label for="fileInput" class="btn button-purple ml-3">
                     📂Upload file CSV
                   </label>
-                  <input type="file" id="fileInput" @change="handleCsvChange" style="display: none;" />
+                  <input type="file" accept=".csv" id="fileInput" @change="handleCsvChange" style="display: none;" />
                 </vue-csv-input>
               </vue-csv-import>
               <button type="button" class="btn button-purple ml-3" @click="handleGenerateTestCase">🤖 Generate

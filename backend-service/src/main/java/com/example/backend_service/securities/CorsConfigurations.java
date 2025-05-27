@@ -21,7 +21,12 @@ public class CorsConfigurations implements WebMvcConfigurer {
                         "http://localhost:4200",  // Angular
                         "http://localhost:3001" ,//Next.js
                         "http://127.0.0.1:5173/",//
-                        "http://127.0.0.1:5174/"
+                        "http://127.0.0.1:5174/",
+                        //lecturer
+                        "https://thesis-software-engineering-lms-source-code-14o8.vercel.app/",
+                        //student
+                        "https://thesis-software-engineering-lms-source-code-ufne.vercel.app/"
+
 
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE","PATCH","OPTIONS")

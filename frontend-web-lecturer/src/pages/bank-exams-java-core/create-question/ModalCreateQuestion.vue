@@ -449,17 +449,17 @@ export default {
       this.listTestCases = [];
       this.loadingGenTestCase = true
       try {
-         const res = await axios.post("https://api.coze.com/v1/workflow/run", {
-           "parameters": {
-             "input": this.content
-           },
-           "workflow_id": "7496876093182754834"
-         }, {
-           headers: {
-             'Authorization': 'Bearer pat_OCcuh0BZVEGRPFPQMscgA45KzBxVe8noXhF64WIXpxRIQTC6iLNDeexIlx3InpNv',
-             'Content-Type': 'application/json'
-           }
-         });
+        const res = await axios.post("https://api.coze.com/v1/workflow/run", {
+          "parameters": {
+            "input": this.content
+          },
+          "workflow_id": "7496876093182754834"
+        }, {
+          headers: {
+            'Authorization': 'Bearer pat_RiN8QphijeHz5W554PlYpljhcHZgSMXOfvBlTpkqb9eoVWrxR3qiV2AUTieZbmV0',
+            'Content-Type': 'application/json'
+          }
+        });
          let data = res.data.data;
          console.log("data", data);
 

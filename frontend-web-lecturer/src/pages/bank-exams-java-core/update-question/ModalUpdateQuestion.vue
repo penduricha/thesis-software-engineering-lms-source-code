@@ -126,7 +126,7 @@ export default {
       const allValidateFormAreEmpty = validations.every(val => val === null);
 
       if(allValidateFormAreEmpty) {
-        testCaseManager.addTestCase(this.input.trim(), this.output.trim(), this.note.trim());
+        testCaseManager.addTestCase(this.input.trim(), this.output.trim(), !this.note ? '' : this.note.trim());
         this.listTestCases = testCaseManager.loadFromSessionStorage();
         this.resetFieldInputTestCase();
       }

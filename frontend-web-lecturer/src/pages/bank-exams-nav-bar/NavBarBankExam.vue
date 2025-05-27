@@ -61,11 +61,11 @@ export default {
     <button class="button-nav-in-course"
             :class="['active-button', setActiveNavJavaCore]"
             @click.prevent="handleNavBankExamsJavaCore"
-    >Java Core</button>
+    >Java core</button>
     <button class="button-nav-in-course"
             :class="['active-button', setActiveNavJavaOop]"
             @click.prevent="handleNavBankExamsJavaOop"
-    >Java Oop Class</button>
+    >Java class</button>
   </div>
 </template>
 

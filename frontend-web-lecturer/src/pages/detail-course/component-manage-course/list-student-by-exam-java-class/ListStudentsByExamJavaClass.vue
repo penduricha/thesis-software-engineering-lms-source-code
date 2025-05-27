@@ -11,9 +11,16 @@ import * as XLSX from "xlsx";
 import DetailMarkStudentDao from "@/daos/DetailMarkStudentDao.js";
 import ModalViewSourceCodeJavaClass
   from "@/pages/detail-course/component-manage-course/list-student-by-exam-java-class/modal-view-src-code/ModalViewSourceCodeJavaClass.vue";
+import ModalViewPieChart
+  from "@/pages/detail-course/component-manage-course/modal-view-pie-chart/ModalViewPieChart.vue";
+import ModalViewBarChart
+  from "@/pages/detail-course/component-manage-course/modal-view-bar-chart/ModalViewBarChart.vue";
 export default {
   name: "ListStudentsByExamByClass",
-  components: {ModalViewSourceCodeJavaClass, NavBarBankExam, AsideAccount, AsideMenu},
+  components: {
+    ModalViewBarChart,
+    ModalViewPieChart,
+    ModalViewSourceCodeJavaClass, NavBarBankExam, AsideAccount, AsideMenu},
 
   props: {
     examID: {
@@ -327,6 +334,8 @@ export default {
   <AsideAccount/>
   </body>
   <modal-view-source-code-java-class ref="modalViewSrcCodeJavaClass" />
+  <modal-view-pie-chart ref="modalViewPieChart" />
+  <modal-view-bar-chart ref="modalViewBarChart" />
 </template>
 
 <style scoped lang="scss">

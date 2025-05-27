@@ -323,7 +323,7 @@ export default {
         try {
           const response = await axios.post('https://api.coze.com/v1/workflow/run', data, {
             headers: {
-              'Authorization': 'Bearer pat_OCcuh0BZVEGRPFPQMscgA45KzBxVe8noXhF64WIXpxRIQTC6iLNDeexIlx3InpNv',
+              'Authorization': 'Bearer pat_RiN8QphijeHz5W554PlYpljhcHZgSMXOfvBlTpkqb9eoVWrxR3qiV2AUTieZbmV0',
               'Content-Type': 'application/json'
             }
           });
@@ -426,20 +426,6 @@ export default {
         this.targetFileZip = null;
       }
     },
-
-    // selectFile (){
-    //
-    // },
-
-    // handleFile(file) {
-    //   if (file && file.name.endsWith('.zip')) {
-    //     this.selectFileZip = file.name; // Store the uploaded file name
-    //     this.zipUrl = URL.createObjectURL(file); // Create a URL for the uploaded zip file
-    //     this.validateUpdateZipFile = null; // Reset any validation messages
-    //   } else {
-    //     this.validateUpdateZipFile = 'Please upload a valid zip file.'; // Show an error message
-    //   }
-    // },
 
     selectFile() {
       this.$refs.fileInput.click();

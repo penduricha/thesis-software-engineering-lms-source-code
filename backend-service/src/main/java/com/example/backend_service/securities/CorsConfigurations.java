@@ -25,7 +25,7 @@ public class CorsConfigurations implements WebMvcConfigurer {
                         //lecturer
                         "https://thesis-software-engineering-lms-source-code-14o8.vercel.app/",
                         //student
-                        "https://thesis-software-engineering-lms-source-code-ufne.vercel.app/"
+                        "https://thesis-software-engineering-lms-source-code-cj12.vercel.app/"
 
 
                 )

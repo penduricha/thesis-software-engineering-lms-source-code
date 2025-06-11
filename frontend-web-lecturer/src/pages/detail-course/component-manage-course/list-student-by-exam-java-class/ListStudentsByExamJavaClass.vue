@@ -155,7 +155,7 @@ export default {
           const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
           const link = document.createElement('a');
           link.href = URL.createObjectURL(blob);
-          link.setAttribute('download', `exam_${this.titleExam}_${this.nameLecturer}.csv`);
+          link.setAttribute('download', `mark_student.csv`);
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);

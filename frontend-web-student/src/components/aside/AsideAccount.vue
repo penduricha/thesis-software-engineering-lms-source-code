@@ -357,8 +357,8 @@ export default {
       <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo">
       <div class="view-name-and-button-information">
 <!--        <div class="placeholder content" style=" width: 100%; height: 3rem;"></div>-->
-        <div v-if="!firstName" class="placeholder content style-span-information-skeleton"></div>
-        <div v-if="!lastName" class="placeholder content style-span-information-skeleton"></div>
+<!--        <div v-if="!firstName" class="placeholder content style-span-information-skeleton"></div>-->
+<!--        <div v-if="!lastName" class="placeholder content style-span-information-skeleton"></div>-->
         <span v-if="studentID" class="style-span-information">{{lastName}} {{firstName}}</span>
         <span v-if="studentID" class="style-span-information">{{studentID}}</span>
       <!--        <button class="button-view-information">View information</button>-->

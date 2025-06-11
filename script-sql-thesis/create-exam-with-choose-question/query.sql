@@ -76,7 +76,7 @@ order by
 
 select * from exam;
 
-update exam set start_date = '2025-05-27 16:30:00' where exam_id = 65;
+update exam set start_date = '2025-05-30 10:30:00' where exam_id = 68;
 
 select student_id, date_of_birth from student where course_id = 2;
 # tru 22662361 mk la 1234 con lai la mk la ddmmyyyy.

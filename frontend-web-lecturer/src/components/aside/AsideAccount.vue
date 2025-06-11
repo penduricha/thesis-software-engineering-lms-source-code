@@ -305,8 +305,8 @@ export default {
     >
       <img src="@/assets/image/account-logo.png" alt="account logo" class="style-account-logo">
       <div class="view-name-and-button-information">
-        <div v-if="!name" class="placeholder content style-span-information-skeleton"></div>
-        <div v-if="!name" class="placeholder content style-span-information-skeleton"></div>
+<!--        <div v-if="!name" class="placeholder content style-span-information-skeleton"></div>-->
+<!--        <div v-if="!name" class="placeholder content style-span-information-skeleton"></div>-->
         <span class="style-span-information">{{name}}</span>
         <span class="style-span-information">{{lecturerID}}</span>
       </div>
